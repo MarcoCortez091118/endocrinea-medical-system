@@ -1,22 +1,7 @@
-/**
-=========================================================
-* Soft UI Dashboard React - v4.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // react-router components
-import { useLocation, Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
@@ -41,17 +26,17 @@ import NotificationItem from "examples/Items/NotificationItem";
 import {
   navbar,
   navbarContainer,
-  navbarRow,
   navbarIconButton,
   navbarMobileMenu,
+  navbarRow,
 } from "examples/Navbars/DashboardNavbar/styles";
 
 // Soft UI Dashboard React context
 import {
-  useSoftUIController,
-  setTransparentNavbar,
   setMiniSidenav,
   setOpenConfigurator,
+  setTransparentNavbar,
+  useSoftUIController,
 } from "context";
 
 // Images

@@ -1,17 +1,3 @@
-/**
-=========================================================
-* Soft UI Dashboard React - v4.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 import { useEffect } from "react";
 
 // @mui material components
@@ -44,7 +30,7 @@ import reportsBarChartData from "layouts/rtl/data/reportsBarChartData";
 import gradientLineChartData from "layouts/rtl/data/gradientLineChartData";
 
 // Soft UI Dashboard React contexts
-import { useSoftUIController, setDirection } from "context";
+import { setDirection, useSoftUIController } from "context";
 
 function RTL() {
   const [, dispatch] = useSoftUIController();

@@ -1,19 +1,4 @@
 /**
-=========================================================
-* Soft UI Dashboard React - v4.0.1
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-/** 
   All of the routes for the Soft UI Dashboard React are added here,
   You can add a new route, customize the routes and delete the routes here.
 
@@ -33,7 +18,7 @@ Coded by www.creative-tim.com
   9. The `href` key is used to store the external links location.
   10. The `title` key is only for the item with the type of `title` and its used for the title text on the Sidenav.
   10. The `component` key is used to store the component of its route.
-*/
+ */
 
 // Soft UI Dashboard React layouts
 import Dashboard from "layouts/dashboard";
