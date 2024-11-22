@@ -1,14 +1,12 @@
-/* eslint-disable react/prop-types */
-// Soft UI Dashboard React components
+import { useEffect, useState } from "react";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import SoftAvatar from "components/SoftAvatar";
 import SoftBadge from "components/SoftBadge";
-import softAPI from "components/SoftApi/ApiAuthorsTableData";
-// Images
+import apiService from "components/ApiService/apiService";
 import team2 from "assets/images/team-2.jpg";
-import team3 from "assets/images/team-3.jpg";
-import team4 from "assets/images/team-4.jpg";
+import PropTypes from "prop-types";
+
 function Author({ image, name, email }) {
   return (
     <SoftBox display="flex" alignItems="center" px={1} py={0.5}>
@@ -26,51 +24,81 @@ function Author({ image, name, email }) {
     </SoftBox>
   );
 }
-function Function({ job, org }) {
+
+Author.propTypes = {
+  image: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired,
+};
+
+function AuthorsTable() {
+  const { data, loading, error } = apiService();
+
+  if (error) {
+    return (
+      <SoftBox>
+        <SoftTypography color="error">Error: {error}</SoftTypography>
+      </SoftBox>
+    );
+  }
+
+  const authorsTableData = {
+    columns: [
+      { name: "author", align: "left" },
+      { name: "phone", align: "left" },
+      { name: "city", align: "center" },
+      { name: "campaing", align: "center" },
+    ],
+    rows: loading
+      ? []
+      : data.map((item, index) => ({
+          author: <Author image={team2} name={item.name} email={item.email} />,
+          phone: (
+            <SoftTypography variant="caption" color="secondary" fontWeight="medium">
+              {item.phone}
+            </SoftTypography>
+          ),
+          city: (
+            <SoftTypography variant="caption" color="secondary" fontWeight="medium">
+              {item.city}
+            </SoftTypography>
+          ),
+          campaing: (
+            <SoftTypography variant="caption" color="secondary" fontWeight="medium">
+              {item.campaing}
+            </SoftTypography>
+          ),
+        })),
+  };
+
   return (
-    <SoftBox display="flex" flexDirection="column">
-      <SoftTypography variant="caption" fontWeight="medium" color="text">
-        {job}
-      </SoftTypography>
-      <SoftTypography variant="caption" color="secondary">
-        {org}
-      </SoftTypography>
+    <SoftBox>
+      <SoftBox component="table" width="100%" borderCollapse="collapse" mt={2} boxShadow={3}>
+        <thead>
+          <SoftBox component="tr">
+            {authorsTableData.columns.map((column, index) => (
+              <SoftBox key={index} component="th" textAlign={column.align} padding={1}>
+                <SoftTypography variant="button" fontWeight="medium">
+                  {column.name}
+                </SoftTypography>
+              </SoftBox>
+            ))}
+          </SoftBox>
+        </thead>
+        <tbody>
+          {authorsTableData.rows.map((row, index) => (
+            <SoftBox component="tr" key={index}>
+              {authorsTableData.columns.map((column, colIndex) => (
+                <SoftBox key={colIndex} component="td" textAlign={column.align} padding={1}>
+                  {row[column.name]}
+                </SoftBox>
+              ))}
+            </SoftBox>
+          ))}
+        </tbody>
+      </SoftBox>
     </SoftBox>
   );
 }
-const authorsTableData = () => {
-  const [rows, setRows] = useState([]);
-  softAPI({ setRows });
-  const columns = [
-    { name: "author", align: "left" },
-    { name: "function", align: "left" },
-    { name: "status", align: "center" },
-    { name: "employed", align: "center" },
-    { name: "action", align: "center" },
-  ];
-  const tableRows = rows.map((row) => ({
-    author: <Author image={team2} name={row.name} email={row.email} />,
-    function: <Function job="Manager" org="Organization" />,
-    status: (
-      <SoftBadge variant="gradient" badgeContent="online" color="success" size="xs" container />
-    ),
-    employed: (
-      <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-        23/04/18
-      </SoftTypography>
-    ),
-    action: (
-      <SoftTypography
-        component="a"
-        href="#"
-        variant="caption"
-        color="secondary"
-        fontWeight="medium"
-      >
-        Edit
-      </SoftTypography>
-    ),
-  }));
-  return { columns, rows: tableRows };
-};
-export default authorsTableData;
+
+export default AuthorsTable;

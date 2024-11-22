@@ -1,21 +1,28 @@
-import React, { useEffect } from "react";
-const apiService = ({ setRows }) => {
+import { useEffect, useState } from "react";
+
+const apiService = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch("https://bituin-fastapi-data.azurewebsites.net/get_forms");
-        const data = await response.json();
-        const filteredData = data.data.map((item) => ({
-          name: item.name || "Unknown",
-          email: item.email || "No email",
-        }));
-        setRows(filteredData);
-      } catch (error) {
-        console.error("Error al obtener los datos de la API:", error);
+        if (!response.ok) throw new Error("Network response was not ok");
+        const result = await response.json();
+        setData(result);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
     };
+
     fetchData();
-  }, [setRows]);
-  return null;
+  }, []);
+
+  return { data, loading, error };
 };
+
 export default apiService;
