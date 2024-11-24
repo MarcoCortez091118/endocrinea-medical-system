@@ -1,28 +1,17 @@
-import { useEffect, useState } from "react";
-
-const apiService = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("https://bituin-fastapi-data.azurewebsites.net/get_forms");
-        if (!response.ok) throw new Error("Network response was not ok");
-        const result = await response.json();
-        setData(result);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+const apiService = {
+  async getForms() {
+    try {
+      const response = await fetch("https://bituin-fastapi-data.azurewebsites.net/get_forms");
+      if (!response.ok) {
+        throw new Error(`Error en la solicitud: ${response.status}`);
       }
-    };
-
-    fetchData();
-  }, []);
-
-  return { data, loading, error };
+      const data = await response.json();
+      return data; // Devuelve los datos obtenidos
+    } catch (error) {
+      console.error("Error al obtener los datos de la API:", error);
+      return [];
+    }
+  },
 };
 
 export default apiService;

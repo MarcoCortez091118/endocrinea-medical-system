@@ -11,11 +11,14 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
 
+// Soft UI Dashboard React base styles
+import React from "react";
+
 // Data
-import authorsTableData from "layouts/tables/data/authorsTableData";
+import useAuthorsTableData from "./data/authorsTableData";
 
 function Tables() {
-  const { columns, rows } = authorsTableData;
+  const { columns, rows } = useAuthorsTableData();
 
   return (
     <DashboardLayout>
