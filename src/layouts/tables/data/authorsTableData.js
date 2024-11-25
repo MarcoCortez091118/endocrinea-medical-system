@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import SoftAvatar from "components/SoftAvatar";
-import SoftBadge from "components/SoftBadge";
 import apiService from "components/ApiService/apiService";
 import team2 from "assets/images/team-2.jpg";
 import PropTypes from "prop-types";
@@ -38,24 +37,22 @@ export default function useAuthorsTableData() {
     async function fetchData() {
       try {
         const forms = await apiService.getForms();
-        console.log("Respuesta de la API:", forms); // Verifica qué devuelve la API
-
-        // Si la respuesta no es un array, ajusta esto según la estructura real
-        const dataArray = Array.isArray(forms) ? forms : forms.data || []; // Cambia `forms.data` si es necesario
+        console.log("Respuesta de la API:", forms); 
+        const dataArray = Array.isArray(forms) ? forms : forms.data || []; 
 
         const rows = dataArray.map((form) => ({
-          author: <Author image={team2} name={form.name} email={form.email} />,
-          phone: (
+          autor: <Author image={team2} name={form.name} email={form.email} />,
+          teléfono: (
             <SoftTypography variant="caption" color="secondary" fontWeight="medium">
               {form.phone}
             </SoftTypography>
           ),
-          city: (
+          ciudad: (
             <SoftTypography variant="caption" color="secondary" fontWeight="medium">
               {form.city}
             </SoftTypography>
           ),
-          campaing: (
+          campaña: (
             <SoftTypography variant="caption" color="secondary" fontWeight="medium">
               {form.campaign || "N/A"}
             </SoftTypography>
@@ -64,10 +61,10 @@ export default function useAuthorsTableData() {
 
         setData({
           columns: [
-            { name: "author", align: "left" },
-            { name: "phone", align: "left" },
-            { name: "city", align: "center" },
-            { name: "campaing", align: "center" },
+            { name: "autor", align: "left" },
+            { name: "teléfono", align: "left" },
+            { name: "ciudad", align: "center" },
+            { name: "campaña", align: "center" },
           ],
           rows,
         });

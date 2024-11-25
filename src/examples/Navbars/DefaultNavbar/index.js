@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 // @mui material components
 import Container from "@mui/material/Container";
 import Icon from "@mui/material/Icon";
+import logoct from "assets/images/logo-ct.png";
 
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
@@ -77,9 +78,7 @@ function DefaultNavbar({ transparent, light, action }) {
         })}
       >
         <SoftBox component={Link} to="/" py={transparent ? 1.5 : 0.75} lineHeight={1}>
-          <SoftTypography variant="button" fontWeight="bold" color={light ? "white" : "dark"}>
-            Soft UI Dashboard
-          </SoftTypography>
+          {  <SoftBox component="img" src={logoct} alt="Bituin Logo" width="8rem" />}
         </SoftBox>
         <SoftBox color="inherit" display={{ xs: "none", lg: "flex" }} m={0} p={0}>
           <DefaultNavbarLink icon="donut_large" name="dashboard" route="/dashboard" light={light} />

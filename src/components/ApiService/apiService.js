@@ -6,7 +6,7 @@ const apiService = {
         throw new Error(`Error en la solicitud: ${response.status}`);
       }
       const data = await response.json();
-      return data; // Devuelve los datos obtenidos
+      return data; 
     } catch (error) {
       console.error("Error al obtener los datos de la API:", error);
       return [];
