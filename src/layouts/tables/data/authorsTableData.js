@@ -44,18 +44,18 @@ export default function useAuthorsTableData() {
         const dataArray = Array.isArray(forms) ? forms : forms.data || []; // Cambia `forms.data` si es necesario
 
         const rows = dataArray.map((form) => ({
-          author: <Author image={team2} name={form.name} email={form.email} />,
-          phone: (
+          autor: <Author image={team2} name={form.name} email={form.email} />,
+          teléfono: (
             <SoftTypography variant="caption" color="secondary" fontWeight="medium">
               {form.phone}
             </SoftTypography>
           ),
-          city: (
+          ciudad: (
             <SoftTypography variant="caption" color="secondary" fontWeight="medium">
               {form.city}
             </SoftTypography>
           ),
-          campaing: (
+          campaña: (
             <SoftTypography variant="caption" color="secondary" fontWeight="medium">
               {form.campaign || "N/A"}
             </SoftTypography>
@@ -64,10 +64,10 @@ export default function useAuthorsTableData() {
 
         setData({
           columns: [
-            { name: "author", align: "left" },
-            { name: "phone", align: "left" },
-            { name: "city", align: "center" },
-            { name: "campaing", align: "center" },
+            { name: "autor", align: "left" },
+            { name: "teléfono", align: "left" },
+            { name: "ciudad", align: "center" },
+            { name: "campaña", align: "center" },
           ],
           rows,
         });
