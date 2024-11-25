@@ -69,13 +69,28 @@ function Footer() {
             </SoftBox>
           </SoftBox>
         </Grid>
-        <Grid item xs={12} lg={8} sx={{ textAlign: "center" }}>
-          <SoftTypography variant="body2" color="secondary">
-            Copyright &copy; 2021 Soft by Creative Tim.
-          </SoftTypography>
+        <SoftBox component="footer" py={6}>
+      <Grid container justifyContent="center">
+        <Grid item xs={10} lg={8}>
+          <SoftBox display="flex" justifyContent="center" flexWrap="wrap" mb={3}>
+            <SoftBox mr={{ xs: 2, lg: 3, xl: 6 }}>
+              <SoftTypography component="a" href="#" variant="body2" color="secondary">
+                Copyright &copy; 2024
+              </SoftTypography>
+            </SoftBox>
+            <SoftBox mr={{ xs: 2, lg: 3, xl: 6 }}>
+              <SoftTypography component="a" href="#" variant="body2" color="secondary">
+                Design by vmasideas
+              </SoftTypography>
+            </SoftBox>
+          </SoftBox>
         </Grid>
       </Grid>
     </SoftBox>
+      </Grid>
+    </SoftBox>
+
+    
   );
 }
 

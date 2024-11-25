@@ -32,7 +32,7 @@ function Footer({ company, links }) {
       width="100%"
       display="flex"
       flexDirection={{ xs: "column", lg: "row" }}
-      justifyContent="space-between"
+      justifyContent="center"
       alignItems="center"
       px={1.5}
     >
@@ -40,7 +40,7 @@ function Footer({ company, links }) {
         display="flex"
         justifyContent="center"
         alignItems="center"
-        flexWrap="wrap"
+        textAlign="center" 
         color="text"
         fontSize={size.sm}
         px={1.5}
@@ -51,13 +51,7 @@ function Footer({ company, links }) {
             favorite
           </Icon>
         </SoftBox>
-        by
-        <Link href={href} target="_blank">
-          <SoftTypography variant="button" fontWeight="medium">
-            &nbsp;{name}&nbsp;
-          </SoftTypography>
-        </Link>
-        for a better web.
+        by Desing vmasideas.
       </SoftBox>
       <SoftBox
         component="ul"
@@ -70,7 +64,6 @@ function Footer({ company, links }) {
           mt: 3,
           mb: 0,
           p: 0,
-
           [breakpoints.up("lg")]: {
             mt: 0,
           },
