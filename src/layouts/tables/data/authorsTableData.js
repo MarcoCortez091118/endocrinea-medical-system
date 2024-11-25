@@ -44,7 +44,7 @@ export default function useAuthorsTableData() {
         const dataArray = Array.isArray(forms) ? forms : forms.data || []; // Cambia `forms.data` si es necesario
 
         const rows = dataArray.map((form) => ({
-          author: <Author name={form.name} email={form.email} />,
+          author: <Author image={team2} name={form.name} email={form.email} />,
           phone: (
             <SoftTypography variant="caption" color="secondary" fontWeight="medium">
               {form.phone}
