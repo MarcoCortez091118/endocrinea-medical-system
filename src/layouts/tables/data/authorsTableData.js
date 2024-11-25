@@ -1,14 +1,11 @@
-/* eslint-disable react/prop-types */
-// Soft UI Dashboard React components
+import React, { useEffect, useState } from "react";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import SoftAvatar from "components/SoftAvatar";
 import SoftBadge from "components/SoftBadge";
-
-// Images
+import apiService from "components/ApiService/apiService";
 import team2 from "assets/images/team-2.jpg";
-import team3 from "assets/images/team-3.jpg";
-import team4 from "assets/images/team-4.jpg";
+import PropTypes from "prop-types";
 
 function Author({ image, name, email }) {
   return (
@@ -28,168 +25,60 @@ function Author({ image, name, email }) {
   );
 }
 
-function Function({ job, org }) {
-  return (
-    <SoftBox display="flex" flexDirection="column">
-      <SoftTypography variant="caption" fontWeight="medium" color="text">
-        {job}
-      </SoftTypography>
-      <SoftTypography variant="caption" color="secondary">
-        {org}
-      </SoftTypography>
-    </SoftBox>
-  );
-}
-
-const authorsTableData = {
-  columns: [
-    { name: "author", align: "left" },
-    { name: "function", align: "left" },
-    { name: "status", align: "center" },
-    { name: "employed", align: "center" },
-    { name: "action", align: "center" },
-  ],
-
-  rows: [
-    {
-      author: <Author image={team2} name="John Michael" email="john@creative-tim.com" />,
-      function: <Function job="Manager" org="Organization" />,
-      status: (
-        <SoftBadge variant="gradient" badgeContent="online" color="success" size="xs" container />
-      ),
-      employed: (
-        <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-          23/04/18
-        </SoftTypography>
-      ),
-      action: (
-        <SoftTypography
-          component="a"
-          href="#"
-          variant="caption"
-          color="secondary"
-          fontWeight="medium"
-        >
-          Edit
-        </SoftTypography>
-      ),
-    },
-    {
-      author: <Author image={team3} name="Alexa Liras" email="alexa@creative-tim.com" />,
-      function: <Function job="Programator" org="Developer" />,
-      status: (
-        <SoftBadge variant="gradient" badgeContent="offline" color="secondary" size="xs" container />
-      ),
-      employed: (
-        <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-          11/01/19
-        </SoftTypography>
-      ),
-      action: (
-        <SoftTypography
-          component="a"
-          href="#"
-          variant="caption"
-          color="secondary"
-          fontWeight="medium"
-        >
-          Edit
-        </SoftTypography>
-      ),
-    },
-    {
-      author: <Author image={team4} name="Laurent Perrier" email="laurent@creative-tim.com" />,
-      function: <Function job="Executive" org="Projects" />,
-      status: (
-        <SoftBadge variant="gradient" badgeContent="online" color="success" size="xs" container />
-      ),
-      employed: (
-        <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-          19/09/17
-        </SoftTypography>
-      ),
-      action: (
-        <SoftTypography
-          component="a"
-          href="#"
-          variant="caption"
-          color="secondary"
-          fontWeight="medium"
-        >
-          Edit
-        </SoftTypography>
-      ),
-    },
-    {
-      author: <Author image={team3} name="Michael Levi" email="michael@creative-tim.com" />,
-      function: <Function job="Programator" org="Developer" />,
-      status: (
-        <SoftBadge variant="gradient" badgeContent="online" color="success" size="xs" container />
-      ),
-      employed: (
-        <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-          24/12/08
-        </SoftTypography>
-      ),
-      action: (
-        <SoftTypography
-          component="a"
-          href="#"
-          variant="caption"
-          color="secondary"
-          fontWeight="medium"
-        >
-          Edit
-        </SoftTypography>
-      ),
-    },
-    {
-      author: <Author image={team2} name="Richard Gran" email="richard@creative-tim.com" />,
-      function: <Function job="Manager" org="Executive" />,
-      status: (
-        <SoftBadge variant="gradient" badgeContent="offline" color="secondary" size="xs" container />
-      ),
-      employed: (
-        <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-          04/10/21
-        </SoftTypography>
-      ),
-      action: (
-        <SoftTypography
-          component="a"
-          href="#"
-          variant="caption"
-          color="secondary"
-          fontWeight="medium"
-        >
-          Edit
-        </SoftTypography>
-      ),
-    },
-    {
-      author: <Author image={team4} name="Miriam Eric" email="miriam@creative-tim.com" />,
-      function: <Function job="Programtor" org="Developer" />,
-      status: (
-        <SoftBadge variant="gradient" badgeContent="offline" color="secondary" size="xs" container />
-      ),
-      employed: (
-        <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-          14/09/20
-        </SoftTypography>
-      ),
-      action: (
-        <SoftTypography
-          component="a"
-          href="#"
-          variant="caption"
-          color="secondary"
-          fontWeight="medium"
-        >
-          Edit
-        </SoftTypography>
-      ),
-    },
-  ],
+Author.propTypes = {
+  image: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired,
 };
 
-export default authorsTableData;
+export default function useAuthorsTableData() {
+  const [data, setData] = useState({ columns: [], rows: [] });
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const forms = await apiService.getForms();
+        console.log("Respuesta de la API:", forms); // Verifica qué devuelve la API
+
+        // Si la respuesta no es un array, ajusta esto según la estructura real
+        const dataArray = Array.isArray(forms) ? forms : forms.data || []; // Cambia `forms.data` si es necesario
+
+        const rows = dataArray.map((form) => ({
+          author: <Author name={form.name} email={form.email} />,
+          phone: (
+            <SoftTypography variant="caption" color="secondary" fontWeight="medium">
+              {form.phone}
+            </SoftTypography>
+          ),
+          city: (
+            <SoftTypography variant="caption" color="secondary" fontWeight="medium">
+              {form.city}
+            </SoftTypography>
+          ),
+          campaing: (
+            <SoftTypography variant="caption" color="secondary" fontWeight="medium">
+              {form.campaign || "N/A"}
+            </SoftTypography>
+          ),
+        }));
+
+        setData({
+          columns: [
+            { name: "author", align: "left" },
+            { name: "phone", align: "left" },
+            { name: "city", align: "center" },
+            { name: "campaing", align: "center" },
+          ],
+          rows,
+        });
+      } catch (error) {
+        console.error("Error al procesar los datos:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+
+  return data;
+}
