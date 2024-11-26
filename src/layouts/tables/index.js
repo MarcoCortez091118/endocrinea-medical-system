@@ -15,10 +15,10 @@ import Table from "examples/Tables/Table";
 import React from "react";
 
 // Data
-import useAuthorsTableData from "./data/authorsTableData";
+import useUsuarioTableData from "./data/authorsTableData";
 
 function Tables() {
-  const { columns, rows } = useAuthorsTableData();
+  const { columns, rows } = useUsuarioTableData();
 
   return (
     <DashboardLayout>
