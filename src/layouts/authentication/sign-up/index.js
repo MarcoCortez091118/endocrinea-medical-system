@@ -29,11 +29,10 @@ function SignUp() {
   return (
     <BasicLayout
       title="Bienvenido"
-  
       image={curved6}
     >
       <Card>
-        <SoftBox p={3} mb={1} textAlign="center">
+       {/* <SoftBox p={3} mb={1} textAlign="center">
           <SoftTypography variant="h5" fontWeight="medium">
           Inicia sesi&oacute;n en tu cuenta
           </SoftTypography>
@@ -41,7 +40,12 @@ function SignUp() {
         <SoftBox mb={2}>
           <Socials />
         </SoftBox>
-        <Separator />
+        <Separator />*/}
+        <SoftBox p={3} mb={1} textAlign="center">
+        <SoftTypography variant="h5" fontWeight="medium" sx={{ color: '#E0040B !important' }}>
+          Reg&iacute;strate
+        </SoftTypography>
+        </SoftBox>
         <SoftBox pt={2} pb={3} px={3}>
           <SoftBox component="form" role="form">
             <SoftBox mb={2}>

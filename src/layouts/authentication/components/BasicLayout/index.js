@@ -19,11 +19,7 @@ function BasicLayout({ title, description, image, children }) {
   return (
     <PageLayout>
       <DefaultNavbar
-        action={{
-          type: "external",
-          route: "https://creative-tim.com/product/soft-ui-dashboard-react",
-          label: "free download",
-        }}
+        
         transparent
         light
       />
@@ -36,12 +32,7 @@ function BasicLayout({ title, description, image, children }) {
         pt={6}
         pb={28}
         sx={{
-          backgroundImage: ({ functions: { linearGradient, rgba }, palette: { gradients } }) =>
-            image &&
-            `${linearGradient(
-              rgba(gradients.dark.main, 0.6),
-              rgba(gradients.dark.state, 0.6)
-            )}, url(${image})`,
+          backgroundImage: `url(${image})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -49,11 +40,11 @@ function BasicLayout({ title, description, image, children }) {
       >
         <Grid container spacing={3} justifyContent="center" sx={{ textAlign: "center" }}>
           <Grid item xs={10} lg={4}>
-            <SoftBox mt={6} mb={1}>
+          <SoftBox mt={12} mb={1}>
               <SoftTypography variant="h1" color="white" fontWeight="bold">
                 {title}
               </SoftTypography>
-            </SoftBox>
+          </SoftBox>
             <SoftBox mb={2}>
               <SoftTypography variant="body2" color="white" fontWeight="regular">
                 {description}

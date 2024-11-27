@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64px" height="64px" viewBox="0 0 64 64">
+    <g fill="none" stroke="none" stroke-width="1" fill-rule="evenodd">
+        <g transform="translate(8.000000, 8.000000)">
+            <!-- Rectángulo que representa la página -->
+            <rect fill="#4A90E2" x="0" y="0" width="48" height="48" rx="4"></rect>
+            <!-- Líneas horizontales que simulan el contenido de la página -->
+            <line x1="4" y1="12" x2="44" y2="12" stroke="#FFFFFF" stroke-width="4"></line>
+            <line x1="4" y1="18" x2="44" y2="18" stroke="#FFFFFF" stroke-width="4"></line>
+            <line x1="4" y1="24" x2="44" y2="24" stroke="#FFFFFF" stroke-width="4"></line>
+            <line x1="4" y1="30" x2="44" y2="30" stroke="#FFFFFF" stroke-width="4"></line>
+            <line x1="4" y1="36" x2="44" y2="36" stroke="#FFFFFF" stroke-width="4"></line>
+            <line x1="4" y1="42" x2="44" y2="42" stroke="#FFFFFF" stroke-width="4"></line>
+        </g>
+    </g>
+</svg>

@@ -52,8 +52,8 @@ const switchButton = {
         transform: `translate(${pxToRem(22)}, -50%)`,
 
         "& + .MuiSwitch-track": {
-          backgroundColor: `${rgba(gradients.dark.state, 0.95)} !important`,
-          borderColor: `${rgba(gradients.dark.state, 0.95)} !important`,
+          backgroundColor: "#E0040B" ,
+          borderColor: "#E0040B",
           opacity: 1,
         },
       },

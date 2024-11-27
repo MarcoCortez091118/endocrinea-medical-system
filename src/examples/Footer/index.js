@@ -32,33 +32,35 @@ function Footer({ company, links }) {
       width="100%"
       display="flex"
       flexDirection={{ xs: "column", lg: "row" }}
-      justifyContent="space-between"
+      justifyContent="center"
       alignItems="center"
       px={1.5}
     >
-      <SoftBox
+       <SoftBox
         display="flex"
-        justifyContent="center"
+        flexDirection="column"
         alignItems="center"
-        flexWrap="wrap"
+        textAlign="center"
         color="text"
         fontSize={size.sm}
         px={1.5}
+        mb={2}
       >
-        &copy; {new Date().getFullYear()}, made with
-        <SoftBox fontSize={size.md} color="text" mb={-0.5} mx={0.25}>
-          <Icon color="inherit" fontSize="inherit">
-            favorite
-          </Icon>
+      
+      <SoftBox display="flex" alignItems="center">
+          &copy; {new Date().getFullYear()}, made with
+          <SoftBox fontSize={size.md} color="text" mb={-0.5} mx={0.25}>
+            <Icon color="inherit" fontSize="inherit">
+              favorite
+            </Icon>
+          </SoftBox>
         </SoftBox>
-        by
-        <Link href={href} target="_blank">
-          <SoftTypography variant="button" fontWeight="medium">
-            &nbsp;{name}&nbsp;
-          </SoftTypography>
-        </Link>
-        for a better web.
+        {/* Texto centrado debajo */}
+        <SoftTypography variant="caption" color="text">
+          Design vmasideas
+        </SoftTypography>
       </SoftBox>
+      
       <SoftBox
         component="ul"
         sx={({ breakpoints }) => ({
@@ -70,7 +72,6 @@ function Footer({ company, links }) {
           mt: 3,
           mb: 0,
           p: 0,
-
           [breakpoints.up("lg")]: {
             mt: 0,
           },
@@ -86,10 +87,10 @@ function Footer({ company, links }) {
 Footer.defaultProps = {
   company: { href: "https://www.creative-tim.com/", name: "Creative Tim" },
   links: [
-    { href: "https://www.creative-tim.com/", name: "Creative Tim" },
-    { href: "https://www.creative-tim.com/presentation", name: "About Us" },
-    { href: "https://www.creative-tim.com/blog", name: "Blog" },
-    { href: "https://www.creative-tim.com/license", name: "License" },
+   // { href: "https://www.creative-tim.com/", name: "Creative Tim" },
+   // { href: "https://www.creative-tim.com/presentation", name: "About Us" },
+   // { href: "https://www.creative-tim.com/blog", name: "Blog" },
+   // { href: "https://www.creative-tim.com/license", name: "License" },
   ],
 };
 

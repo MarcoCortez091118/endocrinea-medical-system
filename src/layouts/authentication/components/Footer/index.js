@@ -3,11 +3,10 @@ import Grid from "@mui/material/Grid";
 
 // @mui icons
 import FacebookIcon from "@mui/icons-material/Facebook";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import PinterestIcon from "@mui/icons-material/Pinterest";
+import WebIcon from "@mui/icons-material/Web";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-
+import Icon from "@mui/material/Icon";
+import Link from "@mui/material/Link"; 
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
@@ -52,27 +51,34 @@ function Footer() {
         </Grid>
         <Grid item xs={12} lg={8}>
           <SoftBox display="flex" justifyContent="center" mt={1} mb={3}>
-            <SoftBox mr={3} color="secondary">
-              <FacebookIcon fontSize="small" />
-            </SoftBox>
-            <SoftBox mr={3} color="secondary">
-              <TwitterIcon fontSize="small" />
-            </SoftBox>
-            <SoftBox mr={3} color="secondary">
-              <InstagramIcon fontSize="small" />
-            </SoftBox>
-            <SoftBox mr={3} color="secondary">
-              <PinterestIcon fontSize="small" />
+          <SoftBox color="secondary">
+              <Link href="https://bituin.mx/" target="_blank" rel="noopener noreferrer" underline="none" color="inherit">
+                <WebIcon fontSize="small" />
+              </Link>
             </SoftBox>
             <SoftBox color="secondary">
-              <LinkedInIcon fontSize="small" />
+              <Link href="https://www.linkedin.com/company/visualizamasideas" target="_blank" rel="noopener noreferrer" underline="none" color="inherit">
+                <LinkedInIcon fontSize="small" />
+              </Link>
+              </SoftBox>
+            <SoftBox mr={3} color="secondary">
+                <Link href="https://www.facebook.com/BituinMX" target="_blank" rel="noopener noreferrer" underline="none" color="inherit">
+                 <FacebookIcon fontSize="small" />
+                </Link>
             </SoftBox>
           </SoftBox>
         </Grid>
-        <Grid item xs={12} lg={8} sx={{ textAlign: "center" }}>
-          <SoftTypography variant="body2" color="secondary">
-            Copyright &copy; 2021 Soft by Creative Tim.
-          </SoftTypography>
+        <Grid item xs={12} lg={8}>
+          <SoftBox display="flex" justifyContent="space-between" alignItems="center" mt={3}>
+            <SoftBox display="flex" justifyContent="center" alignItems="center" flexGrow={1}>
+              <SoftTypography variant="body2" color="secondary" textAlign="center">
+              &copy;  Copyright 2024 - Design: Vmasideas
+              </SoftTypography>
+              <Icon color="inherit" fontSize="inherit">
+                favorite
+               </Icon>
+            </SoftBox>
+          </SoftBox>
         </Grid>
       </Grid>
     </SoftBox>
