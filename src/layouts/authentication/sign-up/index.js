@@ -42,9 +42,9 @@ function SignUp() {
         </SoftBox>
         <Separator />*/}
         <SoftBox p={3} mb={1} textAlign="center">
-          <SoftTypography variant="h5" fontWeight="medium">
-          Reg&iacute;strate                                                                      
-          </SoftTypography>
+        <SoftTypography variant="h5" fontWeight="medium" sx={{ color: '#E0040B !important' }}>
+          Reg&iacute;strate
+        </SoftTypography>
         </SoftBox>
         <SoftBox pt={2} pb={3} px={3}>
           <SoftBox component="form" role="form">

@@ -13,6 +13,8 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
+import { red } from "@mui/material/colors";
+
 /**
  * The base colors for the Soft UI Dashboard React.
  * You can add new color using this file.
@@ -108,8 +110,8 @@ const colors = {
     },
 
     info: {
-      main: "#2152ff",
-      state: "#21d4fd",
+      main: "#E0040B",
+      state: "#E0040B"
     },
 
     success: {
@@ -133,8 +135,8 @@ const colors = {
     },
 
     dark: {
-      main: "#141727",
-      state: "#3a416f",
+      main: "#E0040B",
+      state: "#E0040B",
     },
   },
 
