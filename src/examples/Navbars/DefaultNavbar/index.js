@@ -23,7 +23,7 @@ import DefaultNavbarMobile from "examples/Navbars/DefaultNavbar/DefaultNavbarMob
 // Soft UI Dashboard React base styles
 import breakpoints from "assets/theme/base/breakpoints";
 
-function DefaultNavbar({ transparent, light, action }) {
+function DefaultNavbar({ action }) {
   const [mobileNavbar, setMobileNavbar] = useState(false);
   const [mobileView, setMobileView] = useState(false);
 
@@ -31,7 +31,6 @@ function DefaultNavbar({ transparent, light, action }) {
   const closeMobileNavbar = () => setMobileNavbar(false);
 
   useEffect(() => {
-    // A function that sets the display state for the DefaultNavbarMobile.
     function displayMobileNavbar() {
       if (window.innerWidth < breakpoints.values.lg) {
         setMobileView(true);
@@ -42,16 +41,9 @@ function DefaultNavbar({ transparent, light, action }) {
       }
     }
 
-    /** 
-     The event listener that's calling the displayMobileNavbar function when 
-     resizing the window.
-    */
     window.addEventListener("resize", displayMobileNavbar);
-
-    // Call the displayMobileNavbar function to set the state with the initial value.
     displayMobileNavbar();
 
-    // Remove event listener on cleanup
     return () => window.removeEventListener("resize", displayMobileNavbar);
   }, []);
 
@@ -59,73 +51,58 @@ function DefaultNavbar({ transparent, light, action }) {
     <Container>
       <SoftBox
         py={1.5}
-        px={{ xs: transparent ? 4 : 5, sm: transparent ? 2 : 5, lg: transparent ? 0 : 5 }}
-        my={2}
+        px={{ xs: 5, sm: 5, lg: 5 }}
+        my={5}
         mx={3}
         width="calc(100% - 48px)"
         borderRadius="section"
-        shadow={transparent ? "none" : "md"}
-        color={light ? "white" : "dark"}
+        shadow="md"
+        color="dark"
         display="flex"
         justifyContent="space-between"
         alignItems="center"
         position="absolute"
         left={0}
         zIndex={3}
-        sx={({ palette: { transparent: transparentColor, white }, functions: { rgba } }) => ({
-          backgroundColor: transparent ? transparentColor.main : rgba(white.main, 0.8),
-          backdropFilter: transparent ? "none" : `saturate(200%) blur(30px)`,
+        sx={({ palette: { white }, functions: { rgba } }) => ({
+          backgroundColor: rgba(white.main, 0.8),
+          backdropFilter: `saturate(200%) blur(30px)`,
         })}
       >
-        <SoftBox component={Link} to="/" py={transparent ? 1.5 : 0.75} lineHeight={1}>
-          {  <SoftBox component="img" src={logoct} alt="Bituin Logo" width="8rem" />}
+        <SoftBox component={Link} to="/" py={0.75} lineHeight={1}>
+          <SoftBox component="img" src={logoct} alt="Bituin Logo" width="9rem" />
         </SoftBox>
         <SoftBox color="inherit" display={{ xs: "none", lg: "flex" }} m={0} p={0}>
-          <DefaultNavbarLink icon="donut_large" name="dashboard" route="/dashboard" light={light} />
-          <DefaultNavbarLink icon="person" name="profile" route="/profile" light={light} />
+          <DefaultNavbarLink icon="donut_large" name="dashboard" route="/dashboard" />
+          <DefaultNavbarLink icon="person" name="profile" route="/profile" />
           <DefaultNavbarLink
             icon="account_circle"
             name="sign up"
             route="/authentication/sign-up"
-            light={light}
           />
           <DefaultNavbarLink
             icon="key"
             name="sign in"
             route="/authentication/sign-in"
-            light={light}
           />
         </SoftBox>
-        {action &&
-          (action.type === "internal" ? (
-            <SoftBox display={{ xs: "none", lg: "inline-block" }}>
-              <SoftButton
-                component={Link}
-                to={action.route}
-                variant="gradient"
-                color={action.color ? action.color : "info"}
-                size="small"
-                circular
-              >
-                {action.label}
-              </SoftButton>
-            </SoftBox>
-          ) : (
-            <SoftBox display={{ xs: "none", lg: "inline-block" }}>
-              <SoftButton
-                component="a"
-                href={action.route}
-                target="_blank"
-                rel="noreferrer"
-                variant="gradient"
-                color={action.color ? action.color : "info"}
-                size="small"
-                circular
-              >
-                {action.label}
-              </SoftButton>
-            </SoftBox>
-          ))}
+        {action && (
+          <SoftBox display={{ xs: "none", lg: "inline-block" }}>
+            <SoftButton
+              component={action.type === "internal" ? Link : "a"}
+              to={action.type === "internal" ? action.route : undefined}
+              href={action.type === "external" ? action.route : undefined}
+              target={action.type === "external" ? "_blank" : undefined}
+              rel={action.type === "external" ? "noreferrer" : undefined}
+              variant="gradient"
+              color={action.color || "info"}
+              size="small"
+              circular
+            >
+              {action.label}
+            </SoftButton>
+          </SoftBox>
+        )}
         <SoftBox
           display={{ xs: "inline-block", lg: "none" }}
           lineHeight={0}
@@ -145,15 +122,11 @@ function DefaultNavbar({ transparent, light, action }) {
 
 // Setting default values for the props of DefaultNavbar
 DefaultNavbar.defaultProps = {
-  transparent: false,
-  light: false,
   action: false,
 };
 
 // Typechecking props for the DefaultNavbar
 DefaultNavbar.propTypes = {
-  transparent: PropTypes.bool,
-  light: PropTypes.bool,
   action: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.shape({
