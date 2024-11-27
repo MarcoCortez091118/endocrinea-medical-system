@@ -36,23 +36,31 @@ function Footer({ company, links }) {
       alignItems="center"
       px={1.5}
     >
-      <SoftBox
+       <SoftBox
         display="flex"
-        justifyContent="center"
+        flexDirection="column"
         alignItems="center"
-        textAlign="center" 
+        textAlign="center"
         color="text"
         fontSize={size.sm}
         px={1.5}
+        mb={2}
       >
-        &copy; {new Date().getFullYear()}, made with
-        <SoftBox fontSize={size.md} color="text" mb={-0.5} mx={0.25}>
-          <Icon color="inherit" fontSize="inherit">
-            favorite
-          </Icon>
+      
+      <SoftBox display="flex" alignItems="center">
+          &copy; {new Date().getFullYear()}, made with
+          <SoftBox fontSize={size.md} color="text" mb={-0.5} mx={0.25}>
+            <Icon color="inherit" fontSize="inherit">
+              favorite
+            </Icon>
+          </SoftBox>
         </SoftBox>
-        by Desing vmasideas.
+        {/* Texto centrado debajo */}
+        <SoftTypography variant="caption" color="text">
+          by Design vmasideas
+        </SoftTypography>
       </SoftBox>
+      
       <SoftBox
         component="ul"
         sx={({ breakpoints }) => ({
@@ -79,10 +87,10 @@ function Footer({ company, links }) {
 Footer.defaultProps = {
   company: { href: "https://www.creative-tim.com/", name: "Creative Tim" },
   links: [
-  //  { href: "https://www.creative-tim.com/", name: "Creative Timm" },
-    //{ href: "https://www.creative-tim.com/presentation", name: "About Us" },
-    //{ href: "https://www.creative-tim.com/blog", name: "Blog" },
-    //{ href: "https://www.creative-tim.com/license", name: "License" },
+   // { href: "https://www.creative-tim.com/", name: "Creative Tim" },
+   // { href: "https://www.creative-tim.com/presentation", name: "About Us" },
+   // { href: "https://www.creative-tim.com/blog", name: "Blog" },
+   // { href: "https://www.creative-tim.com/license", name: "License" },
   ],
 };
 
