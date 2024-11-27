@@ -15,10 +15,10 @@ import Table from "examples/Tables/Table";
 import React from "react";
 
 // Data
-import useAuthorsTableData from "./data/authorsTableData";
+import useUsuarioTableData from "./data/authorsTableData";
 
 function Tables() {
-  const { columns, rows } = useAuthorsTableData();
+  const { columns, rows } = useUsuarioTableData();
 
   return (
     <DashboardLayout>
@@ -26,8 +26,11 @@ function Tables() {
       <SoftBox py={3}>
         <SoftBox mb={3}>
           <Card>
-            <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-              <SoftTypography variant="h6">Authors table</SoftTypography>
+            <SoftBox display="flex" flexDirection="column" alignItems="flex-start" p={3}>
+              <SoftTypography variant="h6">Table Leads</SoftTypography>
+              <SoftTypography variant="subtitle2" color="secondary" fontWeight="medium" mt={2}>
+                usuario
+              </SoftTypography>
             </SoftBox>
             <SoftBox
               sx={{
