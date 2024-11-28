@@ -15,55 +15,95 @@ import SoftButton from "components/SoftButton";
 
 // Authentication layout components
 import BasicLayout from "layouts/authentication/components/BasicLayout";
-import Socials from "layouts/authentication/components/Socials";
-import Separator from "layouts/authentication/components/Separator";
 
 // Images
 import curved6 from "assets/images/curved-images/curved14.jpg";
 
-function SignUp() {
-  const [agreement, setAgremment] = useState(true);
+// Importation validation
+import { validateForm } from "components/FormsValidation/validation";
 
-  const handleSetAgremment = () => setAgremment(!agreement);
+function SignUp() {
+  const [agreement, setAgreement] = useState(true);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
+
+  const handleSetAgreement = () => setAgreement(!agreement);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    
+    const validationErrors = validateForm(name, email, password, agreement);
+    
+    if (Object.keys(validationErrors).length === 0) {
+      console.log("Formulario enviado exitosamente");
+    } else {
+      setErrors(validationErrors);
+    }
+  };
 
   return (
-    <BasicLayout
-      title="Bienvenido"
-      image={curved6}
-    >
+    <BasicLayout title="Bienvenido" image={curved6}>
       <Card>
-       {/* <SoftBox p={3} mb={1} textAlign="center">
-          <SoftTypography variant="h5" fontWeight="medium">
-          Inicia sesi&oacute;n en tu cuenta
+        <SoftBox p={3} mb={1} textAlign="center">
+          <SoftTypography variant="h5" fontWeight="medium" sx={{ color: '#E0040B !important' }}>
+            Regístrate
           </SoftTypography>
         </SoftBox>
-        <SoftBox mb={2}>
-          <Socials />
-        </SoftBox>
-        <Separator />*/}
-        <SoftBox p={3} mb={1} textAlign="center">
-        <SoftTypography variant="h5" fontWeight="medium" sx={{ color: '#E0040B !important' }}>
-          Reg&iacute;strate
-        </SoftTypography>
-        </SoftBox>
         <SoftBox pt={2} pb={3} px={3}>
-          <SoftBox component="form" role="form">
+          <SoftBox component="form" role="form" onSubmit={handleSubmit}>
             <SoftBox mb={2}>
-              <SoftInput placeholder="Nombre" />
+              <SoftInput
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Nombre"
+                error={!!errors.name} 
+                fullWidth
+              />
+              {errors.name && (
+                <SoftTypography variant="caption" color="error" sx={{ paddingTop: "5px", display: "block" }}>
+                  {errors.name}
+                </SoftTypography>
+              )}
             </SoftBox>
             <SoftBox mb={2}>
-              <SoftInput type="email" placeholder="Correo electr&oacute;nico" />
+              <SoftInput
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Correo electrónico"
+                error={!!errors.email}
+                fullWidth
+              />
+              {errors.email && (
+                <SoftTypography variant="caption" color="error" sx={{ paddingTop: "5px", display: "block" }}>
+                  {errors.email}
+                </SoftTypography>
+              )}
             </SoftBox>
             <SoftBox mb={2}>
-              <SoftInput type="password" placeholder="Contraseña" />
+              <SoftInput
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Contraseña"
+                error={!!errors.password}
+                fullWidth
+              />
+              {errors.password && (
+                <SoftTypography variant="caption" color="error" sx={{ paddingTop: "5px", display: "block" }}>
+                  {errors.password}
+                </SoftTypography>
+              )}
             </SoftBox>
             <SoftBox display="flex" alignItems="center">
-              <Checkbox checked={agreement} onChange={handleSetAgremment} />
+              <Checkbox checked={agreement} onChange={handleSetAgreement} />
               <SoftTypography
                 variant="button"
                 fontWeight="regular"
-                onClick={handleSetAgremment}
-                sx={{ cursor: "poiner", userSelect: "none" }}
+                onClick={handleSetAgreement}
+                sx={{ cursor: "pointer", userSelect: "none" }}
               >
                 &nbsp;&nbsp;Estoy de acuerdo con los&nbsp;
               </SoftTypography>
@@ -74,17 +114,22 @@ function SignUp() {
                 fontWeight="bold"
                 textGradient
               >
-                T&eacute;rminos y condiciones
+                Términos y condiciones
               </SoftTypography>
             </SoftBox>
+            {errors.agreement && (
+              <SoftTypography variant="caption" color="error" sx={{ paddingTop: "5px", display: "block", textAlign: "center" }}>
+                {errors.agreement}
+              </SoftTypography>
+            )}
             <SoftBox mt={4} mb={1}>
-              <SoftButton variant="gradient" color="dark" fullWidth>
-               Reg&iacute;strate
+              <SoftButton variant="gradient" color="dark" fullWidth type="submit">
+                Regístrate
               </SoftButton>
             </SoftBox>
             <SoftBox mt={3} textAlign="center">
               <SoftTypography variant="button" color="text" fontWeight="regular">
-              ¿No tienes una cuenta?&nbsp;
+                ¿No tienes una cuenta?&nbsp;
                 <SoftTypography
                   component={Link}
                   to="/authentication/sign-in"
@@ -93,7 +138,7 @@ function SignUp() {
                   fontWeight="bold"
                   textGradient
                 >
-                  Reg&iacute;strate
+                  Regístrate
                 </SoftTypography>
               </SoftTypography>
             </SoftBox>
