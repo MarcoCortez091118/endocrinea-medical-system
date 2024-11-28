@@ -1,6 +1,6 @@
 export const validateForm = (name, email, password, agreement) => {
   const errors = {};
-  
+
   if (!name) {
     errors.name = "El nombre es obligatorio.";
   }
@@ -13,8 +13,16 @@ export const validateForm = (name, email, password, agreement) => {
 
   if (!password) {
     errors.password = "La contraseña es obligatoria.";
-  } else if (password.length < 6) {
-    errors.password = "La contraseña debe tener al menos 6 caracteres.";
+  } else if (password.length < 8) {
+    errors.password = "La contraseña debe tener al menos 8 caracteres.";
+  } else if (!/[A-Z]/.test(password)) {
+    errors.password = "La contraseña debe contener al menos una letra mayúscula.";
+  } else if (!/[a-z]/.test(password)) {
+    errors.password = "La contraseña debe contener al menos una letra minúscula.";
+  } else if (!/[0-9]/.test(password)) {
+    errors.password = "La contraseña debe contener al menos un número.";
+  } else if (!/[@$!%*?&]/.test(password)) {
+    errors.password = "La contraseña debe contener al menos un carácter especial (@, $, !, %, *, ?, &).";
   }
 
   if (!agreement) {
