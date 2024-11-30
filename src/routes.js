@@ -79,7 +79,7 @@ const routes = [
   { type: "title", title: "Account Pages", key: "account-pages" },
   {
     type: "collapse",
-    name: "Profile",
+    name: "Perfil",
     key: "profile",
     route: "/profile",
     icon: <CustomerSupport size="12px" />,
@@ -88,7 +88,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Sign In",
+    name: "Iniciar sesión",
     key: "sign-in",
     route: "/authentication/sign-in",
     icon: <Document size="12px" />,
@@ -97,7 +97,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Sign Up",
+    name: "Registrarme",
     key: "sign-up",
     route: "/authentication/sign-up",
     icon: <SpaceShip size="12px" />,

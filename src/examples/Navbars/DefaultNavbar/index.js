@@ -74,15 +74,15 @@ function DefaultNavbar({ action }) {
         </SoftBox>
         <SoftBox color="inherit" display={{ xs: "none", lg: "flex" }} m={0} p={0}>
           <DefaultNavbarLink icon="donut_large" name="dashboard" route="/dashboard" />
-          <DefaultNavbarLink icon="person" name="profile" route="/profile" />
+          <DefaultNavbarLink icon="person" name="perfil" route="/profile" />
           <DefaultNavbarLink
             icon="account_circle"
-            name="sign up"
+            name="Registrarme"
             route="/authentication/sign-up"
           />
           <DefaultNavbarLink
             icon="key"
-            name="sign in"
+            name="Iniciar sesi&oacute;n"
             route="/authentication/sign-in"
           />
         </SoftBox>
