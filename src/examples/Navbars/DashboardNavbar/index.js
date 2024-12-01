@@ -12,6 +12,8 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import Icon from "@mui/material/Icon";
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
@@ -45,18 +47,19 @@ import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 
 //Auth 
 import { useAuth } from "context/AuthContext";
+import logoutUser from "components/ApiService/logout";
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
   const [openMenu, setOpenMenu] = useState(false);
+  const [message, setMessage] = useState("");
   const route = useLocation().pathname.split("/").slice(1);
   const { isAuthenticated, logout } = useAuth();
 
   const handleLogout = () => {
-    logout();
-    document.cookie = "token=; path=/; max-age=0";
+    logoutUser(setMessage);
   };
 
   useEffect(() => {
@@ -206,6 +209,21 @@ function DashboardNavbar({ absolute, light, isMini }) {
           </SoftBox>
         )}
       </Toolbar>
+
+      <Snackbar
+        open={message !== ""}
+        autoHideDuration={2000}
+        onClose={() => setMessage("")}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <Alert severity="success" sx={{ width: "100%" }}>
+          {message}
+        </Alert>
+      </Snackbar>
+
     </AppBar>
   );
 }
