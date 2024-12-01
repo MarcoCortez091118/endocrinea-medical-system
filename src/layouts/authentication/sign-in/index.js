@@ -19,16 +19,20 @@ import { validateEmail, validatePassword } from "components/AuthSignIn/validatio
 // Images
 import curved9 from "assets/images/curved-images/curved-6.jpg";
 
+import { useAuth } from "context/AuthContext";
+
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState(""); 
-  const [openSnackbar, setOpenSnackbar] = useState(false); 
+  const [successMessage, setSuccessMessage] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const navigate = useNavigate();
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const handleCloseSnackbar = () => setOpenSnackbar(false);
+  const { login } = useAuth();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -51,12 +55,12 @@ function SignIn() {
       if (response && response.data && response.data.access_token) {
         const token = response.data.access_token;
         document.cookie = `token=${token}; path=/; secure; samesite=strict; max-age=86400`;
-
+        login();
         setSuccessMessage("¡Bienvenido! Has iniciado sesión correctamente.");
         setOpenSnackbar(true);
         setTimeout(() => {
           navigate("/dashboard");
-        }, 1600); 
+        }, 1600);
       } else {
         setError("No se recibió un token válido del servidor.");
       }
