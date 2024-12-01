@@ -1,27 +1,70 @@
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 // react-router-dom components
 import { Link } from "react-router-dom";
-
 // @mui material components
 import Switch from "@mui/material/Switch";
-
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import SoftInput from "components/SoftInput";
 import SoftButton from "components/SoftButton";
-
 // Authentication layout components
 import CoverLayout from "layouts/authentication/components/CoverLayout";
-
+// Services and validations
+import { loginUser } from "components/AuthSignIn/AuthService";
+import { validateEmail, validatePassword } from "components/AuthSignIn/validations";
 // Images
 import curved9 from "assets/images/curved-images/curved-6.jpg";
 
 function SignIn() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
-
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); 
+  const [openSnackbar, setOpenSnackbar] = useState(false); 
+  const navigate = useNavigate();
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+  const handleCloseSnackbar = () => setOpenSnackbar(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    const emailError = validateEmail(email);
+    const passwordError = validatePassword(password);
+
+    if (emailError) {
+      setError(emailError);
+      return;
+    }
+
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
+
+    try {
+      const response = await loginUser({ mail: email, password });
+
+      if (response && response.data && response.data.access_token) {
+        const token = response.data.access_token;
+        document.cookie = `token=${token}; path=/; secure; samesite=strict; max-age=86400`;
+
+        setSuccessMessage("¡Bienvenido! Has iniciado sesión correctamente.");
+        setOpenSnackbar(true);
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1600); 
+      } else {
+        setError("No se recibió un token válido del servidor.");
+      }
+    } catch (err) {
+      console.error("Error durante el inicio de sesión:", err);
+      setError(err.message || "Ocurrió un error al iniciar sesión.");
+    }
+  };
 
   return (
     <CoverLayout
@@ -29,14 +72,20 @@ function SignIn() {
       description="Ingresa tu correo electrónico y contraseña para iniciar sesión"
       image={curved9}
     >
-      <SoftBox component="form" role="form">
+      <SoftBox component="form" role="form" onSubmit={handleSubmit}>
+        {/* Formulario */}
         <SoftBox mb={2}>
           <SoftBox mb={1} ml={0.5}>
             <SoftTypography component="label" variant="caption" fontWeight="bold">
               Correo electrónico
             </SoftTypography>
           </SoftBox>
-          <SoftInput type="email" placeholder="correo electrónico" />
+          <SoftInput
+            type="email"
+            placeholder="correo electrónico"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </SoftBox>
         <SoftBox mb={2}>
           <SoftBox mb={1} ml={0.5}>
@@ -44,8 +93,18 @@ function SignIn() {
               Contraseña
             </SoftTypography>
           </SoftBox>
-          <SoftInput type="password" placeholder="contraseña" />
+          <SoftInput
+            type="password"
+            placeholder="contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </SoftBox>
+        {error && (
+          <SoftTypography color="error" variant="caption">
+            {error}
+          </SoftTypography>
+        )}
         <SoftBox display="flex" alignItems="center">
           <Switch checked={rememberMe} onChange={handleSetRememberMe} />
           <SoftTypography
@@ -58,8 +117,8 @@ function SignIn() {
           </SoftTypography>
         </SoftBox>
         <SoftBox mt={4} mb={1}>
-          <SoftButton variant="gradient" color="info" fullWidth>
-            iniciar sesión
+          <SoftButton variant="gradient" color="info" fullWidth type="submit">
+            Iniciar sesión
           </SoftButton>
         </SoftBox>
         <SoftBox mt={3} textAlign="center">
@@ -73,11 +132,24 @@ function SignIn() {
               fontWeight="medium"
               textGradient
             >
-              Reg&iacute;strate
+              Regístrate
             </SoftTypography>
           </SoftTypography>
         </SoftBox>
       </SoftBox>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        sx={{ padding: '100px' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: "100%" }}>
+          {successMessage}
+        </Alert>
+      </Snackbar>
+
     </CoverLayout>
   );
 }
