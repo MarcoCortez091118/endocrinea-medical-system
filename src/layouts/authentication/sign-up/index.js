@@ -1,14 +1,11 @@
 import { useState } from "react";
 
 // react-router-dom components
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
-import IconButton from "@mui/material/IconButton";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
@@ -22,26 +19,53 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 // Images
 import curved6 from "assets/images/curved-images/curved14.jpg";
 
-// Importation validation
+// Validation form registration
 import { validateForm } from "components/FormsValidation/validation";
+import { registerUser } from "components/ApiService/signupService";
 
 function SignUp() {
   const [agreement, setAgreement] = useState(true);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [redirecting, setRedirecting] = useState(false);
+  const navigate = useNavigate();
 
   const handleSetAgreement = () => setAgreement(!agreement);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
+    setMessage("");
     const validationErrors = validateForm(name, email, password, agreement);
 
     if (Object.keys(validationErrors).length === 0) {
-      console.log("Formulario enviado exitosamente");
+      setLoading(true);
+      const payload = {
+        username: name,
+        mail: email,
+        password: password,
+        validate_password: password,
+        timestamp: new Date().toISOString(),
+      };
+
+      try {
+        const result = await registerUser(payload);
+        setMessage(`¡Registro exitoso! Redirigiendo...`);
+        setRedirecting(true);
+        setTimeout(() => {
+          navigate("/authentication/sign-in");
+        }, 3000);
+
+      } catch (error) {
+        console.error("Error recibido:", error);
+        const errorMessage = typeof error.message === "string" ? error.message : "Ocurrió un error desconocido.";
+        setMessage(errorMessage);
+      } finally {
+        setLoading(false);
+      }
     } else {
       setErrors(validationErrors);
     }
@@ -98,17 +122,14 @@ function SignUp() {
                 </SoftTypography>
               )}
             </SoftBox>
-            <SoftBox mb={2} position="relative">
+            <SoftBox mb={2}>
               <SoftInput
-                type={showPassword ? "text" : "password"}
+                type={"password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Contraseña"
                 error={!!errors.password}
                 fullWidth
-                sx={{
-                  paddingRight: "40px", 
-                }}
               />
             </SoftBox>
             {errors.password && (
@@ -159,10 +180,24 @@ function SignUp() {
                 color="dark"
                 fullWidth
                 type="submit"
+                disabled={loading}
               >
-                Regístrate
+                {loading ? "Cargando..." : "Regístrate"}
               </SoftButton>
             </SoftBox>
+            {message && (
+              <SoftTypography
+                variant="subtitle2"
+                color="error"
+                sx={{
+                  paddingTop: "10px",
+                  display: "block",
+                  textAlign: "center",
+                }}
+              >
+                {message}
+              </SoftTypography>
+            )}
             <SoftBox mt={3} textAlign="center">
               <SoftTypography
                 variant="button"
