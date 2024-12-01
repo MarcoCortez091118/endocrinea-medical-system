@@ -110,18 +110,6 @@ function SignUp() {
                   paddingRight: "40px", 
                 }}
               />
-              <IconButton
-                onClick={() => setShowPassword(!showPassword)}
-                edge="end"
-                sx={{
-                  position: "absolute",
-                  top: "50%",
-                  right: "10px",
-                  transform: "translateY(-50%)",
-                }}
-              >
-                {showPassword ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
             </SoftBox>
             {errors.password && (
               <SoftTypography
