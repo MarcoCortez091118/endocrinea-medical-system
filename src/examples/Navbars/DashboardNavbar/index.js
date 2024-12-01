@@ -43,12 +43,21 @@ import {
 import team2 from "assets/images/team-2.jpg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 
+//Auth 
+import { useAuth } from "context/AuthContext";
+
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
+  const { isAuthenticated, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    document.cookie = "token=; path=/; max-age=0";
+  };
 
   useEffect(() => {
     // Setting the navbar type
@@ -139,24 +148,38 @@ function DashboardNavbar({ absolute, light, isMini }) {
               />
             </SoftBox>
             <SoftBox color={light ? "white" : "inherit"}>
-              <Link to="/authentication/sign-in">
-                <IconButton sx={navbarIconButton} size="small">
-                  <Icon
-                    sx={({ palette: { dark, white } }) => ({
-                      color: light ? white.main : dark.main,
-                    })}
-                  >
-                    account_circle
-                  </Icon>
-                  <SoftTypography
-                    variant="button"
-                    fontWeight="medium"
-                    color={light ? "white" : "dark"}
-                  >
-                    Iniciar sesión
-                  </SoftTypography>
-                </IconButton>
-              </Link>
+
+              {isAuthenticated ? (
+                <SoftTypography
+                  variant="button"
+                  fontWeight="medium"
+                  color={light ? "white" : "dark"}
+                  onClick={handleLogout}
+                  sx={{ cursor: "pointer" }}
+                >
+                  Cerrar sesión
+                </SoftTypography>
+              ) : (
+
+                <Link to="/authentication/sign-in">
+                  <IconButton sx={navbarIconButton} size="small">
+                    <Icon
+                      sx={({ palette: { dark, white } }) => ({
+                        color: light ? white.main : dark.main,
+                      })}
+                    >
+                      account_circle
+                    </Icon>
+                    <SoftTypography
+                      variant="button"
+                      fontWeight="medium"
+                      color={light ? "white" : "dark"}
+                    >
+                      Iniciar sesión
+                    </SoftTypography>
+                  </IconButton>
+                </Link>
+              )}
               <IconButton
                 size="small"
                 color="inherit"
