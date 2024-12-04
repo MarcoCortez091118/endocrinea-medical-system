@@ -27,9 +27,12 @@ import breakpoints from "assets/theme/base/breakpoints";
 import burceMars from "assets/images/bruce-mars.jpg";
 import curved0 from "assets/images/curved-images/curved0.jpg";
 
+import { useAuth } from "context/AuthContext";
+
 function Header() {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
+  const { userData } = useAuth();
 
   useEffect(() => {
     // A function that sets the orientation state of the tabs.
@@ -98,10 +101,10 @@ function Header() {
           <Grid item>
             <SoftBox height="100%" mt={0.5} lineHeight={1}>
               <SoftTypography variant="h5" fontWeight="medium">
-                Alex Thompson
+                {userData.name || "Nombre no disponible"}
               </SoftTypography>
               <SoftTypography variant="button" color="text" fontWeight="medium">
-                CEO / Co-Founder
+                {userData.email || "Correo no disponible"}
               </SoftTypography>
             </SoftBox>
           </Grid>
