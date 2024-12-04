@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 // react-router components
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
@@ -6,22 +6,12 @@ import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 // @mui material components
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import Icon from "@mui/material/Icon";
-
-// Soft UI Dashboard React components
-import SoftBox from "components/SoftBox";
 
 // Soft UI Dashboard React examples
 import Sidenav from "examples/Sidenav";
 
 // Soft UI Dashboard React themes
 import theme from "assets/theme";
-import themeRTL from "assets/theme/theme-rtl";
-
-// RTL plugins
-import rtlPlugin from "stylis-plugin-rtl";
-import { CacheProvider } from "@emotion/react";
-import createCache from "@emotion/cache";
 
 // Soft UI Dashboard React routes
 import routes from "routes";
@@ -36,18 +26,7 @@ export default function App() {
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, direction, layout, sidenavColor } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
-  const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
-
-  // Cache for the rtl
-  useMemo(() => {
-    const cacheRtl = createCache({
-      key: "rtl",
-      stylisPlugins: [rtlPlugin],
-    });
-
-    setRtlCache(cacheRtl);
-  }, []);
 
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
@@ -89,31 +68,7 @@ export default function App() {
       return null;
     });
 
-
-
-  return direction === "rtl" ? (
-    <CacheProvider value={rtlCache}>
-      <ThemeProvider theme={themeRTL}>
-        <CssBaseline />
-        {layout === "dashboard" && (
-          <>
-            <Sidenav
-              color={sidenavColor}
-              brand={brand}
-              brandName="Soft UI Dashboard"
-              routes={routes}
-              onMouseEnter={handleOnMouseEnter}
-              onMouseLeave={handleOnMouseLeave}
-            />
-          </>
-        )}
-        <Routes>
-          {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/dashboard" />} />
-        </Routes>
-      </ThemeProvider>
-    </CacheProvider>
-  ) : (
+  return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       {layout === "dashboard" && (
