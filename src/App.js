@@ -105,7 +105,7 @@ export default function App() {
               onMouseEnter={handleOnMouseEnter}
               onMouseLeave={handleOnMouseLeave}
             />
-            </>
+          </>
         )}
         <Routes>
           {getRoutes(routes)}
@@ -130,7 +130,7 @@ export default function App() {
       )}
       <Routes>
         {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/dashboard" />} />
+        <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
       </Routes>
     </ThemeProvider>
   );
