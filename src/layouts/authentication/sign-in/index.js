@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
@@ -29,10 +29,20 @@ function SignIn() {
   const [successMessage, setSuccessMessage] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("email");
+    const savedPassword = localStorage.getItem("password");
+    const savedRememberMe = localStorage.getItem("rememberMe") === "true";
+
+    if (savedRememberMe) {
+      if (savedEmail) setEmail(savedEmail);
+      if (savedPassword) setPassword(savedPassword);
+      setRememberMe(true);
+    }
+  }, []);
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const handleCloseSnackbar = () => setOpenSnackbar(false);
-  const { login } = useAuth();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -55,6 +65,17 @@ function SignIn() {
       if (response && response.data && response.data.access_token) {
         const token = response.data.access_token;
         document.cookie = `token=${token}; path=/; secure; samesite=strict; max-age=86400`;
+       
+        if (rememberMe) {
+          localStorage.setItem("email", email);
+          localStorage.setItem("password", password);
+          localStorage.setItem("rememberMe", true);
+        } else {
+          localStorage.removeItem("email");
+          localStorage.removeItem("password");
+          localStorage.removeItem("rememberMe");
+        }
+       
         login();
         setSuccessMessage("¡Bienvenido! Has iniciado sesión correctamente.");
         setOpenSnackbar(true);
@@ -77,7 +98,6 @@ function SignIn() {
       image={curved9}
     >
       <SoftBox component="form" role="form" onSubmit={handleSubmit}>
-        {/* Formulario */}
         <SoftBox mb={2}>
           <SoftBox mb={1} ml={0.5}>
             <SoftTypography component="label" variant="caption" fontWeight="bold">
@@ -109,7 +129,7 @@ function SignIn() {
             {error}
           </SoftTypography>
         )}
-        <SoftBox display="flex" alignItems="center">
+         <SoftBox display="flex" alignItems="center">
           <Switch checked={rememberMe} onChange={handleSetRememberMe} />
           <SoftTypography
             variant="button"
