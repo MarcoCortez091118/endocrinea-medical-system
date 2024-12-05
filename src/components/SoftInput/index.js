@@ -18,7 +18,6 @@ const SoftInput = forwardRef(({ size, icon, error, success, disabled, type, ...r
   const { direction } = controller;
   const iconDirection = icon.direction;
 
-  
   const shouldIncludeIcon = icon.component && type !== "password";
 
   if (shouldIncludeIcon && icon.direction === "left") {
