@@ -21,9 +21,10 @@ export const validateForm = (name, email, password, agreement) => {
     errors.password = "La contraseña debe contener al menos una letra minúscula.";
   } else if (!/[0-9]/.test(password)) {
     errors.password = "La contraseña debe contener al menos un número.";
-  } else if (!/[@$!%*?&]/.test(password)) {
-    errors.password = "La contraseña debe contener al menos un carácter especial (@, $, !, %, *, ?, &).";
+  } else if (!/[^\w\s]/.test(password)) {
+    errors.password = "La contraseña debe contener al menos un carácter especial.";
   }
+  
 
   if (!agreement) {
     errors.agreement = "Debes aceptar los términos y condiciones.";
