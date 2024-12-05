@@ -33,7 +33,7 @@ function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setMessage("");
-    const validationErrors = validateForm(name, email, password, agreement);
+    const validationErrors = validateForm(name, email, password, agreement, confirmPassword);
 
     if (password !== confirmPassword) {
       validationErrors.confirmPassword = "Las contraseñas no coinciden.";
@@ -45,7 +45,7 @@ function SignUp() {
         username: name,
         mail: email,
         password: password,
-        validate_password: password,
+        validate_password: confirmPassword,
         timestamp: new Date().toISOString(),
       };
 
