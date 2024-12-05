@@ -1,28 +1,14 @@
 import { useState } from "react";
-
-// react-router-dom components
 import { Link, useNavigate } from "react-router-dom";
-
-// @mui material components
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
-
-// Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import SoftInput from "components/SoftInput";
 import SoftButton from "components/SoftButton";
-
-// Material UI Icons
-import Icon from "@mui/material/Icon"; // Para usar íconos como "visibility" y "visibility_off"
-
-// Authentication layout components
+import Icon from "@mui/material/Icon";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
-
-// Images
 import curved6 from "assets/images/curved-images/curved14.jpg";
-
-// Validation form registration
 import { validateForm } from "components/FormsValidation/validation";
 import { registerUser } from "components/ApiService/signupService";
 
@@ -31,7 +17,9 @@ function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // Nuevo estado
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -39,13 +27,17 @@ function SignUp() {
   const navigate = useNavigate();
 
   const handleSetAgreement = () => setAgreement(!agreement);
-
-  const togglePasswordVisibility = () => setShowPassword(!showPassword); // Función para alternar el estado
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword); 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setMessage("");
     const validationErrors = validateForm(name, email, password, agreement);
+
+    if (password !== confirmPassword) {
+      validationErrors.confirmPassword = "Las contraseñas no coinciden.";
+    }
 
     if (Object.keys(validationErrors).length === 0) {
       setLoading(true);
@@ -90,7 +82,6 @@ function SignUp() {
         </SoftBox>
         <SoftBox pt={2} pb={3} px={3}>
           <SoftBox component="form" role="form" onSubmit={handleSubmit}>
-            {/* Nombre */}
             <SoftBox mb={2}>
               <SoftInput
                 value={name}
@@ -110,7 +101,7 @@ function SignUp() {
               )}
             </SoftBox>
 
-            {/* Correo electrónico */}
+
             <SoftBox mb={2}>
               <SoftInput
                 type="email"
@@ -131,7 +122,6 @@ function SignUp() {
               )}
             </SoftBox>
 
-            {/* Contraseña con ojito */}
             <SoftBox mb={2} display="flex" alignItems="center">
               <SoftInput
                 type={showPassword ? "text" : "password"}
@@ -140,11 +130,6 @@ function SignUp() {
                 placeholder="Contraseña"
                 error={!!errors.password}
                 fullWidth
-                style={{
-                  "::-ms-reveal": {
-                    display: "none", // Oculta el ojo de Edge
-                  },
-                }}
               />
               <Icon
                 onClick={togglePasswordVisibility}
@@ -168,24 +153,45 @@ function SignUp() {
               </SoftTypography>
             )}
 
-            {/* Aceptación de términos */}
+          
+            <SoftBox mb={2} display="flex" alignItems="center">
+              <SoftInput
+                type={showConfirmPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirmar contraseña"
+                error={!!errors.confirmPassword}
+                fullWidth
+              />
+              <Icon
+                onClick={toggleConfirmPasswordVisibility}
+                sx={{
+                  cursor: "pointer",
+                  marginLeft: "-35px",
+                  zIndex: "10",
+                  color: "#aaa",
+                }}
+              >
+                {showConfirmPassword ? "visibility" : "visibility_off"}
+              </Icon>
+            </SoftBox>
+            {errors.confirmPassword && (
+              <SoftTypography
+                variant="caption"
+                color="error"
+                sx={{ paddingTop: "5px", display: "block" }}
+              >
+                {errors.confirmPassword}
+              </SoftTypography>
+            )}
+
+      
             <SoftBox display="flex" alignItems="center">
               <Checkbox checked={agreement} onChange={handleSetAgreement} />
-              <SoftTypography
-                variant="button"
-                fontWeight="regular"
-                onClick={handleSetAgreement}
-                sx={{ cursor: "pointer", userSelect: "none" }}
-              >
+              <SoftTypography variant="button" fontWeight="regular" onClick={handleSetAgreement} sx={{ cursor: "pointer", userSelect: "none" }}>
                 &nbsp;&nbsp;Acepto los&nbsp;
               </SoftTypography>
-              <SoftTypography
-                component="a"
-                href="#"
-                variant="button"
-                fontWeight="bold"
-                textGradient
-              >
+              <SoftTypography component="a" href="#" variant="button" fontWeight="bold" textGradient>
                 Términos y condiciones
               </SoftTypography>
             </SoftBox>
@@ -193,25 +199,15 @@ function SignUp() {
               <SoftTypography
                 variant="caption"
                 color="error"
-                sx={{
-                  paddingTop: "5px",
-                  display: "block",
-                  textAlign: "center",
-                }}
+                sx={{ paddingTop: "5px", display: "block", textAlign: "center" }}
               >
                 {errors.agreement}
               </SoftTypography>
             )}
 
-            {/* Botón de registro */}
+        
             <SoftBox mt={4} mb={1}>
-              <SoftButton
-                variant="gradient"
-                color="dark"
-                fullWidth
-                type="submit"
-                disabled={loading}
-              >
+              <SoftButton variant="gradient" color="dark" fullWidth type="submit" disabled={loading}>
                 {loading ? "Cargando..." : "Regístrate"}
               </SoftButton>
             </SoftBox>
@@ -228,25 +224,6 @@ function SignUp() {
                 {message}
               </SoftTypography>
             )}
-            <SoftBox mt={3} textAlign="center">
-              <SoftTypography
-                variant="button"
-                color="text"
-                fontWeight="regular"
-              >
-                ¿Ya tienes una cuenta?&nbsp;
-                <SoftTypography
-                  component={Link}
-                  to="/authentication/sign-in"
-                  variant="button"
-                  color="dark"
-                  fontWeight="bold"
-                  textGradient
-                >
-                  Inicia sesi&oacute;n
-                </SoftTypography>
-              </SoftTypography>
-            </SoftBox>
           </SoftBox>
         </SoftBox>
       </Card>
