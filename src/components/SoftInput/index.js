@@ -12,13 +12,16 @@ import SoftInputIconRoot from "components/SoftInput/SoftInputIconRoot";
 // Soft UI Dashboard React contexts
 import { useSoftUIController } from "context";
 
-const SoftInput = forwardRef(({ size, icon, error, success, disabled, ...rest }, ref) => {
+const SoftInput = forwardRef(({ size, icon, error, success, disabled, type, ...rest }, ref) => {
   let template;
   const [controller] = useSoftUIController();
   const { direction } = controller;
   const iconDirection = icon.direction;
 
-  if (icon.component && icon.direction === "left") {
+  // Solo incluir el ícono si no es un campo de contraseña
+  const shouldIncludeIcon = icon.component && type !== "password";
+
+  if (shouldIncludeIcon && icon.direction === "left") {
     template = (
       <SoftInputWithIconRoot ref={ref} ownerState={{ error, success, disabled }}>
         <SoftInputIconBoxRoot ownerState={{ size }}>
@@ -28,15 +31,17 @@ const SoftInput = forwardRef(({ size, icon, error, success, disabled, ...rest },
         </SoftInputIconBoxRoot>
         <SoftInputRoot
           {...rest}
+          type={type}
           ownerState={{ size, error, success, iconDirection, direction, disabled }}
         />
       </SoftInputWithIconRoot>
     );
-  } else if (icon.component && icon.direction === "right") {
+  } else if (shouldIncludeIcon && icon.direction === "right") {
     template = (
       <SoftInputWithIconRoot ref={ref} ownerState={{ error, success, disabled }}>
         <SoftInputRoot
           {...rest}
+          type={type}
           ownerState={{ size, error, success, iconDirection, direction, disabled }}
         />
         <SoftInputIconBoxRoot ownerState={{ size }}>
@@ -48,12 +53,18 @@ const SoftInput = forwardRef(({ size, icon, error, success, disabled, ...rest },
     );
   } else {
     template = (
-      <SoftInputRoot {...rest} ref={ref} ownerState={{ size, error, success, disabled }} />
+      <SoftInputRoot
+        {...rest}
+        ref={ref}
+        type={type}
+        ownerState={{ size, error, success, disabled }}
+      />
     );
   }
 
   return template;
 });
+
 
 // Setting default values for the props of SoftInput
 SoftInput.defaultProps = {
