@@ -17,6 +17,7 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 import { loginUser } from "components/AuthSignIn/AuthService";
 import { validateEmail, validatePassword } from "components/AuthSignIn/validations";
 // Images
+import Icon from "@mui/material/Icon";
 import curved9 from "assets/images/curved-images/curved-6.jpg";
 
 import { useAuth } from "context/AuthContext";
@@ -25,6 +26,7 @@ function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -43,6 +45,9 @@ function SignIn() {
   }, []);
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const handleCloseSnackbar = () => setOpenSnackbar(false);
+
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -112,18 +117,32 @@ function SignIn() {
           />
         </SoftBox>
         <SoftBox mb={2}>
-          <SoftBox mb={1} ml={0.5}>
-            <SoftTypography component="label" variant="caption" fontWeight="bold">
-              Contraseña
-            </SoftTypography>
-          </SoftBox>
-          <SoftInput
-            type="password"
-            placeholder="contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </SoftBox>
+  <SoftBox mb={1} ml={0.5}>
+    <SoftTypography component="label" variant="caption" fontWeight="bold">
+      Contraseña
+    </SoftTypography>
+  </SoftBox>
+  <SoftBox display="flex" alignItems="center">
+    <SoftInput
+      type={showPassword ? "text" : "password"}
+      placeholder="Contraseña"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+    />
+    <Icon
+      onClick={() => setShowPassword(!showPassword)}
+      sx={{
+        cursor: "pointer",
+        marginLeft: "-35px",
+        zIndex: "10",
+        color: "#aaa",
+      }}
+    >
+      {showPassword ? "visibility" : "visibility_off"}
+    </Icon>
+  </SoftBox>
+</SoftBox>
+
         {error && (
           <SoftTypography color="error" variant="caption">
             {error}
