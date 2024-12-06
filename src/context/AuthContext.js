@@ -4,25 +4,28 @@ import PropTypes from "prop-types";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userData, setUserData] = useState({ name: "", email: "", token: "" });
 
-    const login = () => {
-        setIsAuthenticated(true);
-    };
+  const login = (data) => {
+    setIsAuthenticated(true);
+    setUserData(data);
+  };
 
-    const logout = () => {
-        setIsAuthenticated(false);
-    };
+  const logout = () => {
+    setIsAuthenticated(false);
+    setUserData({ name: "", email: "", token: "" });
+  };
 
-    return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, userData }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 AuthProvider.propTypes = {
-    children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export const useAuth = () => useContext(AuthContext);

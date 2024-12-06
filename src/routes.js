@@ -39,6 +39,9 @@ import CustomerSupport from "examples/Icons/CustomerSupport";
 import CreditCard from "examples/Icons/CreditCard";
 import Cube from "examples/Icons/Cube";
 
+// Soft UI React protected routes
+import ProtectedRoute from "components/ProtectedRoutes/ProtectedRoute";
+
 const routes = [
   {
     type: "collapse",
@@ -46,7 +49,11 @@ const routes = [
     key: "dashboard",
     route: "/dashboard",
     icon: <Shop size="12px" />,
-    component: <Dashboard />,
+    component: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
     noCollapse: true,
   },
   {
@@ -55,7 +62,11 @@ const routes = [
     key: "tables",
     route: "/tables",
     icon: <Office size="12px" />,
-    component: <Tables />,
+    component: (
+      <ProtectedRoute>
+        <Tables />
+      </ProtectedRoute>
+    ),
     noCollapse: true,
   },
   {
@@ -64,7 +75,11 @@ const routes = [
     key: "billing",
     route: "/billing",
     icon: <CreditCard size="12px" />,
-    component: <Billing />,
+    component: (
+      <ProtectedRoute>
+        <Billing />
+      </ProtectedRoute>
+    ),
     noCollapse: true,
   },
   {
@@ -73,7 +88,11 @@ const routes = [
     key: "virtual-reality",
     route: "/virtual-reality",
     icon: <Cube size="12px" />,
-    component: <VirtualReality />,
+    component: (
+      <ProtectedRoute>
+        <VirtualReality />
+      </ProtectedRoute>
+    ),
     noCollapse: true,
   },
   { type: "title", title: "Account Pages", key: "account-pages" },
@@ -83,7 +102,11 @@ const routes = [
     key: "profile",
     route: "/profile",
     icon: <CustomerSupport size="12px" />,
-    component: <Profile />,
+    component: (
+      <ProtectedRoute>
+        <Profile />
+      </ProtectedRoute>
+    ),
     noCollapse: true,
   },
   {
