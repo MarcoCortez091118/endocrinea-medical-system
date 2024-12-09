@@ -67,9 +67,8 @@ function SignIn() {
     try {
       const response = await loginUser({ mail: email, password });
 
-      if (response && response.data && response.data.access_token) {
-        const token = response.data.access_token;
-        document.cookie = `token=${token}; path=/; secure; samesite=strict; max-age=86400`;
+      if (response && response.token) {
+        document.cookie = `token=${response.token}; path=/; secure; samesite=strict; max-age=86400`;
        
         if (rememberMe) {
           localStorage.setItem("email", email);
@@ -81,7 +80,9 @@ function SignIn() {
           localStorage.removeItem("rememberMe");
         }
        
-        login();
+       
+        login(response);
+
         setSuccessMessage("¡Bienvenido! Has iniciado sesión correctamente.");
         setOpenSnackbar(true);
         setTimeout(() => {
@@ -186,13 +187,12 @@ function SignIn() {
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        sx={{ padding: '100px' }}
+        sx={{ padding: "100px" }}
       >
         <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: "100%" }}>
           {successMessage}
         </Alert>
       </Snackbar>
-
     </CoverLayout>
   );
 }

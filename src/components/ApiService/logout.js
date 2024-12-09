@@ -1,18 +1,19 @@
 const logoutUser = async (setMessage) => {
     try {
         const response = await fetch('https://bituin-fastapi-data.azurewebsites.net/users/logout', {
-            method: 'POST',
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getCookie('token')}`
-            }
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("authData"))?.token}`,
+            },
         });
 
         if (response.ok) {
             const data = await response.json();
             setMessage(data.message);
 
-            document.cookie = "token=; path=/; max-age=0";
+            sessionStorage.removeItem("authData");
+
             setTimeout(() => {
                 window.location.href = 'authentication/sign-in';
             }, 2000);
@@ -22,13 +23,6 @@ const logoutUser = async (setMessage) => {
     } catch (error) {
         console.error('Error al enviar la solicitud:', error);
     }
-};
-
-const getCookie = (name) => {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-    return null;
 };
 
 export default logoutUser;

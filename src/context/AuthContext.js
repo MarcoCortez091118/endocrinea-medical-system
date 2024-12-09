@@ -1,28 +1,44 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [userData, setUserData] = useState({ name: "", email: "", token: "" });
 
-    const login = () => {
-        setIsAuthenticated(true);
-    };
+  useEffect(() => {
+    const storedData = sessionStorage.getItem("authData");
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      setIsAuthenticated(true);
+      setUserData(parsedData);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, []);
 
-    const logout = () => {
-        setIsAuthenticated(false);
-    };
+  const login = (data) => {
+    setIsAuthenticated(true);
+    setUserData(data);
+    sessionStorage.setItem("authData", JSON.stringify(data));
+  };
 
-    return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  const logout = () => {
+    setIsAuthenticated(false);
+    setUserData({ name: "", email: "", token: "" });
+    sessionStorage.removeItem("authData");
+  };
+
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, userData }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 AuthProvider.propTypes = {
-    children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export const useAuth = () => useContext(AuthContext);

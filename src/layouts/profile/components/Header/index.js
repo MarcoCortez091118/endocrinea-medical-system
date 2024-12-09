@@ -25,11 +25,14 @@ import breakpoints from "assets/theme/base/breakpoints";
 
 // Images
 import burceMars from "assets/images/bruce-mars.jpg";
-import curved0 from "assets/images/curved-images/curved0.jpg";
+import banneruc from "assets/images/banneruc.png";
+
+import { useAuth } from "context/AuthContext";
 
 function Header() {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
+  const { userData } = useAuth();
 
   useEffect(() => {
     // A function that sets the orientation state of the tabs.
@@ -65,9 +68,9 @@ function Header() {
         sx={{
           backgroundImage: ({ functions: { rgba, linearGradient }, palette: { gradients } }) =>
             `${linearGradient(
-              rgba(gradients.info.main, 0.6),
-              rgba(gradients.info.state, 0.6)
-            )}, url(${curved0})`,
+              rgba(gradients.info.main, 0),
+              rgba(gradients.info.state, 0)
+            )}, url(${banneruc})`,
           backgroundSize: "cover",
           backgroundPosition: "50%",
           overflow: "hidden",
@@ -98,10 +101,10 @@ function Header() {
           <Grid item>
             <SoftBox height="100%" mt={0.5} lineHeight={1}>
               <SoftTypography variant="h5" fontWeight="medium">
-                Alex Thompson
+                {userData.name || "Nombre no disponible"}
               </SoftTypography>
               <SoftTypography variant="button" color="text" fontWeight="medium">
-                CEO / Co-Founder
+                {userData.email || "Correo no disponible"}
               </SoftTypography>
             </SoftBox>
           </Grid>
