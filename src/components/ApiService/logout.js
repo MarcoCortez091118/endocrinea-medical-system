@@ -13,6 +13,8 @@ const logoutUser = async (setMessage) => {
             setMessage(data.message);
 
             document.cookie = "token=; path=/; max-age=0";
+            sessionStorage.removeItem("authData");
+
             setTimeout(() => {
                 window.location.href = 'authentication/sign-in';
             }, 2000);
