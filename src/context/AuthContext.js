@@ -28,7 +28,6 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
     setUserData({ name: "", email: "", token: "" });
     sessionStorage.removeItem("authData");
-    document.cookie = "token=; path=/; max-age=0";
   };
 
   return (
