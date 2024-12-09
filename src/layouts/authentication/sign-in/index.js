@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
@@ -17,6 +17,7 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 import { loginUser } from "components/AuthSignIn/AuthService";
 import { validateEmail, validatePassword } from "components/AuthSignIn/validations";
 // Images
+import Icon from "@mui/material/Icon";
 import curved9 from "assets/images/curved-images/curved-6.jpg";
 
 import { useAuth } from "context/AuthContext";
@@ -25,13 +26,27 @@ function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("email");
+    const savedPassword = localStorage.getItem("password");
+    const savedRememberMe = localStorage.getItem("rememberMe") === "true";
+
+    if (savedRememberMe) {
+      if (savedEmail) setEmail(savedEmail);
+      if (savedPassword) setPassword(savedPassword);
+      setRememberMe(true);
+    }
+  }, []);
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const handleCloseSnackbar = () => setOpenSnackbar(false);
-  const { login } = useAuth();
+
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,7 +69,20 @@ function SignIn() {
 
       if (response && response.token) {
         document.cookie = `token=${response.token}; path=/; secure; samesite=strict; max-age=86400`;
+       
+        if (rememberMe) {
+          localStorage.setItem("email", email);
+          localStorage.setItem("password", password);
+          localStorage.setItem("rememberMe", true);
+        } else {
+          localStorage.removeItem("email");
+          localStorage.removeItem("password");
+          localStorage.removeItem("rememberMe");
+        }
+       
+       
         login(response);
+
         setSuccessMessage("¡Bienvenido! Has iniciado sesión correctamente.");
         setOpenSnackbar(true);
         setTimeout(() => {
@@ -76,7 +104,6 @@ function SignIn() {
       image={curved9}
     >
       <SoftBox component="form" role="form" onSubmit={handleSubmit}>
-        {/* Formulario */}
         <SoftBox mb={2}>
           <SoftBox mb={1} ml={0.5}>
             <SoftTypography component="label" variant="caption" fontWeight="bold">
@@ -91,24 +118,38 @@ function SignIn() {
           />
         </SoftBox>
         <SoftBox mb={2}>
-          <SoftBox mb={1} ml={0.5}>
-            <SoftTypography component="label" variant="caption" fontWeight="bold">
-              Contraseña
-            </SoftTypography>
-          </SoftBox>
-          <SoftInput
-            type="password"
-            placeholder="contraseña"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </SoftBox>
+  <SoftBox mb={1} ml={0.5}>
+    <SoftTypography component="label" variant="caption" fontWeight="bold">
+      Contraseña
+    </SoftTypography>
+  </SoftBox>
+  <SoftBox display="flex" alignItems="center">
+    <SoftInput
+      type={showPassword ? "text" : "password"}
+      placeholder="Contraseña"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+    />
+    <Icon
+      onClick={() => setShowPassword(!showPassword)}
+      sx={{
+        cursor: "pointer",
+        marginLeft: "-35px",
+        zIndex: "10",
+        color: "#aaa",
+      }}
+    >
+      {showPassword ? "visibility" : "visibility_off"}
+    </Icon>
+  </SoftBox>
+</SoftBox>
+
         {error && (
           <SoftTypography color="error" variant="caption">
             {error}
           </SoftTypography>
         )}
-        <SoftBox display="flex" alignItems="center">
+         <SoftBox display="flex" alignItems="center">
           <Switch checked={rememberMe} onChange={handleSetRememberMe} />
           <SoftTypography
             variant="button"
