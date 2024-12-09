@@ -18,6 +18,7 @@ import routes from "routes";
 
 // Soft UI Dashboard React contexts
 import { setMiniSidenav, useSoftUIController } from "context";
+import { useAuth } from "context/AuthContext";
 
 // Images
 import brand from "assets/images/logo-ct.png";
@@ -27,6 +28,13 @@ export default function App() {
   const { miniSidenav, direction, layout, sidenavColor } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const { pathname } = useLocation();
+  const { isAuthenticated } = useAuth();
+  const [dynamicRoutes, setDynamicRoutes] = useState([]);
+
+  useEffect(() => {
+    const generatedRoutes = routes(isAuthenticated);
+    setDynamicRoutes(generatedRoutes);
+  }, [isAuthenticated]);
 
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
@@ -77,14 +85,14 @@ export default function App() {
             color={sidenavColor}
             brand={brand}
             brandName="Soft UI Dashboard"
-            routes={routes}
+            routes={dynamicRoutes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
           />
         </>
       )}
       <Routes>
-        {getRoutes(routes)}
+        {getRoutes(dynamicRoutes)}
         <Route path="*" element={<Navigate to="/dashboard" />} />
       </Routes>
     </ThemeProvider>
