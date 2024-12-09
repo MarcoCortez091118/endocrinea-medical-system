@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 
 const AuthContext = createContext();
@@ -7,14 +7,25 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userData, setUserData] = useState({ name: "", email: "", token: "" });
 
+  useEffect(() => {
+    const storedData = sessionStorage.getItem("authData");
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      setIsAuthenticated(true);
+      setUserData(parsedData);
+    }
+  }, []);
+
   const login = (data) => {
     setIsAuthenticated(true);
     setUserData(data);
+    sessionStorage.setItem("authData", JSON.stringify(data));
   };
 
   const logout = () => {
     setIsAuthenticated(false);
     setUserData({ name: "", email: "", token: "" });
+    sessionStorage.removeItem("authData");
   };
 
   return (
