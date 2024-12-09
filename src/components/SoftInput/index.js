@@ -86,6 +86,7 @@ SoftInput.propTypes = {
   error: PropTypes.bool,
   success: PropTypes.bool,
   disabled: PropTypes.bool,
+  type: PropTypes.string,
 };
 
 export default SoftInput;
