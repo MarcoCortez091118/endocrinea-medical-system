@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userData, setUserData] = useState({ name: "", email: "", token: "" });
 
   useEffect(() => {
