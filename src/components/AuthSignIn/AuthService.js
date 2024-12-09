@@ -1,6 +1,5 @@
 export const loginUser = async (credentials) => {
   const API_URL = "https://bituin-fastapi-data.azurewebsites.net/users/login";
-  console.log("Preparando la solicitud al servidor...");
 
   try {
     const response = await fetch(API_URL, {
@@ -11,30 +10,18 @@ export const loginUser = async (credentials) => {
       body: JSON.stringify(credentials),
     });
 
-    console.log("Estado de la respuesta:", response.status);
-
     if (!response.ok) {
       const error = await response.json();
-      console.error("Error desde la API:", error);
-
-      if (error.detail === "Credenciales inválidas.") {
-        throw new Error(
-          "Correo o contraseña incorrectos. Por favor, verifica tus datos e inténtalo nuevamente."
-        );
-      }
-
-      throw new Error(
-        error.detail ||
-          "Hubo un problema al intentar iniciar sesión. Por favor, intenta de nuevo más tarde."
-      );
+      throw new Error(error.detail || "Error al iniciar sesión.");
     }
 
     const data = await response.json();
-    console.log("Respuesta exitosa de la API.");
     const accessToken = data.data.access_token;
+
     if (!accessToken) {
       throw new Error("No se recibió un token válido del servidor.");
     }
+
     const userResponse = await fetch(
       "https://bituin-fastapi-data.azurewebsites.net/users/profile",
       {
@@ -48,12 +35,17 @@ export const loginUser = async (credentials) => {
     if (!userResponse.ok) {
       throw new Error("No se pudo obtener los datos del usuario.");
     }
+
     const userData = await userResponse.json();
-    return {
+
+    const authData = {
       name: userData.name,
       email: userData.email,
       token: accessToken,
     };
+    sessionStorage.setItem("authData", JSON.stringify(authData));
+
+    return authData;
   } catch (error) {
     console.error("Error durante la conexión al servidor:", error);
     throw new Error(error.message || "No se pudo conectar al servidor.");
