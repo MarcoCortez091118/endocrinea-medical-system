@@ -4,7 +4,7 @@ const logoutUser = async (setMessage) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${sessionStorage.getItem("authData")?.token}`,
+                Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("authData"))?.token}`,
             },
         });
 
