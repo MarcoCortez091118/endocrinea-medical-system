@@ -44,32 +44,6 @@ const routes = (isAuthenticated) => [
     ),
     noCollapse: true,
   },
-  {
-    type: "collapse",
-    name: "Billing",
-    key: "billing",
-    route: "/billing",
-    icon: <CreditCard size="12px" />,
-    component: (
-      <ProtectedRoute>
-        <Billing />
-      </ProtectedRoute>
-    ),
-    noCollapse: true,
-  },
-  {
-    type: "collapse",
-    name: "Virtual Reality",
-    key: "virtual-reality",
-    route: "/virtual-reality",
-    icon: <Cube size="12px" />,
-    component: (
-      <ProtectedRoute>
-        <VirtualReality />
-      </ProtectedRoute>
-    ),
-    noCollapse: true,
-  },
   { type: "title", title: "Account Pages", key: "account-pages" },
   ...(isAuthenticated
     ? [
