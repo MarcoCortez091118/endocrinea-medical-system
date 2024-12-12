@@ -75,7 +75,7 @@ function SignUp() {
           <SoftTypography
             variant="h5"
             fontWeight="medium"
-            sx={{ color: "#E0040B !important" }}
+            sx={{ color: "#054eeb !important" }}
           >
             Regístrate
           </SoftTypography>

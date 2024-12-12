@@ -52,8 +52,8 @@ const switchButton = {
         transform: `translate(${pxToRem(22)}, -50%)`,
 
         "& + .MuiSwitch-track": {
-          backgroundColor: "#E0040B" ,
-          borderColor: "#E0040B",
+          backgroundColor: "#054eeb" ,
+          borderColor: "#054eeb",
           opacity: 1,
         },
       },
