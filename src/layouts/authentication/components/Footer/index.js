@@ -72,7 +72,7 @@ function Footer() {
           <SoftBox display="flex" justifyContent="space-between" alignItems="center" mt={3}>
             <SoftBox display="flex" justifyContent="center" alignItems="center" flexGrow={1}>
               <SoftTypography variant="body2" color="secondary" textAlign="center">
-              &copy;  Copyright 2024 - Design: NEUROMARK
+              &copy;  Copyright 2024 - Design: NeuroMarket
               </SoftTypography>
               <Icon color="inherit" fontSize="inherit">
                 favorite
