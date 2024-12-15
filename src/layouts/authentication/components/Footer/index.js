@@ -52,17 +52,17 @@ function Footer() {
         <Grid item xs={12} lg={8}>
           <SoftBox display="flex" justifyContent="center" mt={1} mb={3}>
           <SoftBox color="secondary">
-              <Link href="https://bituin.mx/" target="_blank" rel="noopener noreferrer" underline="none" color="inherit">
+              <Link href="" target="_blank" rel="noopener noreferrer" underline="none" color="inherit">
                 <WebIcon fontSize="small" />
               </Link>
             </SoftBox>
             <SoftBox color="secondary">
-              <Link href="https://www.linkedin.com/company/visualizamasideas" target="_blank" rel="noopener noreferrer" underline="none" color="inherit">
+              <Link href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" underline="none" color="inherit">
                 <LinkedInIcon fontSize="small" />
               </Link>
               </SoftBox>
             <SoftBox mr={3} color="secondary">
-                <Link href="https://www.facebook.com/BituinMX" target="_blank" rel="noopener noreferrer" underline="none" color="inherit">
+                <Link href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" underline="none" color="inherit">
                  <FacebookIcon fontSize="small" />
                 </Link>
             </SoftBox>
@@ -72,7 +72,7 @@ function Footer() {
           <SoftBox display="flex" justifyContent="space-between" alignItems="center" mt={3}>
             <SoftBox display="flex" justifyContent="center" alignItems="center" flexGrow={1}>
               <SoftTypography variant="body2" color="secondary" textAlign="center">
-              &copy;  Copyright 2024 - Design: Vmasideas
+              &copy;  Copyright 2024 - Design: NEUROMARK
               </SoftTypography>
               <Icon color="inherit" fontSize="inherit">
                 favorite
