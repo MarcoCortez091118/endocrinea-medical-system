@@ -39,7 +39,7 @@ function Tables() {
                 fontWeight="medium"
                 mt={2}
               >
-                usuario
+                Pacientes
               </SoftTypography>
             </SoftBox>
             <SoftBox
