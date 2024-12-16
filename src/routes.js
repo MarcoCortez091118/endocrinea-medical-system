@@ -5,7 +5,7 @@ import VirtualReality from "layouts/virtual-reality";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
-
+import ClinicalForm from "layouts/FormsHistoryPsychological";
 import Shop from "examples/Icons/Shop";
 import Office from "examples/Icons/Office";
 import Settings from "examples/Icons/Settings";
@@ -14,6 +14,8 @@ import SpaceShip from "examples/Icons/SpaceShip";
 import CustomerSupport from "examples/Icons/CustomerSupport";
 import CreditCard from "examples/Icons/CreditCard";
 import Cube from "examples/Icons/Cube";
+
+
 
 import ProtectedRoute from "components/ProtectedRoutes/ProtectedRoute";
 
@@ -40,6 +42,19 @@ const routes = (isAuthenticated) => [
     component: (
       <ProtectedRoute>
         <Tables />
+      </ProtectedRoute>
+    ),
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Historial psicológia",
+    key: "ClinicalForm",
+    route: "/FormsHistoryPsychological",
+    icon: <Office size="12px" />,
+    component: (
+      <ProtectedRoute>
+        <ClinicalForm />
       </ProtectedRoute>
     ),
     noCollapse: true,
