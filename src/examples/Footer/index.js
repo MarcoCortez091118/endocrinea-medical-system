@@ -57,7 +57,7 @@ function Footer({ company, links }) {
         </SoftBox>
         {/* Texto centrado debajo */}
         <SoftTypography variant="caption" color="text">
-          Design vmasideas
+        NeuroMarket
         </SoftTypography>
       </SoftBox>
       

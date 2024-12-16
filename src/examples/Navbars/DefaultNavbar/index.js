@@ -70,7 +70,7 @@ function DefaultNavbar({ action }) {
         })}
       >
         <SoftBox to="/" py={0.75} lineHeight={1}>
-          <SoftBox component="img" src={logoct} alt="Bituin Logo" width="9rem" />
+          <SoftBox component="img" src={logoct} alt="Logo" width="9rem" />
         </SoftBox>
         <SoftBox color="inherit" display={{ xs: "none", lg: "flex" }} m={0} p={0}>
           <DefaultNavbarLink

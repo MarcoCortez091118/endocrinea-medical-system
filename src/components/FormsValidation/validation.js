@@ -3,7 +3,10 @@ export const validateForm = (name, email, password, agreement) => {
 
   if (!name) {
     errors.name = "El nombre es obligatorio.";
+  } else if (name.length < 3) {
+    errors.name = "El nombre debe tener al menos 3 caracteres.";
   }
+  
 
   if (!email) {
     errors.email = "El correo electrónico es obligatorio.";
@@ -21,7 +24,7 @@ export const validateForm = (name, email, password, agreement) => {
     errors.password = "La contraseña debe contener al menos una letra minúscula.";
   } else if (!/[0-9]/.test(password)) {
     errors.password = "La contraseña debe contener al menos un número.";
-  } else if (!/[^\w\s]/.test(password)) {
+  } else if (!/[^a-zA-Z0-9\s]/.test(password)) {
     errors.password = "La contraseña debe contener al menos un carácter especial.";
   }
   

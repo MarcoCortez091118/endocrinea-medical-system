@@ -24,7 +24,7 @@ import Settings from "examples/Icons/Settings";
 import breakpoints from "assets/theme/base/breakpoints";
 
 // Images
-import burceMars from "assets/images/bruce-mars.jpg";
+import burceMars from "assets/images/team-2.jpg";
 import banneruc from "assets/images/banneruc.png";
 
 import { useAuth } from "context/AuthContext";

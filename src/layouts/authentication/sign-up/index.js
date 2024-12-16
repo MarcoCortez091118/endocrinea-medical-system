@@ -60,6 +60,10 @@ function SignUp() {
         console.error("Error recibido:", error);
         const errorMessage = typeof error.message === "string" ? error.message : "Ocurrió un error desconocido.";
         setMessage(errorMessage);
+        setRedirecting(true);
+        setTimeout(() => {
+          navigate("/authentication/sign-in");
+        }, 2500);
       } finally {
         setLoading(false);
       }
@@ -75,7 +79,7 @@ function SignUp() {
           <SoftTypography
             variant="h5"
             fontWeight="medium"
-            sx={{ color: "#E0040B !important" }}
+            sx={{ color: "#054eeb !important" }}
           >
             Regístrate
           </SoftTypography>
