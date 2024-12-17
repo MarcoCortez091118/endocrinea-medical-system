@@ -4,7 +4,7 @@ const logoutUser = async (setMessage) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("authData"))?.token}`,
+                Authorization: `Bearer ${JSON.parse(localStorage.getItem("authData"))?.token}`,
             },
         });
 
@@ -12,7 +12,7 @@ const logoutUser = async (setMessage) => {
             const data = await response.json();
             setMessage(data.message);
 
-            sessionStorage.removeItem("authData");
+            localStorage.removeItem("authData");
 
             setTimeout(() => {
                 window.location.href = 'authentication/sign-in';

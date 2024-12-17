@@ -43,7 +43,7 @@ export const loginUser = async (credentials) => {
       email: userData.email,
       token: accessToken,
     };
-    sessionStorage.setItem("authData", JSON.stringify(authData));
+    localStorage.setItem("authData", JSON.stringify(authData));
 
     return authData;
   } catch (error) {
