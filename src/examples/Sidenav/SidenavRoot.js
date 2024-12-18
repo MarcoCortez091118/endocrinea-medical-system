@@ -20,7 +20,7 @@ export default styled(Drawer)(({ theme, ownerState }) => {
     }),
 
     [breakpoints.up("xl")]: {
-      backgroundColor: transparentSidenav ? transparent.main : white.main,
+      backgroundColor: "#054eeb",
       boxShadow: transparentSidenav ? "none" : xxl,
       marginBottom: transparentSidenav ? 0 : "inherit",
       left: "0",
