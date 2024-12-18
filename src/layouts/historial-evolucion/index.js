@@ -12,7 +12,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 
-const HistorialEvolucion = () => {
+function HistorialEvolucion() {
   const [presentacion, setPresentacion] = useState("");
   const [evolucion, setEvolucion] = useState("");
   const [notas, setNotas] = useState("");
@@ -173,6 +173,6 @@ const HistorialEvolucion = () => {
       <Footer />
     </DashboardLayout>
   );
-};
+}
 
 export default HistorialEvolucion;
