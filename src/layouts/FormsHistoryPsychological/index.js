@@ -8,6 +8,8 @@ import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Button from "@mui/material/Button";
+import Card from "@mui/material/Card"; // Importación de Card
+
 // Soft UI Dashboard React examples
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
@@ -16,8 +18,8 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 
 // Función para enviar los datos del formulario
-
 import { sendFormData } from "./sendFormData";
+
 function ClinicalForm() {
   const [formData, setFormData] = useState({
     nombre: "",
@@ -70,165 +72,185 @@ function ClinicalForm() {
         <SoftTypography variant="h4" fontWeight="medium" mb={2}>
           Historia Clínica de Psicología
         </SoftTypography>
-        <SoftBox component="form" onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
-            {/* Sección 1: Ficha de Identificación */}
-            <Grid item xs={12}>
-              <SoftTypography variant="h6" fontWeight="regular">
-                1. Ficha de Identificación
-              </SoftTypography>
-              <Grid container spacing={2}>
-                {/* Nombre */}
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Nombre completo"
-                    variant="outlined"
-                    name="nombre"
-                    value={formData.nombre}
-                    onChange={handleChange}
-                    required
-                    sx={{
-                      "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#054eeb",
-                      },
-                      "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
-                    }}
-                  />
-                </Grid>
+        {/* Card envuelve el formulario */}
+        <Card>
+          <SoftBox component="form" onSubmit={handleSubmit} p={3}>
+            <Grid container spacing={3}>
+              {/* Sección 1: Ficha de Identificación */}
+              <Grid item xs={12}>
+                <SoftTypography variant="h6" fontWeight="regular">
+                  1. Ficha de Identificación
+                </SoftTypography>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Nombre completo"
 
-                {/* Fecha de Nacimiento */}
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Fecha de nacimiento"
-                    type="date"
-                    InputLabelProps={{ shrink: true }}
-                    variant="outlined"
-                    name="fechaNacimiento"
-                    value={formData.fechaNacimiento}
-                    onChange={handleChange}
-                    required
-                    sx={{
-                      "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#054eeb",
-                      },
-                      "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
-                    }}
-                  />
-                </Grid>
-
-                {/* Sexo */}
-                <Grid item xs={12} sm={6}>
-                  <FormControl fullWidth variant="outlined">
-                    <InputLabel sx={{ color: "#000" }}>Sexo</InputLabel>
-                    <Select
-                      label="Sexo"
-                      name="sexo"
-                      value={formData.sexo}
+                      variant="outlined"
+                      name="nombre"
+                      value={formData.nombre}
                       onChange={handleChange}
                       required
                       sx={{
-                        "& .MuiOutlinedInput-notchedOutline": { borderColor: "#ccc" },
-                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        "& .MuiInputLabel-root": { fontSize: "15px" },
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
                           borderColor: "#054eeb",
                         },
+                        "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
                       }}
-                    >
-                      <MenuItem value="">
-                        <em>Seleccionar</em>
-                      </MenuItem>
-                      <MenuItem value="Masculino">Masculino</MenuItem>
-                      <MenuItem value="Femenino">Femenino</MenuItem>
-                      <MenuItem value="Otro">Otro</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
+                    />
+                  </Grid>
 
-                {/* Estado Civil */}
-                <Grid item xs={12} sm={6}>
-                  <FormControl fullWidth variant="outlined">
-                    <InputLabel sx={{ color: "#000" }}>Estado Civil</InputLabel>
-                    <Select
-                      label="Estado Civil"
-                      name="estadoCivil"
-                      value={formData.estadoCivil}
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Fecha de nacimiento"
+                      type="date"
+                      InputLabelProps={{ shrink: true }}
+                      variant="outlined"
+                      name="fechaNacimiento"
+                      value={formData.fechaNacimiento}
                       onChange={handleChange}
                       required
                       sx={{
-                        "& .MuiOutlinedInput-notchedOutline": { borderColor: "#ccc" },
-                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        "& .MuiInputLabel-root": { fontSize: "15px" },
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
                           borderColor: "#054eeb",
                         },
+                        "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
                       }}
-                    >
-                      <MenuItem value="">
-                        <em>Seleccionar</em>
-                      </MenuItem>
-                      <MenuItem value="Soltero/a">Soltero/a</MenuItem>
-                      <MenuItem value="Casado/a">Casado/a</MenuItem>
-                      <MenuItem value="Divorciado/a">Divorciado/a</MenuItem>
-                      <MenuItem value="Viudo/a">Viudo/a</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
+                    />
+                  </Grid>
 
-                {/* Otros campos */}
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Máximo grado de estudios"
-                    variant="outlined"
-                    name="maxEstudios"
-                    value={formData.maxEstudios}
-                    onChange={handleChange}
-                    required
-                    sx={{
-                      "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#054eeb",
-                      },
-                      "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
-                    }}
-                  />
-                </Grid>
+                  <Grid item xs={12} sm={6}>
+                      <FormControl fullWidth variant="outlined">
+                        <InputLabel
+                          sx={{
+                            color: "#054eeb",
+                            fontSize: "15px",  // Cambiar el tamaño de la fuente de la etiqueta
+                          }}
+                        >
+                          Sexo
+                        </InputLabel>
+                        <Select
+                          label="Sexo"
+                          name="sexo"
+                          value={formData.sexo}
+                          onChange={handleChange}
+                          required
+                          sx={{
+                            "& .MuiOutlinedInput-notchedOutline": { borderColor: "#ccc" },
+                            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                              borderColor: "#054eeb",
+                            },
+                          }}
+                        >
+                          <MenuItem value="">
+                            <em>Seleccionar</em>
+                          </MenuItem>
+                          <MenuItem value="Masculino">Masculino</MenuItem>
+                          <MenuItem value="Femenino">Femenino</MenuItem>
+                          <MenuItem value="Otro">Otro</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>
 
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Ocupación actual"
-                    variant="outlined"
-                    name="ocupacion"
-                    value={formData.ocupacion}
-                    onChange={handleChange}
-                    required
-                    sx={{
-                      "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#054eeb",
-                      },
-                      "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
-                    }}
-                  />
-                </Grid>
 
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Creencias religiosas"
-                    variant="outlined"
-                    name="creencias"
-                    value={formData.creencias}
-                    onChange={handleChange}
-                    required
-                    sx={{
-                      "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#054eeb",
-                      },
-                      "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
-                    }}
-                  />
+
+                    <Grid item xs={12} sm={6}>
+                      <FormControl fullWidth variant="outlined">
+                        <InputLabel
+                          sx={{
+                            color: "#054eeb",
+                            fontSize: "15px",  // Cambiar el tamaño de la fuente de la etiqueta
+                          }}
+                        >
+                          Estado Civil
+                        </InputLabel>
+                        <Select
+                          label="Estado Civil"
+                          name="estadoCivil"
+                          value={formData.estadoCivil}
+                          onChange={handleChange}
+                          required
+                          sx={{
+                            "& .MuiOutlinedInput-notchedOutline": { borderColor: "#ccc" },
+                            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                              borderColor: "#054eeb",
+                            },
+                          }}
+                        >
+                          <MenuItem value="">
+                            <em>Seleccionar</em>
+                          </MenuItem>
+                          <MenuItem value="Soltero/a">Soltero/a</MenuItem>
+                          <MenuItem value="Casado/a">Casado/a</MenuItem>
+                          <MenuItem value="Divorciado/a">Divorciado/a</MenuItem>
+                          <MenuItem value="Viudo/a">Viudo/a</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Grid>
+
+
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Máximo grado de estudios"
+                      variant="outlined"
+                      name="maxEstudios"
+                      value={formData.maxEstudios}
+                      onChange={handleChange}
+                      required
+                      sx={{
+                        "& .MuiInputLabel-root": { fontSize: "15px" },
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#054eeb",
+                        },
+                        "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
+                      }}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Ocupación actual"
+                      variant="outlined"
+                      name="ocupacion"
+                      value={formData.ocupacion}
+                      onChange={handleChange}
+                      required
+                      sx={{
+                        "& .MuiInputLabel-root": { fontSize: "15px" },
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#054eeb",
+                        },
+                        "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
+                      }}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Creencias religiosas"
+                      variant="outlined"
+                      name="creencias"
+                      value={formData.creencias}
+                      onChange={handleChange}
+                      required
+                      sx={{
+                        "& .MuiInputLabel-root": { fontSize: "15px" },
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#054eeb",
+                        },
+                        "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
+                      }}
+                    />
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
 
             {/* Sección 2: Antecedentes Médicos */}
             <Grid item xs={12}>
@@ -246,6 +268,7 @@ function ClinicalForm() {
                 onChange={handleChange}
                 required
                 sx={{
+                  "& .MuiInputLabel-root": { fontSize: "15px" },
                   "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
                     borderColor: "#054eeb",
                   },
@@ -263,6 +286,7 @@ function ClinicalForm() {
                 onChange={handleChange}
                 required
                 sx={{
+                  "& .MuiInputLabel-root": { fontSize: "15px" },
                   mt: 2,
                   "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
                     borderColor: "#054eeb",
@@ -287,6 +311,7 @@ function ClinicalForm() {
                 onChange={handleChange}
                 required
                 sx={{
+                  "& .MuiInputLabel-root": { fontSize: "15px" },
                   "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
                     borderColor: "#054eeb",
                   },
@@ -311,6 +336,7 @@ function ClinicalForm() {
                     onChange={handleChange}
                     required
                     sx={{
+                      "& .MuiInputLabel-root": { fontSize: "15px" },
                       "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
                         borderColor: "#054eeb",
                       },
@@ -328,6 +354,7 @@ function ClinicalForm() {
                     onChange={handleChange}
                     required
                     sx={{
+                      "& .MuiInputLabel-root": { fontSize: "15px" },
                       "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
                         borderColor: "#054eeb",
                       },
@@ -345,6 +372,7 @@ function ClinicalForm() {
                     onChange={handleChange}
                     required
                     sx={{
+                      "& .MuiInputLabel-root": { fontSize: "15px" },
                       "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
                         borderColor: "#054eeb",
                       },
@@ -362,6 +390,7 @@ function ClinicalForm() {
                     onChange={handleChange}
                     required
                     sx={{
+                      "& .MuiInputLabel-root": { fontSize: "15px" },
                       "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
                         borderColor: "#054eeb",
                       },
@@ -379,6 +408,7 @@ function ClinicalForm() {
                     onChange={handleChange}
                     required
                     sx={{
+                      "& .MuiInputLabel-root": { fontSize: "15px" },
                       "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
                         borderColor: "#054eeb",
                       },
@@ -416,6 +446,7 @@ function ClinicalForm() {
                   onChange={handleChange}
                   required
                   sx={{
+                    "& .MuiInputLabel-root": { fontSize: "15px" },
                     "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
                       borderColor: "#054eeb",
                     },
@@ -423,26 +454,29 @@ function ClinicalForm() {
                   }}
                 />
               </Grid>
-            ))}
+            ))}            
 
-            {/* Botón de envío */}
-             {/* Botón de Enviar */}
-            <Grid item xs={12}>
-              <Button
-                variant="contained"
-                type="submit"
-                color="primary"
-                sx={{
-                  mt: 3,
-                  backgroundColor: "#054eeb",
-                  "&:hover": { backgroundColor: "#054eeb" },
-                }}
-              >
-                Enviar
-              </Button>
+              <Grid item xs={12}>
+                <Button
+                  variant="contained"
+                  type="submit"
+                  color="primary"
+                  fullWidth
+                  sx={{
+                    
+                    mt: 3,
+                    backgroundColor: "#054eeb",
+                    "&:hover": { backgroundColor: "#054eeb" },
+                      color: "white !important",
+                    
+                  }}
+                >
+                  Enviar
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
-        </SoftBox>
+          </SoftBox>
+        </Card>
       </SoftBox>
       <Footer />
     </DashboardLayout>
