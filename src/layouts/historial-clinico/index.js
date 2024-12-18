@@ -207,19 +207,37 @@ function HistorialClinico() {
                     <FormControlLabel value="Otros" control={<Radio />} label="Otros" />
                   </RadioGroup>
                 </SoftBox>
+                <SoftBox mt={4}>
+                  <Card>
+                    <SoftBox p={3}>
+                      <SoftTypography variant="h5">Antecedentes familiares</SoftTypography>
+                      <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
+                        En esta sección deberá contestar si alguno de sus familiares tiene
+                        diagnosticada alguna de las enfermedades especificadas a continuación. Por
+                        favor, responda sólo si está seguro(a) del diagnóstico.
+                      </SoftTypography>
+                      <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
+                        ¿Alguien de su familia ha sido diagnosticado con alguna de las siguientes
+                        enfermedades?
+                      </SoftTypography>
+                    </SoftBox>
+                  </Card>
+                </SoftBox>
                 <Grid item xs={12}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    sx={{
-                      color: "white !important",
-                      style: { fontSize: "15px" },
-                    }}
-                  >
-                    {"Enviar"}
-                  </Button>
+                  <Card>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                      sx={{
+                        color: "white !important",
+                        style: { fontSize: "15px" },
+                      }}
+                    >
+                      {"Enviar"}
+                    </Button>
+                  </Card>
                 </Grid>
               </form>
             </SoftBox>
