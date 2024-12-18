@@ -164,7 +164,13 @@ function HistorialClinico() {
                 </SoftBox>
                 <SoftBox mb={2}>
                   <FormControl fullWidth>
-                    <InputLabel>Estado civil</InputLabel>
+                    <InputLabel
+                      sx={{
+                        fontSize: "15px",
+                      }}
+                    >
+                      Estado civil
+                    </InputLabel>
                     <Select
                       name="maritalStatus"
                       value={formData.maritalStatus}
