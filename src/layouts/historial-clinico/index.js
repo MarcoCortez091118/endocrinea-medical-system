@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import {
-  TextField,
   MenuItem,
   Select,
   Grid,
@@ -21,23 +20,51 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 
+// Global style textarea
+import "layouts/TextareaStyles.css";
+
 function HistorialClinico() {
   const [formData, setFormData] = useState({
     email: "",
     phoneNumber: "",
     fullName: "",
     birthDate: "",
-    age: "",
-    city: "",
-    occupation: "",
-    maritalStatus: "",
-    foodRestrictions: "",
-    gender: "",
   });
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Aquí debes enviar formData a la API
+    /* 
+    try {
+      // Aquí iría la lógica para enviar los datos a la API
+      const response = await fetch('https://api.example.com/submit-historial', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        console.log('Historial enviado exitosamente');
+        // Manejar la respuesta de éxito aquí
+      } else {
+        console.error('Error al enviar el historial');
+        // Manejar errores aquí
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+    */
+    console.log("Datos a enviar:", formData);
   };
 
   return (
@@ -71,178 +98,68 @@ function HistorialClinico() {
             </SoftBox>
           </Card>
         </SoftBox>
-        <SoftBox mt={4}>
-          <Card>
-            <SoftBox p={3}>
-              <form noValidate autoComplete="off">
+        <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+          <SoftBox mt={4}>
+            <Card>
+              <SoftBox p={3}>
                 <SoftBox mb={2}>
-                  <TextField
-                    fullWidth
-                    label="Correo electrónico *"
+                  <label htmlFor="email">Correo electrónico *</label>
+                  <textarea
+                    id="email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    InputLabelProps={{
-                      style: { fontSize: "15px" },
-                    }}
+                    rows="1"
+                    className="global-textarea"
                   />
                 </SoftBox>
+
                 <SoftBox mb={2}>
-                  <TextField
-                    fullWidth
-                    label="Número telefónico con Whatsapp"
+                  <label htmlFor="phoneNumber">Numero teléfonico con WhatsApp *</label>
+                  <textarea
+                    id="phoneNumber"
                     name="phoneNumber"
                     value={formData.phoneNumber}
                     onChange={handleChange}
-                    InputLabelProps={{
-                      style: { fontSize: "15px" },
-                    }}
+                    required
+                    rows="1"
+                    className="global-textarea"
                   />
                 </SoftBox>
+
                 <SoftBox mb={2}>
-                  <TextField
-                    fullWidth
-                    label="Nombre completo"
+                  <label htmlFor="fullName">Nombre completo (Nombre / Apellido paterno / Apellido materno) *</label>
+                  <textarea
+                    id="fullName"
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleChange}
-                    InputLabelProps={{
-                      style: { fontSize: "15px" },
-                    }}
+                    required
+                    rows="1"
+                    className="global-textarea"
                   />
                 </SoftBox>
+
                 <SoftBox mb={2}>
-                  <TextField
-                    fullWidth
-                    label="Fecha de nacimiento"
-                    type="date"
+                  <textarea
                     name="birthDate"
+                    type="date"
                     value={formData.birthDate}
                     onChange={handleChange}
-                    InputLabelProps={{
-                      shrink: true,
-                      style: { fontSize: "15px" },
-                    }}
+                    required
+                    rows="1"
+                    className="global-textarea"
                   />
                 </SoftBox>
-                <SoftBox mb={2}>
-                  <TextField
-                    fullWidth
-                    label="Edad"
-                    name="age"
-                    value={formData.age}
-                    onChange={handleChange}
-                    InputLabelProps={{
-                      style: { fontSize: "15px" },
-                    }}
-                  />
-                </SoftBox>
-                <SoftBox mb={2}>
-                  <TextField
-                    fullWidth
-                    label="Ciudad"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleChange}
-                    InputLabelProps={{
-                      style: { fontSize: "15px" },
-                    }}
-                  />
-                </SoftBox>
-                <SoftBox mb={2}>
-                  <TextField
-                    fullWidth
-                    label="Ocupación"
-                    name="occupation"
-                    value={formData.occupation}
-                    onChange={handleChange}
-                    InputLabelProps={{
-                      style: { fontSize: "15px" },
-                    }}
-                  />
-                </SoftBox>
-                <SoftBox mb={2}>
-                  <FormControl fullWidth>
-                    <InputLabel
-                      sx={{
-                        fontSize: "15px",
-                      }}
-                    >
-                      Estado civil
-                    </InputLabel>
-                    <Select
-                      name="maritalStatus"
-                      value={formData.maritalStatus}
-                      onChange={handleChange}
-                    >
-                      <MenuItem value="Casado(a)">Casado(a)</MenuItem>
-                      <MenuItem value="Unión libre">Unión libre</MenuItem>
-                      <MenuItem value="Soltero(a)">Soltero(a)</MenuItem>
-                      <MenuItem value="Otros">Otros</MenuItem>
-                    </Select>
-                  </FormControl>
-                </SoftBox>
-                <SoftBox mb={2}>
-                  <SoftTypography variant="subtitle2" fontWeight="medium">
-                    ¿Su religión le impide comer algún tipo de alimento?
-                  </SoftTypography>
-                  <RadioGroup
-                    row
-                    name="foodRestrictions"
-                    value={formData.foodRestrictions}
-                    onChange={handleChange}
-                  >
-                    <FormControlLabel value="Si" control={<Radio />} label="Sí" />
-                    <FormControlLabel value="No" control={<Radio />} label="No" />
-                  </RadioGroup>
-                </SoftBox>
-                <SoftBox mb={2}>
-                  <SoftTypography variant="subtitle2" fontWeight="medium">
-                    Género
-                  </SoftTypography>
-                  <RadioGroup row name="gender" value={formData.gender} onChange={handleChange}>
-                    <FormControlLabel value="H" control={<Radio />} label="Hombre" />
-                    <FormControlLabel value="M" control={<Radio />} label="Mujer" />
-                    <FormControlLabel value="Otros" control={<Radio />} label="Otros" />
-                  </RadioGroup>
-                </SoftBox>
-                <SoftBox mt={4}>
-                  <Card>
-                    <SoftBox p={3}>
-                      <SoftTypography variant="h5">Antecedentes familiares</SoftTypography>
-                      <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
-                        En esta sección deberá contestar si alguno de sus familiares tiene
-                        diagnosticada alguna de las enfermedades especificadas a continuación. Por
-                        favor, responda sólo si está seguro(a) del diagnóstico.
-                      </SoftTypography>
-                      <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
-                        ¿Alguien de su familia ha sido diagnosticado con alguna de las siguientes
-                        enfermedades?
-                      </SoftTypography>
-                    </SoftBox>
-                  </Card>
-                </SoftBox>
-                <Grid item xs={12}>
-                  <Card>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      fullWidth
-                      sx={{
-                        color: "white !important",
-                        style: { fontSize: "15px" },
-                      }}
-                    >
-                      {"Enviar"}
-                    </Button>
-                  </Card>
-                </Grid>
-              </form>
-            </SoftBox>
-          </Card>
-        </SoftBox>
+
+              </SoftBox>
+            </Card>
+          </SoftBox>
+          <Button type="submit" variant="contained" color="primary">
+            Enviar
+          </Button>
+        </form>
       </SoftBox>
       <Footer />
     </DashboardLayout>
