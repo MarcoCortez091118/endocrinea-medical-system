@@ -1,5 +1,6 @@
 /* Textarea global styles */
 .global-textarea {
+    font-family: 'Roboto', sans-serif;
     width: 100%;
     border-radius: 4px;
     padding: 8px;
