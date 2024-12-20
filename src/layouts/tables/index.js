@@ -16,6 +16,8 @@ import CustomPagination from "./CustomPagination";
 import { useNavigate } from "react-router-dom";
 import Dashboard from "layouts/dashboard";
 import routes from "routes";
+import AddPatient from "./AddPatient";
+
 function Tables() {
   const { columns, rows } = useUsuarioTableData();
   const navigate = useNavigate(); // Hook para redirigir
@@ -24,11 +26,10 @@ function Tables() {
   const rowsPerPage = 10; 
   const totalPages = Math.ceil(rows.length / rowsPerPage);
   const displayedRows = rows.slice((page - 1) * rowsPerPage, page * rowsPerPage);
-
-  const handlePageChange = (newPage) => {
-    setPage(newPage);
-  };
-
+  const [openModal, setOpenModal] = useState(false); 
+  const handlePageChange = (newPage) => {setPage(newPage);};
+  const handleAddPatientClick = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
   const handleAddClick = () => {
     console.log("Agregar botón clicado"); 
   };
@@ -55,7 +56,7 @@ function Tables() {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => console.log("Agregar paciente")}
+                onClick={handleAddPatientClick}
                 sx={{
                   padding: "8px 22px",
                   display: "flex",
@@ -99,6 +100,9 @@ function Tables() {
         </SoftBox>
       </SoftBox>
       <Footer />
+
+      {/* Modal para agregar paciente */}
+      <AddPatient open={openModal} onClose={handleCloseModal} />
     </DashboardLayout>
   );
 }
