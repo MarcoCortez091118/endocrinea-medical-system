@@ -62,9 +62,43 @@ function ClinicalForm() {
     }));
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    sendFormData(formData); // Enviar los datos del formulario
+  //const handleSubmit = (event) => {
+  //  event.preventDefault();
+   // sendFormData(formData); // Enviar los datos del formulario
+ // };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const dataToSend = { ...formData };
+    if (dataToSend.maritalStatus !== "Otros") {
+      delete dataToSend.otherStatus;
+    }
+
+    // Aquí debes enviar formData a la API
+    /* 
+    try {
+      // Aquí iría la lógica para enviar los datos a la API
+      const response = await fetch('https://api.example.com/submit-historial', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        console.log('Historial enviado exitosamente');
+        // Manejar la respuesta de éxito aquí
+      } else {
+        console.error('Error al enviar el historial');
+        // Manejar errores aquí
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+    */
+    console.log("Datos a enviar:", formData);
   };
 
   return (
@@ -118,7 +152,6 @@ function ClinicalForm() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    required
                     rows="1"
                     className="global-textarea"
                   />
@@ -133,7 +166,6 @@ function ClinicalForm() {
                         type="date"
                         value={formData.birthDate}
                         onChange={handleChange}
-                        required
                         fullWidth
                         InputLabelProps={{ shrink: true }}
                       />
@@ -155,7 +187,6 @@ function ClinicalForm() {
                           name="sexo"
                           value={formData.sexo}
                           onChange={handleChange}
-                          required
                           sx={{
                             "& .MuiOutlinedInput-notchedOutline": { borderColor: "#ccc" },
                             "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
@@ -190,7 +221,6 @@ function ClinicalForm() {
                           name="estadoCivil"
                           value={formData.estadoCivil}
                           onChange={handleChange}
-                          required
                           sx={{
                             "& .MuiOutlinedInput-notchedOutline": { borderColor: "#ccc" },
                             "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
@@ -218,7 +248,6 @@ function ClinicalForm() {
                             name="maxiestudios"
                             value={formData.maxiestudios}
                             onChange={handleChange}
-                            required
                             rows="1"
                             className="global-textarea"
                           />
@@ -233,7 +262,6 @@ function ClinicalForm() {
                         name="ocupacion"
                         value={formData.ocupacion}
                         onChange={handleChange}
-                        required
                         rows="1"
                         className="global-textarea"
                       />
@@ -248,7 +276,6 @@ function ClinicalForm() {
                         name="creencias"
                         value={formData.creencias}
                         onChange={handleChange}
-                        required
                         rows="1"
                         className="global-textarea"
                       />
@@ -269,7 +296,6 @@ function ClinicalForm() {
                     name="AHF"
                     value={formData.AHF}
                     onChange={handleChange}
-                    required
                     rows="1"
                     className="global-textarea"
                   />
@@ -281,7 +307,6 @@ function ClinicalForm() {
                     name="PA"
                     value={formData.PA}
                     onChange={handleChange}
-                    required
                     rows="1"
                     className="global-textarea"
                   />
@@ -299,7 +324,6 @@ function ClinicalForm() {
                   name="toxicomanias"
                   value={formData.toxicomanias}
                   onChange={handleChange}
-                  required
                   rows="1"
                   className="global-textarea"
                 />
@@ -320,7 +344,6 @@ function ClinicalForm() {
                       name="alimentacion"
                       value={formData.alimentacion}
                       onChange={handleChange}
-                      required
                       rows="2"
                       className="global-textarea"
                     />
@@ -334,7 +357,6 @@ function ClinicalForm() {
                       name="sueno"
                       value={formData.sueno}
                       onChange={handleChange}
-                      required
                       rows="2"
                       className="global-textarea"
                     />
@@ -348,7 +370,6 @@ function ClinicalForm() {
                       name="actividadFisica"
                       value={formData.actividadFisica}
                       onChange={handleChange}
-                      required
                       rows="2"
                       className="global-textarea"
                     />
@@ -362,7 +383,6 @@ function ClinicalForm() {
                       name="ocio"
                       value={formData.ocio}
                       onChange={handleChange}
-                      required
                       rows="2"
                       className="global-textarea"
                     />
@@ -376,7 +396,6 @@ function ClinicalForm() {
                       name="higiene"
                       value={formData.higiene}
                       onChange={handleChange}
-                      required
                       rows="2"
                       className="global-textarea"
                     />
@@ -386,43 +405,42 @@ function ClinicalForm() {
             </Grid>
 
             <SoftBox component="form" onSubmit={handleSubmit} noValidate sx={{ p: 3 }}>
-      <Grid container spacing={2}>
-        {[
-          { name: "dinamicaFamilia", label: "5. Dinámica y relaciones familiares" },
-          { name: "relacionesAfectivas", label: "6. Relaciones afectivas y de pareja" },
-          { name: "dinamicaLaboral", label: "7. Dinámica laboral o académica" },
-          { name: "antecedentesPsicologicos", label: "8. Antecedentes psicológicos" },
-          { name: "motivoConsulta", label: "9. Motivo de consulta" },
-          { name: "intentosSolucion", label: "10. Intentos previos de solución" },
-          {
-            name: "signosSintomas",
-            label:
-              "11. Signos, síntomas, reacciones fisiológicas, pensamientos y emociones",
-          },
-          {
-            name: "conductasAutolesivas",
-            label: "12. Conductas autolesivas, ideación y comportamiento suicida",
-          },
-          { name: "valoracionClinica", label: "13. Valoración clínica" },
-          { name: "impresionDiagnostica", label: "14. Impresión diagnóstica" },
-        ].map((field) => (
-          <Grid item xs={12} key={field.name}>
-            <SoftTypography variant="h6" fontWeight="regular">
-              {field.label}
-            </SoftTypography>
-            <textarea
-              id={field.name}
-              name={field.name}
-              value={formData[field.name]}
-              onChange={handleChange}
-              required
-              rows={3}
-              className="global-textarea"
-            />
-          </Grid>
-        ))}
-      </Grid>
-    </SoftBox>   
+              <Grid container spacing={2}>
+                {[
+                  { name: "dinamicaFamilia", label: "5. Dinámica y relaciones familiares" },
+                  { name: "relacionesAfectivas", label: "6. Relaciones afectivas y de pareja" },
+                  { name: "dinamicaLaboral", label: "7. Dinámica laboral o académica" },
+                  { name: "antecedentesPsicologicos", label: "8. Antecedentes psicológicos" },
+                  { name: "motivoConsulta", label: "9. Motivo de consulta" },
+                  { name: "intentosSolucion", label: "10. Intentos previos de solución" },
+                  {
+                    name: "signosSintomas",
+                    label:
+                      "11. Signos, síntomas, reacciones fisiológicas, pensamientos y emociones",
+                  },
+                  {
+                    name: "conductasAutolesivas",
+                    label: "12. Conductas autolesivas, ideación y comportamiento suicida",
+                  },
+                  { name: "valoracionClinica", label: "13. Valoración clínica" },
+                  { name: "impresionDiagnostica", label: "14. Impresión diagnóstica" },
+                ].map((field) => (
+                  <Grid item xs={12} key={field.name}>
+                    <SoftTypography variant="h6" fontWeight="regular">
+                      {field.label}
+                    </SoftTypography>
+                    <textarea
+                      id={field.name}
+                      name={field.name}
+                      value={formData[field.name]}
+                      onChange={handleChange}
+                      rows={3}
+                      className="global-textarea"
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </SoftBox>   
 
               <Grid item xs={12}>
                 <Button
