@@ -24,6 +24,8 @@ import Footer from "examples/Footer";
 
 // Global style textarea
 import "layouts/TextareaStyles.css";
+import button from "assets/theme/components/button";
+import { Margin } from "@mui/icons-material";
 
 function HistorialClinico() {
   const [formData, setFormData] = useState({
@@ -40,7 +42,28 @@ function HistorialClinico() {
     otherReligion: "",
     gender: "",
     otherGender: "",
+    familyHistory: {
+      Diabetes: { Madre: false, Padre: false, Hermanos: false, "Tíos paternos": false, "Tíos maternos": false },
+      Hipertensión: { Madre: false, Padre: false, Hermanos: false, "Tíos paternos": false, "Tíos maternos": false },
+      "Colesterol alto": { Madre: false, Padre: false, Hermanos: false, "Tíos paternos": false, "Tíos maternos": false },
+      Infartos: { Madre: false, Padre: false, Hermanos: false, "Tíos paternos": false, "Tíos maternos": false },
+    },
   });
+
+  // Maneja el cambio de los checkboxes
+  const handleCheckboxChange = (e, disease, familyMember) => {
+    const { checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      familyHistory: {
+        ...prevData.familyHistory,
+        [disease]: {
+          ...prevData.familyHistory[disease],
+          [familyMember]: checked,
+        },
+      },
+    }));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -322,6 +345,49 @@ function HistorialClinico() {
                     continuación. Por favor, responda sólo si está seguro(a) del
                     diagnóstico.
                   </SoftTypography>
+                </SoftBox>
+              </SoftBox>
+            </Card>
+          </SoftBox>
+
+          <SoftBox mt={4}>
+            <Card>
+              <SoftBox p={3}>
+                <SoftBox mb={2}>
+                  <SoftBox mb={2}>
+                    <label htmlFor="religion">¿Alguien de su familia ha sido diagnosticado con alguna
+                      de las siguientes enfermedades ?</label>
+                    <SoftBox mt={3}>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th className="ancho"></th>
+                            <th className="ancho">Madre</th>
+                            <th className="ancho">Padre</th>
+                            <th className="ancho">Hermanos</th>
+                            <th className="ancho">Tíos paternos</th>
+                            <th className="ancho">Tíos maternos</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {Object.keys(formData.familyHistory).map((disease) => (
+                            <tr key={disease}>
+                              <td style={{ padding: "8px" }}>{disease}</td>
+                              {Object.keys(formData.familyHistory[disease]).map((familyMember) => (
+                                <td key={familyMember} style={{ textAlign: "center", padding: "8px" }}>
+                                  <input
+                                    type="checkbox"
+                                    checked={formData.familyHistory[disease][familyMember]}
+                                    onChange={(e) => handleCheckboxChange(e, disease, familyMember)}
+                                  />
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </SoftBox>
+                  </SoftBox>
                 </SoftBox>
               </SoftBox>
             </Card>
