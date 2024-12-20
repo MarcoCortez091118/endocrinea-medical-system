@@ -1,0 +1,13 @@
+/* Textarea global styles */
+.global-textarea {
+    width: 100%;
+    border-radius: 4px;
+    padding: 8px;
+    outline: none;
+    resize: none;
+    border-color: #c4c4c4;
+}
+
+.global-textarea:focus {
+    border-color: #054eeb;
+}
