@@ -93,6 +93,10 @@ function HistorialClinico() {
     takeMedications: "",
     menstruation: "",
     menstruationNull: "",
+    menstruationDate: "",
+    pregnancies: "",
+    otherPregnancies: "",
+    pregnanciesComplications: [],
   });
 
   // Maneja el cambio de los checkboxes
@@ -127,6 +131,16 @@ function HistorialClinico() {
       diagnosedDiseases: checked
         ? [...prevData.diagnosedDiseases, disease] // Agrega la enfermedad si está seleccionada
         : prevData.diagnosedDiseases.filter((item) => item !== disease), // Remueve la enfermedad si se deselecciona
+    }));
+  };
+
+  const handleComplicationsCheckboxChange = (e, complications) => {
+    const { checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      pregnanciesComplications: checked
+        ? [...prevData.pregnanciesComplications, complications] // Agrega la enfermedad si está seleccionada
+        : prevData.pregnanciesComplications.filter((item) => item !== complications), // Remueve la enfermedad si se deselecciona
     }));
   };
 
@@ -1023,6 +1037,99 @@ function HistorialClinico() {
                     </SoftBox>
                   </SoftBox>
                 </SoftBox>
+
+                <SoftBox p={3}>
+                  <SoftBox mb={2}>
+                    <label htmlFor="menstruationDate">
+                      En caso de que su periodo siga llegando, ¿Cuál es la fecha de inicio de su
+                      última menstruación?
+                    </label>
+                    <TextField
+                      id="menstruationDate"
+                      name="menstruationDate"
+                      type="date"
+                      value={formData.menstruationDate}
+                      onChange={handleChange}
+                      required
+                      fullWidth
+                      InputLabelProps={{ shrink: true }}
+                    />
+                  </SoftBox>
+                </SoftBox>
+
+                <SoftBox ml={2}>
+                  <SoftBox mb={2}>
+                    <label htmlFor="pregnancies">Número de embarazos</label>
+                    <RadioGroup
+                      id="pregnancies"
+                      name="pregnancies"
+                      value={formData.pregnancies}
+                      onChange={handleChange}
+                      required
+                    >
+                      <FormControlLabel value="0" control={<Radio />} label="0" />
+                      <FormControlLabel value="1" control={<Radio />} label="1" />
+                      <FormControlLabel value="2" control={<Radio />} label="2" />
+                      <FormControlLabel value="3" control={<Radio />} label="3" />
+                      <FormControlLabel value="Otros" control={<Radio />} label="Otros" />
+                    </RadioGroup>
+                  </SoftBox>
+                </SoftBox>
+                {["1", "2", "3"].includes(formData.pregnancies) && (
+                  <FormControl component="fieldset">
+                    <SoftBox ml={2}>
+                      <SoftTypography variant="subtitle2">
+                        ¿Presentó alguna complicación durante los embarazos? Es posible seleccionar
+                        varias respuestas.
+                      </SoftTypography>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formData.pregnanciesComplications.includes("Preeclampsia")}
+                            onChange={(e) => handleComplicationsCheckboxChange(e, "Preeclampsia")}
+                          />
+                        }
+                        label="Preeclampsia"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formData.pregnanciesComplications.includes(
+                              "Diabetes gestacional"
+                            )}
+                            onChange={(e) =>
+                              handleComplicationsCheckboxChange(e, "Diabetes gestacional")
+                            }
+                          />
+                        }
+                        label="Diabetes gestacional"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formData.pregnanciesComplications.includes("Hipertensión")}
+                            onChange={(e) => handleComplicationsCheckboxChange(e, "Hipertensión")}
+                          />
+                        }
+                        label="Hipertensión"
+                      />
+                    </SoftBox>
+                  </FormControl>
+                )}
+                {formData.pregnancies === "Otros" && (
+                  <SoftBox mb={2}>
+                    <textarea
+                      id="otherPregnancies"
+                      name="otherPregnancies"
+                      placeholder="Especifique"
+                      value={formData.otherPregnancies}
+                      onChange={handleChange}
+                      required
+                      rows="1"
+                      className="global-textarea"
+                    />
+                  </SoftBox>
+                )}
               </Card>
             </SoftBox>
           )}
