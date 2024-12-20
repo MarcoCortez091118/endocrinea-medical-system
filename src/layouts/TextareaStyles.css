@@ -7,6 +7,7 @@
     outline: none;
     resize: none;
     border-color: #c4c4c4;
+    color: rgb(73, 80, 87);
 }
 
 .global-textarea:focus {
