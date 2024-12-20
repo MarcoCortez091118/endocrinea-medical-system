@@ -36,18 +36,37 @@ function HistorialClinico() {
     occupation: "",
     maritalStatus: "",
     otherStatus: "",
+    religion: "",
+    otherReligion: "",
+    gender: "",
+    otherGender: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    // Si cambia el estado civil y no es "Otros", limpiamos el campo otherStatus
+    if ((name === "maritalStatus" && value !== "otros")) {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+        otherStatus: "", // Limpiamos el campo "otherStatus"
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const dataToSend = { ...formData };
+    if (dataToSend.maritalStatus !== "Otros") {
+      delete dataToSend.otherStatus;
+    }
+
     // Aquí debes enviar formData a la API
     /* 
     try {
@@ -209,7 +228,6 @@ function HistorialClinico() {
                     value={formData.maritalStatus}
                     onChange={handleChange}
                     required
-                    columns="4"
                   >
                     <FormControlLabel value="Soltero(a)" control={<Radio />} label="Soltero(a)" />
                     <FormControlLabel value="Casado(a)" control={<Radio />} label="Casado(a)" />
@@ -232,18 +250,92 @@ function HistorialClinico() {
                   </SoftBox>
                 )}
 
+                <SoftBox mb={2}>
+                  <label htmlFor="religion">¿Su RELIGIÓN le impide comer algún tipo de alimento?</label>
+                  <RadioGroup
+                    id="religion"
+                    name="religion"
+                    value={formData.religion}
+                    onChange={handleChange}
+                    required
+                  >
+                    <FormControlLabel value="Si" control={<Radio />} label="Si" />
+                    <FormControlLabel value="No" control={<Radio />} label="No" />
+                  </RadioGroup>
+                </SoftBox>
+                {formData.religion === "Si" && (
+                  <SoftBox mb={2}>
+                    <textarea
+                      id="otherReligion"
+                      name="otherReligion"
+                      placeholder="Especifique"
+                      value={formData.otherReligion}
+                      onChange={handleChange}
+                      required
+                      rows="1"
+                      className="global-textarea"
+                    />
+                  </SoftBox>
+                )}
+
+                <SoftBox mb={2}>
+                  <label htmlFor="religion">Genero</label>
+                  <RadioGroup
+                    id="gender"
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                    required
+                  >
+                    <FormControlLabel value="H" control={<Radio />} label="H" />
+                    <FormControlLabel value="M" control={<Radio />} label="M" />
+                    <FormControlLabel value="Otros" control={<Radio />} label="Otros" />
+                  </RadioGroup>
+                </SoftBox>
+                {formData.gender === "Otros" && (
+                  <SoftBox mb={2}>
+                    <textarea
+                      id="otherGender"
+                      name="otherGender"
+                      placeholder="Especifique"
+                      value={formData.otherGender}
+                      onChange={handleChange}
+                      required
+                      rows="1"
+                      className="global-textarea"
+                    />
+                  </SoftBox>
+                )}
+
               </SoftBox>
             </Card>
           </SoftBox>
+
+          <SoftBox mt={4}>
+            <Card>
+              <SoftBox p={3}>
+                <SoftBox mb={2}>
+                  <SoftTypography variant="h4">Antecedentes familiares</SoftTypography>
+                  <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
+                    En esta sección deberá contestar si alguno de sus familiares
+                    tiene diagnosticada alguna de las enfermedades especificadas a
+                    continuación. Por favor, responda sólo si está seguro(a) del
+                    diagnóstico.
+                  </SoftTypography>
+                </SoftBox>
+              </SoftBox>
+            </Card>
+          </SoftBox>
+
           <SoftBox mt={2}>
             <Button type="submit" variant="contained" color="primary" fullWidth style={{ color: 'white' }}>
               Enviar
             </Button>
           </SoftBox>
         </form>
-      </SoftBox>
+      </SoftBox >
       <Footer />
-    </DashboardLayout>
+    </DashboardLayout >
   );
 }
 
