@@ -5,6 +5,7 @@ import {
   TextField,
   MenuItem,
   Select,
+  Input,
   Grid,
   Button,
   FormControl,
@@ -48,6 +49,16 @@ function HistorialClinico() {
       "Colesterol alto": { Madre: false, Padre: false, Hermanos: false, "Tíos paternos": false, "Tíos maternos": false },
       Infartos: { Madre: false, Padre: false, Hermanos: false, "Tíos paternos": false, "Tíos maternos": false },
     },
+    smoke: "",
+    smokeHistory: "",
+    smokeOther: "",
+    alcohol: "",
+    alcoholHistory: "",
+    alcoholOther: "",
+    drug: "",
+    drugHistory: "",
+    exercise: "",
+    allergic: "",
   });
 
   // Maneja el cambio de los checkboxes
@@ -302,7 +313,7 @@ function HistorialClinico() {
                 )}
 
                 <SoftBox mb={2}>
-                  <label htmlFor="religion">Genero</label>
+                  <label htmlFor="gender">Genero</label>
                   <RadioGroup
                     id="gender"
                     name="gender"
@@ -393,8 +404,232 @@ function HistorialClinico() {
             </Card>
           </SoftBox>
 
+          <SoftBox mt={4}>
+            <Card>
+              <SoftBox p={3}>
+                <SoftBox mb={2}>
+                  <SoftTypography variant="h4">Antecedentes personales</SoftTypography>
+                  <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
+                    En esta sección recabaremos información sobre sus antecedentes médicos.
+                  </SoftTypography>
+                </SoftBox>
+              </SoftBox>
+            </Card>
+          </SoftBox>
+
+          <SoftBox mt={4}>
+            <Card>
+              <SoftBox p={3}>
+                <SoftBox mb={2}>
+                  <label htmlFor="smoke">¿Fuma?</label>
+                  <RadioGroup
+                    id="smoke"
+                    name="smoke"
+                    value={formData.smoke}
+                    onChange={handleChange}
+                    required
+                  >
+                    <FormControlLabel value="Si" control={<Radio />} label="Sí" />
+                  </RadioGroup>
+                  {formData.smoke === "Si" && (
+                    <SoftBox ml={4}>
+
+                      <RadioGroup
+                        id="smokeHistory"
+                        name="smokeHistory"
+                        value={formData.smokeHistory}
+                        onChange={handleChange}
+                        required
+                      >
+                        <FormControlLabel value="1" control={<Radio />} label="Menos de 5 cigarrillos al mes" />
+                        <FormControlLabel value="2" control={<Radio />} label="De 1-5 cigarrillos a la semana" />
+                        <FormControlLabel value="3" control={<Radio />} label="De 6-10 cigarrillos a la semana" />
+                        <FormControlLabel value="4" control={<Radio />} label="Mas de 20 cigarrillos a la semana" />
+                        <FormControlLabel value="Otros" control={<Radio />} label=" Otros:" />
+                      </RadioGroup>
+                      {formData.smokeHistory === "Otros" && (
+                        <SoftBox mb={2}>
+                          <textarea
+                            id="smokeOther"
+                            name="smokeOther"
+                            placeholder="Especifique"
+                            value={formData.smokeOther}
+                            onChange={handleChange}
+                            required
+                            rows="1"
+                            className="global-textarea"
+                          />
+                        </SoftBox>
+                      )}
+                    </SoftBox>
+                  )}
+                  <RadioGroup
+                    id="smoke"
+                    name="smoke"
+                    value={formData.smoke}
+                    onChange={handleChange}
+                    required
+                  >
+                    <FormControlLabel value="No" control={<Radio />} label="No" />
+                  </RadioGroup>
+                </SoftBox>
+                <SoftBox mb={2}>
+                  <label htmlFor="alcohol">¿Consume alcohol?</label>
+                  <RadioGroup
+                    id="alcohol"
+                    name="alcohol"
+                    value={formData.alcohol}
+                    onChange={handleChange}
+                    required
+                  >
+                    <FormControlLabel value="Si" control={<Radio />} label="Sí" />
+                  </RadioGroup>
+                  {formData.alcohol === "Si" && (
+                    <SoftBox ml={4}>
+                      <RadioGroup
+                        id="alcoholHistory"
+                        name="alcoholHistory"
+                        value={formData.alcoholHistory}
+                        onChange={handleChange}
+                        required
+                      >
+                        <FormControlLabel value="1" control={<Radio />} label="Sólo en fiestas o reuniones." />
+                        <FormControlLabel value="2" control={<Radio />} label="Al menos una vez a la semana hasta llegar a la embriaguez." />
+                        <FormControlLabel value="3" control={<Radio />} label="Al menos una vez a la semana sin llegar a la embriaguez." />
+                        <FormControlLabel value="Otros" control={<Radio />} label=" Otros:" />
+                      </RadioGroup>
+                      {formData.alcoholHistory === "Otros" && (
+                        <SoftBox mb={2}>
+                          <textarea
+                            id="alcoholOther"
+                            name="alcoholOther"
+                            placeholder="Especifique"
+                            value={formData.alcoholOther}
+                            onChange={handleChange}
+                            required
+                            rows="1"
+                            className="global-textarea"
+                          />
+                        </SoftBox>
+                      )}
+                    </SoftBox>
+                  )}
+                  <RadioGroup
+                    id="alcohol"
+                    name="alcohol"
+                    value={formData.alcohol}
+                    onChange={handleChange}
+                    required
+                  >
+                    <FormControlLabel value="No" control={<Radio />} label="No" />
+                  </RadioGroup>
+                </SoftBox>
+
+                <SoftBox mb={2}>
+                  <label htmlFor="drug">¿Consume o ha consumido algún tipo de droga?</label>
+                  <RadioGroup
+                    id="drug"
+                    name="drug"
+                    value={formData.drug}
+                    onChange={handleChange}
+                    required
+                  >
+                    <FormControlLabel value="Si" control={<Radio />} label="Sí" />
+                  </RadioGroup>
+                  {formData.drug === "Si" && (
+                    <SoftBox mb={2}>
+                      <textarea
+                        id="drugHistory"
+                        name="drugHistory"
+                        placeholder=" ¿Cuál o cuáles?"
+                        value={formData.drugHistory}
+                        onChange={handleChange}
+                        required
+                        rows="1"
+                        className="global-textarea"
+                      />
+                    </SoftBox>
+                  )}
+                  <RadioGroup
+                    id="drug"
+                    name="drug"
+                    value={formData.drug}
+                    onChange={handleChange}
+                    required
+                  >
+                    <FormControlLabel value="No" control={<Radio />} label=" No" />
+                  </RadioGroup>
+                </SoftBox>
+
+                <SoftBox mb={2}>
+                  <label htmlFor="exercise">¿Actualmente realiza ejercicio?</label>
+                  <RadioGroup
+                    id="exercise"
+                    name="exercise"
+                    value={formData.exercise}
+                    onChange={handleChange}
+                    required
+                  >
+                    <FormControlLabel value="1" control={<Radio />} label="Al menos 1 día a la semana" />
+                    <FormControlLabel value="2" control={<Radio />} label="Al menos 2 días a la semana" />
+                    <FormControlLabel value="3" control={<Radio />} label="3 o más días a la semana" />
+                    <FormControlLabel value="4" control={<Radio />} label="No hago ejercicio" />
+                  </RadioGroup>
+                </SoftBox>
+              </SoftBox>
+            </Card>
+          </SoftBox>
+
+          <SoftBox mt={4}>
+            <Card>
+              <SoftBox p={3}>
+                <SoftBox mb={2}>
+                  <SoftTypography variant="h4">Antecedentes Médicos</SoftTypography>
+                  <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
+                    Sección enfocada a conocer si padece alguna enfermedad y la medicación que actualmente utiliza.
+                  </SoftTypography>
+                </SoftBox>
+              </SoftBox>
+            </Card>
+          </SoftBox>
+
+          <SoftBox mt={4}>
+            <Card>
+              <SoftBox p={3}>
+                <SoftBox mb={2}>
+                  <label htmlFor="allergic"> ¿Es alérgico(a) a algún medicamento? ¿Cuál?</label>
+                  <SoftBox mb={2}>
+                    <textarea
+                      id="allergic"
+                      name="allergic"
+                      placeholder="Especifique"
+                      value={formData.allergic}
+                      onChange={handleChange}
+                      required
+                      rows="1"
+                      className="global-textarea"
+                    />
+                  </SoftBox>
+                </SoftBox>
+              </SoftBox>
+            </Card>
+          </SoftBox>
+
+          <SoftBox mt={4}>
+            <Card>
+              <SoftBox p={3}>
+                <SoftBox mb={2}>
+                  <SoftTypography variant="h4">Antecedentes personales</SoftTypography>
+                  <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
+                    En esta sección recabaremos información sobre sus antecedentes médicos.
+                  </SoftTypography>
+                </SoftBox>
+              </SoftBox>
+            </Card>
+          </SoftBox>
+
           <SoftBox mt={2}>
-            <Button type="submit" variant="contained" color="primary" fullWidth style={{ color: 'white' }}>
+            <Button type="submit" variant="contained" color="primary" fullWidth style={{ color: 'white' }} onClick={handleSubmit}>
               Enviar
             </Button>
           </SoftBox>
