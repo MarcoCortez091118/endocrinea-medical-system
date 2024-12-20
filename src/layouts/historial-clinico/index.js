@@ -24,6 +24,8 @@ import Footer from "examples/Footer";
 
 // Global style textarea
 import "layouts/TextareaStyles.css";
+import button from "assets/theme/components/button";
+import { Margin } from "@mui/icons-material";
 
 function HistorialClinico() {
   const [formData, setFormData] = useState({
@@ -36,18 +38,58 @@ function HistorialClinico() {
     occupation: "",
     maritalStatus: "",
     otherStatus: "",
+    religion: "",
+    otherReligion: "",
+    gender: "",
+    otherGender: "",
+    familyHistory: {
+      Diabetes: { Madre: false, Padre: false, Hermanos: false, "Tíos paternos": false, "Tíos maternos": false },
+      Hipertensión: { Madre: false, Padre: false, Hermanos: false, "Tíos paternos": false, "Tíos maternos": false },
+      "Colesterol alto": { Madre: false, Padre: false, Hermanos: false, "Tíos paternos": false, "Tíos maternos": false },
+      Infartos: { Madre: false, Padre: false, Hermanos: false, "Tíos paternos": false, "Tíos maternos": false },
+    },
   });
+
+  // Maneja el cambio de los checkboxes
+  const handleCheckboxChange = (e, disease, familyMember) => {
+    const { checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      familyHistory: {
+        ...prevData.familyHistory,
+        [disease]: {
+          ...prevData.familyHistory[disease],
+          [familyMember]: checked,
+        },
+      },
+    }));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    // Si cambia el estado civil y no es "Otros", limpiamos el campo otherStatus
+    if ((name === "maritalStatus" && value !== "otros")) {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+        otherStatus: "", // Limpiamos el campo "otherStatus"
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const dataToSend = { ...formData };
+    if (dataToSend.maritalStatus !== "Otros") {
+      delete dataToSend.otherStatus;
+    }
+
     // Aquí debes enviar formData a la API
     /* 
     try {
@@ -209,7 +251,6 @@ function HistorialClinico() {
                     value={formData.maritalStatus}
                     onChange={handleChange}
                     required
-                    columns="4"
                   >
                     <FormControlLabel value="Soltero(a)" control={<Radio />} label="Soltero(a)" />
                     <FormControlLabel value="Casado(a)" control={<Radio />} label="Casado(a)" />
@@ -232,18 +273,135 @@ function HistorialClinico() {
                   </SoftBox>
                 )}
 
+                <SoftBox mb={2}>
+                  <label htmlFor="religion">¿Su RELIGIÓN le impide comer algún tipo de alimento?</label>
+                  <RadioGroup
+                    id="religion"
+                    name="religion"
+                    value={formData.religion}
+                    onChange={handleChange}
+                    required
+                  >
+                    <FormControlLabel value="Si" control={<Radio />} label="Si" />
+                    <FormControlLabel value="No" control={<Radio />} label="No" />
+                  </RadioGroup>
+                </SoftBox>
+                {formData.religion === "Si" && (
+                  <SoftBox mb={2}>
+                    <textarea
+                      id="otherReligion"
+                      name="otherReligion"
+                      placeholder="Especifique"
+                      value={formData.otherReligion}
+                      onChange={handleChange}
+                      required
+                      rows="1"
+                      className="global-textarea"
+                    />
+                  </SoftBox>
+                )}
+
+                <SoftBox mb={2}>
+                  <label htmlFor="religion">Genero</label>
+                  <RadioGroup
+                    id="gender"
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                    required
+                  >
+                    <FormControlLabel value="H" control={<Radio />} label="H" />
+                    <FormControlLabel value="M" control={<Radio />} label="M" />
+                    <FormControlLabel value="Otros" control={<Radio />} label="Otros" />
+                  </RadioGroup>
+                </SoftBox>
+                {formData.gender === "Otros" && (
+                  <SoftBox mb={2}>
+                    <textarea
+                      id="otherGender"
+                      name="otherGender"
+                      placeholder="Especifique"
+                      value={formData.otherGender}
+                      onChange={handleChange}
+                      required
+                      rows="1"
+                      className="global-textarea"
+                    />
+                  </SoftBox>
+                )}
+
               </SoftBox>
             </Card>
           </SoftBox>
+
+          <SoftBox mt={4}>
+            <Card>
+              <SoftBox p={3}>
+                <SoftBox mb={2}>
+                  <SoftTypography variant="h4">Antecedentes familiares</SoftTypography>
+                  <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
+                    En esta sección deberá contestar si alguno de sus familiares
+                    tiene diagnosticada alguna de las enfermedades especificadas a
+                    continuación. Por favor, responda sólo si está seguro(a) del
+                    diagnóstico.
+                  </SoftTypography>
+                </SoftBox>
+              </SoftBox>
+            </Card>
+          </SoftBox>
+
+          <SoftBox mt={4}>
+            <Card>
+              <SoftBox p={3}>
+                <SoftBox mb={2}>
+                  <SoftBox mb={2}>
+                    <label htmlFor="religion">¿Alguien de su familia ha sido diagnosticado con alguna
+                      de las siguientes enfermedades ?</label>
+                    <SoftBox mt={3}>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th className="ancho"></th>
+                            <th className="ancho">Madre</th>
+                            <th className="ancho">Padre</th>
+                            <th className="ancho">Hermanos</th>
+                            <th className="ancho">Tíos paternos</th>
+                            <th className="ancho">Tíos maternos</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {Object.keys(formData.familyHistory).map((disease) => (
+                            <tr key={disease}>
+                              <td style={{ padding: "8px" }}>{disease}</td>
+                              {Object.keys(formData.familyHistory[disease]).map((familyMember) => (
+                                <td key={familyMember} style={{ textAlign: "center", padding: "8px" }}>
+                                  <input
+                                    type="checkbox"
+                                    checked={formData.familyHistory[disease][familyMember]}
+                                    onChange={(e) => handleCheckboxChange(e, disease, familyMember)}
+                                  />
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </SoftBox>
+                  </SoftBox>
+                </SoftBox>
+              </SoftBox>
+            </Card>
+          </SoftBox>
+
           <SoftBox mt={2}>
             <Button type="submit" variant="contained" color="primary" fullWidth style={{ color: 'white' }}>
               Enviar
             </Button>
           </SoftBox>
         </form>
-      </SoftBox>
+      </SoftBox >
       <Footer />
-    </DashboardLayout>
+    </DashboardLayout >
   );
 }
 
