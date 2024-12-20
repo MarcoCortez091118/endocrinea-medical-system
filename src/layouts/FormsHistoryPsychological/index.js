@@ -19,6 +19,8 @@ import Footer from "examples/Footer";
 
 // Función para enviar los datos del formulario
 import { sendFormData } from "./sendFormData";
+// Global style textarea
+import "layouts/TextareaStyles.css";
 
 function ClinicalForm() {
   const [formData, setFormData] = useState({
@@ -69,9 +71,36 @@ function ClinicalForm() {
     <DashboardLayout>
       <DashboardNavbar />
       <SoftBox py={3}>
-        <SoftTypography variant="h4" fontWeight="medium" mb={2}>
-          Historia Clínica de Psicología
-        </SoftTypography>
+      <SoftBox mb={3}>
+          <Card>
+            <SoftBox display="flex" flexDirection="column" alignItems="flex-start" p={3}>
+            <SoftTypography variant="h4" fontWeight="medium" mb={2}>
+              Historia Clínica de Psicología -</SoftTypography>
+              <SoftTypography variant="h4">Endocrinea Care</SoftTypography>
+              <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
+                Estimado paciente los siguientes datos de contacto y antecedentes médicos recabados
+                en el presente documento serán utilizados para llenar su historial médico.
+              </SoftTypography>
+              <SoftTypography variant="subtitle2" fontWeight="medium" mt={2}>
+                Todos sus datos serán tratados con total confidencialidad, la información sera
+                utilizada única y exclusivamente para mejorar la calidad de la atención durante su
+                consulta y brindarle un mejor servicio.
+              </SoftTypography>
+              <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
+                Dr. Francisco Javier Porquillo. C.P. 10550033 / 12467290 <br />
+                Dra. Carolain Ulrrich García. C.P. 13035875 <br />
+                Dra. Elizabeth Raquel Juárez Juárez. C.P. 1075112 / 12550599 <br />
+                Dra. Isbeth Gómez Díaz. C.P. 12611063 <br />
+                Dra. Victoria Sandoval Nava. C.P. 10101155 / 12655823
+              </SoftTypography>
+              <SoftTypography variant="subtitle2" fontWeight="medium" mt={4}>
+                Circuito Juan Pablo II. PB No. 3113. Colonia Fraccionamiento Las Ánimas, Puebla.
+              </SoftTypography>
+            </SoftBox>
+          </Card>
+        </SoftBox>
+
+
         {/* Card envuelve el formulario */}
         <Card>
           <SoftBox component="form" onSubmit={handleSubmit} p={3}>
@@ -83,44 +112,32 @@ function ClinicalForm() {
                 </SoftTypography>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Nombre completo"
-
-                      variant="outlined"
-                      name="nombre"
-                      value={formData.nombre}
-                      onChange={handleChange}
-                      required
-                      sx={{
-                        "& .MuiInputLabel-root": { fontSize: "15px" },
-                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                          borderColor: "#054eeb",
-                        },
-                        "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
-                      }}
-                    />
+                  <label htmlFor="email">Nombre </label>
+                  <textarea
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    rows="1"
+                    className="global-textarea"
+                  />
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Fecha de nacimiento"
-                      type="date"
-                      InputLabelProps={{ shrink: true }}
-                      variant="outlined"
-                      name="fechaNacimiento"
-                      value={formData.fechaNacimiento}
-                      onChange={handleChange}
-                      required
-                      sx={{
-                        "& .MuiInputLabel-root": { fontSize: "15px" },
-                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                          borderColor: "#054eeb",
-                        },
-                        "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
-                      }}
-                    />
+                    <SoftBox mb={2}>
+                      <label htmlFor="birthDate">Fecha de nacimiento </label>
+                      <TextField
+                        id="birthDate"
+                        name="birthDate"
+                        type="date"
+                        value={formData.birthDate}
+                        onChange={handleChange}
+                        required
+                        fullWidth
+                        InputLabelProps={{ shrink: true }}
+                      />
+                    </SoftBox>
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
@@ -193,62 +210,50 @@ function ClinicalForm() {
                     </Grid>
 
 
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Máximo grado de estudios"
-                      variant="outlined"
-                      name="maxEstudios"
-                      value={formData.maxEstudios}
-                      onChange={handleChange}
-                      required
-                      sx={{
-                        "& .MuiInputLabel-root": { fontSize: "15px" },
-                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                          borderColor: "#054eeb",
-                        },
-                        "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
-                      }}
-                    />
-                  </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <SoftBox mb={2}>
+                          <label htmlFor="fullName">Máximo grado de estudios </label>
+                          <textarea
+                            id="maxiestudios"
+                            name="maxiestudios"
+                            value={formData.maxiestudios}
+                            onChange={handleChange}
+                            required
+                            rows="1"
+                            className="global-textarea"
+                          />
+                        </SoftBox>
+                      </Grid>
 
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Ocupación actual"
-                      variant="outlined"
-                      name="ocupacion"
-                      value={formData.ocupacion}
-                      onChange={handleChange}
-                      required
-                      sx={{
-                        "& .MuiInputLabel-root": { fontSize: "15px" },
-                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                          borderColor: "#054eeb",
-                        },
-                        "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
-                      }}
-                    />
-                  </Grid>
+                      <SoftBox mb={2}>
+                      <label htmlFor="fullName"> Ocupación actual </label>
+                      <textarea
+                        id="ocupacion"
+                        name="ocupacion"
+                        value={formData.ocupacion}
+                        onChange={handleChange}
+                        required
+                        rows="1"
+                        className="global-textarea"
+                      />
+                    </SoftBox>
+                </Grid>
 
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      label="Creencias religiosas"
-                      variant="outlined"
-                      name="creencias"
-                      value={formData.creencias}
-                      onChange={handleChange}
-                      required
-                      sx={{
-                        "& .MuiInputLabel-root": { fontSize: "15px" },
-                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                          borderColor: "#054eeb",
-                        },
-                        "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
-                      }}
-                    />
-                  </Grid>
+                <Grid item xs={12} sm={6}>
+                      <SoftBox mb={2}>
+                      <label htmlFor="fullName"> Creencias religiosas </label>
+                      <textarea
+                        id="creencias"
+                        name="creencias"
+                        value={formData.creencias}
+                        onChange={handleChange}
+                        required
+                        rows="1"
+                        className="global-textarea"
+                      />
+                    </SoftBox>
+                </Grid>
                 </Grid>
               </Grid>
 
@@ -256,44 +261,32 @@ function ClinicalForm() {
             <Grid item xs={12}>
               <SoftTypography variant="h6" fontWeight="regular">
                 2. Antecedentes Médicos
-              </SoftTypography>
-              <TextField
-                fullWidth
-                label="AHF"
-                variant="outlined"
-                multiline
-                rows={2}
-                name="antecedentesMedicos"
-                value={formData.antecedentesMedicos}
-                onChange={handleChange}
-                required
-                sx={{
-                  "& .MuiInputLabel-root": { fontSize: "15px" },
-                  "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#054eeb",
-                  },
-                  "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
-                }}
-              />
-              <TextField
-                fullWidth
-                label="P.A"
-                variant="outlined"
-                multiline
-                rows={2}
-                name="toxicomanias"
-                value={formData.toxicomanias}
-                onChange={handleChange}
-                required
-                sx={{
-                  "& .MuiInputLabel-root": { fontSize: "15px" },
-                  mt: 2,
-                  "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#054eeb",
-                  },
-                  "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
-                }}
-              />
+              </SoftTypography>             
+              <SoftBox mb={2}>
+                  <label htmlFor="fullName"> AHF </label>
+                  <textarea
+                    id="AHF"
+                    name="AHF"
+                    value={formData.AHF}
+                    onChange={handleChange}
+                    required
+                    rows="1"
+                    className="global-textarea"
+                  />
+                </SoftBox>
+                <SoftBox mb={2}>
+                  <label htmlFor="fullName"> P.A </label>
+                  <textarea
+                    id="PA"
+                    name="PA"
+                    value={formData.PA}
+                    onChange={handleChange}
+                    required
+                    rows="1"
+                    className="global-textarea"
+                  />
+                </SoftBox>
+            
             </Grid>
 
             {/* Sección 3: Toxicomanías */}
@@ -301,23 +294,16 @@ function ClinicalForm() {
               <SoftTypography variant="h6" fontWeight="regular">
                 3. Toxicomanías
               </SoftTypography>
-              <TextField
-                fullWidth
-                variant="outlined"
-                multiline
-                rows={2}
-                name="toxicomanias"
-                value={formData.toxicomanias}
-                onChange={handleChange}
-                required
-                sx={{
-                  "& .MuiInputLabel-root": { fontSize: "15px" },
-                  "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#054eeb",
-                  },
-                  "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
-                }}
-              />
+                <textarea
+                  id="toxicomanias"
+                  name="toxicomanias"
+                  value={formData.toxicomanias}
+                  onChange={handleChange}
+                  required
+                  rows="1"
+                  className="global-textarea"
+                />
+                    
             </Grid>
 
             {/* Estilo de vida */}
@@ -327,134 +313,116 @@ function ClinicalForm() {
               </SoftTypography>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Alimentación"
-                    variant="outlined"
-                    name="estiloVida.alimentacion"
-                    value={formData.estiloVida.alimentacion}
-                    onChange={handleChange}
-                    required
-                    sx={{
-                      "& .MuiInputLabel-root": { fontSize: "15px" },
-                      "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#054eeb",
-                      },
-                      "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
-                    }}
-                  />
+                  <SoftBox mb={2}>
+                    <label htmlFor="fullName">  Alimentación </label>
+                    <textarea
+                      id="alimentacion"
+                      name="alimentacion"
+                      value={formData.alimentacion}
+                      onChange={handleChange}
+                      required
+                      rows="2"
+                      className="global-textarea"
+                    />
+                  </SoftBox>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Sueño"
-                    variant="outlined"
-                    name="estiloVida.sueno"
-                    value={formData.estiloVida.sueno}
-                    onChange={handleChange}
-                    required
-                    sx={{
-                      "& .MuiInputLabel-root": { fontSize: "15px" },
-                      "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#054eeb",
-                      },
-                      "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
-                    }}
-                  />
+                   <SoftBox mb={2}>
+                    <label htmlFor="fullName">  Sueño </label>
+                    <textarea
+                      id="sueno"
+                      name="sueno"
+                      value={formData.sueno}
+                      onChange={handleChange}
+                      required
+                      rows="2"
+                      className="global-textarea"
+                    />
+                  </SoftBox>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Actividad física"
-                    variant="outlined"
-                    name="estiloVida.actividadFisica"
-                    value={formData.estiloVida.actividadFisica}
-                    onChange={handleChange}
-                    required
-                    sx={{
-                      "& .MuiInputLabel-root": { fontSize: "15px" },
-                      "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#054eeb",
-                      },
-                      "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
-                    }}
-                  />
+                   <SoftBox mb={2}>
+                    <label htmlFor="fullName">  Actividad física </label>
+                    <textarea
+                      id="actividadFisica"
+                      name="actividadFisica"
+                      value={formData.actividadFisica}
+                      onChange={handleChange}
+                      required
+                      rows="2"
+                      className="global-textarea"
+                    />
+                  </SoftBox>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    label="Ocio y recreación"
-                    variant="outlined"
-                    name="estiloVida.ocio"
-                    value={formData.estiloVida.ocio}
-                    onChange={handleChange}
-                    required
-                    sx={{
-                      "& .MuiInputLabel-root": { fontSize: "15px" },
-                      "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#054eeb",
-                      },
-                      "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
-                    }}
-                  />
+                  <SoftBox mb={2}>
+                    <label htmlFor="fullName">  Ocio y recreación </label>
+                    <textarea
+                      id="ocio"
+                      name="ocio"
+                      value={formData.ocio}
+                      onChange={handleChange}
+                      required
+                      rows="2"
+                      className="global-textarea"
+                    />
+                  </SoftBox>
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Higiene"
-                    variant="outlined"
-                    name="estiloVida.higiene"
-                    value={formData.estiloVida.higiene}
-                    onChange={handleChange}
-                    required
-                    sx={{
-                      "& .MuiInputLabel-root": { fontSize: "15px" },
-                      "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#054eeb",
-                      },
-                      "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
-                    }}
-                  />
+                  <SoftBox mb={2}>
+                    <label htmlFor="fullName">  Higiene </label>
+                    <textarea
+                      id="higiene"
+                      name="higiene"
+                      value={formData.higiene}
+                      onChange={handleChange}
+                      required
+                      rows="2"
+                      className="global-textarea"
+                    />
+                  </SoftBox>
                 </Grid>
               </Grid>
             </Grid>
 
-            {/* Otras Secciones */}
-            {[
-              "5. Dinámica y relaciones familiares",
-              "6. Relaciones afectivas y de pareja",
-              "7. Dinámica laboral o académica",
-              "8. Antecedentes psicológicos",
-              "9. Motivo de consulta",
-              "10. Intentos previos de solución",
+            <SoftBox component="form" onSubmit={handleSubmit} noValidate sx={{ p: 3 }}>
+      <Grid container spacing={2}>
+        {[
+          { name: "dinamicaFamilia", label: "5. Dinámica y relaciones familiares" },
+          { name: "relacionesAfectivas", label: "6. Relaciones afectivas y de pareja" },
+          { name: "dinamicaLaboral", label: "7. Dinámica laboral o académica" },
+          { name: "antecedentesPsicologicos", label: "8. Antecedentes psicológicos" },
+          { name: "motivoConsulta", label: "9. Motivo de consulta" },
+          { name: "intentosSolucion", label: "10. Intentos previos de solución" },
+          {
+            name: "signosSintomas",
+            label:
               "11. Signos, síntomas, reacciones fisiológicas, pensamientos y emociones",
-              "12. Conductas autolesivas, ideación y comportamiento suicida",
-              "13. Valoración clínica",
-              "14. Impresión diagnóstica",
-            ].map((section, index) => (
-              <Grid item xs={12} key={index}>
-                <SoftTypography variant="h6" fontWeight="regular">
-                  {section}
-                </SoftTypography>
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  multiline
-                  rows={2}
-                  name={`otrasSecciones.${section.replace(/[^a-zA-Z0-9]/g, "")}`}
-                  value={formData.otrasSecciones[section.replace(/[^a-zA-Z0-9]/g, "")]}
-                  onChange={handleChange}
-                  required
-                  sx={{
-                    "& .MuiInputLabel-root": { fontSize: "15px" },
-                    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#054eeb",
-                    },
-                    "& .MuiInputLabel-root.Mui-focused": { color: "#054eeb" },
-                  }}
-                />
-              </Grid>
-            ))}            
+          },
+          {
+            name: "conductasAutolesivas",
+            label: "12. Conductas autolesivas, ideación y comportamiento suicida",
+          },
+          { name: "valoracionClinica", label: "13. Valoración clínica" },
+          { name: "impresionDiagnostica", label: "14. Impresión diagnóstica" },
+        ].map((field) => (
+          <Grid item xs={12} key={field.name}>
+            <SoftTypography variant="h6" fontWeight="regular">
+              {field.label}
+            </SoftTypography>
+            <textarea
+              id={field.name}
+              name={field.name}
+              value={formData[field.name]}
+              onChange={handleChange}
+              required
+              rows={3}
+              className="global-textarea"
+            />
+          </Grid>
+        ))}
+      </Grid>
+    </SoftBox>   
 
               <Grid item xs={12}>
                 <Button
