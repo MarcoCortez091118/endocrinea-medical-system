@@ -108,43 +108,67 @@ function HistorialEvolucion() {
       <DashboardNavbar />
       <SoftBox py={3}>
         <SoftBox mb={3}>
+        <SoftBox mb={3}>
+          <Card>
+            <SoftBox display="flex" flexDirection="column" alignItems="flex-start" p={3}>
+            <SoftTypography variant="h4">Historial de evolución -</SoftTypography>
+              <SoftTypography variant="h4">Endocrinea Care</SoftTypography>
+              <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
+                Estimado paciente los siguientes datos de contacto y antecedentes médicos recabados
+                en el presente documento serán utilizados para llenar su historial médico.
+              </SoftTypography>
+              <SoftTypography variant="subtitle2" fontWeight="medium" mt={2}>
+                Todos sus datos serán tratados con total confidencialidad, la información sera
+                utilizada única y exclusivamente para mejorar la calidad de la atención durante su
+                consulta y brindarle un mejor servicio.
+              </SoftTypography>
+              <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
+                Dr. Francisco Javier Porquillo. C.P. 10550033 / 12467290 <br />
+                Dra. Carolain Ulrrich García. C.P. 13035875 <br />
+                Dra. Elizabeth Raquel Juárez Juárez. C.P. 1075112 / 12550599 <br />
+                Dra. Isbeth Gómez Díaz. C.P. 12611063 <br />
+                Dra. Victoria Sandoval Nava. C.P. 10101155 / 12655823
+              </SoftTypography>
+              <SoftTypography variant="subtitle2" fontWeight="medium" mt={4}>
+                Circuito Juan Pablo II. PB No. 3113. Colonia Fraccionamiento Las Ánimas, Puebla.
+              </SoftTypography>
+            </SoftBox>
+          </Card>
+        </SoftBox>
           <Card style={{ maxWidth: "none" }}>
             <SoftBox display="flex" flexDirection="column" alignItems="flex-start" p={3}>
-              <SoftTypography variant="h6">Historial de evolución</SoftTypography>
               <SoftTypography variant="subtitle2" color="secondary" fontWeight="medium" mt={2}>
                 Nota de evolución
               </SoftTypography>
             </SoftBox>
 
             <SoftBox component="form" onSubmit={handleSubmit} noValidate sx={{ p: 3 }}>
-              <Grid container spacing={2}>
-                {[
-                  { name: "presentacion", label: "Presentación", value: presentacion },
-                  { name: "evolucion", label: "Evolución", value: evolucion },
-                  { name: "notas", label: "Notas de la sesión", value: notas },
-                  { name: "tareas", label: "Tareas de seguimiento", value: tareas },
-                  { name: "comentarios", label: "Comentarios/Observaciones", value: comentarios },
-                  { name: "pronostico", label: "Pronóstico", value: pronostico },
-                ].map((field) => (
-                  <Grid item xs={12} key={field.name}>
-                    <TextField
-                      fullWidth
-                      label={field.label}
-                      name={field.name}
-                      value={field.value}
-                      onChange={handleChange}
-                      error={Boolean(errors[field.name])}
-                      helperText={errors[field.name] || ""}
-                      multiline
-                      rows={3}
-                      InputLabelProps={{
-                        style: { fontSize: "1rem" },
-                      }}
-                      sx={{ marginBottom: 2 }}
-                    />
+                  <Grid container spacing={2}>
+                    {[ 
+                      { name: "presentacion", label: "Presentación", value: presentacion },
+                      { name: "evolucion", label: "Evolución", value: evolucion },
+                      { name: "notas", label: "Notas de la sesión", value: notas },
+                      { name: "tareas", label: "Tareas de seguimiento", value: tareas },
+                      { name: "comentarios", label: "Comentarios/Observaciones", value: comentarios },
+                      { name: "pronostico", label: "Pronóstico", value: pronostico },
+                    ].map((field) => (
+                      <Grid item xs={12} key={field.name}>
+                                    <SoftTypography variant="h6" fontWeight="regular">
+                                      {field.label}
+                                    </SoftTypography>
+                        <textarea
+                          className="global-textarea"
+                          name={field.name}
+                          value={field.value}
+                          onChange={handleChange}
+                          rows="3"
+                          placeholder={field.label}
+                        ></textarea>
+                      </Grid>
+                    ))}
                   </Grid>
-                ))}
-              </Grid>
+
+
               <Grid item xs={12}>
                 <Button
                   type="submit"
