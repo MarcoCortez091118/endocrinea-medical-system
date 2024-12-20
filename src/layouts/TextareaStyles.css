@@ -13,3 +13,8 @@
 .global-textarea:focus {
     border-color: #054eeb;
 }
+
+.ancho {
+    width: 16%;
+    text-align: center;
+}
