@@ -45,10 +45,34 @@ function HistorialClinico() {
     gender: "",
     otherGender: "",
     familyHistory: {
-      Diabetes: { Madre: false, Padre: false, Hermanos: false, "Tíos paternos": false, "Tíos maternos": false },
-      Hipertensión: { Madre: false, Padre: false, Hermanos: false, "Tíos paternos": false, "Tíos maternos": false },
-      "Colesterol alto": { Madre: false, Padre: false, Hermanos: false, "Tíos paternos": false, "Tíos maternos": false },
-      Infartos: { Madre: false, Padre: false, Hermanos: false, "Tíos paternos": false, "Tíos maternos": false },
+      Diabetes: {
+        Madre: false,
+        Padre: false,
+        Hermanos: false,
+        "Tíos paternos": false,
+        "Tíos maternos": false,
+      },
+      Hipertensión: {
+        Madre: false,
+        Padre: false,
+        Hermanos: false,
+        "Tíos paternos": false,
+        "Tíos maternos": false,
+      },
+      "Colesterol alto": {
+        Madre: false,
+        Padre: false,
+        Hermanos: false,
+        "Tíos paternos": false,
+        "Tíos maternos": false,
+      },
+      Infartos: {
+        Madre: false,
+        Padre: false,
+        Hermanos: false,
+        "Tíos paternos": false,
+        "Tíos maternos": false,
+      },
     },
     smoke: "",
     smokeHistory: "",
@@ -67,6 +91,8 @@ function HistorialClinico() {
     diagnosedDiseases: [],
     diagnosedDiseasesOther: "",
     takeMedications: "",
+    menstruation: "",
+    menstruationNull: "",
   });
 
   // Maneja el cambio de los checkboxes
@@ -107,7 +133,7 @@ function HistorialClinico() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     // Si cambia el estado civil y no es "Otros", limpiamos el campo otherStatus
-    if ((name === "maritalStatus" && value !== "otros")) {
+    if (name === "maritalStatus" && value !== "otros") {
       setFormData((prevData) => ({
         ...prevData,
         [name]: value,
@@ -224,7 +250,9 @@ function HistorialClinico() {
                 </SoftBox>
 
                 <SoftBox mb={2}>
-                  <label htmlFor="fullName">Nombre completo (Nombre / Apellido paterno / Apellido materno) *</label>
+                  <label htmlFor="fullName">
+                    Nombre completo (Nombre / Apellido paterno / Apellido materno) *
+                  </label>
                   <textarea
                     id="fullName"
                     name="fullName"
@@ -320,7 +348,9 @@ function HistorialClinico() {
                 )}
 
                 <SoftBox mb={2}>
-                  <label htmlFor="religion">¿Su RELIGIÓN le impide comer algún tipo de alimento?</label>
+                  <label htmlFor="religion">
+                    ¿Su RELIGIÓN le impide comer algún tipo de alimento?
+                  </label>
                   <RadioGroup
                     id="religion"
                     name="religion"
@@ -375,7 +405,6 @@ function HistorialClinico() {
                     />
                   </SoftBox>
                 )}
-
               </SoftBox>
             </Card>
           </SoftBox>
@@ -386,10 +415,9 @@ function HistorialClinico() {
                 <SoftBox mb={2}>
                   <SoftTypography variant="h4">Antecedentes familiares</SoftTypography>
                   <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
-                    En esta sección deberá contestar si alguno de sus familiares
-                    tiene diagnosticada alguna de las enfermedades especificadas a
-                    continuación. Por favor, responda sólo si está seguro(a) del
-                    diagnóstico.
+                    En esta sección deberá contestar si alguno de sus familiares tiene diagnosticada
+                    alguna de las enfermedades especificadas a continuación. Por favor, responda
+                    sólo si está seguro(a) del diagnóstico.
                   </SoftTypography>
                 </SoftBox>
               </SoftBox>
@@ -401,8 +429,10 @@ function HistorialClinico() {
               <SoftBox p={3}>
                 <SoftBox mb={2}>
                   <SoftBox mb={2}>
-                    <label htmlFor="religion">¿Alguien de su familia ha sido diagnosticado con alguna
-                      de las siguientes enfermedades ?</label>
+                    <label htmlFor="religion">
+                      ¿Alguien de su familia ha sido diagnosticado con alguna de las siguientes
+                      enfermedades ?
+                    </label>
                     <SoftBox mt={3}>
                       <table>
                         <thead>
@@ -420,7 +450,10 @@ function HistorialClinico() {
                             <tr key={disease}>
                               <td style={{ padding: "8px" }}>{disease}</td>
                               {Object.keys(formData.familyHistory[disease]).map((familyMember) => (
-                                <td key={familyMember} style={{ textAlign: "center", padding: "8px" }}>
+                                <td
+                                  key={familyMember}
+                                  style={{ textAlign: "center", padding: "8px" }}
+                                >
                                   <input
                                     type="checkbox"
                                     checked={formData.familyHistory[disease][familyMember]}
@@ -468,7 +501,6 @@ function HistorialClinico() {
                   </RadioGroup>
                   {formData.smoke === "Si" && (
                     <SoftBox ml={4}>
-
                       <RadioGroup
                         id="smokeHistory"
                         name="smokeHistory"
@@ -476,10 +508,26 @@ function HistorialClinico() {
                         onChange={handleChange}
                         required
                       >
-                        <FormControlLabel value="1" control={<Radio />} label="Menos de 5 cigarrillos al mes" />
-                        <FormControlLabel value="2" control={<Radio />} label="De 1-5 cigarrillos a la semana" />
-                        <FormControlLabel value="3" control={<Radio />} label="De 6-10 cigarrillos a la semana" />
-                        <FormControlLabel value="4" control={<Radio />} label="Mas de 20 cigarrillos a la semana" />
+                        <FormControlLabel
+                          value="1"
+                          control={<Radio />}
+                          label="Menos de 5 cigarrillos al mes"
+                        />
+                        <FormControlLabel
+                          value="2"
+                          control={<Radio />}
+                          label="De 1-5 cigarrillos a la semana"
+                        />
+                        <FormControlLabel
+                          value="3"
+                          control={<Radio />}
+                          label="De 6-10 cigarrillos a la semana"
+                        />
+                        <FormControlLabel
+                          value="4"
+                          control={<Radio />}
+                          label="Mas de 20 cigarrillos a la semana"
+                        />
                         <FormControlLabel value="Otros" control={<Radio />} label=" Otros:" />
                       </RadioGroup>
                       {formData.smokeHistory === "Otros" && (
@@ -528,9 +576,21 @@ function HistorialClinico() {
                         onChange={handleChange}
                         required
                       >
-                        <FormControlLabel value="1" control={<Radio />} label="Sólo en fiestas o reuniones." />
-                        <FormControlLabel value="2" control={<Radio />} label="Al menos una vez a la semana hasta llegar a la embriaguez." />
-                        <FormControlLabel value="3" control={<Radio />} label="Al menos una vez a la semana sin llegar a la embriaguez." />
+                        <FormControlLabel
+                          value="1"
+                          control={<Radio />}
+                          label="Sólo en fiestas o reuniones."
+                        />
+                        <FormControlLabel
+                          value="2"
+                          control={<Radio />}
+                          label="Al menos una vez a la semana hasta llegar a la embriaguez."
+                        />
+                        <FormControlLabel
+                          value="3"
+                          control={<Radio />}
+                          label="Al menos una vez a la semana sin llegar a la embriaguez."
+                        />
                         <FormControlLabel value="Otros" control={<Radio />} label=" Otros:" />
                       </RadioGroup>
                       {formData.alcoholHistory === "Otros" && (
@@ -605,9 +665,21 @@ function HistorialClinico() {
                     onChange={handleChange}
                     required
                   >
-                    <FormControlLabel value="1" control={<Radio />} label="Al menos 1 día a la semana" />
-                    <FormControlLabel value="2" control={<Radio />} label="Al menos 2 días a la semana" />
-                    <FormControlLabel value="3" control={<Radio />} label="3 o más días a la semana" />
+                    <FormControlLabel
+                      value="1"
+                      control={<Radio />}
+                      label="Al menos 1 día a la semana"
+                    />
+                    <FormControlLabel
+                      value="2"
+                      control={<Radio />}
+                      label="Al menos 2 días a la semana"
+                    />
+                    <FormControlLabel
+                      value="3"
+                      control={<Radio />}
+                      label="3 o más días a la semana"
+                    />
                     <FormControlLabel value="4" control={<Radio />} label="No hago ejercicio" />
                   </RadioGroup>
                 </SoftBox>
@@ -621,7 +693,8 @@ function HistorialClinico() {
                 <SoftBox mb={2}>
                   <SoftTypography variant="h4">Antecedentes Médicos</SoftTypography>
                   <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
-                    Sección enfocada a conocer si padece alguna enfermedad y la medicación que actualmente utiliza.
+                    Sección enfocada a conocer si padece alguna enfermedad y la medicación que
+                    actualmente utiliza.
                   </SoftTypography>
                 </SoftBox>
               </SoftBox>
@@ -632,7 +705,9 @@ function HistorialClinico() {
             <Card>
               <SoftBox p={3}>
                 <SoftBox mb={2}>
-                  <label htmlFor="allergicMedicine">¿Es alérgico(a) a algún medicamento?  ¿Cuál?</label>
+                  <label htmlFor="allergicMedicine">
+                    ¿Es alérgico(a) a algún medicamento? ¿Cuál?
+                  </label>
                   <SoftBox mb={2}>
                     <textarea
                       id="allergicMedicine"
@@ -648,7 +723,7 @@ function HistorialClinico() {
                 </SoftBox>
 
                 <SoftBox mb={2}>
-                  <label htmlFor="allergicFood">¿Es alérgico(a) a algún alimento?  ¿Cuál?</label>
+                  <label htmlFor="allergicFood">¿Es alérgico(a) a algún alimento? ¿Cuál?</label>
                   <SoftBox mb={2}>
                     <textarea
                       id="allergicFood"
@@ -664,7 +739,9 @@ function HistorialClinico() {
                 </SoftBox>
 
                 <SoftBox mb={2}>
-                  <label htmlFor="surgery">¿Le han realizado alguna cirugía? Es posible seleccionar varías respuestas.</label>
+                  <label htmlFor="surgery">
+                    ¿Le han realizado alguna cirugía? Es posible seleccionar varías respuestas.
+                  </label>
                   <RadioGroup
                     id="surgery"
                     name="surgery"
@@ -677,7 +754,9 @@ function HistorialClinico() {
                   {formData.surgery === "Si" && (
                     <SoftBox ml={4}>
                       <FormControl component="fieldset">
-                        <SoftTypography variant="subtitle2">Seleccione las cirugías que le hayan realizado:</SoftTypography>
+                        <SoftTypography variant="subtitle2">
+                          Seleccione las cirugías que le hayan realizado:
+                        </SoftTypography>
                         <SoftBox>
                           <FormControlLabel
                             control={
@@ -710,13 +789,17 @@ function HistorialClinico() {
                             control={
                               <Checkbox
                                 checked={formData.surgeryHistory.includes("Cirugía bariatríca")}
-                                onChange={(e) => handleSurgeryCheckboxChange(e, "Cirugía bariatríca")}
+                                onChange={(e) =>
+                                  handleSurgeryCheckboxChange(e, "Cirugía bariatríca")
+                                }
                               />
                             }
                             label="Cirugía bariatríca"
                           />
                           <SoftBox mb={2} display="flex">
-                            <label htmlFor="surgeryOther" style={{ marginRight: "8px" }}>Otros:</label>
+                            <label htmlFor="surgeryOther" style={{ marginRight: "8px" }}>
+                              Otros:
+                            </label>
                             <textarea
                               id="surgeryOther"
                               name="surgeryOther"
@@ -745,10 +828,14 @@ function HistorialClinico() {
                 </SoftBox>
 
                 <SoftBox mb={2}>
-                  <label htmlFor="diagnosedDiseases">¿Ha sido diagnósticado con alguna de las siguientes enfermedades?</label>
-                  <SoftTypography variant="subtitle2" >Es posible seleccionar varías respuestas.</SoftTypography>
+                  <label htmlFor="diagnosedDiseases">
+                    ¿Ha sido diagnósticado con alguna de las siguientes enfermedades?
+                  </label>
+                  <SoftTypography variant="subtitle2">
+                    Es posible seleccionar varías respuestas.
+                  </SoftTypography>
                   <FormControl component="fieldset">
-                    <SoftBox ml={2} >
+                    <SoftBox ml={2}>
                       <FormControlLabel
                         control={
                           <Checkbox
@@ -789,7 +876,9 @@ function HistorialClinico() {
                         control={
                           <Checkbox
                             checked={formData.diagnosedDiseases.includes("Hipercolesterolemia")}
-                            onChange={(e) => handleDiagnosedCheckboxChange(e, "Hipercolesterolemia")}
+                            onChange={(e) =>
+                              handleDiagnosedCheckboxChange(e, "Hipercolesterolemia")
+                            }
                           />
                         }
                         label="Hipercolesterolemia"
@@ -798,7 +887,9 @@ function HistorialClinico() {
                         control={
                           <Checkbox
                             checked={formData.diagnosedDiseases.includes("Hipertrigliceridemia")}
-                            onChange={(e) => handleDiagnosedCheckboxChange(e, "Hipertrigliceridemia")}
+                            onChange={(e) =>
+                              handleDiagnosedCheckboxChange(e, "Hipertrigliceridemia")
+                            }
                           />
                         }
                         label="Hipertrigliceridemia"
@@ -806,8 +897,12 @@ function HistorialClinico() {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            checked={formData.diagnosedDiseases.includes("Resistencia a la insulina")}
-                            onChange={(e) => handleDiagnosedCheckboxChange(e, "Resistencia a la insulina")}
+                            checked={formData.diagnosedDiseases.includes(
+                              "Resistencia a la insulina"
+                            )}
+                            onChange={(e) =>
+                              handleDiagnosedCheckboxChange(e, "Resistencia a la insulina")
+                            }
                           />
                         }
                         label="Resistencia a la insulina"
@@ -815,8 +910,12 @@ function HistorialClinico() {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            checked={formData.diagnosedDiseases.includes("Síndrome de ovario poliquístico")}
-                            onChange={(e) => handleDiagnosedCheckboxChange(e, "Síndrome de ovario poliquístico")}
+                            checked={formData.diagnosedDiseases.includes(
+                              "Síndrome de ovario poliquístico"
+                            )}
+                            onChange={(e) =>
+                              handleDiagnosedCheckboxChange(e, "Síndrome de ovario poliquístico")
+                            }
                           />
                         }
                         label="Síndrome de ovario poliquístico"
@@ -825,13 +924,17 @@ function HistorialClinico() {
                         control={
                           <Checkbox
                             checked={formData.diagnosedDiseases.includes("Sobrepeso / Obesidad.")}
-                            onChange={(e) => handleDiagnosedCheckboxChange(e, "Sobrepeso / Obesidad.")}
+                            onChange={(e) =>
+                              handleDiagnosedCheckboxChange(e, "Sobrepeso / Obesidad.")
+                            }
                           />
                         }
                         label="Sobrepeso / Obesidad."
                       />
                       <SoftBox mb={2} display="flex">
-                        <label htmlFor="diagnosedDiseasesOther" style={{ marginRight: "8px" }}>Otros:</label>
+                        <label htmlFor="diagnosedDiseasesOther" style={{ marginRight: "8px" }}>
+                          Otros:
+                        </label>
                         <textarea
                           id="diagnosedDiseasesOther"
                           name="diagnosedDiseasesOther"
@@ -849,7 +952,10 @@ function HistorialClinico() {
                 </SoftBox>
 
                 <SoftBox mb={2}>
-                  <label htmlFor="takeMedications">En caso de tomar medicamentos, ¿Qué medicamentos toma actualmente?. Especificar dosis y horario. Ejemplo: Metformina tabletas 850 mg, 1 tableta cada 12 horas.</label>
+                  <label htmlFor="takeMedications">
+                    En caso de tomar medicamentos, ¿Qué medicamentos toma actualmente?. Especificar
+                    dosis y horario. Ejemplo: Metformina tabletas 850 mg, 1 tableta cada 12 horas.
+                  </label>
                   <SoftBox mb={2} display="flex">
                     <textarea
                       id="takeMedications"
@@ -867,18 +973,59 @@ function HistorialClinico() {
             </Card>
           </SoftBox>
 
-          <SoftBox mt={4}>
-            <Card>
-              <SoftBox p={3}>
-                <SoftBox mb={2}>
-                  <SoftTypography variant="h4">Antecedentes Ginecológicos</SoftTypography>
-                  <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
-                    Sección enfocada únicamente a mujeres, en caso de ser hombre por favor pasar directamente a la siguiente sección.
-                  </SoftTypography>
+          {formData.gender === "M" && (
+            <SoftBox mt={4}>
+              <Card>
+                <SoftBox p={3}>
+                  <SoftBox mb={2}>
+                    <SoftTypography variant="h4">Antecedentes Ginecológicos</SoftTypography>
+                    <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
+                      Sección enfocada únicamente a mujeres, en caso de ser hombre por favor pasar
+                      directamente a la siguiente sección.
+                    </SoftTypography>
+                  </SoftBox>
                 </SoftBox>
-              </SoftBox>
-            </Card>
-          </SoftBox>
+
+                <SoftBox p={3}>
+                  <SoftBox mb={2}>
+                    <label htmlFor="menstruation">¿A qué edad comenzó a menstruar?</label>
+                    <SoftBox mb={2} display="flex">
+                      <textarea
+                        id="menstruation"
+                        name="menstruation"
+                        placeholder="Especifique"
+                        value={formData.menstruation}
+                        onChange={handleChange}
+                        required
+                        rows="1"
+                        className="global-textarea"
+                      />
+                    </SoftBox>
+                  </SoftBox>
+                </SoftBox>
+
+                <SoftBox p={3}>
+                  <SoftBox mb={2}>
+                    <label htmlFor="menstruationNull">
+                      En caso de haber dejado de menstruar, ¿A qué edad dejó de menstruar?
+                    </label>
+                    <SoftBox mb={2} display="flex">
+                      <textarea
+                        id="menstruationNull"
+                        name="menstruationNull"
+                        placeholder="Especifique"
+                        value={formData.menstruationNull}
+                        onChange={handleChange}
+                        required
+                        rows="1"
+                        className="global-textarea"
+                      />
+                    </SoftBox>
+                  </SoftBox>
+                </SoftBox>
+              </Card>
+            </SoftBox>
+          )}
 
           <SoftBox mt={4}>
             <Card>
@@ -898,22 +1045,28 @@ function HistorialClinico() {
               <SoftBox p={3}>
                 <SoftBox mb={2}>
                   <SoftTypography variant="h4"></SoftTypography>
-                  <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
-                  </SoftTypography>
+                  <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}></SoftTypography>
                 </SoftBox>
               </SoftBox>
             </Card>
           </SoftBox>
 
           <SoftBox mt={2}>
-            <Button type="submit" variant="contained" color="primary" fullWidth style={{ color: 'white' }} onClick={handleSubmit}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              style={{ color: "white" }}
+              onClick={handleSubmit}
+            >
               Enviar
             </Button>
           </SoftBox>
         </form>
-      </SoftBox >
+      </SoftBox>
       <Footer />
-    </DashboardLayout >
+    </DashboardLayout>
   );
 }
 
