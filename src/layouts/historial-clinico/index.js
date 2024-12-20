@@ -14,6 +14,7 @@ import {
   Radio,
   RadioGroup,
   DatePicker,
+  Checkbox,
 } from "@mui/material";
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
@@ -26,7 +27,7 @@ import Footer from "examples/Footer";
 // Global style textarea
 import "layouts/TextareaStyles.css";
 import button from "assets/theme/components/button";
-import { Margin } from "@mui/icons-material";
+import { Margin, WidthFull } from "@mui/icons-material";
 
 function HistorialClinico() {
   const [formData, setFormData] = useState({
@@ -58,7 +59,14 @@ function HistorialClinico() {
     drug: "",
     drugHistory: "",
     exercise: "",
-    allergic: "",
+    allergicMedicine: "",
+    allergicFood: "",
+    surgery: "",
+    surgeryHistory: [],
+    surgeryOther: "",
+    diagnosedDiseases: [],
+    diagnosedDiseasesOther: "",
+    takeMedications: "",
   });
 
   // Maneja el cambio de los checkboxes
@@ -76,6 +84,26 @@ function HistorialClinico() {
     }));
   };
 
+  const handleSurgeryCheckboxChange = (e, surgeryType) => {
+    const { checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      surgeryHistory: checked
+        ? [...prevData.surgeryHistory, surgeryType] // Agregar si está marcado
+        : prevData.surgeryHistory.filter((item) => item !== surgeryType), // Quitar si está desmarcado
+    }));
+  };
+
+  const handleDiagnosedCheckboxChange = (e, disease) => {
+    const { checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      diagnosedDiseases: checked
+        ? [...prevData.diagnosedDiseases, disease] // Agrega la enfermedad si está seleccionada
+        : prevData.diagnosedDiseases.filter((item) => item !== disease), // Remueve la enfermedad si se deselecciona
+    }));
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     // Si cambia el estado civil y no es "Otros", limpiamos el campo otherStatus
@@ -84,6 +112,13 @@ function HistorialClinico() {
         ...prevData,
         [name]: value,
         otherStatus: "", // Limpiamos el campo "otherStatus"
+      }));
+    } else if (name === "surgery") {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+        surgeryHistory: [], // Limpiamos el historial de cirugías si cambia
+        surgeryOther: "", // Limpiamos el campo de especificaciones
       }));
     } else {
       setFormData((prevData) => ({
@@ -597,13 +632,230 @@ function HistorialClinico() {
             <Card>
               <SoftBox p={3}>
                 <SoftBox mb={2}>
-                  <label htmlFor="allergic"> ¿Es alérgico(a) a algún medicamento? ¿Cuál?</label>
+                  <label htmlFor="allergicMedicine">¿Es alérgico(a) a algún medicamento?  ¿Cuál?</label>
                   <SoftBox mb={2}>
                     <textarea
-                      id="allergic"
-                      name="allergic"
+                      id="allergicMedicine"
+                      name="allergicMedicine"
                       placeholder="Especifique"
-                      value={formData.allergic}
+                      value={formData.allergicMedicine}
+                      onChange={handleChange}
+                      required
+                      rows="1"
+                      className="global-textarea"
+                    />
+                  </SoftBox>
+                </SoftBox>
+
+                <SoftBox mb={2}>
+                  <label htmlFor="allergicFood">¿Es alérgico(a) a algún alimento?  ¿Cuál?</label>
+                  <SoftBox mb={2}>
+                    <textarea
+                      id="allergicFood"
+                      name="allergicFood"
+                      placeholder="Especifique"
+                      value={formData.allergicFood}
+                      onChange={handleChange}
+                      required
+                      rows="1"
+                      className="global-textarea"
+                    />
+                  </SoftBox>
+                </SoftBox>
+
+                <SoftBox mb={2}>
+                  <label htmlFor="surgery">¿Le han realizado alguna cirugía? Es posible seleccionar varías respuestas.</label>
+                  <RadioGroup
+                    id="surgery"
+                    name="surgery"
+                    value={formData.surgery}
+                    onChange={handleChange}
+                    required
+                  >
+                    <FormControlLabel value="Si" control={<Radio />} label="Sí" />
+                  </RadioGroup>
+                  {formData.surgery === "Si" && (
+                    <SoftBox ml={4}>
+                      <FormControl component="fieldset">
+                        <SoftTypography variant="subtitle2">Seleccione las cirugías que le hayan realizado:</SoftTypography>
+                        <SoftBox>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={formData.surgeryHistory.includes("Apendicectomía")}
+                                onChange={(e) => handleSurgeryCheckboxChange(e, "Apendicectomía")}
+                              />
+                            }
+                            label="Apendicectomía"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={formData.surgeryHistory.includes("Colecistectomía")}
+                                onChange={(e) => handleSurgeryCheckboxChange(e, "Colecistectomía")}
+                              />
+                            }
+                            label="Colecistectomía"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={formData.surgeryHistory.includes("Cesarea")}
+                                onChange={(e) => handleSurgeryCheckboxChange(e, "Cesarea")}
+                              />
+                            }
+                            label="Cesarea"
+                          />
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={formData.surgeryHistory.includes("Cirugía bariatríca")}
+                                onChange={(e) => handleSurgeryCheckboxChange(e, "Cirugía bariatríca")}
+                              />
+                            }
+                            label="Cirugía bariatríca"
+                          />
+                          <SoftBox mb={2} display="flex">
+                            <label htmlFor="surgeryOther" style={{ marginRight: "8px" }}>Otros:</label>
+                            <textarea
+                              id="surgeryOther"
+                              name="surgeryOther"
+                              placeholder="Especifique"
+                              value={formData.surgeryOther}
+                              onChange={handleChange}
+                              required
+                              rows="1"
+                              className="global-textarea"
+                              style={{ width: "100%" }}
+                            />
+                          </SoftBox>
+                        </SoftBox>
+                      </FormControl>
+                    </SoftBox>
+                  )}
+                  <RadioGroup
+                    id="surgery"
+                    name="surgery"
+                    value={formData.surgery}
+                    onChange={handleChange}
+                    required
+                  >
+                    <FormControlLabel value="No" control={<Radio />} label="No" />
+                  </RadioGroup>
+                </SoftBox>
+
+                <SoftBox mb={2}>
+                  <label htmlFor="diagnosedDiseases">¿Ha sido diagnósticado con alguna de las siguientes enfermedades?</label>
+                  <SoftTypography variant="subtitle2" >Es posible seleccionar varías respuestas.</SoftTypography>
+                  <FormControl component="fieldset">
+                    <SoftBox ml={2} >
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formData.diagnosedDiseases.includes("Diabetes")}
+                            onChange={(e) => handleDiagnosedCheckboxChange(e, "Diabetes")}
+                          />
+                        }
+                        label="Diabetes"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formData.diagnosedDiseases.includes("Hipertensión")}
+                            onChange={(e) => handleDiagnosedCheckboxChange(e, "Hipertensión")}
+                          />
+                        }
+                        label="Hipertensión"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formData.diagnosedDiseases.includes("Hipotiroidismo")}
+                            onChange={(e) => handleDiagnosedCheckboxChange(e, "Hipotiroidismo")}
+                          />
+                        }
+                        label="Hipotiroidismo"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formData.diagnosedDiseases.includes("Hipertiroidismo")}
+                            onChange={(e) => handleDiagnosedCheckboxChange(e, "Hipertiroidismo")}
+                          />
+                        }
+                        label="Hipertiroidismo"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formData.diagnosedDiseases.includes("Hipercolesterolemia")}
+                            onChange={(e) => handleDiagnosedCheckboxChange(e, "Hipercolesterolemia")}
+                          />
+                        }
+                        label="Hipercolesterolemia"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formData.diagnosedDiseases.includes("Hipertrigliceridemia")}
+                            onChange={(e) => handleDiagnosedCheckboxChange(e, "Hipertrigliceridemia")}
+                          />
+                        }
+                        label="Hipertrigliceridemia"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formData.diagnosedDiseases.includes("Resistencia a la insulina")}
+                            onChange={(e) => handleDiagnosedCheckboxChange(e, "Resistencia a la insulina")}
+                          />
+                        }
+                        label="Resistencia a la insulina"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formData.diagnosedDiseases.includes("Síndrome de ovario poliquístico")}
+                            onChange={(e) => handleDiagnosedCheckboxChange(e, "Síndrome de ovario poliquístico")}
+                          />
+                        }
+                        label="Síndrome de ovario poliquístico"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formData.diagnosedDiseases.includes("Sobrepeso / Obesidad.")}
+                            onChange={(e) => handleDiagnosedCheckboxChange(e, "Sobrepeso / Obesidad.")}
+                          />
+                        }
+                        label="Sobrepeso / Obesidad."
+                      />
+                      <SoftBox mb={2} display="flex">
+                        <label htmlFor="diagnosedDiseasesOther" style={{ marginRight: "8px" }}>Otros:</label>
+                        <textarea
+                          id="diagnosedDiseasesOther"
+                          name="diagnosedDiseasesOther"
+                          placeholder="Especifique"
+                          value={formData.diagnosedDiseasesOther}
+                          onChange={handleChange}
+                          required
+                          rows="1"
+                          className="global-textarea"
+                          style={{ width: "100%" }}
+                        />
+                      </SoftBox>
+                    </SoftBox>
+                  </FormControl>
+                </SoftBox>
+
+                <SoftBox mb={2}>
+                  <label htmlFor="takeMedications">En caso de tomar medicamentos, ¿Qué medicamentos toma actualmente?. Especificar dosis y horario. Ejemplo: Metformina tabletas 850 mg, 1 tableta cada 12 horas.</label>
+                  <SoftBox mb={2} display="flex">
+                    <textarea
+                      id="takeMedications"
+                      name="takeMedications"
+                      placeholder="Especifique"
+                      value={formData.takeMedications}
                       onChange={handleChange}
                       required
                       rows="1"
@@ -619,9 +871,34 @@ function HistorialClinico() {
             <Card>
               <SoftBox p={3}>
                 <SoftBox mb={2}>
-                  <SoftTypography variant="h4">Antecedentes personales</SoftTypography>
+                  <SoftTypography variant="h4">Antecedentes Ginecológicos</SoftTypography>
                   <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
-                    En esta sección recabaremos información sobre sus antecedentes médicos.
+                    Sección enfocada únicamente a mujeres, en caso de ser hombre por favor pasar directamente a la siguiente sección.
+                  </SoftTypography>
+                </SoftBox>
+              </SoftBox>
+            </Card>
+          </SoftBox>
+
+          <SoftBox mt={4}>
+            <Card>
+              <SoftBox p={3}>
+                <SoftBox mb={2}>
+                  <SoftTypography variant="h4">Motivo de la consulta.</SoftTypography>
+                  <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
+                    Sección enfocada a conocer la razón de su asistencia a la consulta.
+                  </SoftTypography>
+                </SoftBox>
+              </SoftBox>
+            </Card>
+          </SoftBox>
+
+          <SoftBox mt={4}>
+            <Card>
+              <SoftBox p={3}>
+                <SoftBox mb={2}>
+                  <SoftTypography variant="h4"></SoftTypography>
+                  <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
                   </SoftTypography>
                 </SoftBox>
               </SoftBox>
