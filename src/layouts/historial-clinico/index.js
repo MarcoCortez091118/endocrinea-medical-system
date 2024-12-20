@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import {
+  TextField,
   MenuItem,
   Select,
   Grid,
@@ -11,6 +12,7 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
+  DatePicker,
 } from "@mui/material";
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
@@ -29,6 +31,11 @@ function HistorialClinico() {
     phoneNumber: "",
     fullName: "",
     birthDate: "",
+    age: "",
+    city: "",
+    occupation: "",
+    maritalStatus: "",
+    otherStatus: "",
   });
 
   const handleChange = (e) => {
@@ -142,10 +149,38 @@ function HistorialClinico() {
                 </SoftBox>
 
                 <SoftBox mb={2}>
-                  <textarea
+                  <label htmlFor="birthDate">Fecha de nacimiento *</label>
+                  <TextField
+                    id="birthDate"
                     name="birthDate"
                     type="date"
                     value={formData.birthDate}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </SoftBox>
+
+                <SoftBox mb={2}>
+                  <label htmlFor="age">Edad *</label>
+                  <TextField
+                    id="age"
+                    name="age"
+                    value={formData.age}
+                    onChange={handleChange}
+                    required
+                    fullWidth
+                    className="global-textarea"
+                  />
+                </SoftBox>
+
+                <SoftBox mb={2}>
+                  <label htmlFor="city">Ciudad o municipio de residencia actual *</label>
+                  <textarea
+                    id="city"
+                    name="city"
+                    value={formData.city}
                     onChange={handleChange}
                     required
                     rows="1"
@@ -153,12 +188,58 @@ function HistorialClinico() {
                   />
                 </SoftBox>
 
+                <SoftBox mb={2}>
+                  <label htmlFor="occupation">Ocupación *</label>
+                  <textarea
+                    id="occupation"
+                    name="occupation"
+                    value={formData.occupation}
+                    onChange={handleChange}
+                    required
+                    rows="1"
+                    className="global-textarea"
+                  />
+                </SoftBox>
+
+                <SoftBox mb={2}>
+                  <label htmlFor="maritalStatus">Estado civil *</label>
+                  <RadioGroup
+                    id="maritalStatus"
+                    name="maritalStatus"
+                    value={formData.maritalStatus}
+                    onChange={handleChange}
+                    required
+                    columns="4"
+                  >
+                    <FormControlLabel value="Soltero(a)" control={<Radio />} label="Soltero(a)" />
+                    <FormControlLabel value="Casado(a)" control={<Radio />} label="Casado(a)" />
+                    <FormControlLabel value="Union Libre" control={<Radio />} label="Unión libre" />
+                    <FormControlLabel value="Otros" control={<Radio />} label="Otros" />
+                  </RadioGroup>
+                </SoftBox>
+                {formData.maritalStatus === "Otros" && (
+                  <SoftBox mb={2}>
+                    <textarea
+                      id="otherStatus"
+                      name="otherStatus"
+                      placeholder="Especifique"
+                      value={formData.otherStatus}
+                      onChange={handleChange}
+                      required
+                      rows="1"
+                      className="global-textarea"
+                    />
+                  </SoftBox>
+                )}
+
               </SoftBox>
             </Card>
           </SoftBox>
-          <Button type="submit" variant="contained" color="primary">
-            Enviar
-          </Button>
+          <SoftBox mt={2}>
+            <Button type="submit" variant="contained" color="primary" fullWidth style={{ color: 'white' }}>
+              Enviar
+            </Button>
+          </SoftBox>
         </form>
       </SoftBox>
       <Footer />
