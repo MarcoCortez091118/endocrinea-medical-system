@@ -92,11 +92,14 @@ function HistorialClinico() {
     diagnosedDiseasesOther: "",
     takeMedications: "",
     menstruation: "",
+    menstruationTrue: "",
     menstruationNull: "",
     menstruationDate: "",
     pregnancies: "",
     otherPregnancies: "",
     pregnanciesComplications: [],
+    reasonConsultation: [],
+    consultationOther: "",
   });
 
   // Maneja el cambio de los checkboxes
@@ -1130,6 +1133,29 @@ function HistorialClinico() {
                     />
                   </SoftBox>
                 )}
+
+                <SoftBox ml={2}>
+                  <SoftBox mb={2}>
+                    <label htmlFor="menstruationTrue">
+                      En caso de seguir menstruando, ¿Cada cuánto llegan los periodos menstruales?
+                    </label>
+                    <RadioGroup
+                      id="menstruationTrue"
+                      name="menstruationTrue"
+                      value={formData.menstruationTrue}
+                      onChange={handleChange}
+                      required
+                    >
+                      <FormControlLabel value="1" control={<Radio />} label="Cada 21-30 dias" />
+                      <FormControlLabel value="2" control={<Radio />} label="Cada 31-40 dias" />
+                      <FormControlLabel
+                        value="3"
+                        control={<Radio />}
+                        label="Tardan mas de 40 días"
+                      />
+                    </RadioGroup>
+                  </SoftBox>
+                </SoftBox>
               </Card>
             </SoftBox>
           )}
@@ -1151,8 +1177,46 @@ function HistorialClinico() {
             <Card>
               <SoftBox p={3}>
                 <SoftBox mb={2}>
-                  <SoftTypography variant="h4"></SoftTypography>
-                  <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}></SoftTypography>
+                  <label htmlFor="reasonConsultation">
+                    Motivo de su consulta (Puede seleccionar varias opciones).
+                  </label>
+                  <RadioGroup
+                    id="reasonConsultation"
+                    name="reasonConsultation"
+                    value={formData.reasonConsultation}
+                    onChange={handleChange}
+                    required
+                  >
+                    <FormControlLabel value="1" control={<Radio />} label="Control de diabetes" />
+                    <FormControlLabel
+                      value="2"
+                      control={<Radio />}
+                      label="Control de hipertensión"
+                    />
+                    <FormControlLabel value="3" control={<Radio />} label="Control de peso" />
+                    <FormControlLabel
+                      value="4"
+                      control={<Radio />}
+                      label="Control de resistencia a la insulina"
+                    />
+                    <FormControlLabel value="5" control={<Radio />} label="Control de tiroides" />
+                    <FormControlLabel value="6" control={<Radio />} label="Chequeo general" />
+                    <FormControlLabel value="Otros" control={<Radio />} label="Otros" />
+                  </RadioGroup>
+                  {formData.reasonConsultation === "Otros" && (
+                    <SoftBox mb={2}>
+                      <textarea
+                        id="consultationOther"
+                        name="consultationOther"
+                        placeholder="Especifique"
+                        value={formData.consultationOther}
+                        onChange={handleChange}
+                        required
+                        rows="1"
+                        className="global-textarea"
+                      />
+                    </SoftBox>
+                  )}
                 </SoftBox>
               </SoftBox>
             </Card>
