@@ -8,6 +8,7 @@ import SignUp from "layouts/authentication/sign-up";
 import ClinicalForm from "layouts/FormsHistoryPsychological";
 import HistorialEvolucion from "layouts/historial-evolucion";
 import HistorialClinico from "layouts/historial-clinico";
+import Agenda from "layouts/agenda";
 import Shop from "examples/Icons/Shop";
 import Office from "examples/Icons/Office";
 import Settings from "examples/Icons/Settings";
@@ -86,43 +87,56 @@ const routes = (isAuthenticated) => [
     ),
     noCollapse: true,
   },
+  {
+    type: "collapse",
+    name: "Agenda",
+    key: "Agenda",
+    route: "/agenda",
+    icon: <HistoryIcon size="12px" />,
+    component: (
+      <ProtectedRoute>
+        <Agenda />
+      </ProtectedRoute>
+    ),
+    noCollapse: true,
+  },
   { type: "title", title: "Account Pages", key: "account-pages" },
   ...(isAuthenticated
     ? [
-        {
-          type: "collapse",
-          name: "Perfil",
-          key: "profile",
-          route: "/profile",
-          icon: <CustomerSupport size="12px" />,
-          component: (
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          ),
-          noCollapse: true,
-        },
-      ]
+      {
+        type: "collapse",
+        name: "Perfil",
+        key: "profile",
+        route: "/profile",
+        icon: <CustomerSupport size="12px" />,
+        component: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
+        noCollapse: true,
+      },
+    ]
     : [
-        {
-          type: "collapse",
-          name: "Iniciar sesión",
-          key: "sign-in",
-          route: "/authentication/sign-in",
-          icon: <Document size="12px" />,
-          component: <SignIn />,
-          noCollapse: true,
-        },
-        {
-          type: "collapse",
-          name: "Registrarme",
-          key: "sign-up",
-          route: "/authentication/sign-up",
-          icon: <SpaceShip size="12px" />,
-          component: <SignUp />,
-          noCollapse: true,
-        },
-      ]),
+      {
+        type: "collapse",
+        name: "Iniciar sesión",
+        key: "sign-in",
+        route: "/authentication/sign-in",
+        icon: <Document size="12px" />,
+        component: <SignIn />,
+        noCollapse: true,
+      },
+      {
+        type: "collapse",
+        name: "Registrarme",
+        key: "sign-up",
+        route: "/authentication/sign-up",
+        icon: <SpaceShip size="12px" />,
+        component: <SignUp />,
+        noCollapse: true,
+      },
+    ]),
 ];
 
 export default routes;
