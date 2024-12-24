@@ -34,15 +34,15 @@ function HistorialEvolucion() {
     event.preventDefault();
     const dataToSend = { ...formData };
 
+    /*
     const blob = new Blob([JSON.stringify(dataToSend, null, 2)], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    // Crear un enlace de descarga
     const link = document.createElement("a");
     link.href = url;
     link.download = "historial-evolucion.txt";
     link.click();
-    // Liberar memoria del objeto URL
     URL.revokeObjectURL(url);
+*/
 
     console.log("Datos a enviar:", formData);
   };
