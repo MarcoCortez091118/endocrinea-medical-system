@@ -147,6 +147,16 @@ function HistorialClinico() {
     }));
   };
 
+  const handleReasonsCheckboxChange = (e, reasons) => {
+    const { checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      reasonConsultation: checked
+        ? [...prevData.reasonConsultation, reasons] // Agrega la enfermedad si está seleccionada
+        : prevData.reasonConsultation.filter((item) => item !== reasons), // Remueve la enfermedad si se deselecciona
+    }));
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     // Si cambia el estado civil y no es "Otros", limpiamos el campo otherStatus
@@ -202,6 +212,18 @@ function HistorialClinico() {
       console.error('Error:', error);
     }
     */
+
+    // Convertir los datos a JSON y crear un archivo TXT para descargar
+    const blob = new Blob([JSON.stringify(dataToSend, null, 2)], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    // Crear un enlace de descarga
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "historial-clinico.txt";
+    link.click();
+    // Liberar memoria del objeto URL
+    URL.revokeObjectURL(url);
+
     console.log("Datos a enviar:", formData);
   };
 
@@ -1180,43 +1202,90 @@ function HistorialClinico() {
                   <label htmlFor="reasonConsultation">
                     Motivo de su consulta (Puede seleccionar varias opciones).
                   </label>
-                  <RadioGroup
-                    id="reasonConsultation"
-                    name="reasonConsultation"
-                    value={formData.reasonConsultation}
-                    onChange={handleChange}
-                    required
-                  >
-                    <FormControlLabel value="1" control={<Radio />} label="Control de diabetes" />
-                    <FormControlLabel
-                      value="2"
-                      control={<Radio />}
-                      label="Control de hipertensión"
-                    />
-                    <FormControlLabel value="3" control={<Radio />} label="Control de peso" />
-                    <FormControlLabel
-                      value="4"
-                      control={<Radio />}
-                      label="Control de resistencia a la insulina"
-                    />
-                    <FormControlLabel value="5" control={<Radio />} label="Control de tiroides" />
-                    <FormControlLabel value="6" control={<Radio />} label="Chequeo general" />
-                    <FormControlLabel value="Otros" control={<Radio />} label="Otros" />
-                  </RadioGroup>
-                  {formData.reasonConsultation === "Otros" && (
-                    <SoftBox mb={2}>
-                      <textarea
-                        id="consultationOther"
-                        name="consultationOther"
-                        placeholder="Especifique"
-                        value={formData.consultationOther}
-                        onChange={handleChange}
-                        required
-                        rows="1"
-                        className="global-textarea"
+                  <SoftBox ml={2}>
+                    <FormControl component="fieldset">
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formData.reasonConsultation.includes("Control de diabetes")}
+                            onChange={(e) =>
+                              handleReasonsCheckboxChange(e, "Control de diabetes")
+                            }
+                          />
+                        }
+                        label="Control de diabetes"
                       />
-                    </SoftBox>
-                  )}
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formData.reasonConsultation.includes("Control de hipertensión")}
+                            onChange={(e) =>
+                              handleReasonsCheckboxChange(e, "Control de hipertensión")
+                            }
+                          />
+                        }
+                        label="Control de hipertensión"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formData.reasonConsultation.includes("Control de peso")}
+                            onChange={(e) =>
+                              handleReasonsCheckboxChange(e, "Control de peso")
+                            }
+                          />
+                        }
+                        label="Control de peso"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formData.reasonConsultation.includes("Control de resistencia a la insulina")}
+                            onChange={(e) =>
+                              handleReasonsCheckboxChange(e, "Control de resistencia a la insulina")
+                            }
+                          />
+                        }
+                        label="Control de resistencia a la insulina"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formData.reasonConsultation.includes("Control de tiroides")}
+                            onChange={(e) =>
+                              handleReasonsCheckboxChange(e, "Control de tiroides")
+                            }
+                          />
+                        }
+                        label="Control de tiroides"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={formData.reasonConsultation.includes("Chequeo general")}
+                            onChange={(e) =>
+                              handleReasonsCheckboxChange(e, "Chequeo general")
+                            }
+                          />
+                        }
+                        label="Chequeo general"
+                      />
+                      <SoftBox mb={2} mt={1} display="flex">
+                        <SoftTypography variant="subtitle2">Otros: </SoftTypography>
+                        <textarea
+                          id="consultationOther"
+                          name="consultationOther"
+                          placeholder="Especifique"
+                          value={formData.consultationOther}
+                          onChange={handleChange}
+                          required
+                          rows="1"
+                          className="global-textarea"
+                          style={{ width: "100%" }}
+                        />
+                      </SoftBox>
+                    </FormControl>
+                  </SoftBox>
                 </SoftBox>
               </SoftBox>
             </Card>
