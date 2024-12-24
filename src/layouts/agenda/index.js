@@ -146,7 +146,6 @@ export default function Agenda({ view }) {
                 <SoftBox mb={3}>
                     <Card>
                         <div>
-                            <h1>🍞📅 TOAST UI Calendar + React.js</h1>
                             <div>
                                 <select onChange={(ev) => setSelectedView(ev.target.value)} value={selectedView}>
                                     {viewModeOptions.map((option, index) => (
