@@ -42,7 +42,7 @@ function HistorialEvolucion() {
     link.download = "historial-evolucion.txt";
     link.click();
     URL.revokeObjectURL(url);
-*/
+    */
 
     console.log("Datos a enviar:", formData);
   };
