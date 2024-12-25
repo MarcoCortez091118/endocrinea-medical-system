@@ -24,81 +24,84 @@ import "layouts/TextareaStyles.css";
 
 function ClinicalForm() {
   const [formData, setFormData] = useState({
-    nombre: "",
-    fechaNacimiento: "",
-    sexo: "",
-    estadoCivil: "",
-    maxEstudios: "",
-    ocupacion: "",
-    creencias: "",
-    antecedentesMedicos: "",
-    toxicomanias: "",
-    estiloVida: {
-      alimentacion: "",
-      sueno: "",
-      actividadFisica: "",
-      ocio: "",
-      higiene: "",
+    name: "",
+    birthDate: "",
+    gender: "",
+    maritalStatus: "",
+    highestEducation: "",
+    occupation: "",
+    religiousBeliefs: "",
+    medicalHistory: { // Sección de antecedentes médicos
+      AHF: "", // Historial familiar
+      PA: "",  // Condiciones médicas
     },
-    otrasSecciones: {
-      dinamicaFamilia: "",
-      relacionesAfectivas: "",
-      dinamicaLaboral: "",
-      antecedentesPsicologicos: "",
-      motivoConsulta: "",
-      intentosSolucion: "",
-      signosSintomas: "",
-      conductasAutolesivas: "",
-      valoracionClinica: "",
-      impresionDiagnostica: "",
+    substanceAbuse: "",
+    lifestyle: {
+      diet: "",
+      sleep: "",
+      physicalActivity: "",
+      leisure: "",
+      hygiene: "",
+    },
+    otherSections: {
+      familyDynamics: "",
+      affectiveRelationships: "",
+      workDynamics: "",
+      psychologicalHistory: "",
+      consultationReason: "",
+      solutionAttempts: "",
+      signsSymptoms: "",
+      selfHarmingBehaviors: "",
+      clinicalAssessment: "",
+      diagnosticImpression: "",
     },
   });
-
+  
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  
+    // Manejo para campos anidados con "." en el nombre
+    if (name.includes(".")) {
+      const [section, field] = name.split(".");
+      setFormData((prevData) => ({
+        ...prevData,
+        [section]: {
+          ...prevData[section],
+          [field]: value,
+        },
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
-  //const handleSubmit = (event) => {
-  //  event.preventDefault();
-   // sendFormData(formData); // Enviar los datos del formulario
- // };
+  const generateJSON = () => {
+    const jsonData = {
+      identification: {
+        name: formData.name,
+        birthDate: formData.birthDate,
+        gender: formData.gender,
+        maritalStatus: formData.maritalStatus,
+        highestEducation: formData.highestEducation,
+        occupation: formData.occupation,
+        religiousBeliefs: formData.religiousBeliefs,
+      },
+      medicalHistory: formData.medicalHistory,
+      substanceAbuse: formData.substanceAbuse,
+      lifestyle: formData.lifestyle,
+      otherSections: formData.otherSections,
+    };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    console.log("Generated JSON:", JSON.stringify(jsonData, null, 2));
+  };
 
-    const dataToSend = { ...formData };
-    if (dataToSend.maritalStatus !== "Otros") {
-      delete dataToSend.otherStatus;
-    }
-
-    // Aquí debes enviar formData a la API
-    /* 
-    try {
-      // Aquí iría la lógica para enviar los datos a la API
-      const response = await fetch('https://api.example.com/submit-historial', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        console.log('Historial enviado exitosamente');
-        // Manejar la respuesta de éxito aquí
-      } else {
-        console.error('Error al enviar el historial');
-        // Manejar errores aquí
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-    */
-    console.log("Datos a enviar:", formData);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    generateJSON();
+    // Aquí puedes enviar los datos generados a tu API si es necesario
   };
 
   return (
@@ -139,14 +142,14 @@ function ClinicalForm() {
         <Card>
           <SoftBox component="form" onSubmit={handleSubmit} p={3}>
             <Grid container spacing={3}>
-              {/* Sección 1: Ficha de Identificación */}
+              
               <Grid item xs={12}>
                 <SoftTypography variant="h6" fontWeight="regular">
                   1. Ficha de Identificación
                 </SoftTypography>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
-                  <label htmlFor="email">Nombre </label>
+                  <label htmlFor="name">Nombre </label>
                   <textarea
                     id="name"
                     name="name"
@@ -183,9 +186,9 @@ function ClinicalForm() {
                           Sexo
                         </InputLabel>
                         <Select
-                          label="Sexo"
-                          name="sexo"
-                          value={formData.sexo}
+                          label="Gender"
+                          name="gender"
+                          value={formData.gender}
                           onChange={handleChange}
                           sx={{
                             "& .MuiOutlinedInput-notchedOutline": { borderColor: "#ccc" },
@@ -197,9 +200,9 @@ function ClinicalForm() {
                           <MenuItem value="">
                             <em>Seleccionar</em>
                           </MenuItem>
-                          <MenuItem value="Masculino">Masculino</MenuItem>
-                          <MenuItem value="Femenino">Femenino</MenuItem>
-                          <MenuItem value="Otro">Otro</MenuItem>
+                          <MenuItem value="Male">Masculino</MenuItem>
+                          <MenuItem value="Female">Femenino</MenuItem>
+                          <MenuItem value="Other">Otro</MenuItem>
                         </Select>
                       </FormControl>
                     </Grid>
@@ -217,9 +220,9 @@ function ClinicalForm() {
                           Estado Civil
                         </InputLabel>
                         <Select
-                          label="Estado Civil"
-                          name="estadoCivil"
-                          value={formData.estadoCivil}
+                          label="Marital Status"
+                          name="maritalStatus"
+                          value={formData.maritalStatus}
                           onChange={handleChange}
                           sx={{
                             "& .MuiOutlinedInput-notchedOutline": { borderColor: "#ccc" },
@@ -231,10 +234,10 @@ function ClinicalForm() {
                           <MenuItem value="">
                             <em>Seleccionar</em>
                           </MenuItem>
-                          <MenuItem value="Soltero/a">Soltero/a</MenuItem>
-                          <MenuItem value="Casado/a">Casado/a</MenuItem>
-                          <MenuItem value="Divorciado/a">Divorciado/a</MenuItem>
-                          <MenuItem value="Viudo/a">Viudo/a</MenuItem>
+                          <MenuItem value="Single">Soltero/a</MenuItem>
+                          <MenuItem value="Married">Casado/a</MenuItem>
+                          <MenuItem value="Divorced">Divorciado/a</MenuItem>
+                          <MenuItem value="Widowed">Viudo/a</MenuItem>
                         </Select>
                       </FormControl>
                     </Grid>
@@ -242,11 +245,11 @@ function ClinicalForm() {
 
                       <Grid item xs={12} sm={6}>
                         <SoftBox mb={2}>
-                          <label htmlFor="fullName">Máximo grado de estudios </label>
+                          <label htmlFor="highestEducation">Máximo grado de estudios </label>
                           <textarea
-                            id="maxiestudios"
-                            name="maxiestudios"
-                            value={formData.maxiestudios}
+                            id="highestEducation"
+                            name="highestEducation"
+                            value={formData.highestEducation}
                             onChange={handleChange}
                             rows="1"
                             className="global-textarea"
@@ -256,11 +259,11 @@ function ClinicalForm() {
 
                   <Grid item xs={12} sm={6}>
                       <SoftBox mb={2}>
-                      <label htmlFor="fullName"> Ocupación actual </label>
+                      <label htmlFor="occupation"> Ocupación actual </label>
                       <textarea
-                        id="ocupacion"
-                        name="ocupacion"
-                        value={formData.ocupacion}
+                        id="occupation"
+                        name="occupation"
+                        value={formData.occupation}
                         onChange={handleChange}
                         rows="1"
                         className="global-textarea"
@@ -270,11 +273,11 @@ function ClinicalForm() {
 
                 <Grid item xs={12} sm={6}>
                       <SoftBox mb={2}>
-                      <label htmlFor="fullName"> Creencias religiosas </label>
+                      <label htmlFor="religiousBeliefs"> Creencias religiosas </label>
                       <textarea
-                        id="creencias"
-                        name="creencias"
-                        value={formData.creencias}
+                        id="religiousBeliefs"
+                        name="religiousBeliefs"
+                        value={formData.religiousBeliefs}
                         onChange={handleChange}
                         rows="1"
                         className="global-textarea"
@@ -290,22 +293,22 @@ function ClinicalForm() {
                 2. Antecedentes Médicos
               </SoftTypography>             
               <SoftBox mb={2}>
-                  <label htmlFor="fullName"> AHF </label>
+                  <label htmlFor="AHF"> AHF </label>
                   <textarea
                     id="AHF"
-                    name="AHF"
-                    value={formData.AHF}
+                    name="medicalHistory.AHF"
+                    value={formData.medicalHistory.AHF}
                     onChange={handleChange}
                     rows="1"
                     className="global-textarea"
                   />
                 </SoftBox>
                 <SoftBox mb={2}>
-                  <label htmlFor="fullName"> P.A </label>
+                  <label htmlFor="PA"> P.A </label>
                   <textarea
                     id="PA"
-                    name="PA"
-                    value={formData.PA}
+                    name="medicalHistory.PA"
+                    value={formData.medicalHistory.PA}
                     onChange={handleChange}
                     rows="1"
                     className="global-textarea"
@@ -320,14 +323,13 @@ function ClinicalForm() {
                 3. Toxicomanías
               </SoftTypography>
                 <textarea
-                  id="toxicomanias"
-                  name="toxicomanias"
-                  value={formData.toxicomanias}
+                  id="substanceAbuse"
+                  name="substanceAbuse"
+                  value={formData.substanceAbuse}
                   onChange={handleChange}
                   rows="1"
                   className="global-textarea"
                 />
-                    
             </Grid>
 
             {/* Estilo de vida */}
@@ -338,11 +340,11 @@ function ClinicalForm() {
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <SoftBox mb={2}>
-                    <label htmlFor="fullName">  Alimentación </label>
+                    <label htmlFor="diet">  Alimentación </label>
                     <textarea
-                      id="alimentacion"
-                      name="alimentacion"
-                      value={formData.alimentacion}
+                      id="diet"
+                      name="lifestyle.diet"
+                      value={formData.lifestyle.diet}
                       onChange={handleChange}
                       rows="2"
                       className="global-textarea"
@@ -351,11 +353,11 @@ function ClinicalForm() {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                    <SoftBox mb={2}>
-                    <label htmlFor="fullName">  Sueño </label>
+                    <label htmlFor="sleep">  Sueño </label>
                     <textarea
-                      id="sueno"
-                      name="sueno"
-                      value={formData.sueno}
+                      id="sleep"
+                      name="lifestyle.sleep"
+                      value={formData.lifestyle.sleep}
                       onChange={handleChange}
                       rows="2"
                       className="global-textarea"
@@ -364,11 +366,11 @@ function ClinicalForm() {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                    <SoftBox mb={2}>
-                    <label htmlFor="fullName">  Actividad física </label>
+                    <label htmlFor="physicalActivity">  Actividad física </label>
                     <textarea
-                      id="actividadFisica"
-                      name="actividadFisica"
-                      value={formData.actividadFisica}
+                      id="physicalActivity"
+                      name="lifestyle.physicalActivity"
+                      value={formData.lifestyle.physicalActivity}
                       onChange={handleChange}
                       rows="2"
                       className="global-textarea"
@@ -377,11 +379,11 @@ function ClinicalForm() {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <SoftBox mb={2}>
-                    <label htmlFor="fullName">  Ocio y recreación </label>
+                    <label htmlFor="leisure">  Ocio y recreación </label>
                     <textarea
-                      id="ocio"
-                      name="ocio"
-                      value={formData.ocio}
+                      id="leisure"
+                      name="lifestyle.leisure"
+                      value={formData.lifestyle.leisure}
                       onChange={handleChange}
                       rows="2"
                       className="global-textarea"
@@ -390,11 +392,11 @@ function ClinicalForm() {
                 </Grid>
                 <Grid item xs={12}>
                   <SoftBox mb={2}>
-                    <label htmlFor="fullName">  Higiene </label>
+                    <label htmlFor="hygiene">  Higiene </label>
                     <textarea
-                      id="higiene"
-                      name="higiene"
-                      value={formData.higiene}
+                      id="hygiene"
+                      name="lifestyle.hygiene"
+                      value={formData.lifestyle.hygiene}
                       onChange={handleChange}
                       rows="2"
                       className="global-textarea"
@@ -407,23 +409,23 @@ function ClinicalForm() {
             <SoftBox component="form" onSubmit={handleSubmit} noValidate sx={{ p: 3 }}>
               <Grid container spacing={2}>
                 {[
-                  { name: "dinamicaFamilia", label: "5. Dinámica y relaciones familiares" },
-                  { name: "relacionesAfectivas", label: "6. Relaciones afectivas y de pareja" },
-                  { name: "dinamicaLaboral", label: "7. Dinámica laboral o académica" },
-                  { name: "antecedentesPsicologicos", label: "8. Antecedentes psicológicos" },
-                  { name: "motivoConsulta", label: "9. Motivo de consulta" },
-                  { name: "intentosSolucion", label: "10. Intentos previos de solución" },
+                  { name: "familyDynamics", label: "5. Dinámica y relaciones familiares" },
+                  { name: "affectiveRelationships", label: "6. Relaciones afectivas y de pareja" },
+                  { name: "workDynamics", label: "7. Dinámica laboral o académica" },
+                  { name: "psychologicalHistory", label: "8. Antecedentes psicológicos" },
+                  { name: "consultationReason", label: "9. Motivo de consulta" },
+                  { name: "solutionAttempts", label: "10. Intentos previos de solución" },
                   {
-                    name: "signosSintomas",
+                    name: "signsSymptoms",
                     label:
                       "11. Signos, síntomas, reacciones fisiológicas, pensamientos y emociones",
                   },
                   {
-                    name: "conductasAutolesivas",
+                    name: "selfHarmingBehaviors",
                     label: "12. Conductas autolesivas, ideación y comportamiento suicida",
                   },
-                  { name: "valoracionClinica", label: "13. Valoración clínica" },
-                  { name: "impresionDiagnostica", label: "14. Impresión diagnóstica" },
+                  { name: "clinicalAssessment", label: "13. Valoración clínica" },
+                  { name: "diagnosticImpression", label: "14. Impresión diagnóstica" },
                 ].map((field) => (
                   <Grid item xs={12} key={field.name}>
                     <SoftTypography variant="h6" fontWeight="regular">
@@ -431,8 +433,8 @@ function ClinicalForm() {
                     </SoftTypography>
                     <textarea
                       id={field.name}
-                      name={field.name}
-                      value={formData[field.name]}
+                      name={`otherSections.${field.name}`}
+                      value={formData.otherSections[field.name]}
                       onChange={handleChange}
                       rows={3}
                       className="global-textarea"

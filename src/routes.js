@@ -17,7 +17,7 @@ import CustomerSupport from "examples/Icons/CustomerSupport";
 import CreditCard from "examples/Icons/CreditCard";
 import Cube from "examples/Icons/Cube";
 import HistoryIcon from "@mui/icons-material/History";
-
+import PatientDetails from "layouts/patientFiles/patientFiles";
 import ProtectedRoute from "components/ProtectedRoutes/ProtectedRoute";
 
 const routes = (isAuthenticated) => [
@@ -49,9 +49,9 @@ const routes = (isAuthenticated) => [
   },
   {
     type: "collapse",
-    name: "historial evolucion",
-    key: "historialevolucion",
-    route: "/historial-evolucion",
+    name: "Historial evolucion",
+    key: "HistorialEvolucion",
+    route: "/HistorialEvolucion",
     icon: <HistoryIcon size="12px" />,
     component: (
       <ProtectedRoute>
@@ -64,7 +64,7 @@ const routes = (isAuthenticated) => [
     type: "collapse",
     name: "Historial psicológia",
     key: "ClinicalForm",
-    route: "/FormsHistoryPsychological",
+    route: "/ClinicalForm",
     icon: <HistoryIcon size="12px" />,
     component: (
       <ProtectedRoute>
@@ -75,9 +75,22 @@ const routes = (isAuthenticated) => [
   },
   {
     type: "collapse",
+    name: "Historial pacientes",
+    key: "PatientDetails",
+    route: "/PatientDetails",
+    icon: <HistoryIcon size="12px" />,
+    component: (
+      <ProtectedRoute>
+        <PatientDetails />
+      </ProtectedRoute>
+    ),
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
     name: "Historial clinico",
     key: "HistorialClinico",
-    route: "/historial-clinico",
+    route: "/HistorialClinico",
     icon: <HistoryIcon size="12px" />,
     component: (
       <ProtectedRoute>
@@ -86,43 +99,44 @@ const routes = (isAuthenticated) => [
     ),
     noCollapse: true,
   },
+
   { type: "title", title: "Account Pages", key: "account-pages" },
   ...(isAuthenticated
     ? [
-        {
-          type: "collapse",
-          name: "Perfil",
-          key: "profile",
-          route: "/profile",
-          icon: <CustomerSupport size="12px" />,
-          component: (
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          ),
-          noCollapse: true,
-        },
-      ]
+      {
+        type: "collapse",
+        name: "Perfil",
+        key: "profile",
+        route: "/profile",
+        icon: <CustomerSupport size="12px" />,
+        component: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
+        noCollapse: true,
+      },
+    ]
     : [
-        {
-          type: "collapse",
-          name: "Iniciar sesión",
-          key: "sign-in",
-          route: "/authentication/sign-in",
-          icon: <Document size="12px" />,
-          component: <SignIn />,
-          noCollapse: true,
-        },
-        {
-          type: "collapse",
-          name: "Registrarme",
-          key: "sign-up",
-          route: "/authentication/sign-up",
-          icon: <SpaceShip size="12px" />,
-          component: <SignUp />,
-          noCollapse: true,
-        },
-      ]),
+      {
+        type: "collapse",
+        name: "Iniciar sesión",
+        key: "sign-in",
+        route: "/authentication/sign-in",
+        icon: <Document size="12px" />,
+        component: <SignIn />,
+        noCollapse: true,
+      },
+      {
+        type: "collapse",
+        name: "Registrarme",
+        key: "sign-up",
+        route: "/authentication/sign-up",
+        icon: <SpaceShip size="12px" />,
+        component: <SignUp />,
+        noCollapse: true,
+      },
+    ]),
 ];
 
 export default routes;
