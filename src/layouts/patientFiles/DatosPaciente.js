@@ -38,6 +38,8 @@ const PatientDetailsForm = () => {
       maritalStatus: "",
       education: "",
       profession: "",
+      consent: false,
+      sendReminders: false,
     });
   
     const handleChange = (e) => {
@@ -45,7 +47,7 @@ const PatientDetailsForm = () => {
         if (type === 'checkbox') {
           setPatientData({
             ...patientData,
-            [name]: checked,
+            [name]: checked, // Aquí almacenamos si el checkbox está marcado o no
           });
         } else {
           setPatientData({
@@ -54,7 +56,8 @@ const PatientDetailsForm = () => {
           });
         }
       };
-    
+      
+  
     
       const handleAddressChange = (e) => {
         const { name, value } = e.target;
@@ -94,20 +97,20 @@ const PatientDetailsForm = () => {
           maritalStatus: patientData.maritalStatus,
           education: patientData.education,
           profession: patientData.profession,
+          consent: patientData.consent,
+          sendReminders: patientData.sendReminders,
         };
     
         // Mostrar el JSON en consola
         console.log("JSON generado: ", JSON.stringify(jsonData, null, 2));
       };
   return (
-    <Card style={{ padding: "16px" }}>
-      <Typography variant="h5" gutterBottom>
-        Datos del Paciente
-      </Typography>
+    <Card style={{ padding: "35px" }}>
+
 
       <form onSubmit={handleSubmit}>
         
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h5" gutterBottom>
             Datos generales del paciente
             </Typography>
             <Grid container spacing={2}>
@@ -121,13 +124,6 @@ const PatientDetailsForm = () => {
                 onChange={handleChange}
                 rows="1"
                 className="global-textarea"
-                style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                }}
                 />
             </Grid>
 
@@ -141,13 +137,6 @@ const PatientDetailsForm = () => {
                 onChange={handleChange}
                 rows="1"
                 className="global-textarea"
-                style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                }}
                 />
             </Grid>
 
@@ -211,8 +200,8 @@ const PatientDetailsForm = () => {
             </Grid>
 
       
-            <Card style={{ padding: '16px' }}>
-            <Typography variant="h6" gutterBottom>
+           
+            <Typography variant="h5" gutterBottom>
                 Datos administrativos
             </Typography>
             <Grid container spacing={2}>
@@ -225,13 +214,8 @@ const PatientDetailsForm = () => {
                     value={patientData.id}
                     onChange={handleChange}
                     rows="1"
-                    style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                    }}
+                    className="global-textarea"
+
                 />
                 </Grid>
 
@@ -244,12 +228,13 @@ const PatientDetailsForm = () => {
                     value={patientData.patientStatus}
                     onChange={handleChange}
                     style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                    }}
+                        width: '100%',
+                        padding: '8px',
+                        border: '1px solid #ccc',
+                        borderRadius: '4px',
+                        fontSize: '14px'
+                        }}
+
                 >
                     <option value="">Selecciona una opción</option>
                     <option value="active">Activo</option>
@@ -257,7 +242,7 @@ const PatientDetailsForm = () => {
                 </select>
                 </Grid>
 
-                {/* Responsable del tratamiento de datos */}
+                
                 <Grid item xs={12}>
                 <label htmlFor="dataResponsible">
                     Responsable del tratamiento de datos de paciente
@@ -268,13 +253,7 @@ const PatientDetailsForm = () => {
                     value={patientData.dataResponsible}
                     onChange={handleChange}
                     rows="1"
-                    style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                    }}
+                    className="global-textarea"
                 />
                 </Grid>
 
@@ -287,13 +266,7 @@ const PatientDetailsForm = () => {
                     value={patientData.birthCity}
                     onChange={handleChange}
                     rows="1"
-                    style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                    }}
+                    className="global-textarea"
                 />
                 </Grid>
 
@@ -306,13 +279,7 @@ const PatientDetailsForm = () => {
                     value={patientData.nationality}
                     onChange={handleChange}
                     rows="1"
-                    style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                    }}
+                    className="global-textarea"
                 />
                 </Grid>
 
@@ -325,13 +292,7 @@ const PatientDetailsForm = () => {
                     value={patientData.birthState}
                     onChange={handleChange}
                     rows="1"
-                    style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                    }}
+                    className="global-textarea"
                 />
                 </Grid>
 
@@ -344,12 +305,13 @@ const PatientDetailsForm = () => {
                     value={patientData.idType}
                     onChange={handleChange}
                     style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                    }}
+                        width: '100%',
+                        padding: '8px',
+                        border: '1px solid #ccc',
+                        borderRadius: '4px',
+                        fontSize: '14px'
+                        }}
+                  
                 >
                     <option value="CURP">CURP</option>
                     <option value="INE">INE</option>
@@ -366,13 +328,7 @@ const PatientDetailsForm = () => {
                     value={patientData.idNumber}
                     onChange={handleChange}
                     rows="1"
-                    style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                    }}
+                    className="global-textarea"
                 />
                 </Grid>
 
@@ -391,14 +347,14 @@ const PatientDetailsForm = () => {
                 </label>
                 </Grid>
             </Grid>
-            </Card>
-            <Card style={{ padding: '16px' }}>
-            <Typography variant="h6" gutterBottom>
+           
+            <Typography variant="h5" gutterBottom>
                 Datos de contacto
-            </Typography>
-            <Typography variant="body2" gutterBottom>
+                <Typography variant="body2" gutterBottom>
                 Estos contactos se usarán para las notificaciones, mensajes y otras comunicaciones.
+                </Typography>
             </Typography>
+            
             <Grid container spacing={2}>
                 {/* Teléfono */}
                 <Grid item xs={12} sm={6}>
@@ -409,13 +365,8 @@ const PatientDetailsForm = () => {
                     value={patientData.phone}
                     onChange={handleChange}
                     rows="1"
-                    style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                    }}
+                    className="global-textarea"
+
                 />
                 </Grid>
 
@@ -428,13 +379,8 @@ const PatientDetailsForm = () => {
                     value={patientData.email}
                     onChange={handleChange}
                     rows="1"
-                    style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                    }}
+                    className="global-textarea"
+                    
                 />
                 </Grid>
 
@@ -447,13 +393,8 @@ const PatientDetailsForm = () => {
                     value={patientData.additionalPhone}
                     onChange={handleChange}
                     rows="1"
-                    style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                    }}
+                    className="global-textarea"
+                    
                 />
                 </Grid>
 
@@ -480,13 +421,8 @@ const PatientDetailsForm = () => {
                     value={patientData.address.street}
                     onChange={handleAddressChange}
                     rows="1"
-                    style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                    }}
+                    className="global-textarea"
+                   
                 />
                 </Grid>
 
@@ -499,13 +435,8 @@ const PatientDetailsForm = () => {
                     value={patientData.address.number}
                     onChange={handleAddressChange}
                     rows="1"
-                    style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                    }}
+                    className="global-textarea"
+                    
                 />
                 </Grid>
 
@@ -518,13 +449,8 @@ const PatientDetailsForm = () => {
                     value={patientData.address.postalCode}
                     onChange={handleAddressChange}
                     rows="1"
-                    style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                    }}
+                    className="global-textarea"
+                    
                 />
                 </Grid>
 
@@ -537,13 +463,8 @@ const PatientDetailsForm = () => {
                     value={patientData.address.neighborhood}
                     onChange={handleAddressChange}
                     rows="1"
-                    style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                    }}
+                    className="global-textarea"
+                    
                 />
                 </Grid>
 
@@ -556,13 +477,8 @@ const PatientDetailsForm = () => {
                     value={patientData.address.city}
                     onChange={handleAddressChange}
                     rows="1"
-                    style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                    }}
+                    className="global-textarea"
+                   
                 />
                 </Grid>
 
@@ -621,25 +537,19 @@ const PatientDetailsForm = () => {
                     value={patientData.address.country}
                     onChange={handleAddressChange}
                     rows="1"
-                    style={{
-                    width: '100%',
-                    padding: '8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    fontSize: '14px'
-                    }}
+                    className="global-textarea"
+                   
                 />
                 </Grid>
             </Grid>
-            </Card>
-
-            <Card style={{ padding: '16px' }}>
-                <Typography variant="h6" gutterBottom>
+           
+                <Typography variant="h5" gutterBottom>
                     Datos complementarios
-                </Typography>
-                <Typography variant="body2" gutterBottom>
+                    <Typography variant="body2" gutterBottom>
                     Proporciona información adicional relevante para el perfil del paciente.
+                    </Typography>
                 </Typography>
+
                 <Grid container spacing={2}>
                     {/* Religión */}
                     <Grid item xs={12} sm={6}>
@@ -650,13 +560,8 @@ const PatientDetailsForm = () => {
                         value={patientData.religion}
                         onChange={handleChange}
                         rows="1"
-                        style={{
-                        width: '100%',
-                        padding: '8px',
-                        border: '1px solid #ccc',
-                        borderRadius: '4px',
-                        resize: 'none',
-                        }}
+                        className="global-textarea"
+                        
                     />
                     </Grid>
 
@@ -669,11 +574,12 @@ const PatientDetailsForm = () => {
                         value={patientData.maritalStatus}
                         onChange={handleChange}
                         style={{
-                        width: '100%',
-                        padding: '8px',
-                        border: '1px solid #ccc',
-                        borderRadius: '4px',
-                        }}
+                            width: '100%',
+                            padding: '8px',
+                            border: '1px solid #ccc',
+                            borderRadius: '4px',
+                            fontSize: '14px'
+                            }}
                     >
                         <option value="">Selecciona una opción</option>
                         <option value="single">Soltero(a)</option>
@@ -692,11 +598,12 @@ const PatientDetailsForm = () => {
                         value={patientData.education}
                         onChange={handleChange}
                         style={{
-                        width: '100%',
-                        padding: '8px',
-                        border: '1px solid #ccc',
-                        borderRadius: '4px',
-                        }}
+                            width: '100%',
+                            padding: '8px',
+                            border: '1px solid #ccc',
+                            borderRadius: '4px',
+                            fontSize: '14px'
+                            }}
                     >
                         <option value="">Selecciona una opción</option>
                         <option value="primary">Primaria</option>
@@ -715,17 +622,12 @@ const PatientDetailsForm = () => {
                         value={patientData.profession}
                         onChange={handleChange}
                         rows="1"
-                        style={{
-                        width: '100%',
-                        padding: '8px',
-                        border: '1px solid #ccc',
-                        borderRadius: '4px',
-                        resize: 'none',
-                        }}
+                        className="global-textarea"
+                        
                     />
                     </Grid>
                 </Grid>
-                </Card>
+                
             </Grid>
             <SoftBox mt={2}>
             <Button

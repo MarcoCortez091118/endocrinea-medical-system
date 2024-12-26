@@ -46,7 +46,7 @@ function PatientDetails() {
           <SoftBox display="flex" flexDirection="column" alignItems="center">
             <SoftBox
               style={{
-                backgroundColor: "#a8dadc",
+                backgroundColor: "#054eeb",
                 width: 70,
                 height: 70,
                 borderRadius: "50%",
@@ -57,7 +57,7 @@ function PatientDetails() {
                 fontSize: "18px",
               }}
             >
-              {patient ? `${patient.firstName.charAt(0)}${patient.lastName.charAt(0)}` : "?"}
+              {patient ? `${patient.firstName.charAt(0)}${patient.lastName.charAt(0)}` : "nombre"}
             </SoftBox>
             <SoftTypography variant="h6" mt={2}>
               {patient ? `${patient.firstName} ${patient.lastName}` : "Nombre del paciente"}
