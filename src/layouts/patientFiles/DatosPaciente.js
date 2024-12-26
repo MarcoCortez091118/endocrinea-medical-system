@@ -34,6 +34,9 @@ const PatientDetailsForm = () => {
         state: "",
         country: "",
       },
+      relatedPersons: [],
+      authorizedPerson: '',
+      legalRepresentative: '',
       religion: "",
       maritalStatus: "",
       education: "",
@@ -41,13 +44,51 @@ const PatientDetailsForm = () => {
       consent: false,
       sendReminders: false,
     });
-  
+    const [relatedPersons, setRelatedPersons] = useState([]);
+    const [authorizedPerson, setAuthorizedPerson] = useState('');
+    const [legalRepresentative, setLegalRepresentative] = useState('');
+    const [showAuthorizedDropdown, setShowAuthorizedDropdown] = useState(false);
+    const [showRepresentativeDropdown, setShowRepresentativeDropdown] = useState(false);
+    const handleAddRelatedPerson = () => {
+        const newRelatedPersons = [...patientData.relatedPersons, { name: '', relation: '', profession: '' }];
+        setPatientData({ ...patientData, relatedPersons: newRelatedPersons });
+      };
+      
+      const handleRelatedPersonChange = (index, field, value) => {
+        const updatedPersons = [...patientData.relatedPersons];
+        updatedPersons[index][field] = value;
+        setPatientData({ ...patientData, relatedPersons: updatedPersons });
+      };
+      
+
+      const handleAuthorizedPersonChange = (value) => {
+        setPatientData({ ...patientData, authorizedPerson: value });
+      };
+      
+      const handleLegalRepresentativeChange = (value) => {
+        setPatientData({ ...patientData, legalRepresentative: value });
+      };
+      
+      
+      const handleCheckboxChange = (checkboxType) => {
+        if (checkboxType === 'authorized') {
+          setShowAuthorizedDropdown(!showAuthorizedDropdown);
+        } else if (checkboxType === 'representative') {
+          setShowRepresentativeDropdown(!showRepresentativeDropdown);
+        }
+      };
+      const handleRemoveRelatedPerson = (index) => {
+  const updatedPersons = relatedPersons.filter((_, i) => i !== index);
+  setRelatedPersons(updatedPersons);
+};
+
+          
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         if (type === 'checkbox') {
           setPatientData({
             ...patientData,
-            [name]: checked, // Aquí almacenamos si el checkbox está marcado o no
+            [name]: checked, 
           });
         } else {
           setPatientData({
@@ -99,11 +140,15 @@ const PatientDetailsForm = () => {
           profession: patientData.profession,
           consent: patientData.consent,
           sendReminders: patientData.sendReminders,
+          relatedPersons: patientData.relatedPersons,
+    authorizedPerson: patientData.authorizedPerson,
+    legalRepresentative: patientData.legalRepresentative,
         };
     
         // Mostrar el JSON en consola
         console.log("JSON generado: ", JSON.stringify(jsonData, null, 2));
       };
+
   return (
     <Card style={{ padding: "35px" }}>
 
@@ -542,7 +587,129 @@ const PatientDetailsForm = () => {
                 />
                 </Grid>
             </Grid>
-           
+            <Grid item xs={12}>
+                    <Typography variant="h6">Personas allegadas</Typography>
+                    <Typography variant="body2">
+                    Las personas allegadas pueden seleccionarse como personas autorizadas o representantes legales de este paciente.
+                    </Typography>
+                </Grid>
+
+                {/* Lista de personas allegadas */}
+                {relatedPersons.map((person, index) => (
+                    <Grid container spacing={2} key={index}>
+                    <Grid item xs={12} sm={4}>
+                        <label htmlFor={`name-${index}`}>Nombre y Apellidos</label>
+                        <textarea
+                        id={`name-${index}`}
+                        name={`name-${index}`}
+                        value={person.name}
+                        onChange={(e) => handleRelatedPersonChange(index, 'name', e.target.value)}
+                        rows="1"
+                        className="global-textarea"
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <label htmlFor={`relation-${index}`}>Relación</label>
+                        <textarea
+                        id={`relation-${index}`}
+                        name={`relation-${index}`}
+                        value={person.relation}
+                        onChange={(e) => handleRelatedPersonChange(index, 'relation', e.target.value)}
+                        rows="1"
+                        className="global-textarea"
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <label htmlFor={`profession-${index}`}>Profesión</label>
+                        <textarea
+                        id={`profession-${index}`}
+                        name={`profession-${index}`}
+                        value={person.profession}
+                        onChange={(e) => handleRelatedPersonChange(index, 'profession', e.target.value)}
+                        rows="1"
+                        className="global-textarea"
+                        />
+                    </Grid>
+                    </Grid>
+                ))}
+
+                {/* Botón para agregar personas allegadas */}
+                <Grid item xs={12}>
+                    <Button onClick={handleAddRelatedPerson} style={{ color: '#1976d2', textTransform: 'none' }}>
+                    + Agregar persona allegada
+                    </Button>
+                </Grid>
+
+                {/* Opciones de selección */}
+                <Grid item xs={12}>
+                    <label>
+                    <input
+                        type="checkbox"
+                        checked={showAuthorizedDropdown}
+                        onChange={() => handleCheckboxChange('authorized')}
+                        style={{ marginRight: '8px' }}
+                    />
+                    El paciente autoriza a esta persona a acceder a sus datos médicos
+                    </label>
+                    {showAuthorizedDropdown && (
+                    <>
+                        <Typography variant="body2">Persona autorizada</Typography>
+                        {relatedPersons.length > 0 ? (
+                            <select
+                            value={patientData.authorizedPerson}
+                            onChange={(e) => handleAuthorizedPersonChange(e.target.value)}
+                            style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
+                            >
+                            <option value="">Elija una persona autorizada</option>
+                            {patientData.relatedPersons.map((person, index) => (
+                                <option key={index} value={person.name}>
+                                {person.name}
+                                </option>
+                            ))}
+                            </select>
+                        ) : (
+                        <Typography variant="body2" color="error">
+                            Primero debes agregar una persona.
+                        </Typography>
+                        )}
+                    </>
+                    )}
+                </Grid>
+
+                <Grid item xs={12}>
+                    <label>
+                    <input
+                        type="checkbox"
+                        checked={showRepresentativeDropdown}
+                        onChange={() => handleCheckboxChange('representative')}
+                        style={{ marginRight: '8px' }}
+                    />
+                    El paciente es menor de edad o no tiene capacidad legal
+                    </label>
+                    {showRepresentativeDropdown && (
+                    <>
+                        <Typography variant="body2">Representante legal</Typography>
+                        {relatedPersons.length > 0 ? (
+                            <select
+                                value={patientData.legalRepresentative}
+                                onChange={(e) => handleLegalRepresentativeChange(e.target.value)}
+                                style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
+                                >
+                                <option value="">Elija un representante legal</option>
+                                {patientData.relatedPersons.map((person, index) => (
+                                    <option key={index} value={person.name}>
+                                    {person.name}
+                                    </option>
+                                ))}
+                                </select>
+                        ) : (
+                        <Typography variant="body2" color="error">
+                            Primero debes agregar una persona.
+                        </Typography>   
+                        )}
+                    </>
+                    )}
+                </Grid>
                 <Typography variant="h5" gutterBottom>
                     Datos complementarios
                     <Typography variant="body2" gutterBottom>
