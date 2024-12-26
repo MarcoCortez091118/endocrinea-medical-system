@@ -7,7 +7,7 @@ function Citas() {
     <Card style={{ padding: "16px" }}>
       <SoftTypography variant="h6">Citas</SoftTypography>
       <SoftTypography variant="body2" mt={2}>
-        Aquí puedes gestionar las citas del paciente. (Contenido en desarrollo)
+               Aquí se gestionará las citas del paciente. (Contenido en desarrollo)
       </SoftTypography>
     </Card>
   );
