@@ -4,9 +4,15 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import SoftBox from "components/SoftBox";
+import { Card, Tabs, Tab, Divider } from "@mui/material";
 import SoftTypography from "components/SoftTypography";
-import { Card, Tabs, Tab, Divider, Table, TableBody, TableCell, TableHead, TableRow, IconButton, Button } from "@mui/material";
-import { Download, Edit, Delete } from "@mui/icons-material";
+
+// Importar las secciones
+
+import Documentos from "./documentos";
+import DatosPaciente from "./DatosPaciente";
+import Citas from "./citas";
+
 
 function PatientDetails() {
   const location = useLocation();
@@ -14,99 +20,18 @@ function PatientDetails() {
 
   const [activeTab, setActiveTab] = useState(0); // Control de pestañas
 
-  // Estado de archivos subidos (simulación de datos cargados)
-  const files = [
-    {
-      id: 1,
-      name: "Aaron Martinez Morales pqte platino vig septiembre",
-      author: "Erika Guadalupe Munguía",
-      date: "29/10/2024",
-    },
-    {
-      id: 2,
-      name: "A.C. Aaron Martinez Morales Dra Laura",
-      author: "Erika Guadalupe Munguía",
-      date: "02/08/2024",
-    },
-    {
-      id: 3,
-      name: "A.C. Aaron Martinez Morales Dra Caro",
-      author: "Erika Guadalupe Munguía",
-      date: "01/08/2024",
-    },
-  ];
-
-  // Manejar cambio de pestañas
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
 
-  // Contenido de cada pestaña
   const renderTabContent = () => {
     switch (activeTab) {
-      case 0: // Citas
-        return (
-          <Card style={{ padding: "16px" }}>
-            <SoftTypography variant="h6">Citas</SoftTypography>
-            <SoftTypography variant="body2" mt={2}>
-              Aquí puedes gestionar las citas del paciente. (Contenido en desarrollo)
-            </SoftTypography>
-          </Card>
-        );
-
-      case 1: // Documentos
-        return (
-          <Card style={{ padding: "16px" }}>
-            <SoftTypography variant="h6">Documentos</SoftTypography>
-            <SoftBox display="flex" gap={2} mt={2} mb={2}>
-              <Button variant="outlined" startIcon={<i className="fas fa-upload" />}>Subir archivo</Button>
-              <Button variant="contained" color="success">Crear documento</Button>
-              <Button variant="text" startIcon={<i className="fas fa-file-medical" />}>Solicitar resultados de una prueba</Button>
-            </SoftBox>
-            <Divider />
-
-            {/* Tabla de Archivos */}
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Tipo</TableCell>
-                  <TableCell>Nombre</TableCell>
-                  <TableCell>Autor</TableCell>
-                  <TableCell>Fecha</TableCell>
-                  <TableCell>Acciones</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {files.map((file) => (
-                  <TableRow key={file.id}>
-                    <TableCell>
-                      <Button variant="outlined" size="small">PDF</Button>
-                    </TableCell>
-                    <TableCell>{file.name}</TableCell>
-                    <TableCell>{file.author}</TableCell>
-                    <TableCell>{file.date}</TableCell>
-                    <TableCell>
-                      <IconButton color="primary"><Download /></IconButton>
-                      <IconButton color="warning"><Edit /></IconButton>
-                      <IconButton color="error"><Delete /></IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Card>
-        );
-
-      case 2: // Datos del paciente
-        return (
-          <Card style={{ padding: "16px" }}>
-            <SoftTypography variant="h6">Datos del Paciente</SoftTypography>
-            <SoftTypography variant="body2" mt={2}>
-              Aquí puedes ver y editar la información del paciente. (Contenido en desarrollo)
-            </SoftTypography>
-          </Card>
-        );
-
+      case 0:
+        return <Citas />;
+      case 1:
+        return <Documentos />;
+      case 2:
+        return <DatosPaciente />;
       default:
         return null;
     }
@@ -147,22 +72,14 @@ function PatientDetails() {
               {patient?.phone || "Teléfono no proporcionado"}
             </SoftTypography>
             <Divider style={{ width: "100%", margin: "16px 0" }} />
-            <SoftTypography variant="body2" color="textSecondary">
-              <b>Notas</b>
-            </SoftTypography>
-            <SoftTypography variant="body2" mt={1}>
-              12/07/24 Info Platino <br />
-              PLATINO TRIMESTRAL <br />
-              16/07/24 AL 30/09/24
-            </SoftTypography>
           </SoftBox>
         </Card>
 
         {/* Panel Derecho - Contenido de pestañas */}
         <SoftBox style={{ width: "75%" }}>
           <Tabs value={activeTab} onChange={handleTabChange} indicatorColor="primary" textColor="primary">
-            <Tab label="Citas" />
-            <Tab label="Documentos" />
+            <Tab label="citas" />
+            <Tab label="documentos" />
             <Tab label="Datos del Paciente" />
           </Tabs>
           <Divider style={{ margin: "16px 0" }} />
