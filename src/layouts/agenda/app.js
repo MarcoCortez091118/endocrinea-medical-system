@@ -44,6 +44,11 @@ function App() {
             <Scheduler
                 ref={calendarRef}
                 view="day"
+                day={{
+                    startHour: 6.5,
+                    endHour: 21.5,
+                    step: 30
+                }}
                 week={{
                     weekStartOn: 1,
                 }}
