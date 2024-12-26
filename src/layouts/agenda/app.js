@@ -11,7 +11,7 @@ function App() {
     return (
         <Fragment>
             <div style={{ textAlign: "center" }}>
-                <span>Resource View Mode: </span>
+                <span>Modo de Vista: </span>
                 <Button
                     color={mode === "default" ? "primary" : "inherit"}
                     variant={mode === "default" ? "contained" : "text"}
@@ -24,7 +24,7 @@ function App() {
                         );
                     }}
                 >
-                    Default
+                    Predeterminado
                 </Button>
                 <Button
                     color={mode === "tabs" ? "primary" : "inherit"}
@@ -38,11 +38,18 @@ function App() {
                         );
                     }}
                 >
-                    Tabs
+                    Pestañas
                 </Button>
             </div>
             <Scheduler
                 ref={calendarRef}
+                view="day"
+                week={{
+                    weekStartOn: 1,
+                }}
+                month={{
+                    weekStartOn: 1,
+                }}
                 events={EVENTS}
                 resources={RESOURCES}
                 resourceFields={{
@@ -64,7 +71,7 @@ function App() {
                                 value: res.admin_id // Should match "name" property
                             };
                         }),
-                        config: { label: "Assignee", required: true }
+                        config: { label: "Especialista", required: true }
                     }
                 ]}
                 viewerExtraComponent={(fields, event) => {
