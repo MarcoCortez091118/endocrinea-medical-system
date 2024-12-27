@@ -2,7 +2,8 @@ import React, { Fragment, useRef, useState } from "react";
 import { Button, Typography } from "@mui/material";
 import { Scheduler } from "@aldabil/react-scheduler";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
-import { RESOURCES, EVENTS } from "./data";
+import { RESOURCES, EVENTS, PATIENTS } from "./data";
+import { es } from "date-fns/locale";
 
 function App() {
     const [mode, setMode] = useState("default");
@@ -44,6 +45,30 @@ function App() {
             <Scheduler
                 ref={calendarRef}
                 view="day"
+                locale={es}
+                translations={{
+                    navigation: {
+                        today: "Hoy",
+                        month: "Mes",
+                        week: "Semana",
+                        day: "Día",
+                        agenda: "Agenda",
+                    },
+                    form: {
+                        addTitle: "Agregar Cita",
+                        editTitle: "Editar Cita",
+                        confirm: "Confirmar",
+                        delete: "Eliminar",
+                        cancel: "Cancelar",
+                    },
+                    event: {
+                        title: "Título",
+                        start: "Inicio",
+                        end: "Fin",
+                        allDay: "Todo el día",
+                    },
+                    moreEvents: "Más eventos",
+                }}
                 day={{
                     startHour: 6.5,
                     endHour: 21.5,
