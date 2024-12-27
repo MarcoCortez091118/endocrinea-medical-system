@@ -168,3 +168,33 @@ export const RESOURCES = [
         color: "#08c5bd"
     }
 ];
+
+export const PATIENTS = [
+    {
+        id: 1,
+        firstName: "Carlos",
+        lastName: "Hernández",
+        phone: "555123456",
+        email: "carlos.hernandez@example.com",
+        insured: true, // De aseguradora
+        private: false // Privado
+    },
+    {
+        id: 2,
+        firstName: "María",
+        lastName: "López",
+        phone: "555654321",
+        email: "maria.lopez@example.com",
+        insured: false, // De aseguradora
+        private: true // Privado
+    },
+    {
+        id: 3,
+        firstName: "Luis",
+        lastName: "Martínez",
+        phone: "555987654",
+        email: "luis.martinez@example.com",
+        insured: true, // De aseguradora
+        private: false // Privado
+    }
+];
