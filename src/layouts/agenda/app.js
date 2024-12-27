@@ -70,9 +70,9 @@ function App() {
                     moreEvents: "Más eventos",
                 }}
                 day={{
-                    startHour: 6.5,
-                    endHour: 21.5,
-                    step: 30
+                    startHour: 6,
+                    endHour: 22,
+                    //step: 30
                 }}
                 week={{
                     weekStartOn: 1,
