@@ -52,7 +52,7 @@ function Tables() {
               alignItems="center"
               p={3}
             >
-              <SoftTypography variant="h6">Table Leads</SoftTypography>
+              <SoftTypography variant="h6">Pacientes</SoftTypography>
               <Button
                 variant="contained"
                 color="primary"

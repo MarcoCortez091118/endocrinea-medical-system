@@ -22,7 +22,7 @@ export default function CustomPagination({ page, totalPages, onPageChange }) {
             backgroundColor: "#054eeb",
           },
           "& .MuiPaginationItem-root:hover": {
-            backgroundColor: "rgba(224, 4, 11, 0.7)",
+            backgroundColor: "#054eeb",
           },
           "& .MuiPaginationItem-ellipsis": {
             color: "grey",
