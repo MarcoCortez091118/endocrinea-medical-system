@@ -1,5 +1,5 @@
 import React, { Fragment, useRef, useState } from "react";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, } from "@mui/material";
 import { Scheduler } from "@aldabil/react-scheduler";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import { DOCTOR, EVENTS, PATIENTS } from "./data";
@@ -129,6 +129,22 @@ function App() {
                             })}
                         </div>
                     );
+                }}
+                onConfirm={async (event, action) => {
+                    // "action" puede ser "edit" o "create"
+                    console.log("Acción:", action);
+                    if (action === "create") {
+                        console.log("EVENTO NUEVO:", JSON.stringify(event, null, 2));
+                        // Retornar el evento nuevo (con ID si lo generas tú mismo)
+                        return {
+                            ...event,
+                            event_id: Date.now(), // Ejemplo de ID
+                        };
+                    } else if (action === "edit") {
+                        console.log("EVENTO EDITADO:", JSON.stringify(event, null, 2));
+                        // Retorna el evento editado
+                        return event;
+                    }
                 }}
             />
         </Fragment>
