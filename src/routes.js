@@ -74,18 +74,18 @@ const routes = (isAuthenticated) => [
     ),
     noCollapse: true,
   },
-  {
-    type: "collapse",
-    name: "Historial pacientes",
+ {
+  //  type: "collapse",
+   // name: "Historial pacientes",
     key: "PatientDetails",
     route: "/PatientDetails",
-    icon: <HistoryIcon size="12px" />,
+    //icon: <HistoryIcon size="12px" />,
     component: (
       <ProtectedRoute>
         <PatientDetails />
       </ProtectedRoute>
     ),
-    noCollapse: true,
+    //noCollapse: true,
   },
   {
     type: "collapse",
