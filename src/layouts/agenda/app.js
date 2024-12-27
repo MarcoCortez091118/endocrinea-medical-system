@@ -2,7 +2,7 @@ import React, { Fragment, useRef, useState } from "react";
 import { Button, Typography } from "@mui/material";
 import { Scheduler } from "@aldabil/react-scheduler";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
-import { RESOURCES, EVENTS, PATIENTS } from "./data";
+import { DOCTOR, EVENTS, PATIENTS } from "./data";
 import { es } from "date-fns/locale";
 
 function App() {
@@ -81,24 +81,24 @@ function App() {
                     weekStartOn: 1,
                 }}
                 events={EVENTS}
-                resources={RESOURCES}
+                resources={DOCTOR}
                 resourceFields={{
-                    idField: "admin_id",
+                    idField: "doctor_id",
                     textField: "title",
-                    subTextField: "mobile",
+                    subTextField: "adress",
                     avatarField: "title",
                     colorField: "color"
                 }}
                 fields={[
                     {
-                        name: "admin_id",
+                        name: "doctor_id",
                         type: "select",
-                        default: RESOURCES[0].admin_id,
-                        options: RESOURCES.map((res) => {
+                        default: DOCTOR[0].doctor_id,
+                        options: DOCTOR.map((res) => {
                             return {
-                                id: res.admin_id,
-                                text: `${res.title} (${res.mobile})`,
-                                value: res.admin_id // Should match "name" property
+                                id: res.doctor_id,
+                                text: `${res.title} (${res.adress})`,
+                                value: res.doctor_id // Should match "name" property
                             };
                         }),
                         config: { label: "Especialista", required: true }
@@ -108,9 +108,9 @@ function App() {
                     return (
                         <div>
                             {fields.map((field, i) => {
-                                if (field.name === "admin_id") {
+                                if (field.name === "doctor_id") {
                                     const admin = field.options.find(
-                                        (fe) => fe.id === event.admin_id
+                                        (fe) => fe.id === event.doctor_id
                                     );
                                     return (
                                         <Typography

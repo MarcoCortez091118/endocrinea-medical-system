@@ -4,14 +4,14 @@ export const EVENTS = [
         title: "Event 1",
         start: new Date(new Date(new Date().setHours(9)).setMinutes(30)),
         end: new Date(new Date(new Date().setHours(10)).setMinutes(30)),
-        admin_id: 1
+        doctor_id: 1
     },
     {
         event_id: 2,
         title: "Event 2",
         start: new Date(new Date(new Date().setHours(10)).setMinutes(0)),
         end: new Date(new Date(new Date().setHours(11)).setMinutes(0)),
-        admin_id: 2
+        doctor_id: 2
     },
     {
         event_id: 3,
@@ -22,7 +22,7 @@ export const EVENTS = [
             )
         ),
         end: new Date(new Date(new Date().setHours(10)).setMinutes(0)),
-        admin_id: 1
+        doctor_id: 1
     },
     {
         event_id: 4,
@@ -37,7 +37,7 @@ export const EVENTS = [
                 new Date().getDate() - 2
             )
         ),
-        admin_id: 2
+        doctor_id: 2
     },
     {
         event_id: 5,
@@ -52,14 +52,14 @@ export const EVENTS = [
                 new Date().getDate() + 10
             )
         ),
-        admin_id: 4
+        doctor_id: 4
     },
     {
         event_id: 6,
         title: "Event 6",
         start: new Date(new Date(new Date().setHours(11)).setMinutes(0)),
         end: new Date(new Date(new Date().setHours(12)).setMinutes(0)),
-        admin_id: 2
+        doctor_id: 2
     },
     {
         event_id: 7,
@@ -74,7 +74,7 @@ export const EVENTS = [
                 new Date().getDate() - 1
             )
         ),
-        admin_id: 3
+        doctor_id: 3
     },
     {
         event_id: 8,
@@ -89,7 +89,7 @@ export const EVENTS = [
                 new Date().getDate() - 1
             )
         ),
-        admin_id: 4
+        doctor_id: 4
     },
     {
         event_id: 9,
@@ -104,7 +104,7 @@ export const EVENTS = [
                 new Date().getDate() + 1
             )
         ),
-        admin_id: 1
+        doctor_id: 1
     },
     {
         event_id: 10,
@@ -119,7 +119,7 @@ export const EVENTS = [
                 new Date().getDate() + 1
             )
         ),
-        admin_id: 2
+        doctor_id: 2
     },
     {
         event_id: 11,
@@ -134,36 +134,36 @@ export const EVENTS = [
                 new Date().getDate() - 1
             )
         ),
-        admin_id: 1
+        doctor_id: 1
     }
 ];
 
-export const RESOURCES = [
+export const DOCTOR = [
     {
-        admin_id: 1,
+        doctor_id: 1,
         title: "John",
-        mobile: "555666777",
+        adress: "Online",
         avatar: "https://picsum.photos/200/300",
         color: "#ab2d2d"
     },
     {
-        admin_id: 2,
+        doctor_id: 2,
         title: "Sarah",
-        mobile: "545678354",
+        adress: "Presencial",
         avatar: "https://picsum.photos/200/300",
         color: "#58ab2d"
     },
     {
-        admin_id: 3,
+        doctor_id: 3,
         title: "Joseph",
-        mobile: "543678433",
+        adress: "Online",
         avatar: "https://picsum.photos/200/300",
         color: "#a001a2"
     },
     {
-        admin_id: 4,
+        doctor_id: 4,
         title: "Mera",
-        mobile: "507487620",
+        adress: "Presencial",
         avatar: "https://picsum.photos/200/300",
         color: "#08c5bd"
     }
