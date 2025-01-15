@@ -12,6 +12,7 @@ import SoftTypography from "components/SoftTypography";
 import Documentos from "./documentos";
 import DatosPaciente from "./DatosPaciente";
 import Citas from "./citas";
+import NotaClinico from "layouts/nota-Clinica copy/nota-Clinica";
 
 
 function PatientDetails() {
@@ -32,6 +33,8 @@ function PatientDetails() {
         return <Documentos />;
       case 2:
         return <DatosPaciente />;
+      case 4:
+        return <NotaClinico />;
       default:
         return null;
     }
