@@ -81,6 +81,8 @@ function PatientDetails() {
             <Tab label="citas" />
             <Tab label="documentos" />
             <Tab label="Datos del Paciente" />
+            <Tab label="Nota de Evolucion" />
+            <Tab label="Nota Clínica Médica" />
           </Tabs>
           <Divider style={{ margin: "16px 0" }} />
           {renderTabContent()}

@@ -133,6 +133,7 @@ function App() {
                         config: { label: "Especialista", required: true }
                     },
                     {
+
                         // NUEVO MENÚ DESPLEGABLE
                         name: "visit_type",
                         type: "select",
@@ -148,10 +149,13 @@ function App() {
                     },
                     {
                         // NUEVO Campo de Precio
-                        name: "precio",
+                        name: "PAGO",
+                        name: "precioOOO",
                         type: "input",  // O 'number' si prefieres
                         default: 600,
+                        
                         config: {
+                            sectionLabel: "Sección de pago",
                             label: "Precio",
                             required: true,
                             type: "number" // para que muestre un campo numérico
