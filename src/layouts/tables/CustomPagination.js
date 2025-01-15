@@ -19,10 +19,10 @@ export default function CustomPagination({ page, totalPages, onPageChange }) {
           },
           "& .MuiPaginationItem-root.Mui-selected": {
             color: "#FFFFFF",
-            backgroundColor: "#054eeb",
+            backgroundColor: "#183A64",
           },
           "& .MuiPaginationItem-root:hover": {
-            backgroundColor: "#054eeb",
+            backgroundColor: "#183A64",
           },
           "& .MuiPaginationItem-ellipsis": {
             color: "grey",

@@ -124,11 +124,7 @@ function ClinicalForm() {
                 consulta y brindarle un mejor servicio.
               </SoftTypography>
               <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
-                Dr. Francisco Javier Porquillo. C.P. 10550033 / 12467290 <br />
-                Dra. Carolain Ulrrich García. C.P. 13035875 <br />
-                Dra. Elizabeth Raquel Juárez Juárez. C.P. 1075112 / 12550599 <br />
-                Dra. Isbeth Gómez Díaz. C.P. 12611063 <br />
-                Dra. Victoria Sandoval Nava. C.P. 10101155 / 12655823
+                Lic. Fernando Trejo Martínez
               </SoftTypography>
               <SoftTypography variant="subtitle2" fontWeight="medium" mt={4}>
                 Circuito Juan Pablo II. PB No. 3113. Colonia Fraccionamiento Las Ánimas, Puebla.
@@ -179,7 +175,7 @@ function ClinicalForm() {
                       <FormControl fullWidth variant="outlined">
                         <InputLabel
                           sx={{
-                            color: "#054eeb",
+                            color: "#183A64",
                             fontSize: "15px",  // Cambiar el tamaño de la fuente de la etiqueta
                           }}
                         >
@@ -193,7 +189,7 @@ function ClinicalForm() {
                           sx={{
                             "& .MuiOutlinedInput-notchedOutline": { borderColor: "#ccc" },
                             "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                              borderColor: "#054eeb",
+                              borderColor: "#183A64",
                             },
                           }}
                         >
@@ -213,7 +209,7 @@ function ClinicalForm() {
                       <FormControl fullWidth variant="outlined">
                         <InputLabel
                           sx={{
-                            color: "#054eeb",
+                            color: "#183A64",
                             fontSize: "15px",  // Cambiar el tamaño de la fuente de la etiqueta
                           }}
                         >
@@ -227,7 +223,7 @@ function ClinicalForm() {
                           sx={{
                             "& .MuiOutlinedInput-notchedOutline": { borderColor: "#ccc" },
                             "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                              borderColor: "#054eeb",
+                              borderColor: "#183A64",
                             },
                           }}
                         >
@@ -453,8 +449,8 @@ function ClinicalForm() {
                   sx={{
                     
                     mt: 3,
-                    backgroundColor: "#054eeb",
-                    "&:hover": { backgroundColor: "#054eeb" },
+                    backgroundColor: "#183A64",
+                    "&:hover": { backgroundColor: "#183A64" },
                       color: "white !important",
                     
                   }}
