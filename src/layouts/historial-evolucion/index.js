@@ -12,6 +12,13 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Box from '@mui/material/Box';
+import NativeSelect from '@mui/material/NativeSelect';
+
 function HistorialEvolucion() {
   const [formData, setFormData] = useState({
     presentation: "",
@@ -21,6 +28,7 @@ function HistorialEvolucion() {
     comments: "",
     prognostic: "",
   });
+  const [age, setAge] = React.useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -85,6 +93,9 @@ function HistorialEvolucion() {
               <Card>
                 <SoftBox p={3}>
                   <SoftBox mb={2}>
+                  <Box
+                    sx={{ py: 2, display: 'grid', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}
+                  >
                     <label htmlFor="presentation">1. Presentación *</label>
                     <textarea
                       id="presentation"
@@ -95,6 +106,7 @@ function HistorialEvolucion() {
                       rows="2"
                       className="global-textarea"
                     />
+                    </Box>
                   </SoftBox>
 
                   <SoftBox mb={2}>
@@ -160,6 +172,26 @@ function HistorialEvolucion() {
                       rows="2"
                       className="global-textarea"
                     />
+                  </SoftBox>
+
+                  <SoftBox mb={2}>
+                    <FormControl fullWidth>
+                      <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                        Age
+                      </InputLabel>
+                      <NativeSelect
+                        defaultValue={30}
+                        inputProps={{
+                          name: 'age',
+                          id: 'uncontrolled-native',
+                        }}
+                      >
+                        <option value={10}>Ten</option>
+                        <option value={20}>Twenty</option>
+                        <option value={30}>Thirty</option>
+                      </NativeSelect>
+                    </FormControl>
+      
                   </SoftBox>
 
                 </SoftBox>

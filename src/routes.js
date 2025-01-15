@@ -65,7 +65,7 @@ const routes = (isAuthenticated) => [
   },
   {
     type: "collapse",
-    name: "Historia Clínica de Psicología",
+    name: "HCP",
     key: "ClinicalForm",
     route: "/ClinicalForm",
     icon: <HistoryIcon size="12px" />,
@@ -78,7 +78,7 @@ const routes = (isAuthenticated) => [
   },
   {
     type: "collapse",
-    name: "Historia Clínica Nutricional",
+    name: "HCN",
     key: "HistorialNutricional",
     route: "/HistorialNutricional",
     icon: <HistoryIcon size="12px" />,
@@ -104,7 +104,7 @@ const routes = (isAuthenticated) => [
   },
   {
     type: "collapse",
-    name: "Historia Clínica Médica",
+    name: "HCM",
     key: "HistorialClinico",
     route: "/HistorialClinico",
     icon: <HistoryIcon size="12px" />,

@@ -45,75 +45,22 @@ import { Code, Margin, WidthFull } from "@mui/icons-material";
 
 // Libreria gluestacks
 
-function HistorialNutricional() {
+function NotaNutricional() {
   {
     /* Variables */
   }
   const [formData, setFormData] = useState({
-    name: "",
-    gender: "",
-    reasonVisit: "",
-    birthDate: "",
-    occupation: "",
-
-    familyHistory: {
-      Diabetes: {
-        Madre: false,
-        Padre: false,
-        Hermanos: false,
-        "Tíos paternos": false,
-        "Tíos maternos": false,
-      },
-      Hipertensión: {
-        Madre: false,
-        Padre: false,
-        Hermanos: false,
-        "Tíos paternos": false,
-        "Tíos maternos": false,
-      },
-      Cancer: {
-        Madre: false,
-        Padre: false,
-        Hermanos: false,
-        "Tíos paternos": false,
-        "Tíos maternos": false,
-      },
-      Infartos: {
-        Madre: false,
-        Padre: false,
-        Hermanos: false,
-        "Tíos paternos": false,
-        "Tíos maternos": false,
-      },
-    },
-
-    otherFamilyHistory: "",
-
-    alergiaMedicamentos: "",
-    otrosAlergiaMedicamentos: "",
-    alergiaAlimentos: "",
-    otrosAlergiaAlimentos: "",
-    alimentosProibidos: "",
-    otrosAlimentosProibidos: "",
-
+    sintomas:"",
+    Energia:"",
+    Liquidos:"",
     ejercicio: "",
     TiposEjercicios: "",
     ejercicioDiasSemana: "",
     ejercicioIntensidad: "",
 
-    suenoInsomnio: false,
-    suenoHoras: "",
 
-    tabaquismo: false,
-    alcoholismo: "",
-
-    cirugias: "",
     padecimientosActuales: "",
-    medicamentos: "",
-    vitaminas: "",
-    suplementos: "",
 
-    laboratiosRelevantes: "",
     sintomasGastrointestinales: "",
 
     desayuno: "",
@@ -122,38 +69,6 @@ function HistorialNutricional() {
     colacion2: "",
     extras: "",
 
-    frutas: "",
-    verduras: "",
-    carne: "",
-    leche: "",
-    queso: "",
-    yogurt: "",
-    tortilla: "",
-    pan: "",
-    arroz: "",
-    pasta: "",
-    leguminosas: "",
-    azucares: "",
-    galletas: "",
-    aceites: "",
-    aceitesProteina: "",
-    comidaRapida: "",
-    refresco: "",
-    jugos: "",
-    aguasSabor: "",
-    aguaSimple: "",
-    alimentosNoGustan: "",
-
-    glucosa: "",
-    presionArterial: "",
-    temperatura: "",
-    frecuenciaCardiaca: "",
-
-    fechaPesos: "",
-    pesoHabitual: "",
-    pesoMaximo: "",
-    pesoMinimo: "",
-    pesoActual: "",
 
     fechaMediciones: "",
     cintura: "",
@@ -167,37 +82,6 @@ function HistorialNutricional() {
 
     diagnostico: "",
 
-    objetivo: "",
-    medicamentos: "",
-    tipoPlanNutricional: "",
-    especificaciones: "",
-
-    smoke: "",
-    smokeHistory: "",
-    smokeOther: "",
-    alcohol: "",
-    alcoholHistory: "",
-    alcoholOther: "",
-    drug: "",
-    drugHistory: "",
-    exercise: "",
-    allergicMedicine: "",
-    allergicFood: "",
-    surgery: "",
-    surgeryHistory: [],
-    surgeryOther: "",
-    diagnosedDiseases: [],
-    diagnosedDiseasesOther: "",
-    takeMedications: "",
-    menstruation: "",
-    menstruationTrue: "",
-    menstruationNull: "",
-    menstruationDate: "",
-    pregnancies: "",
-    otherPregnancies: "",
-    pregnanciesComplications: [],
-    reasonConsultation: [],
-    consultationOther: "",
   });
 
   // Maneja el cambio de los checkboxes
@@ -324,12 +208,6 @@ function HistorialNutricional() {
     console.log("Datos a enviar:", formData);
   };
 
-  const data = [
-    ["Frutas", "Verduras", "Carne", "Leche", "Queso"],
-    ["Yogurt", "Tortilla", "Pan", "Arroz", "Pasta"],
-    ["Leguminosas", "Azúcares", "Galletas", "Aceites", "Aceites con proteína"],
-    ["Comida Rápida", "Refresco", "Jugos", "Aguas de Sabor", "Agua simple"],
-  ];
 
   const [columnsMediciones, setColumnsMediciones] = useState([]);
   const [datesMediciones, setDatesMediciones] = useState([]);
@@ -337,10 +215,7 @@ function HistorialNutricional() {
   const [datesPesos, setDatesPesos] = useState([]);
   const [actualDate] = useState(new Date().toISOString().split("T")[0]); // Fecha para "Actual"
 
-  const optionsGender = [
-    { label: "Hombre", value: "male" },
-    { label: "Mujer", value: "female" },
-  ];
+
 
   // Mapeo de nombres legibles para las claves
   const visibleFieldsMediciones = {
@@ -354,13 +229,6 @@ function HistorialNutricional() {
     pantorrillaIzquierda: "Pantorrilla Izquierda",
   };
 
-  const visibleFieldsPesos = {
-    fechaPesos: "Fecha",
-    pesoHabitual: "Peso Habitual",
-    pesoMaximo: "Peso Máximo",
-    pesoMinimo: "Peso Mínimo",
-    pesoActualPeso: "Peso Actual",
-  };
 
   const handleInputChange = (event, measurement) => {
     setFormData({
@@ -430,7 +298,7 @@ function HistorialNutricional() {
         <SoftBox mb={3}>
           <Card>
             <SoftBox display="flex" flexDirection="column" alignItems="flex-start" p={3}>
-              <SoftTypography variant="h4">Historia Clínica Nutricional -</SoftTypography>
+              <SoftTypography variant="h4">Nota Nutricional -</SoftTypography>
               <SoftTypography variant="h4">Endocrinea Care</SoftTypography>
               <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
                 Estimado paciente los siguientes datos de contacto y antecedentes médicos recabados
@@ -461,7 +329,32 @@ function HistorialNutricional() {
           <SoftBox mt={4}>
             <Card>
               <SoftBox p={3}>
-                <SoftTypography variant="h5">Generales</SoftTypography>
+                <SoftTypography variant="h5">Subjetivo</SoftTypography>
+                <SoftBox mb={2}>
+                    <label htmlFor="sintomas" style={{ display: "block", marginBottom: "8px" }}>
+                        Síntomas:
+                        </label>
+                        <textarea
+                        id="sintomas"
+                        name="sintomas"
+                        value={formData.sintomas}
+                        onChange={handleChange}
+                        className="global-textarea"
+                        style={{ width: "100%", height: "40px" }}
+                        />
+                </SoftBox><SoftBox mb={2}>
+                    <label htmlFor="Energia" style={{ display: "block", marginBottom: "8px" }}>
+                        Energía:
+                        </label>
+                        <textarea
+                        id="Energia"
+                        name="Energia"
+                        value={formData.Energia}
+                        onChange={handleChange}
+                        className="global-textarea"
+                        style={{ width: "100%", height: "40px" }}
+                        />
+                </SoftBox>
                 <Grid container spacing={2} alignItems="center">
                   <Grid item xs={12} sm={3}>
                     <label htmlFor="name" style={{ display: "block", marginBottom: "8px" }}>
@@ -1682,4 +1575,4 @@ function HistorialNutricional() {
   );
 }
 
-export default HistorialNutricional;
+export default NotaNutricional;
