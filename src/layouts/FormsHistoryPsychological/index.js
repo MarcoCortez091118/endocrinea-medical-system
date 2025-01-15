@@ -287,29 +287,37 @@ function ClinicalForm() {
             <Grid item xs={12}>
               <SoftTypography variant="h6" fontWeight="regular">
                 2. Antecedentes Médicos
-              </SoftTypography>             
-              <SoftBox mb={2}>
-                  <label htmlFor="AHF"> AHF </label>
-                  <textarea
-                    id="AHF"
-                    name="medicalHistory.AHF"
-                    value={formData.medicalHistory.AHF}
-                    onChange={handleChange}
-                    rows="1"
-                    className="global-textarea"
-                  />
-                </SoftBox>
-                <SoftBox mb={2}>
-                  <label htmlFor="PA"> P.A </label>
-                  <textarea
-                    id="PA"
-                    name="medicalHistory.PA"
-                    value={formData.medicalHistory.PA}
-                    onChange={handleChange}
-                    rows="1"
-                    className="global-textarea"
-                  />
-                </SoftBox>
+              </SoftTypography>   
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <SoftBox mb={2}>
+                    <label htmlFor="AHF"> AHF </label>
+                    <textarea
+                      id="AHF"
+                      name="medicalHistory.AHF"
+                      value={formData.medicalHistory.AHF}
+                      onChange={handleChange}
+                      rows="1"
+                      className="global-textarea"
+                    />
+                  </SoftBox>          
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <SoftBox mb={2}>
+                    <label htmlFor="PA"> P.A </label>
+                    <textarea
+                      id="PA"
+                      name="medicalHistory.PA"
+                      value={formData.medicalHistory.PA}
+                      onChange={handleChange}
+                      rows="1"
+                      className="global-textarea"
+                    />
+                  </SoftBox>       
+                </Grid>
+              </Grid>          
+              
+                
             
             </Grid>
 

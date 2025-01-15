@@ -63,7 +63,7 @@ function HistorialEvolucion() {
           <SoftBox mb={3}>
             <Card>
               <SoftBox display="flex" flexDirection="column" alignItems="flex-start" p={3}>
-                <SoftTypography variant="h4">Historial de evolución -</SoftTypography>
+                <SoftTypography variant="h4">Nota de evolución -</SoftTypography>
                 <SoftTypography variant="h4">Endocrinea Care</SoftTypography>
                 <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
                   Estimado paciente los siguientes datos de contacto y antecedentes médicos recabados
@@ -74,6 +74,7 @@ function HistorialEvolucion() {
                   utilizada única y exclusivamente para mejorar la calidad de la atención durante su
                   consulta y brindarle un mejor servicio.
                 </SoftTypography>
+                {/* 
                 <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
                   Dr. Francisco Javier Porquillo. C.P. 10550033 / 12467290 <br />
                   Dra. Carolain Ulrrich García. C.P. 13035875 <br />
@@ -81,6 +82,7 @@ function HistorialEvolucion() {
                   Dra. Isbeth Gómez Díaz. C.P. 12611063 <br />
                   Dra. Victoria Sandoval Nava. C.P. 10101155 / 12655823
                 </SoftTypography>
+                */}
                 <SoftTypography variant="subtitle2" fontWeight="medium" mt={4}>
                   Circuito Juan Pablo II. PB No. 3113. Colonia Fraccionamiento Las Ánimas, Puebla.
                 </SoftTypography>
@@ -173,27 +175,6 @@ function HistorialEvolucion() {
                       className="global-textarea"
                     />
                   </SoftBox>
-
-                  <SoftBox mb={2}>
-                    <FormControl fullWidth>
-                      <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                        Age
-                      </InputLabel>
-                      <NativeSelect
-                        defaultValue={30}
-                        inputProps={{
-                          name: 'age',
-                          id: 'uncontrolled-native',
-                        }}
-                      >
-                        <option value={10}>Ten</option>
-                        <option value={20}>Twenty</option>
-                        <option value={30}>Thirty</option>
-                      </NativeSelect>
-                    </FormControl>
-      
-                  </SoftBox>
-
                 </SoftBox>
               </Card>
 

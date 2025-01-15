@@ -10,6 +10,7 @@ import HistorialEvolucion from "layouts/historial-evolucion";
 import HistorialClinico from "layouts/historial-clinico";
 import NotaClinico from "layouts/nota-Clinica/nota-Clinica";
 import HistorialNutricional from "layouts/historial-nutricional";
+import NotaNutricional from "layouts/nota-Nutricion/nota-Nutricion";
 import Agenda from "layouts/agenda";
 import Shop from "examples/Icons/Shop";
 import Office from "examples/Icons/Office";
@@ -85,6 +86,19 @@ const routes = (isAuthenticated) => [
     component: (
       <ProtectedRoute>
         <HistorialNutricional />
+      </ProtectedRoute>
+    ),
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Nota Nutricional",
+    key: "NotaNutricional",
+    route: "/NotaNutricional",
+    icon: <HistoryIcon size="12px" />,
+    component: (
+      <ProtectedRoute>
+        <NotaNutricional />
       </ProtectedRoute>
     ),
     noCollapse: true,
