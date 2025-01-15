@@ -233,7 +233,7 @@ function HistorialClinico() {
         <SoftBox mb={3}>
           <Card>
             <SoftBox display="flex" flexDirection="column" alignItems="flex-start" p={3}>
-              <SoftTypography variant="h4">Historia Clínica -</SoftTypography>
+              <SoftTypography variant="h4">Historia Clínica Médica -</SoftTypography>
               <SoftTypography variant="h4">Endocrinea Care</SoftTypography>
               <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
                 Estimado paciente los siguientes datos de contacto y antecedentes médicos recabados

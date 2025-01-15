@@ -10,6 +10,7 @@ import HistorialEvolucion from "layouts/historial-evolucion";
 import HistorialClinico from "layouts/historial-clinico";
 import NotaClinico from "layouts/nota-Clinica/nota-Clinica";
 import HistorialNutricional from "layouts/historial-nutricional";
+import NotaNutricional from "layouts/nota-Nutricion/nota-Nutricion";
 import Agenda from "layouts/agenda";
 import Shop from "examples/Icons/Shop";
 import Office from "examples/Icons/Office";
@@ -65,7 +66,7 @@ const routes = (isAuthenticated) => [
   },
   {
     type: "collapse",
-    name: "Historia Clínica de Psicología",
+    name: "HCP",
     key: "ClinicalForm",
     route: "/ClinicalForm",
     icon: <HistoryIcon size="12px" />,
@@ -78,13 +79,26 @@ const routes = (isAuthenticated) => [
   },
   {
     type: "collapse",
-    name: "Historia Clínica Nutricional",
+    name: "HCN",
     key: "HistorialNutricional",
     route: "/HistorialNutricional",
     icon: <HistoryIcon size="12px" />,
     component: (
       <ProtectedRoute>
         <HistorialNutricional />
+      </ProtectedRoute>
+    ),
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Nota Nutricional",
+    key: "NotaNutricional",
+    route: "/NotaNutricional",
+    icon: <HistoryIcon size="12px" />,
+    component: (
+      <ProtectedRoute>
+        <NotaNutricional />
       </ProtectedRoute>
     ),
     noCollapse: true,
@@ -104,7 +118,7 @@ const routes = (isAuthenticated) => [
   },
   {
     type: "collapse",
-    name: "Historia Clínica Médica",
+    name: "HCM",
     key: "HistorialClinico",
     route: "/HistorialClinico",
     icon: <HistoryIcon size="12px" />,

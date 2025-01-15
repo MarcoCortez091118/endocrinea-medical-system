@@ -16,8 +16,20 @@ import {
   DatePicker,
   Checkbox,
   Box as MuiBox,
+  NativeSelect,
   FormLabel as MuiFormLabel,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  tableCellClasses,
+  Box,
 } from "@mui/material";
+import { styled } from '@mui/system';
+
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
@@ -33,13 +45,13 @@ import { Code, Margin, WidthFull } from "@mui/icons-material";
 
 // Libreria gluestacks
 
-
 function HistorialNutricional() {
-
-  {/* Variables */}
+  {
+    /* Variables */
+  }
   const [formData, setFormData] = useState({
-    name:"",
-    gender:"",
+    name: "",
+    gender: "",
     reasonVisit: "",
     birthDate: "",
     occupation: "",
@@ -59,7 +71,7 @@ function HistorialNutricional() {
         "Tíos paternos": false,
         "Tíos maternos": false,
       },
-      "Cancer": {
+      Cancer: {
         Madre: false,
         Padre: false,
         Hermanos: false,
@@ -74,22 +86,24 @@ function HistorialNutricional() {
         "Tíos maternos": false,
       },
     },
-    
+
+    otherFamilyHistory: "",
+
     alergiaMedicamentos: "",
     otrosAlergiaMedicamentos: "",
     alergiaAlimentos: "",
     otrosAlergiaAlimentos: "",
     alimentosProibidos: "",
     otrosAlimentosProibidos: "",
-    
-    ejercicio:"",
+
+    ejercicio: "",
     TiposEjercicios: "",
     ejercicioDiasSemana: "",
     ejercicioIntensidad: "",
 
     suenoInsomnio: false,
     suenoHoras: "",
-    
+
     tabaquismo: false,
     alcoholismo: "",
 
@@ -102,7 +116,6 @@ function HistorialNutricional() {
     laboratiosRelevantes: "",
     sintomasGastrointestinales: "",
 
-   
     desayuno: "",
     colacion1: "",
     comina: "",
@@ -135,14 +148,14 @@ function HistorialNutricional() {
     presionArterial: "",
     temperatura: "",
     frecuenciaCardiaca: "",
-    
-    fechaPesos:"",
+
+    fechaPesos: "",
     pesoHabitual: "",
     pesoMaximo: "",
     pesoMinimo: "",
     pesoActual: "",
-    
-    fechaMediciones:"",
+
+    fechaMediciones: "",
     cintura: "",
     abdomen: "",
     cadera: "",
@@ -153,7 +166,7 @@ function HistorialNutricional() {
     nuevasMediciones: [],
 
     diagnostico: "",
-    
+
     objetivo: "",
     medicamentos: "",
     tipoPlanNutricional: "",
@@ -330,7 +343,7 @@ function HistorialNutricional() {
   ];
 
   // Mapeo de nombres legibles para las claves
-  const visibleFieldsMediciones  = {
+  const visibleFieldsMediciones = {
     fechaMediciones: "Fecha",
     cintura: "Cintura",
     abdomen: "Abdomen",
@@ -368,6 +381,7 @@ function HistorialNutricional() {
     }
   };
 
+  
   const addColumn = (tableType) => {
     const currentDate = new Date().toISOString().split("T")[0]; // Fecha actual en formato "YYYY-MM-DD"
     if (tableType === "mediciones") {
@@ -381,6 +395,33 @@ function HistorialNutricional() {
     }
   };
 
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+  
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
+
+  const [values, setValues] = React.useState({});
+  const handleChange1 = (rowIndex, colIndex, value) => {
+    setValues((prevValues) => ({
+      ...prevValues,
+      [`${rowIndex}-${colIndex}`]: value,
+    }));
+  };
 
   return (
     <DashboardLayout>
@@ -401,10 +442,13 @@ function HistorialNutricional() {
                 consulta y brindarle un mejor servicio.
               </SoftTypography>
               <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
-                Dra. Elizabeth Raquel Juárez <br/>
-                Mtra. Isbeth Gómez Díaz<br/>
-                LNC Laura Elizabeth Jiménez Criollo (Licenciada en Nutrición Clinica)<br/>
-                Dra. Victoria Sandoval Nava<br/>
+                Dra. Elizabeth Raquel Juárez <br />
+                Mtra. Isbeth Gómez Díaz
+                <br />
+                LNC Laura Elizabeth Jiménez Criollo (Licenciada en Nutrición Clinica)
+                <br />
+                Dra. Victoria Sandoval Nava
+                <br />
               </SoftTypography>
               <SoftTypography variant="subtitle2" fontWeight="medium" mt={4}>
                 Circuito Juan Pablo II. PB No. 3113. Colonia Fraccionamiento Las Ánimas, Puebla.
@@ -413,13 +457,14 @@ function HistorialNutricional() {
           </Card>
         </SoftBox>
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+          {/* Generales */}
           <SoftBox mt={4}>
             <Card>
               <SoftBox p={3}>
                 <SoftTypography variant="h5">Generales</SoftTypography>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={4}>
-                    <label>
+                <Grid container spacing={2} alignItems="center">
+                  <Grid item xs={12} sm={3}>
+                    <label htmlFor="name" style={{ display: "block", marginBottom: "8px" }}>
                       Nombre:
                     </label>
                     <textarea
@@ -427,49 +472,77 @@ function HistorialNutricional() {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      required
                       className="global-textarea"
-                      />
-                      
+                      style={{ width: "100%", height: "40px" }}
+                    />
                   </Grid>
-                  <Grid item xs={12} sm={4}>
-                  </Grid>
+                  <Grid item xs={12} sm={3}>
+                    <InputLabel
+                      variant="standard"
+                      htmlFor="gender"
+                      style={{ display: "block", marginBottom: "8px" }}
+                    >
+                      Género:
+                    </InputLabel>
 
+                    <MuiFormControl variant="standard" fullWidth>
+                      <MuiSelect
+                        id="gender"
+                        name="gender"
+                        value={formData.gender}
+                        onChange={handleChange}
+                        inputProps={{
+                          id: "gender-native",
+                        }}
+                        style={{ width: "100%", height: "40px" }}
+                        label="Género"
+                      >
+                        <MenuItem value="">
+                          <em>None</em>
+                        </MenuItem>
+                        <MenuItem value="Hombre">Hombre</MenuItem>
+                        <MenuItem value="Mujer">Mujer</MenuItem>
+                      </MuiSelect>
+                    </MuiFormControl>
+                  </Grid>
+                  <Grid item xs={12} sm={3}>
+                    <label htmlFor="birthDate" style={{ display: "block", marginBottom: "8px" }}>
+                      Fecha de nacimiento:
+                    </label>
+                    <TextField
+                      id="birthDate"
+                      name="birthDate"
+                      type="date"
+                      value={formData.birthDate}
+                      onChange={handleChange}
+                      fullWidth
+                      InputLabelProps={{ shrink: true }}
+                      style={{ width: "100%", height: "40px" }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={3}>
+                    <label htmlFor="occupation" style={{ display: "block", marginBottom: "8px" }}>
+                      Ocupación:
+                    </label>
+                    <textarea
+                      id="occupation"
+                      name="occupation"
+                      value={formData.occupation}
+                      onChange={handleChange}
+                      rows="1"
+                      className="global-textarea"
+                      style={{ width: "100%", height: "40px" }}
+                    />
+                  </Grid>
                 </Grid>
+
                 <SoftBox mb={2}>
-                  <label htmlFor="reasonVisit">Motivo de visita *</label>
+                  <label htmlFor="reasonVisit">Motivo de visita:</label>
                   <textarea
                     id="reasonVisit"
                     name="reasonVisit"
                     value={formData.reasonVisit}
                     onChange={handleChange}
-                    required
-                    className="global-textarea"
-                  />
-                </SoftBox>
-                <SoftBox mb={2}>
-                  <label htmlFor="birthDate">Fecha de nacimiento *</label>
-                  <TextField
-                    id="birthDate"
-                    name="birthDate"
-                    type="date"
-                    value={formData.birthDate}
-                    onChange={handleChange}
-                    required
-                    fullWidth
-                    InputLabelProps={{ shrink: true }}
-                  />
-                </SoftBox>
-
-                <SoftBox mb={2}>
-                  <label htmlFor="occupation">Ocupación *</label>
-                  <textarea
-                    id="occupation"
-                    name="occupation"
-                    value={formData.occupation}
-                    onChange={handleChange}
-                    required
-                    rows="1"
                     className="global-textarea"
                   />
                 </SoftBox>
@@ -482,14 +555,14 @@ function HistorialNutricional() {
             <Card>
               <SoftBox p={3}>
                 <SoftBox mb={2}>
-                  <SoftTypography variant="h4">Antecedentes Heredo familiares</SoftTypography>
+                  <SoftTypography variant="h4">Antecedentes Heredo Familiares</SoftTypography>
                   <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
                     En esta sección deberá contestar si alguno de sus familiares tiene diagnosticada
                     alguna de las enfermedades especificadas a continuación. Por favor, responda
                     sólo si está seguro(a) del diagnóstico.
                   </SoftTypography>
-                    {/*  */}
-                    <SoftBox mb={2}>
+                  {/*  */}
+                  <SoftBox mb={2}>
                     <label htmlFor="religion">
                       ¿Alguien de su familia ha sido diagnosticado con alguna de las siguientes
                       enfermedades ?
@@ -527,12 +600,24 @@ function HistorialNutricional() {
                         </tbody>
                       </table>
                     </SoftBox>
+                    <SoftBox mb={2}>
+                      <label>Otros:</label>
+                      <textarea
+                        id="otherFamilyHistory"
+                        name="otherFamilyHistory"
+                        placeholder="Especifique"
+                        value={formData.otherFamilyHistory}
+                        onChange={handleChange}
+                        rows="1"
+                        className="global-textarea"
+                      />
+                    </SoftBox>
                   </SoftBox>
                 </SoftBox>
               </SoftBox>
             </Card>
           </SoftBox>
-        
+
           {/* ANTECEDENTES PERSONALES NO PATOLÓGICOS */}
           <SoftBox mt={4}>
             <Card>
@@ -542,362 +627,382 @@ function HistorialNutricional() {
                   <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
                     En esta sección recabaremos información sobre sus antecedentes médicos.
                   </SoftTypography>
-                  <SoftBox mb={2}>
-                    <label htmlFor="alergiaMedicamentos">
-                      ¿Usted sufre alguna alergia a medicamentos?
-                    </label>
-                    <RadioGroup
-                      id="alergiaMedicamentos"
-                      name="alergiaMedicamentos"
-                      value={formData.alergiaMedicamentos}
-                      onChange={handleChange}
-                      required
-                    >
-                      <MuiFormControlLabel value="Si" control={<Radio />} label="Si" />
-                      <MuiFormControlLabel value="No" control={<Radio />} label="No" />
-                    </RadioGroup>
-                  </SoftBox>
-                  {formData.alergiaMedicamentos === "Si" && (
-                    <SoftBox mb={2}>
-                      <textarea
-                        id="otrosAlergiaMedicamentos"
-                        name="otrosAlergiaMedicamentos"
-                        placeholder="Especifique"
-                        value={formData.otrosAlergiaMedicamentos}
-                        onChange={handleChange}
-                        required
-                        rows="1"
-                        className="global-textarea"
-                      />
-                    </SoftBox>
-                  )}
-                </SoftBox>
-                <SoftBox mb={2}>
-                  <label htmlFor="alergiaAlimentos">
-                    ¿Usted sufre alguna alergia a algun alimento?
-                  </label>
-                  <RadioGroup
-                    id="alergiaAlimentos"
-                    name="alergiaAlimentos"
-                    value={formData.alergiaAlimentos}
-                    onChange={handleChange}
-                    required
-                  >
-                    <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
-                    <MuiFormControlLabel value="No" control={<Radio />} label="No" />
-                  </RadioGroup>
-                </SoftBox>
-                  {formData.alergiaAlimentos === "Si" && (
-                    <SoftBox ml={2}>
-                      <textarea
-                        id="otrosAlergiaAlimentos"
-                        name="otrosAlergiaAlimentos"
-                        placeholder="Especifique"
-                        value={formData.otrosAlergiaAlimentos}
-                        onChange={handleChange}
-                        required
-                        rows="1"
-                        className="global-textarea"
-                      />
-                    </SoftBox>
-                  )}
-                  <SoftBox mb={2}>
-                    <label htmlFor="alimentosProibidos">
-                        ¿Su RELIGIÓN le impide comer algún tipo de alimento?
-                    </label>
-                    <RadioGroup
-                        id="alimentosProibidos"
-                        name="alimentosProibidos"
-                        value={formData.alimentosProibidos}
-                        onChange={handleChange}
-                        required
-                    >
-                        <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
-                        <MuiFormControlLabel value="No" control={<Radio />} label="No" />
-                    </RadioGroup>
-                   </SoftBox>
-                   {
-                    formData.alimentosProibidos === "Si" && (
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6}>
+                      <SoftBox mb={2}>
+                        <label htmlFor="alergiaMedicamentos">
+                          ¿Usted sufre alguna alergia a medicamentos?
+                        </label>
+                        <RadioGroup
+                          id="alergiaMedicamentos"
+                          name="alergiaMedicamentos"
+                          value={formData.alergiaMedicamentos}
+                          onChange={handleChange}
+                          required
+                        >
+                          <MuiFormControlLabel value="Si" control={<Radio />} label="Si" />
+                          <MuiFormControlLabel value="No" control={<Radio />} label="No" />
+                        </RadioGroup>
+                      </SoftBox>
+                      {formData.alergiaMedicamentos === "Si" && (
+                        <SoftBox mb={2}>
+                          <textarea
+                            id="otrosAlergiaMedicamentos"
+                            name="otrosAlergiaMedicamentos"
+                            placeholder="Especifique"
+                            value={formData.otrosAlergiaMedicamentos}
+                            onChange={handleChange}
+                            required
+                            rows="1"
+                            className="global-textarea"
+                          />
+                        </SoftBox>
+                      )}
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <SoftBox mb={2}>
+                        <label htmlFor="alergiaAlimentos">
+                          ¿Usted sufre alguna alergia a algun alimento?
+                        </label>
+                        <RadioGroup
+                          id="alergiaAlimentos"
+                          name="alergiaAlimentos"
+                          value={formData.alergiaAlimentos}
+                          onChange={handleChange}
+                          required
+                        >
+                          <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
+                          <MuiFormControlLabel value="No" control={<Radio />} label="No" />
+                        </RadioGroup>
+                      </SoftBox>
+                      {formData.alergiaAlimentos === "Si" && (
                         <SoftBox ml={2}>
-                            <textarea
-                                id="otrosAlimentosProhibidos"
-                                name="otrosAlimentosProhibidos"
+                          <textarea
+                            id="otrosAlergiaAlimentos"
+                            name="otrosAlergiaAlimentos"
+                            placeholder="Especifique"
+                            value={formData.otrosAlergiaAlimentos}
+                            onChange={handleChange}
+                            required
+                            rows="1"
+                            className="global-textarea"
+                          />
+                        </SoftBox>
+                      )}
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <SoftBox mb={2}>
+                        <label htmlFor="alimentosProibidos">
+                          ¿Su RELIGIÓN le impide comer algún tipo de alimento?
+                        </label>
+                        <RadioGroup
+                          id="alimentosProibidos"
+                          name="alimentosProibidos"
+                          value={formData.alimentosProibidos}
+                          onChange={handleChange}
+                          required
+                        >
+                          <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
+                          <MuiFormControlLabel value="No" control={<Radio />} label="No" />
+                        </RadioGroup>
+                      </SoftBox>
+                      {formData.alimentosProibidos === "Si" && (
+                        <SoftBox ml={2}>
+                          <textarea
+                            id="otrosAlimentosProhibidos"
+                            name="otrosAlimentosProhibidos"
+                            placeholder="Especifique"
+                            value={formData.otrosAlimentosProibidos}
+                            onChange={handleChange}
+                            required
+                            rows="1"
+                            className="global-textarea"
+                          />
+                        </SoftBox>
+                      )}
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <SoftBox mb={2}>
+                        <SoftBox mb={2}>
+                          <label>¿Realiza algún tipo de ejercicio?</label>
+                          <RadioGroup
+                            id="ejercicio"
+                            name="ejercicio"
+                            value={formData.ejercicio}
+                            onChange={handleChange}
+                            required
+                          >
+                            <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
+                            <MuiFormControlLabel value="No" control={<Radio />} label="No" />
+                          </RadioGroup>
+                        </SoftBox>
+
+                        {formData.ejercicio === "Si" && (
+                          <>
+                            <SoftBox mb={2}>
+                              <label>¿Cuál es el tipo de ejercicio que realiza?</label>
+                              <textarea
+                                id="tiposEjercicio"
+                                name="tiposEjercicio"
                                 placeholder="Especifique"
-                                value={formData.otrosAlimentosProibidos}
+                                value={formData.tiposEjercicio} // Nota: El nombre debe coincidir con los datos del formulario
                                 onChange={handleChange}
                                 required
                                 rows="1"
                                 className="global-textarea"
-                            />
-                        </SoftBox>
-                   )}
-                   <Card>
-                    <SoftBox p={3}>
-                        <SoftBox mb={2}>
-                            <SoftTypography variant="h5">Ejercicio:</SoftTypography>
-                            <SoftBox mb={2}>
-                                <label>¿Realiza algún tipo de ejercicio?</label>
-                                <RadioGroup
-                                    id="ejercicio"
-                                    name="ejercicio"
-                                    value={formData.ejercicio}
-                                    onChange={handleChange}
-                                    required
-                                >
-                                    <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
-                                    <MuiFormControlLabel value="No" control={<Radio />} label="No" />
-                                </RadioGroup>
+                              />
                             </SoftBox>
 
-                            {formData.ejercicio === "Si" && (
-                                <>
-                                    <SoftBox mb={2}>
-                                        <label>¿Cuál es el tipo de ejercicio que realiza?</label>
-                                        <textarea
-                                            id="tiposEjercicio"
-                                            name="tiposEjercicio"
-                                            placeholder="Especifique"
-                                            value={formData.tiposEjercicio} // Nota: El nombre debe coincidir con los datos del formulario
-                                            onChange={handleChange}
-                                            required
-                                            rows="1"
-                                            className="global-textarea"
-                                        />
-                                    </SoftBox>
-
-                                    <SoftBox mb={2}>
-                                        <label>¿Cuántos días a la semana realiza ejercicio?</label>
-                                        <RadioGroup
-                                            id="exercise"
-                                            name="exercise"
-                                            value={formData.exercise}
-                                            onChange={handleChange}
-                                            required
-                                        >
-                                            <MuiFormControlLabel
-                                                value="1"
-                                                control={<Radio />}
-                                                label="Al menos 1 día a la semana"
-                                            />
-                                            <MuiFormControlLabel
-                                                value="2"
-                                                control={<Radio />}
-                                                label="Al menos 2 días a la semana"
-                                            />
-                                            <MuiFormControlLabel
-                                                value="3"
-                                                control={<Radio />}
-                                                label="3 o más días a la semana"
-                                            />
-                                            <MuiFormControlLabel
-                                                value="4"
-                                                control={<Radio />}
-                                                label="No hago ejercicio"
-                                            />
-                                        </RadioGroup>
-                                    </SoftBox>
-
-                                    <SoftBox mb={2}>
-                                        <label>
-                                            ¿Con qué intensidad realiza los ejercicios?
-                                        </label>
-                                        <RadioGroup
-                                            id="ejercicioIntensidad"
-                                            name="ejercicioIntensidad"
-                                            placeholder="Especifique"
-                                            value={formData.ejercicioIntensidad}
-                                            onChange={handleChange}
-                                            required
-                                            rows="1"
-                                            className="global-textarea"
-                                        >
-                                            <MuiFormControlLabel value="Leve" control={<Radio />} label="Leve"/>
-                                            <MuiFormControlLabel value="Moderado" control={<Radio />} label="Moderado"/>
-                                            <MuiFormControlLabel value="Intenso" control={<Radio />} label="Intenso"/>
-                                        </RadioGroup>
-                                    </SoftBox>
-                                </>
-                            )}
-                        </SoftBox>
-                    </SoftBox>
-                   </Card>
-                   <br></br>
-                   <Card>
-                    <SoftBox p={3}>
-                        <SoftBox mb={2}>
-                            <SoftTypography variant="h5">Sueño:</SoftTypography>
                             <SoftBox mb={2}>
-                                <label>¿Usted sufre de insomnio?</label>
-                                <RadioGroup
-                                id="suenoInsomnio"
-                                name="suenoInsomnio"
-                                value={formData.suenoInsomnio}
+                              <label>¿Cuántos días a la semana realiza ejercicio?</label>
+                              <RadioGroup
+                                id="exercise"
+                                name="exercise"
+                                value={formData.exercise}
                                 onChange={handleChange}
                                 required
-                                >
-                                    <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
-                                    <MuiFormControlLabel value="No" control={<Radio />} label="No" />
-                                </RadioGroup>
+                              >
+                                <MuiFormControlLabel
+                                  value="1"
+                                  control={<Radio />}
+                                  label="Al menos 1 día a la semana"
+                                />
+                                <MuiFormControlLabel
+                                  value="2"
+                                  control={<Radio />}
+                                  label="Al menos 2 días a la semana"
+                                />
+                                <MuiFormControlLabel
+                                  value="3"
+                                  control={<Radio />}
+                                  label="3 o más días a la semana"
+                                />
+                                <MuiFormControlLabel
+                                  value="4"
+                                  control={<Radio />}
+                                  label="No hago ejercicio"
+                                />
+                              </RadioGroup>
                             </SoftBox>
+
                             <SoftBox mb={2}>
-                                <label>¿Cuántas horas duerme por noche?</label>
-                                <RadioGroup
+                              <label>¿Con qué intensidad realiza los ejercicios?</label>
+                              <RadioGroup
+                                id="ejercicioIntensidad"
+                                name="ejercicioIntensidad"
+                                placeholder="Especifique"
+                                value={formData.ejercicioIntensidad}
+                                onChange={handleChange}
+                                required
+                                rows="1"
+                                className="global-textarea"
+                              >
+                                <MuiFormControlLabel
+                                  value="Leve"
+                                  control={<Radio />}
+                                  label="Leve"
+                                />
+                                <MuiFormControlLabel
+                                  value="Moderado"
+                                  control={<Radio />}
+                                  label="Moderado"
+                                />
+                                <MuiFormControlLabel
+                                  value="Intenso"
+                                  control={<Radio />}
+                                  label="Intenso"
+                                />
+                              </RadioGroup>
+                            </SoftBox>
+                          </>
+                        )}
+                      </SoftBox>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <SoftBox mb={2}>
+                        <SoftBox mb={2}>
+                          <label>¿Usted sufre de insomnio?</label>
+                          <RadioGroup
+                            id="suenoInsomnio"
+                            name="suenoInsomnio"
+                            value={formData.suenoInsomnio}
+                            onChange={handleChange}
+                            required
+                          >
+                            <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
+                            <MuiFormControlLabel value="No" control={<Radio />} label="No" />
+                          </RadioGroup>
+                          {formData.suenoInsomnio === "Si" && (
+                            <SoftBox ml={4}>
+                              <SoftTypography variant="subtitle2">¿Cuántas horas duerme por noche?</SoftTypography>
+                              <RadioGroup
                                 id="suenoHoras"
                                 name="suenoHoras"
                                 value={formData.suenoHoras}
                                 onChange={handleChange}
                                 required
-                                >
-                                    <MuiFormControlLabel value="Menos de 4 horas" control={<Radio />} label="Menos de 4 horas" />
-                                    <MuiFormControlLabel value="4-5 horas" control={<Radio />} label="4-5 horas" />
-                                    <MuiFormControlLabel value="6-7 horas" control={<Radio />} label="6-7 horas" />
-                                    <MuiFormControlLabel value="8 horas (recomendado)" control={<Radio />} label="8 horas (recomendado)" />
-                                    <MuiFormControlLabel value="Más de 8 horas" control={<Radio />} label="Más de 8 horas" />
-                                </RadioGroup>
+                              >
+                                <MuiFormControlLabel
+                                  value="Menos de 4 horas"
+                                  control={<Radio />}
+                                  label="Menos de 4 horas"
+                                />
+                                <MuiFormControlLabel
+                                  value="4-5 horas"
+                                  control={<Radio />}
+                                  label="4-5 horas"
+                                />
+                                <MuiFormControlLabel
+                                  value="6-7 horas"
+                                  control={<Radio />}
+                                  label="6-7 horas"
+                                />
+                                <MuiFormControlLabel
+                                  value="8 horas (recomendado)"
+                                  control={<Radio />}
+                                  label="8 horas (recomendado)"
+                                />
+                                <MuiFormControlLabel
+                                  value="Más de 8 horas"
+                                  control={<Radio />}
+                                  label="Más de 8 horas"
+                                />
+                              </RadioGroup>
                             </SoftBox>
+                          )}
                         </SoftBox>
-                    </SoftBox>
-                   </Card>
-                   <br></br>
-                   <Card>
-                    <SoftBox p={3}>
+                        
+                      </SoftBox>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <SoftBox mb={2}>
                         <SoftBox mb={2}>
-                            <SoftTypography variant="h5">Tabaquismo:</SoftTypography>
+                          <label>¿Fuma o ha fumado en el pasado?</label>
+                          <RadioGroup
+                            id="smoke"
+                            name="smoke"
+                            value={formData.smoke}
+                            onChange={handleChange}
+                            required
+                          >
+                            <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
+                            <MuiFormControlLabel value="No" control={<Radio />} label="No" />
+                          </RadioGroup>
+                          {formData.smoke === "Si" && (
                             <SoftBox mb={2}>
-                                <label>¿Fuma o ha fumado en el pasado?</label>
-                                <RadioGroup
-                                    id="smoke"
-                                    name="smoke"
-                                    value={formData.smoke}
-                                    onChange={handleChange}
-                                    required
-                                    >
-                                        <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
-                                        <MuiFormControlLabel value="No" control={<Radio />} label="No" />
-                                    </RadioGroup>
-                                    {formData.smoke === "Si" && (
-                                        <SoftBox mb={2}>
-                                            <label>¿Cuántos cigarros fuma al día?</label>
-                                            <RadioGroup
-                                            id="smokeHistory"
-                                            name="smokeHistory"
-                                            value={formData.smokeHistory}
-                                            onChange={handleChange}
-                                            required
-                                            >
-                                                <MuiFormControlLabel
-                                                    value="1"
-                                                    control={<Radio />}
-                                                    label="Menos de 5 cigarrillos al mes"
-                                                />
-                                                <MuiFormControlLabel
-                                                value="2"
-                                                control={<Radio />}
-                                                label="De 1 a 5 cigarrillos a la semana"
-                                                />
-                                                <MuiFormControlLabel
-                                                value="3"
-                                                control={<Radio />}
-                                                label="De 6 a 10 cigarrillos a la semana"
-                                                />
-                                                <MuiFormControlLabel
-                                                value="4"
-                                                control={<Radio />}
-                                                label="Mas de 20 cigarrillos a la semana"
-                                                />
-                                                <MuiFormControlLabel value="Otros" control={<Radio />} label="Otros:" />
-                                            </RadioGroup>
-                                            {
-                                                formData.smokeHistory === "Otros" && (
-                                                    <SoftBox mb={2}>
-                                                        <textarea
-                                                            id="smokeOther"
-                                                            name="smokeOther"
-                                                            placeholder="Especifique"
-                                                            value={formData.smokeOther}
-                                                            onChange={handleChange}
-                                                            required
-                                                            rows="1"
-                                                            className="global-textarea"
-                                                        />
-                                                    </SoftBox>
-                                                )}
-                                        </SoftBox>
-                                    )}
-                            </SoftBox>
-                        </SoftBox>
-                    </SoftBox>
-                   </Card>
-                   <br></br>
-                   <Card>
-                    <SoftBox p={3}>
-                        <SoftBox mb={2}>
-                            <SoftTypography variant="h5">Alcoholismo:</SoftTypography>
-                            <SoftBox mb={2}>
-                                <label htmlFor="alcohol">
-                                    ¿Consume alcohol?
-                                </label>
-                                <RadioGroup
-                                id="alcohol"
-                                name="alcohol"
-                                value={formData.alcohol}
+                              <label>¿Cuántos cigarros fuma al día?</label>
+                              <RadioGroup
+                                id="smokeHistory"
+                                name="smokeHistory"
+                                value={formData.smokeHistory}
                                 onChange={handleChange}
                                 required
-                                >
-                                    <MuiFormControlLabel value="Si" control={<Radio />} label="Sí"/>
-                                    <MuiFormControlLabel value="No" control={<Radio />} label="No"/>
-                                </RadioGroup>
-                                {formData.alcohol === "Si" && (
-                                    <SoftBox mb={2}>
-                                        <label>
-                                            ¿Cuántas veces a la semana bebe alcohol?
-                                        </label>
-                                        <RadioGroup
-                                        id="alcoholHistory"
-                                        name="alcoholHistory"
-                                        value={formData.alcoholHistory}
-                                        onChange={handleChange}
-                                        required
-                                        >
-                                            <MuiFormControlLabel
-                                                value="1"
-                                                control={<Radio />}
-                                                label="Sólo en fiestas o reuniones."
-                                            />
-                                            <MuiFormControlLabel
-                                                value="2"
-                                                control={<Radio />}
-                                                label="Al menos una vez a la semana hasta llegar a la embriaguez."
-                                            />
-                                            <MuiFormControlLabel
-                                                value="3"
-                                                control={<Radio />}
-                                                label="Al menos una vez a la semana sin llegar a la embriaguez."
-                                            />
-                                            <MuiFormControlLabel value="Otros" control={<Radio />} label=" Otros:" />
-                                        </RadioGroup>
-                                        {formData.alcoholHistory === "Otros" && (
-                                            <SoftBox mb={2}>
-                                                <textarea
-                                                id="alcoholOther"
-                                                name="alcoholOther"
-                                                placeholder="Especifique"
-                                                value={formData.alcoholOther}
-                                                onChange={handleChange}
-                                                required
-                                                rows="1"
-                                                className="global-textarea"
-                                                />
-                                            </SoftBox>
-                                        )}
-                                    </SoftBox>
-                                )}
+                              >
+                                <MuiFormControlLabel
+                                  value="1"
+                                  control={<Radio />}
+                                  label="Menos de 5 cigarrillos al mes"
+                                />
+                                <MuiFormControlLabel
+                                  value="2"
+                                  control={<Radio />}
+                                  label="De 1 a 5 cigarrillos a la semana"
+                                />
+                                <MuiFormControlLabel
+                                  value="3"
+                                  control={<Radio />}
+                                  label="De 6 a 10 cigarrillos a la semana"
+                                />
+                                <MuiFormControlLabel
+                                  value="4"
+                                  control={<Radio />}
+                                  label="Mas de 20 cigarrillos a la semana"
+                                />
+                                <MuiFormControlLabel value="Otros" control={<Radio />} label="Otros:" />
+                              </RadioGroup>
+                              {formData.smokeHistory === "Otros" && (
+                                <SoftBox mb={2}>
+                                  <textarea
+                                    id="smokeOther"
+                                    name="smokeOther"
+                                    placeholder="Especifique"
+                                    value={formData.smokeOther}
+                                    onChange={handleChange}
+                                    required
+                                    rows="1"
+                                    className="global-textarea"
+                                  />
+                                </SoftBox>
+                              )}
                             </SoftBox>
+                          )}
                         </SoftBox>
-                    </SoftBox>
-                   </Card>
+                      </SoftBox>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <SoftBox mb={2}>
+                        <SoftBox mb={2}>
+                          <label htmlFor="alcohol">¿Consume alcohol?</label>
+                          <RadioGroup
+                            id="alcohol"
+                            name="alcohol"
+                            value={formData.alcohol}
+                            onChange={handleChange}
+                            required
+                          >
+                            <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
+                            <MuiFormControlLabel value="No" control={<Radio />} label="No" />
+                          </RadioGroup>
+                          {formData.alcohol === "Si" && (
+                            <SoftBox mb={2}>
+                              <label>¿Cuántas veces a la semana bebe alcohol?</label>
+                              <RadioGroup
+                                id="alcoholHistory"
+                                name="alcoholHistory"
+                                value={formData.alcoholHistory}
+                                onChange={handleChange}
+                                required
+                              >
+                                <MuiFormControlLabel
+                                  value="1"
+                                  control={<Radio />}
+                                  label="Sólo en fiestas o reuniones."
+                                />
+                                <MuiFormControlLabel
+                                  value="2"
+                                  control={<Radio />}
+                                  label="Al menos una vez a la semana hasta llegar a la embriaguez."
+                                />
+                                <MuiFormControlLabel
+                                  value="3"
+                                  control={<Radio />}
+                                  label="Al menos una vez a la semana sin llegar a la embriaguez."
+                                />
+                                <MuiFormControlLabel value="Otros" control={<Radio />} label=" Otros:" />
+                              </RadioGroup>
+                              {formData.alcoholHistory === "Otros" && (
+                                <SoftBox mb={2}>
+                                  <textarea
+                                    id="alcoholOther"
+                                    name="alcoholOther"
+                                    placeholder="Especifique"
+                                    value={formData.alcoholOther}
+                                    onChange={handleChange}
+                                    required
+                                    rows="1"
+                                    className="global-textarea"
+                                  />
+                                </SoftBox>
+                              )}
+                            </SoftBox>
+                          )}
+                        </SoftBox>
+                      </SoftBox>
+                    </Grid>
+                  </Grid>
+                </SoftBox>
               </SoftBox>
-            </Card>         
+            </Card>
           </SoftBox>
 
           {/* Antecedentes medicos */}
@@ -911,183 +1016,188 @@ function HistorialNutricional() {
                     actualmente utiliza.
                   </SoftTypography>
                   <SoftBox mb={2}>
-                  <label htmlFor="surgery">
-                    ¿Le han realizado alguna cirugía? Es posible seleccionar varías respuestas.
-                  </label>
-                  <RadioGroup
-                    id="surgery"
-                    name="surgery"
-                    value={formData.surgery}
-                    onChange={handleChange}
-                    required
-                  >
-                    <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
-                  </RadioGroup>
-                  {formData.surgery === "Si" && (
-                    <SoftBox ml={4}>
-                      <MuiFormControl component="fieldset">
-                        <SoftTypography variant="subtitle2">
-                          Seleccione las cirugías que le hayan realizado:
-                        </SoftTypography>
-                        <SoftBox>
-                          <MuiFormControlLabel
-                            control={
-                              <Checkbox
-                                checked={formData.surgeryHistory.includes("Apendicectomía")}
-                                onChange={(e) => handleSurgeryCheckboxChange(e, "Apendicectomía")}
-                              />
-                            }
-                            label="Apendicectomía"
-                          />
-                          <MuiFormControlLabel
-                            control={
-                              <Checkbox
-                                checked={formData.surgeryHistory.includes("Colecistectomía")}
-                                onChange={(e) => handleSurgeryCheckboxChange(e, "Colecistectomía")}
-                              />
-                            }
-                            label="Colecistectomía"
-                          />
-                          <MuiFormControlLabel
-                            control={
-                              <Checkbox
-                                checked={formData.surgeryHistory.includes("Cesarea")}
-                                onChange={(e) => handleSurgeryCheckboxChange(e, "Cesarea")}
-                              />
-                            }
-                            label="Cesarea"
-                          />
-                          <MuiFormControlLabel
-                            control={
-                              <Checkbox
-                                checked={formData.surgeryHistory.includes("Cirugía bariatríca")}
-                                onChange={(e) =>
-                                  handleSurgeryCheckboxChange(e, "Cirugía bariatríca")
-                                }
-                              />
-                            }
-                            label="Cirugía bariatríca"
-                          />
-                          <SoftBox mb={2} display="flex">
-                            <label htmlFor="surgeryOther" style={{ marginRight: "8px" }}>
-                              Otros:
-                            </label>
-                            <textarea
-                              id="surgeryOther"
-                              name="surgeryOther"
-                              placeholder="Especifique"
-                              value={formData.surgeryOther}
-                              onChange={handleChange}
-                              required
-                              rows="1"
-                              className="global-textarea"
-                              style={{ width: "100%" }}
+                    <label htmlFor="surgery">
+                      ¿Le han realizado alguna cirugía? Es posible seleccionar varías respuestas.
+                    </label>
+                    <RadioGroup
+                      id="surgery"
+                      name="surgery"
+                      value={formData.surgery}
+                      onChange={handleChange}
+                      required
+                    >
+                      <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
+                    </RadioGroup>
+                    {formData.surgery === "Si" && (
+                      <SoftBox ml={4}>
+                        <MuiFormControl component="fieldset">
+                          <SoftTypography variant="subtitle2">
+                            Seleccione las cirugías que le hayan realizado:
+                          </SoftTypography>
+                          <SoftBox>
+                            <MuiFormControlLabel
+                              control={
+                                <Checkbox
+                                  checked={formData.surgeryHistory.includes("Apendicectomía")}
+                                  onChange={(e) => handleSurgeryCheckboxChange(e, "Apendicectomía")}
+                                />
+                              }
+                              label="Apendicectomía"
                             />
+                            <MuiFormControlLabel
+                              control={
+                                <Checkbox
+                                  checked={formData.surgeryHistory.includes("Colecistectomía")}
+                                  onChange={(e) =>
+                                    handleSurgeryCheckboxChange(e, "Colecistectomía")
+                                  }
+                                />
+                              }
+                              label="Colecistectomía"
+                            />
+                            <MuiFormControlLabel
+                              control={
+                                <Checkbox
+                                  checked={formData.surgeryHistory.includes("Cesarea")}
+                                  onChange={(e) => handleSurgeryCheckboxChange(e, "Cesarea")}
+                                />
+                              }
+                              label="Cesarea"
+                            />
+                            <MuiFormControlLabel
+                              control={
+                                <Checkbox
+                                  checked={formData.surgeryHistory.includes("Cirugía bariatríca")}
+                                  onChange={(e) =>
+                                    handleSurgeryCheckboxChange(e, "Cirugía bariatríca")
+                                  }
+                                />
+                              }
+                              label="Cirugía bariatríca"
+                            />
+                            <SoftBox mb={2} display="flex">
+                              <label htmlFor="surgeryOther" style={{ marginRight: "8px" }}>
+                                Otros:
+                              </label>
+                              <textarea
+                                id="surgeryOther"
+                                name="surgeryOther"
+                                placeholder="Especifique"
+                                value={formData.surgeryOther}
+                                onChange={handleChange}
+                                required
+                                rows="1"
+                                className="global-textarea"
+                                style={{ width: "100%" }}
+                              />
+                            </SoftBox>
                           </SoftBox>
-                        </SoftBox>
-                      </MuiFormControl>
-                    </SoftBox>
-                  )}
-                  <RadioGroup
-                    id="surgery"
-                    name="surgery"
-                    value={formData.surgery}
-                    onChange={handleChange}
-                    required
-                  >
-                    <MuiFormControlLabel value="No" control={<Radio />} label="No" />
-                  </RadioGroup>
-                </SoftBox>
-                <SoftBox mb={2}>
+                        </MuiFormControl>
+                      </SoftBox>
+                    )}
+                    <RadioGroup
+                      id="surgery"
+                      name="surgery"
+                      value={formData.surgery}
+                      onChange={handleChange}
+                      required
+                    >
+                      <MuiFormControlLabel value="No" control={<Radio />} label="No" />
+                    </RadioGroup>
+                  </SoftBox>
+                  <SoftBox mb={2}>
                     <label>
-                        ¿Tiene algún padecimiento o condición de salud actual que deba mencionar?
+                      ¿Tiene algún padecimiento o condición de salud actual que deba mencionar?
                     </label>
                     <textarea
-                    id="padecimientoActuales"
-                    name="padecimientoActuales"
-                    placeholder="Especifique"
-                    value={formData.padecimientoActuales}
-                    onChange={handleChange}
-                    required
-                    rows="1"
-                    className="global-textarea"
+                      id="padecimientoActuales"
+                      name="padecimientoActuales"
+                      placeholder="Especifique"
+                      value={formData.padecimientoActuales}
+                      onChange={handleChange}
+                      required
+                      rows="1"
+                      className="global-textarea"
                     />
-                </SoftBox>
-                <SoftBox mb={2}>
+                  </SoftBox>
+                  <SoftBox mb={2}>
                     <label>
-                    ¿Está tomando algún medicamento actualmente? Si es así, por favor especifique cuáles y con qué frecuencia.
+                      ¿Está tomando algún medicamento actualmente? Si es así, por favor especifique
+                      cuáles y con qué frecuencia.
                     </label>
                     <textarea
-                    id="medicamentos"
-                    name="medicamentos"
-                    placeholder="Especifique"
-                    value={formData.medicamentos}
-                    onChange={handleChange}
-                    required
-                    rows="1"
-                    className="global-textarea"
+                      id="medicamentos"
+                      name="medicamentos"
+                      placeholder="Especifique"
+                      value={formData.medicamentos}
+                      onChange={handleChange}
+                      required
+                      rows="1"
+                      className="global-textarea"
                     />
-                </SoftBox>
-                <SoftBox mb={2}>
+                  </SoftBox>
+                  <SoftBox mb={2}>
+                    <label>¿Consume alguna vitamina regularmente? Si es así, indique cuáles.</label>
+                    <textarea
+                      id="vitaminas"
+                      name="vitaminas"
+                      placeholder="Especifique"
+                      value={formData.vitaminas}
+                      onChange={handleChange}
+                      required
+                      rows="1"
+                      className="global-textarea"
+                    />
+                  </SoftBox>
+                  <SoftBox mb={2}>
                     <label>
-                    ¿Consume alguna vitamina regularmente? Si es así, indique cuáles.
+                      ¿Está consumiendo algún suplemento alimenticio o nutricional? Si es así, por
+                      favor especifique.
                     </label>
                     <textarea
-                    id="vitaminas"
-                    name="vitaminas"
-                    placeholder="Especifique"
-                    value={formData.vitaminas}
-                    onChange={handleChange}
-                    required
-                    rows="1"
-                    className="global-textarea"
+                      id="suplementos"
+                      name="suplementos"
+                      placeholder="Especifique"
+                      value={formData.suplementos}
+                      onChange={handleChange}
+                      required
+                      rows="1"
+                      className="global-textarea"
                     />
-                </SoftBox>
-                <SoftBox mb={2}>
+                  </SoftBox>
+                  <SoftBox mb={2}>
                     <label>
-                    ¿Está consumiendo algún suplemento alimenticio o nutricional? Si es así, por favor especifique.
+                      ¿Se ha realizado algún análisis de laboratorio reciente que considere
+                      importante mencionar? (por ejemplo, análisis de sangre, pruebas hormonales,
+                      etc.)
                     </label>
                     <textarea
-                    id="suplementos"
-                    name="suplementos"
-                    placeholder="Especifique"
-                    value={formData.suplementos}
-                    onChange={handleChange}
-                    required
-                    rows="1"
-                    className="global-textarea"
+                      id="laboratoriosRelevantes"
+                      name="laboratoriosRelevantes"
+                      placeholder="Especifique"
+                      value={formData.laboratoriosRelevantes}
+                      onChange={handleChange}
+                      required
+                      rows="1"
+                      className="global-textarea"
                     />
-                </SoftBox>
-                <SoftBox mb={2}>
+                  </SoftBox>
+                  <SoftBox mb={2}>
                     <label>
-                    ¿Se ha realizado algún análisis de laboratorio reciente que considere importante mencionar? (por ejemplo, análisis de sangre, pruebas hormonales, etc.)
+                      ¿Ha experimentado recientemente algún síntoma gastrointestinal, como dolor
+                      abdominal, náuseas, acidez, estreñimiento o diarrea?
                     </label>
                     <textarea
-                    id="laboratoriosRelevantes"
-                    name="laboratoriosRelevantes"
-                    placeholder="Especifique"
-                    value={formData.laboratoriosRelevantes}
-                    onChange={handleChange}
-                    required
-                    rows="1"
-                    className="global-textarea"
+                      id="sintomasGastrointestinales"
+                      name="sintomasGastrointestinales"
+                      placeholder="Especifique"
+                      value={formData.sintomasGastrointestinales}
+                      onChange={handleChange}
+                      required
+                      rows="1"
+                      className="global-textarea"
                     />
-                </SoftBox>
-                <SoftBox mb={2}>
-                    <label>
-                    ¿Ha experimentado recientemente algún síntoma gastrointestinal, como dolor abdominal, náuseas, acidez, estreñimiento o diarrea?
-                    </label>
-                    <textarea
-                    id="sintomasGastrointestinales"
-                    name="sintomasGastrointestinales"
-                    placeholder="Especifique"
-                    value={formData.sintomasGastrointestinales}
-                    onChange={handleChange}
-                    required
-                    rows="1"
-                    className="global-textarea"
-                    />
-                </SoftBox>
+                  </SoftBox>
                 </SoftBox>
               </SoftBox>
             </Card>
@@ -1095,406 +1205,425 @@ function HistorialNutricional() {
 
           {/* Evaluacion dietetica */}
           <SoftBox mt={4}>
-              <Card>
-                <SoftBox p={3}>
-                  <SoftBox mb={2}>
-                    <SoftTypography variant="h4">Evaluación dietética</SoftTypography>
-                    <SoftTypography variant="subtitle2" sx={{ fontWeight: 'bold' }} mt={3}>
-                      RECORDATORIO DE 24 HORAS
-                    </SoftTypography>
-                    <SoftBox mb={2}>
-                      <label>
-                          Desayuno:
-                      </label>
-                      <textarea
-                      id="desayuno"
-                      name="desayuno"
-                      placeholder="Especifique"
-                      value={formData.desayuno}
-                      onChange={handleChange}
-                      required
-                      rows="1"
-                      className="global-textarea"
-                      />
-                    </SoftBox>
-                    <SoftBox mb={2}>
-                      <label>
-                          Colacion:
-                      </label>
-                      <textarea
-                      id="colacion1"
-                      name="colacion1"
-                      placeholder="Especifique"
-                      value={formData.colacion1}
-                      onChange={handleChange}
-                      required
-                      rows="1"
-                      className="global-textarea"
-                      />
-                    </SoftBox>
-                    <SoftBox mb={2}>
-                      <label>
-                          Comida:
-                      </label>
-                      <textarea
-                      id="comida"
-                      name="comida"
-                      placeholder="Especifique"
-                      value={formData.comina}
-                      onChange={handleChange}
-                      required
-                      rows="1"
-                      className="global-textarea"
-                      />
-                    </SoftBox>
-                    <SoftBox mb={2}>
-                      <label>
-                          Colacion 2:
-                      </label>
-                      <textarea
-                      id="colacion2"
-                      name="colacion2"
-                      placeholder="Especifique"
-                      value={formData.colacion2}
-                      onChange={handleChange}
-                      required
-                      rows="1"
-                      className="global-textarea"
-                      />
-                    </SoftBox>
-                    <SoftBox mb={2}>
-                      <label>
-                          Extras:
-                      </label>
-                      <textarea
-                      id="extras"
-                      name="extras"
-                      placeholder="Especifique"
-                      value={formData.extras}
-                      onChange={handleChange}
-                      required
-                      rows="1"
-                      className="global-textarea"
-                      />
-                    </SoftBox>
-                  </SoftBox>
+            <Card>
+              <SoftBox p={3}>
+                <SoftBox mb={2}>
+                  <SoftTypography variant="h4">Evaluación dietética</SoftTypography>
+                  <SoftTypography variant="subtitle2" sx={{ fontWeight: "bold" }} mt={3}>
+                    RECORDATORIO DE 24 HORAS
+                  </SoftTypography>
+                  <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={12} sm={6}>
+                      <SoftBox mb={2}>
+                        <label>Desayuno:</label>
+                        <textarea
+                          id="desayuno"
+                          name="desayuno"
+                          placeholder="Especifique"
+                          value={formData.desayuno}
+                          onChange={handleChange}
+                          required
+                          rows="1"
+                          className="global-textarea"
+                        />
+                      </SoftBox>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <SoftBox mb={2}>
+                        <label>Colacion:</label>
+                        <textarea
+                          id="colacion1"
+                          name="colacion1"
+                          placeholder="Especifique"
+                          value={formData.colacion1}
+                          onChange={handleChange}
+                          required
+                          rows="1"
+                          className="global-textarea"
+                        />
+                      </SoftBox>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <SoftBox mb={2}>
+                        <label>Comida:</label>
+                        <textarea
+                          id="comida"
+                          name="comida"
+                          placeholder="Especifique"
+                          value={formData.comina}
+                          onChange={handleChange}
+                          required
+                          rows="1"
+                          className="global-textarea"
+                        />
+                      </SoftBox>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <SoftBox mb={2}>
+                        <label>Colacion 2:</label>
+                        <textarea
+                          id="colacion2"
+                          name="colacion2"
+                          placeholder="Especifique"
+                          value={formData.colacion2}
+                          onChange={handleChange}
+                          required
+                          rows="1"
+                          className="global-textarea"
+                        />
+                      </SoftBox>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <SoftBox mb={2}>
+                        <label>Extras:</label>
+                        <textarea
+                          id="extras"
+                          name="extras"
+                          placeholder="Especifique"
+                          value={formData.extras}
+                          onChange={handleChange}
+                          required
+                          rows="1"
+                          className="global-textarea"
+                        />
+                      </SoftBox>
+                    </Grid>
+                  </Grid>
+                </SoftBox>
               </SoftBox>
-              </Card>
-          </SoftBox>            
+            </Card>
+          </SoftBox>
 
           {/* Frecuencia de alimentos */}
           <SoftBox mt={4}>
-              <Card>
-                <SoftBox p={3}>
+            <Card>
+              <SoftBox p={3}>
+                <SoftBox mb={2}>
+                  <SoftTypography variant="h4">FRECUENCIA DE ALIMENTOS</SoftTypography>
                   <SoftBox mb={2}>
-                    <SoftTypography variant="h4">FRECUENCIA DE ALIMENTOS</SoftTypography>
-                    <SoftBox mb={2}>
-                      <label>
-                        Descripcion de la frecuencia de los alimentos:
-                      </label>
-                      <table>
-                        <tbody>
+                    <label>Descripcion de la frecuencia de los alimentos:</label>
+                    <TableContainer component={Paper}>
+                      <Table>
+                        <TableBody>
                           {data.map((row, rowIndex) => (
-                            <tr key={rowIndex}>
+                            <TableRow key={rowIndex}>
                               {row.map((item, colIndex) => (
-                                <td key={colIndex}>
-                                  <label>{item}</label>
-                                  <select>
-                                    <option value="Nunca">Nunca</option>
-                                    <option value="Rara vez">Rara vez</option>
-                                    <option value="A veces">A veces</option>
-                                    <option value="Frecuentemente">Frecuentemente</option>
-                                    <option value="Siempre">Siempre</option>
-                                  </select>
-                                </td>
+                                <TableCell key={colIndex}>
+                                  <Box sx={{ minWidth: 120 }}>
+                                    <MuiFormControl fullWidth>
+                                      <InputLabel id={`select-label-${rowIndex}-${colIndex}`}>
+                                        {item}
+                                      </InputLabel>
+                                      <MuiSelect
+                                        labelId={`select-label-${rowIndex}-${colIndex}`}
+                                        id={`select-${rowIndex}-${colIndex}`}
+                                        value={values[`${rowIndex}-${colIndex}`] || ""}
+                                        onChange={(event) =>
+                                          handleChange1(rowIndex, colIndex, event.target.value)
+                                        }
+                                      >
+                                        <MenuItem value="Nunca">Nunca</MenuItem>
+                                        <MenuItem value="Rara vez">Rara vez</MenuItem>
+                                        <MenuItem value="A veces">A veces</MenuItem>
+                                        <MenuItem value="Frecuentemente">Frecuentemente</MenuItem>
+                                        <MenuItem value="Siempre">Siempre</MenuItem>
+                                      </MuiSelect>
+                                    </MuiFormControl>
+                                  </Box>
+                                </TableCell>
                               ))}
-                            </tr>
+                            </TableRow>
                           ))}
-                        </tbody>
-                      </table>
-                      <label>
-                        Alimentos que no le gustan:
-                      </label>
-                      <textarea
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                    <label>Alimentos que no le gustan:</label>
+                    <textarea
                       id="alimentosNoGustan"
                       name="alimentosNoGustan"
                       placeholder="Especifique"
                       value={formData.alimentosNoGustan}
                       rows="1"
                       className="global-textarea"
-                      />
-                    </SoftBox>
+                    />
                   </SoftBox>
                 </SoftBox>
-              </Card>
+              </SoftBox>
+            </Card>
           </SoftBox>
 
           {/* Signos vitales y mediciones */}
           <SoftBox mt={4}>
-              <Card>
-                <SoftBox p={3}>
-                  <SoftBox mb={2}>
-                    <SoftTypography variant="h4">SIGNOS VITALES</SoftTypography>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sm={4}>
-                        <label>
-                          Glucosa:
-                        </label>
-                        <textarea
-                          id="glucosa"
-                          name="glucosa"
-                          placeholder="Especifique"
-                          value={formData.glucosa}
-                          rows="1"
-                          className="global-textarea"
-                        />
-                      </Grid>
+            <Card>
+              <SoftBox p={3}>
+                <SoftBox mb={2}>
+                  <SoftTypography variant="h4">SIGNOS VITALES</SoftTypography>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={4}>
+                      <label>Glucosa:</label>
+                      <textarea
+                        id="glucosa"
+                        name="glucosa"
+                        placeholder="Especifique"
+                        value={formData.glucosa}
+                        rows="1"
+                        className="global-textarea"
+                      />
+                    </Grid>
 
-                      <Grid item xs={12} sm={4}>
-                        <label>
-                          Glucosa:
-                        </label>
-                        <textarea
-                          id="glucosa"
-                          name="glucosa"
-                          placeholder="Especifique"
-                          value={formData.glucosa}
-                          rows="1"
-                          className="global-textarea"
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={4}>
-                        <label>
-                          TDA:
-                        </label>
-                        <textarea
+                    <Grid item xs={12} sm={4}>
+                      <label>Glucosa:</label>
+                      <textarea
+                        id="glucosa"
+                        name="glucosa"
+                        placeholder="Especifique"
+                        value={formData.glucosa}
+                        rows="1"
+                        className="global-textarea"
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <label>TDA:</label>
+                      <textarea
                         id="presionArterial"
                         name="presionArterial"
                         placeholder="Especifique"
                         value={formData.presionArterial}
                         rows="1"
                         className="global-textarea"
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={4}>
-                        <label>
-                          TDA:
-                        </label>
-                        <textarea
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <label>TDA:</label>
+                      <textarea
                         id="presionArterial"
                         name="presionArterial"
                         placeholder="Especifique"
                         value={formData.presionArterial}
                         rows="1"
                         className="global-textarea"
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={4}>
-                        <label>
-                          FC:
-                        </label>
-                        <textarea
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <label>FC:</label>
+                      <textarea
                         id="frecuenciaCardiaca"
                         name="frecuenciaCardiaca"
                         placeholder="Especifique"
                         value={formData.frecuenciaCardiaca}
                         rows="1"
                         className="global-textarea"
-                        />
-                      </Grid>
-                      <Grid item xs={12} sm={4}>
-                        <label>
-                          Temperatura:
-                        </label>
-                        <textarea
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <label>Temperatura:</label>
+                      <textarea
                         id="temperatura"
                         name="temperatura"
                         placeholder="Especifique"
                         value={formData.temperatura}
                         rows="1"
                         className="global-textarea"
-                        />
-                      </Grid>
+                      />
                     </Grid>
-                    
-                    <SoftBox mb={2}>
-                      {/* Tabla de pesos */}
-                      <div className="overflow-x-auto mt-8">
-                        <h2 className="text-md font-bold">Pesos</h2>
-                        <table className="min-w-full border border-gray-300">
-                          <thead>
-                            <tr>
-                              <th className="border border-gray-300 px-4 py-2 text-left">Medida</th>
-                              <th className="border border-gray-300 px-4 py-2 text-left">Actual</th>
-                              {columnsPesos.map((_, colIndex) => (
-                                <th
-                                  key={`col-${colIndex}`}
-                                  className="border border-gray-300 px-4 py-2 text-left"
-                                >
-                                  Medición {colIndex + 1}
-                                </th>
-                              ))}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td className="border border-gray-300 px-4 py-2 font-bold">Fecha</td>
-                              <td className="border border-gray-300 px-4 py-2 text-center">{actualDate}</td>
+                  </Grid>
+
+                  <SoftBox mb={2}>
+                    {/* Tabla de pesos */}
+                    <div className="overflow-x-auto mt-8">
+                      <h2 className="text-md font-bold">Pesos</h2>
+                      <TableContainer component={Paper}>
+                        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                          <TableBody>
+                            {/* Fecha Row */}
+                            <StyledTableRow>
+                              <StyledTableCell component="th" scope="row">
+                                Fecha
+                              </StyledTableCell>
+                              <StyledTableCell align="center">{actualDate}</StyledTableCell>
                               {datesPesos.map((date, colIndex) => (
-                                <td
-                                  key={`date-col-${colIndex}`}
-                                  className="border border-gray-300 px-4 py-2 text-center"
-                                >
+                                <StyledTableCell key={`date-col-${colIndex}`} align="center">
                                   {date}
-                                </td>
+                                </StyledTableCell>
                               ))}
-                            </tr>
+                            </StyledTableRow>
+                            {/* Medidas Rows */}
                             {Object.keys(visibleFieldsPesos).map((measurement, rowIndex) => (
-                              <tr key={measurement}>
-                                <td className="border border-gray-300 px-4 py-2">
+                              <StyledTableRow key={measurement}>
+                                <StyledTableCell component="th" scope="row">
                                   {visibleFieldsPesos[measurement]}
-                                </td>
-                                <td className="border border-gray-300 px-4 py-2">
+                                </StyledTableCell>
+                                <StyledTableCell align="center">
                                   <input
                                     type="text"
-                                    className="w-full border border-gray-300 px-2 py-1"
                                     value={formData[measurement]}
                                     onChange={(e) => handleInputChange(e, measurement)}
+                                    style={{
+                                      width: "100%",
+                                      padding: "8px",
+                                      border: "1px solid #ccc",
+                                      borderRadius: "4px",
+                                      boxSizing: "border-box",
+                                    }}
                                   />
-                                </td>
+                                </StyledTableCell>
                                 {columnsPesos.map((col, colIndex) => (
-                                  <td key={`cell-${colIndex}-${rowIndex}`} className="border border-gray-300 px-4 py-2">
+                                  <StyledTableCell
+                                    key={`cell-${colIndex}-${rowIndex}`}
+                                    align="center"
+                                  >
                                     <input
                                       type="text"
-                                      className="w-full border border-gray-300 px-2 py-1"
                                       value={col[rowIndex] || ""}
                                       onChange={(e) =>
                                         handleNewMeasurementChange(e, rowIndex, colIndex, "pesos")
                                       }
+                                      style={{
+                                        width: "100%",
+                                        padding: "8px",
+                                        border: "1px solid #ccc",
+                                        borderRadius: "4px",
+                                        boxSizing: "border-box",
+                                      }}
                                     />
-                                  </td>
+                                  </StyledTableCell>
                                 ))}
-                              </tr>
+                              </StyledTableRow>
                             ))}
-                          </tbody>
-                        </table>
-                        <button
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+
+                      <SoftBox mt={2}>
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          color="primary"
+                          style={{ color: "white" }}
                           onClick={() => addColumn("pesos")}
-                          className="mt-4 bg-green-500 text-white px-4 py-2 rounded"
                         >
                           Agregar Columna
-                        </button>
-                      </div>
-                    </SoftBox>
+                        </Button>
+                      </SoftBox>
+                    </div>
+                  </SoftBox>
 
-                    <SoftBox mb={2}>
-                      {/* Tabla de mediciones */}
-                      <div className="overflow-x-auto mt-4">
-                        <h2 className="text-md font-bold">Mediciones</h2>
-                        <table className="min-w-full border border-gray-300">
-                          <thead>
-                            <tr>
-                              <th className="border border-gray-300 px-4 py-2 text-left">Medida</th>
-                              <th className="border border-gray-300 px-4 py-2 text-left">Actual</th>
-                              {columnsMediciones.map((_, colIndex) => (
-                                <th
-                                  key={`col-${colIndex}`}
-                                  className="border border-gray-300 px-4 py-2 text-left"
-                                >
-                                  Medición {colIndex + 1}
-                                </th>
-                              ))}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td className="border border-gray-300 px-4 py-2 font-bold">Fecha</td>
-                              <td className="border border-gray-300 px-4 py-2 text-center">{actualDate}</td>
+                  <SoftBox mb={2}>
+                    {/* Tabla de mediciones */}
+                    <div className="overflow-x-auto mt-4">
+                      <h2 className="text-md font-bold">Mediciones</h2>
+                      <TableContainer component={Paper}>
+                        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                          <TableBody>
+                            <StyledTableRow>
+                              <StyledTableCell component="th" scope="row">
+                                Fecha
+                              </StyledTableCell>
+                              <StyledTableCell align="center">{actualDate}</StyledTableCell>
                               {datesMediciones.map((date, colIndex) => (
-                                <td
-                                  key={`date-col-${colIndex}`}
-                                  className="border border-gray-300 px-4 py-2 text-center"
-                                >
+                                <StyledTableCell key={`date-col-${colIndex}`} align="center">
                                   {date}
-                                </td>
+                                </StyledTableCell>
                               ))}
-                            </tr>
+                            </StyledTableRow>
                             {Object.keys(visibleFieldsMediciones).map((measurement, rowIndex) => (
-                              <tr key={measurement}>
-                                <td className="border border-gray-300 px-4 py-2">
+                              <StyledTableRow key={measurement}>
+                                <StyledTableCell component="th" scope="row">
                                   {visibleFieldsMediciones[measurement]}
-                                </td>
-                                <td className="border border-gray-300 px-4 py-2">
+                                </StyledTableCell>
+                                <StyledTableCell>
                                   <input
                                     type="text"
-                                    className="w-full border border-gray-300 px-2 py-1"
+                                    style={{
+                                      width: "100%",
+                                      padding: "8px",
+                                      border: "1px solid #ccc",
+                                      borderRadius: "4px",
+                                    }}
                                     value={formData[measurement]}
                                     onChange={(e) => handleInputChange(e, measurement)}
                                   />
-                                </td>
+                                </StyledTableCell>
                                 {columnsMediciones.map((col, colIndex) => (
-                                  <td key={`cell-${colIndex}-${rowIndex}`} className="border border-gray-300 px-4 py-2">
+                                  <StyledTableCell key={`cell-${colIndex}-${rowIndex}`}>
                                     <input
                                       type="text"
-                                      className="w-full border border-gray-300 px-2 py-1"
+                                      style={{
+                                        width: "100%",
+                                        padding: "8px",
+                                        border: "1px solid #ccc",
+                                        borderRadius: "4px",
+                                      }}
                                       value={col[rowIndex] || ""}
                                       onChange={(e) =>
-                                        handleNewMeasurementChange(e, rowIndex, colIndex, "mediciones")
+                                        handleNewMeasurementChange(
+                                          e,
+                                          rowIndex,
+                                          colIndex,
+                                          "mediciones"
+                                        )
                                       }
                                     />
-                                  </td>
+                                  </StyledTableCell>
                                 ))}
-                              </tr>
+                              </StyledTableRow>
                             ))}
-                          </tbody>
-                        </table>
-                        <button
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+
+                      <SoftBox mt={2}>
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          color="primary"
+                          style={{ color: "white" }}
                           onClick={() => addColumn("mediciones")}
                           className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
                         >
                           Agregar Columna
-                        </button>
-                      </div>
- 
-                    </SoftBox>
+                        </Button>
+                      </SoftBox>
+                    </div>
                   </SoftBox>
                 </SoftBox>
-              </Card>
+              </SoftBox>
+            </Card>
           </SoftBox>
 
           {/* Diagnostico */}
           <SoftBox mt={4}>
-              <Card>
-                <SoftBox p={3}>
+            <Card>
+              <SoftBox p={3}>
+                <SoftBox mb={2}>
+                  <SoftTypography variant="h4">Diagnostico</SoftTypography>
                   <SoftBox mb={2}>
-                    <SoftTypography variant="h4">Diagnostico</SoftTypography>
-                    <SoftBox mb={2}>
-                      <textarea
+                    <textarea
                       id="diagnostico"
                       value={formData.diagnostico}
                       placeholder="Especifique"
                       onChange={handleChange}
                       required
-                      rows="1"
+                      rows="4"
                       className="global-textarea"
-                      />
-                    </SoftBox>
+                    />
                   </SoftBox>
                 </SoftBox>
-              </Card>
+              </SoftBox>
+            </Card>
           </SoftBox>
-          
+
           {/* Objetivo y Plan */}
           <SoftBox mt={4}>
-              <Card>
-                <SoftBox p={3}>
+            <Card>
+              <SoftBox p={3}>
+                <SoftBox mb={2}>
+                  <SoftTypography variant="h4">Plan y objetivo</SoftTypography>
                   <SoftBox mb={2}>
-                    <SoftTypography variant="h4">Plan y objetivo</SoftTypography>
-                    <SoftBox mb={2}>
-                      <label>
-                        <SoftTypography variant="body2">OBJETIVO:</SoftTypography>
-                      </label>
-                      <textarea
+                    <label>
+                      <SoftTypography variant="body2">OBJETIVO:</SoftTypography>
+                    </label>
+                    <textarea
                       id="objetivo"
                       value={formData.objetivo}
                       placeholder="Especifique"
@@ -1502,13 +1631,15 @@ function HistorialNutricional() {
                       required
                       rows="1"
                       className="global-textarea"
-                      />
-                    </SoftBox>
-                    <label>
-                      <SoftTypography variant="body2">MEDICAMENTOS Y SUPLEMENTOS AÑADIDOS:</SoftTypography>
-                    </label>
-                    <SoftBox mb={2}>
-                      <textarea
+                    />
+                  </SoftBox>
+                  <label>
+                    <SoftTypography variant="body2">
+                      MEDICAMENTOS Y SUPLEMENTOS AÑADIDOS:
+                    </SoftTypography>
+                  </label>
+                  <SoftBox mb={2}>
+                    <textarea
                       id="medicamentos"
                       value={formData.medicamentos}
                       placeholder="Especifique"
@@ -1516,13 +1647,13 @@ function HistorialNutricional() {
                       required
                       rows="1"
                       className="global-textarea"
-                      />
-                    </SoftBox>
-                    <label>
-                      <SoftTypography variant="body2">TIPO DE PLAN NUTRICIONAL:</SoftTypography>
-                    </label>
-                    <SoftBox mb={2}>
-                      <textarea
+                    />
+                  </SoftBox>
+                  <label>
+                    <SoftTypography variant="body2">TIPO DE PLAN NUTRICIONAL:</SoftTypography>
+                  </label>
+                  <SoftBox mb={2}>
+                    <textarea
                       id="tipoPlanNutricional"
                       value={formData.tipoPlanNutricional}
                       placeholder="Especifique"
@@ -1530,13 +1661,13 @@ function HistorialNutricional() {
                       required
                       rows="1"
                       className="global-textarea"
-                      />
-                    </SoftBox>
-                    <label>
-                      <SoftTypography variant="body2">ESPECIFICACIONES:</SoftTypography>
-                    </label>
-                    <SoftBox mb={2}>
-                      <textarea
+                    />
+                  </SoftBox>
+                  <label>
+                    <SoftTypography variant="body2">ESPECIFICACIONES:</SoftTypography>
+                  </label>
+                  <SoftBox mb={2}>
+                    <textarea
                       id="especificaciones"
                       value={formData.especificaciones}
                       placeholder="Especifique"
@@ -1544,13 +1675,13 @@ function HistorialNutricional() {
                       required
                       rows="1"
                       className="global-textarea"
-                      />
-                    </SoftBox>
+                    />
                   </SoftBox>
                 </SoftBox>
-              </Card>
+              </SoftBox>
+            </Card>
           </SoftBox>
-        
+
           {/* Boton enviar */}
           <SoftBox mt={2}>
             <Button
