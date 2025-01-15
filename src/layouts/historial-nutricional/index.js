@@ -401,11 +401,10 @@ function HistorialNutricional() {
                 consulta y brindarle un mejor servicio.
               </SoftTypography>
               <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
-                Dr. Francisco Javier Porquillo. C.P. 10550033 / 12467290 <br />
-                Dra. Carolain Ulrrich García. C.P. 13035875 <br />
-                Dra. Elizabeth Raquel Juárez Juárez. C.P. 1075112 / 12550599 <br />
-                Dra. Isbeth Gómez Díaz. C.P. 12611063 <br />
-                Dra. Victoria Sandoval Nava. C.P. 10101155 / 12655823
+                Dra. Elizabeth Raquel Juárez <br/>
+                Mtra. Isbeth Gómez Díaz<br/>
+                LNC Laura Elizabeth Jiménez Criollo (Licenciada en Nutrición Clinica)<br/>
+                Dra. Victoria Sandoval Nava<br/>
               </SoftTypography>
               <SoftTypography variant="subtitle2" fontWeight="medium" mt={4}>
                 Circuito Juan Pablo II. PB No. 3113. Colonia Fraccionamiento Las Ánimas, Puebla.
