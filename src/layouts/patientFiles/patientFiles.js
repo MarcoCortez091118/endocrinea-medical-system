@@ -46,7 +46,7 @@ function PatientDetails() {
           <SoftBox display="flex" flexDirection="column" alignItems="center">
             <SoftBox
               style={{
-                backgroundColor: "#054eeb",
+                backgroundColor: "#183A64",
                 width: 70,
                 height: 70,
                 borderRadius: "50%",

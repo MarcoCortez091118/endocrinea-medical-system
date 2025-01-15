@@ -179,7 +179,7 @@ function ClinicalForm() {
                       <FormControl fullWidth variant="outlined">
                         <InputLabel
                           sx={{
-                            color: "#054eeb",
+                            color: "#183A64",
                             fontSize: "15px",  // Cambiar el tamaño de la fuente de la etiqueta
                           }}
                         >
@@ -193,7 +193,7 @@ function ClinicalForm() {
                           sx={{
                             "& .MuiOutlinedInput-notchedOutline": { borderColor: "#ccc" },
                             "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                              borderColor: "#054eeb",
+                              borderColor: "#183A64",
                             },
                           }}
                         >
@@ -213,7 +213,7 @@ function ClinicalForm() {
                       <FormControl fullWidth variant="outlined">
                         <InputLabel
                           sx={{
-                            color: "#054eeb",
+                            color: "#183A64",
                             fontSize: "15px",  // Cambiar el tamaño de la fuente de la etiqueta
                           }}
                         >
@@ -227,7 +227,7 @@ function ClinicalForm() {
                           sx={{
                             "& .MuiOutlinedInput-notchedOutline": { borderColor: "#ccc" },
                             "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                              borderColor: "#054eeb",
+                              borderColor: "#183A64",
                             },
                           }}
                         >
@@ -453,8 +453,8 @@ function ClinicalForm() {
                   sx={{
                     
                     mt: 3,
-                    backgroundColor: "#054eeb",
-                    "&:hover": { backgroundColor: "#054eeb" },
+                    backgroundColor: "#183A64",
+                    "&:hover": { backgroundColor: "#183A64" },
                       color: "white !important",
                     
                   }}
