@@ -8,6 +8,8 @@ import SignUp from "layouts/authentication/sign-up";
 import ClinicalForm from "layouts/FormsHistoryPsychological";
 import HistorialEvolucion from "layouts/historial-evolucion";
 import HistorialClinico from "layouts/historial-clinico";
+import NotaClinico from "layouts/nota-Clinica/nota-Clinica";
+import HistorialNutricional from "layouts/historial-nutricional";
 import Agenda from "layouts/agenda";
 import Shop from "examples/Icons/Shop";
 import Office from "examples/Icons/Office";
@@ -50,7 +52,7 @@ const routes = (isAuthenticated) => [
   },
   {
     type: "collapse",
-    name: "Historial evolucion",
+    name: "Nota de Evolución",
     key: "HistorialEvolucion",
     route: "/HistorialEvolucion",
     icon: <HistoryIcon size="12px" />,
@@ -63,13 +65,26 @@ const routes = (isAuthenticated) => [
   },
   {
     type: "collapse",
-    name: "Historial psicológia",
+    name: "Historia Clínica de Psicología",
     key: "ClinicalForm",
     route: "/ClinicalForm",
     icon: <HistoryIcon size="12px" />,
     component: (
       <ProtectedRoute>
         <ClinicalForm />
+      </ProtectedRoute>
+    ),
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Historia Clínica Nutricional",
+    key: "HistorialNutricional",
+    route: "/HistorialNutricional",
+    icon: <HistoryIcon size="12px" />,
+    component: (
+      <ProtectedRoute>
+        <HistorialNutricional />
       </ProtectedRoute>
     ),
     noCollapse: true,
@@ -89,13 +104,27 @@ const routes = (isAuthenticated) => [
   },
   {
     type: "collapse",
-    name: "Historial clinico",
+    name: "Historia Clínica Médica",
     key: "HistorialClinico",
     route: "/HistorialClinico",
     icon: <HistoryIcon size="12px" />,
     component: (
       <ProtectedRoute>
         <HistorialClinico />
+      </ProtectedRoute>
+    ),
+    noCollapse: true,
+  },
+
+  {
+    type: "collapse",
+    name: "Nota Clínica Médica",
+    key: "NotaClinico",
+    route: "/nota-Clinica",
+    icon: <HistoryIcon size="12px" />,
+    component: (
+      <ProtectedRoute>
+        <NotaClinico />
       </ProtectedRoute>
     ),
     noCollapse: true,
