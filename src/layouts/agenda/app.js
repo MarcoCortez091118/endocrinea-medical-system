@@ -70,9 +70,10 @@ function App() {
                         confirm: "Confirmar",
                         delete: "Eliminar",
                         cancel: "Cancelar",
+                        title: "Paciente",
                     },
                     event: {
-                        title: "Título",
+                        title: "Paciente",
                         start: "Inicio",
                         end: "Fin",
                         allDay: "Todo el día",
@@ -116,8 +117,27 @@ function App() {
                         })),
                         config: {
                             label: "Paciente",
-                            required: true
+                            required: true,
                         }
+                    },
+                    {
+                        name: "subtitle",
+                        type: "select",
+                        default: "programada",
+                        options: [
+                            { id: "programada", text: "Programada", value: "programada" },
+                            { id: "sala_espera", text: "En la sala de espera", value: "sala_espera" },
+                            { id: "visita_curso", text: "Visita en curso", value: "visita_curso" },
+                            { id: "visita_realizada", text: "Visita realizada", value: "visita_realizada" },
+                            { id: "no_visita", text: "No ha venido", value: "no_visita" }
+                        ],
+                        config: {
+                            label: "Estatus",
+                            required: true,
+                            icon: (value) => (
+                                <div className={`status-icon ${value}`} />
+                            )
+                        },
                     },
                     {
                         name: "doctor_id",
@@ -150,10 +170,10 @@ function App() {
                     {
                         // NUEVO Campo de Precio
                         name: "PAGO",
-                        name: "precioOOO",
+                        name: "precio",
                         type: "input",  // O 'number' si prefieres
                         default: 600,
-                        
+
                         config: {
                             sectionLabel: "Sección de pago",
                             label: "Precio",
@@ -188,116 +208,6 @@ function App() {
                             fullWidth: true
                         }
                     },
-                    /*
-                    {
-                        name: "notificaciones",
-                        type: "custom",
-                        // Por defecto, suponemos que no hay ninguna seleccionada
-                        default: [],
-                        editor: ({ value, onChange }) => {
-                            // value es el array con las notificaciones seleccionadas
-                            // onChange actualiza ese valor en el evento
-
-                            // Helper para manejar la activación/desactivación de cada checkbox
-                            const handleCheckboxChange = (option) => (event) => {
-                                if (event.target.checked) {
-                                    // Agregar la opción seleccionada
-                                    onChange([...value, option]);
-                                } else {
-                                    // Quitar la opción si se desmarca
-                                    onChange(value.filter((val) => val !== option));
-                                }
-                            };
-
-                            return (
-                                <Box sx={{ mt: 2 }}>
-                                    <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                                        ¿Qué notificaciones le enviamos?
-                                    </Typography>
-                                    <FormGroup>
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={value.includes("confirmacion")}
-                                                    onChange={handleCheckboxChange("confirmacion")}
-                                                />
-                                            }
-                                            label={
-                                                <>
-                                                    Confirmación de cita
-                                                    <Tooltip title="Se envía al confirmar la cita.">
-                                                        <IconButton size="small">
-                                                            <InfoOutlined fontSize="inherit" />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </>
-                                            }
-                                        />
-
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={value.includes("recordatorio")}
-                                                    onChange={handleCheckboxChange("recordatorio")}
-                                                />
-                                            }
-                                            label={
-                                                <>
-                                                    Recordatorio de cita
-                                                    <Tooltip title="Se envía antes de la fecha de la cita.">
-                                                        <IconButton size="small">
-                                                            <InfoOutlined fontSize="inherit" />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </>
-                                            }
-                                        />
-
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={value.includes("agendar_online")}
-                                                    onChange={handleCheckboxChange("agendar_online")}
-                                                />
-                                            }
-                                            label={
-                                                <>
-                                                    Invitación a agendar online
-                                                    <Tooltip title="Permite reprogramar o gestionar su cita.">
-                                                        <IconButton size="small">
-                                                            <InfoOutlined fontSize="inherit" />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </>
-                                            }
-                                        />
-
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={value.includes("opinion")}
-                                                    onChange={handleCheckboxChange("opinion")}
-                                                />
-                                            }
-                                            label={
-                                                <>
-                                                    Solicitud de opinión
-                                                    <Tooltip title="Se envía para conocer la satisfacción del paciente.">
-                                                        <IconButton size="small">
-                                                            <InfoOutlined fontSize="inherit" />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </>
-                                            }
-                                        />
-                                    </FormGroup>
-                                </Box>
-                            );
-                        },
-                        config: {
-                            required: false
-                        }
-                    }*/
                 ]}
                 viewerExtraComponent={(fields, event) => {
                     return (
@@ -325,22 +235,24 @@ function App() {
                         </div>
                     );
                 }}
-                onConfirm={async (event, action) => {
-                    // "action" puede ser "edit" o "create"
-                    console.log("Acción:", action);
-                    if (action === "create") {
-                        console.log("EVENTO NUEVO:", JSON.stringify(event, null, 2));
-                        // Retornar el evento nuevo (con ID si lo generas tú mismo)
-                        return {
-                            ...event,
-                            event_id: Date.now(), // Ejemplo de ID
-                        };
-                    } else if (action === "edit") {
-                        console.log("EVENTO EDITADO:", JSON.stringify(event, null, 2));
-                        // Retorna el evento editado
-                        return event;
-                    }
-                }}
+            /*
+            onConfirm={async (event, action) => {
+                // "action" puede ser "edit" o "create"
+                console.log("Acción:", action);
+                if (action === "create") {
+                    console.log("EVENTO NUEVO:", JSON.stringify(event, null, 2));
+                    // Retornar el evento nuevo (con ID si lo generas tú mismo)
+                    return {
+                        ...event,
+                        event_id: Date.now(), // Ejemplo de ID
+                    };
+                } else if (action === "edit") {
+                    console.log("EVENTO EDITADO:", JSON.stringify(event, null, 2));
+                    // Retorna el evento editado
+                    return event;
+                }
+            }} 
+                */
             />
         </Fragment >
     );
