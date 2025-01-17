@@ -148,19 +148,22 @@ function Citas() {
 
             {/* Botón Modificar Cita */}
             <Box>
-              <Button
-                variant="outlined"
-                size="small"
-                style={{
-                  fontSize: "12px",
-                  textTransform: "none",
-                  marginLeft: "16px",
-                  padding: "4px 8px",
-                }}
-              >
-                Modificar cita
-              </Button>
-            </Box>
+  <Button
+    variant="outlined"
+    size="small"
+    style={{
+      fontSize: "12px", // Tamaño de texto
+      textTransform: "none", // Evita que el texto sea todo en mayúsculas
+      padding: "4px 8px", // Espaciado interno
+      fontWeight: "bold", // Grosor de la fuente
+      color: "#1976d2", // Color del texto
+      borderColor: "#1976d2", // Color del borde
+    }}
+  >
+    Modificar cita
+  </Button>
+</Box>
+
           </Box>
            {index < citas.length - 1 && (
             <Box

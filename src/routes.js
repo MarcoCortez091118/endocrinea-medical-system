@@ -40,7 +40,7 @@ const routes = (isAuthenticated) => [
   },
   {
     type: "collapse",
-    name: "Tables",
+    name: "Usuarios",
     key: "tables",
     route: "/tables",
     icon: <Office size="12px" />,
