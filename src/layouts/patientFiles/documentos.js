@@ -15,7 +15,7 @@ import { Download, Edit, Delete, Upload, Add } from "@mui/icons-material";
 
 function Documentos() {
   const files = [
-    { id: 1, name: "Juan Lopez ", author: "DR Bryan Pichon", date: "29/10/2024" },
+    { id: 1, name: "Juan Lopez ", author: "Dr Bryan Pichon", date: "29/10/2024" },
     { id: 2, name: "Juan Lopez AH", author: "Dr Oscar Lopez", date: "02/08/2024" },
     { id: 3, name: "Juan Lopez RC", author: "Dr Oscar Lopez", date: "01/08/2024" },
   ];
