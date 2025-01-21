@@ -13,7 +13,8 @@ import Documentos from "./documentos";
 import DatosPaciente from "./DatosPaciente";
 import Citas from "./citas";
 import NotaClinico from "layouts/nota-Clinica copy/nota-Clinica";
-
+import HistorialEvolucion from "layouts/historial-evolucion";
+import NotaNutricional from "layouts/nota-Nutricion/nota-Nutricion";
 
 function PatientDetails() {
   const location = useLocation();
@@ -33,8 +34,12 @@ function PatientDetails() {
         return <Documentos />;
       case 2:
         return <DatosPaciente />;
+      case 3:
+        return < HistorialEvolucion />;
       case 4:
         return <NotaClinico />;
+      case 4:
+        return < NotaNutricional />;  
       default:
         return null;
     }
@@ -86,6 +91,7 @@ function PatientDetails() {
             <Tab label="Datos del Paciente" />
             <Tab label="Nota de Evolucion" />
             <Tab label="Nota Clínica Médica" />
+            <Tab label="Nota Nutricional" />
           </Tabs>
           <Divider style={{ margin: "16px 0" }} />
           {renderTabContent()}
