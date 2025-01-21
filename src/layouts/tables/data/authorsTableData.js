@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SoftTypography from "components/SoftTypography";
 import SoftAvatar from "components/SoftAvatar";
-import apiService from "components/ApiService/apiService";
 import team2 from "assets/images/team-2.jpg";
 
 export default function useUsuarioTableData() {
@@ -10,37 +9,57 @@ export default function useUsuarioTableData() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const forms = await apiService.getForms();
-        console.log("Respuesta de la API:", forms);
-        const dataArray = Array.isArray(forms) ? forms : forms.data || [];
+        // Datos de prueba en lugar de la API
+        const mockUsers = [
+          {
+            name: "Juan Pérez",
+            phone: "555-123-4567",
+            email: "juan.perez@example.com",
+            city: "Ciudad de México",
+            timestamp: "2025-01-21",
+          },
+          {
+            name: "María López",
+            phone: "555-987-6543",
+            email: "maria.lopez@example.com",
+            city: "Guadalajara",
+            timestamp: "2025-01-20",
+          },
+          {
+            name: "Carlos Rodríguez",
+            phone: "555-765-4321",
+            email: "carlos.rod@example.com",
+            city: "Monterrey",
+            timestamp: "2025-01-19",
+          },
+        ];
 
-        const rows = dataArray.map((form) => ({
-          foto: (
-            <SoftAvatar src={team2} size="sm" variant="rounded" />
-          ),
+        // Transformar los datos para la tabla
+        const rows = mockUsers.map((user) => ({
+          foto: <SoftAvatar src={team2} size="sm" variant="rounded" />,
           nombre: (
             <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-              {form.name}
+              {user.name}
             </SoftTypography>
           ),
           teléfono: (
             <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-              {form.phone}
+              {user.phone}
             </SoftTypography>
           ),
           correo: (
             <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-              {form.email}
+              {user.email}
             </SoftTypography>
           ),
           ciudad: (
             <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-              {form.city}
+              {user.city}
             </SoftTypography>
           ),
           fecha: (
             <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-              {form.timestamp}
+              {user.timestamp}
             </SoftTypography>
           ),
         }));
@@ -57,7 +76,7 @@ export default function useUsuarioTableData() {
           rows,
         });
       } catch (error) {
-        console.error("Error al procesar los datos:", error);
+        console.error("Error al cargar los datos locales:", error);
       }
     }
 
