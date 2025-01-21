@@ -64,9 +64,10 @@ function DefaultNavbar({ action }) {
         position="absolute"
         left={0}
         zIndex={3}
-        sx={({ palette: { white }, functions: { rgba } }) => ({
-          backgroundColor: rgba(white.main, 0.8),
-          backdropFilter: `saturate(200%) blur(30px)`,
+        sx={({ palette: { gradients, white }, functions: { rgba } }) => ({
+          backgroundImage: `linear-gradient(90deg, ${gradients.info.main}, ${rgba(white.main, 0.9)})`,
+          backdropFilter: `saturate(200%) blur(15px)`,
+          border: `1px solid ${rgba(white.main, 0.4)}`,
         })}
       >
         <SoftBox to="/" py={0.75} lineHeight={1}>
@@ -80,7 +81,7 @@ function DefaultNavbar({ action }) {
           />
           <DefaultNavbarLink
             icon="key"
-            name="Iniciar sesi&oacute;n"
+            name="Iniciar sesión"
             route="/authentication/sign-in"
           />
         </SoftBox>

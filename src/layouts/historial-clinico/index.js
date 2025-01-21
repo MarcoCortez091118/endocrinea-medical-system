@@ -231,217 +231,230 @@ function HistorialClinico() {
       <DashboardNavbar />
       <SoftBox py={3}>
         <SoftBox mb={3}>
-          <Card>
-            <SoftBox display="flex" flexDirection="column" alignItems="flex-start" p={3}>
-              <SoftTypography variant="h4">Historia Clínica Médica -</SoftTypography>
-              <SoftTypography variant="h4">Endocrinea Care</SoftTypography>
-              <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
+          <Card sx={{ p: 3, mb: 2 }}>
+              <SoftTypography variant="h5" mb={2}>Historia Clínica Médica -</SoftTypography>
+              <SoftTypography variant="h5" mb={2}>Endocrinea Care</SoftTypography>
+              <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
                 Estimado paciente los siguientes datos de contacto y antecedentes médicos recabados
                 en el presente documento serán utilizados para llenar su historial médico.
               </SoftTypography>
-              <SoftTypography variant="subtitle2" fontWeight="medium" mt={2}>
+              <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
                 Todos sus datos serán tratados con total confidencialidad, la información sera
                 utilizada única y exclusivamente para mejorar la calidad de la atención durante su
                 consulta y brindarle un mejor servicio.
               </SoftTypography>
-              <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
+              <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
                 Dra.Lizzette Pellegrin Quiroz
               </SoftTypography>
-              <SoftTypography variant="subtitle2" fontWeight="medium" mt={4}>
+              <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
                 Circuito Juan Pablo II. PB No. 3113. Colonia Fraccionamiento Las Ánimas, Puebla.
               </SoftTypography>
-            </SoftBox>
           </Card>
         </SoftBox>
+
+
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+
           <SoftBox mt={4}>
-            <Card>
-              <SoftBox p={3}>
-                <SoftBox mb={2}>
-                  <label htmlFor="email">Correo electrónico *</label>
-                  <textarea
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    rows="1"
-                    className="global-textarea"
-                  />
-                </SoftBox>
+  <Card>
+    <SoftBox p={3}>
+      {/* Campos del formulario */}
+      {[
+        {
+          id: "email",
+          label: "Correo electrónico *",
+          value: formData.email,
+          placeholder: "Ingrese su correo electrónico",
+          rows: 1,
+        },
+        {
+          id: "phoneNumber",
+          label: "Número telefónico con WhatsApp *",
+          value: formData.phoneNumber,
+          placeholder: "Ingrese su número telefónico",
+          rows: 1,
+        },
+        {
+          id: "fullName",
+          label: "Nombre completo (Nombre / Apellido paterno / Apellido materno) *",
+          value: formData.fullName,
+          placeholder: "Ingrese su nombre completo",
+          rows: 1,
+        },
+        {
+          id: "city",
+          label: "Ciudad o municipio de residencia actual *",
+          value: formData.city,
+          placeholder: "Ingrese su ciudad o municipio",
+          rows: 1,
+        },
+        {
+          id: "occupation",
+          label: "Ocupación *",
+          value: formData.occupation,
+          placeholder: "Ingrese su ocupación",
+          rows: 1,
+        },
+      ].map((field) => (
+        <SoftBox key={field.id} mb={2}>
+          <label htmlFor={field.id}>{field.label}</label>
+          <textarea
+            id={field.id}
+            name={field.id}
+            value={field.value}
+            onChange={handleChange}
+            required
+            rows={field.rows}
+            placeholder={field.placeholder}
+            style={{
+              width: "100%",
+              padding: "10px",
+              fontSize: "16px",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              resize: "none",
+            }}
+          />
+        </SoftBox>
+      ))}
 
-                <SoftBox mb={2}>
-                  <label htmlFor="phoneNumber">Numero teléfonico con WhatsApp *</label>
-                  <textarea
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    value={formData.phoneNumber}
-                    onChange={handleChange}
-                    required
-                    rows="1"
-                    className="global-textarea"
-                  />
-                </SoftBox>
+      <SoftBox mb={2}>
+        <label htmlFor="birthDate">Fecha de nacimiento *</label>
+        <TextField
+          id="birthDate"
+          name="birthDate"
+          type="date"
+          value={formData.birthDate}
+          onChange={handleChange}
+          required
+          fullWidth
+          InputLabelProps={{ shrink: true }}
+        />
+      </SoftBox>
 
-                <SoftBox mb={2}>
-                  <label htmlFor="fullName">
-                    Nombre completo (Nombre / Apellido paterno / Apellido materno) *
-                  </label>
-                  <textarea
-                    id="fullName"
-                    name="fullName"
-                    value={formData.fullName}
-                    onChange={handleChange}
-                    required
-                    rows="1"
-                    className="global-textarea"
-                  />
-                </SoftBox>
+      <SoftBox mb={2}>
+        <label htmlFor="age">Edad *</label>
+        <TextField
+          id="age"
+          name="age"
+          type="number"
+          value={formData.age}
+          onChange={handleChange}
+          required
+          fullWidth
+        />
+      </SoftBox>
 
-                <SoftBox mb={2}>
-                  <label htmlFor="birthDate">Fecha de nacimiento *</label>
-                  <TextField
-                    id="birthDate"
-                    name="birthDate"
-                    type="date"
-                    value={formData.birthDate}
-                    onChange={handleChange}
-                    required
-                    fullWidth
-                    InputLabelProps={{ shrink: true }}
-                  />
-                </SoftBox>
+      <SoftBox mb={2}>
+        <label htmlFor="maritalStatus">Estado civil *</label>
+        <RadioGroup
+          id="maritalStatus"
+          name="maritalStatus"
+          value={formData.maritalStatus}
+          onChange={handleChange}
+          required
+        >
+          {["Soltero(a)", "Casado(a)", "Unión libre", "Otros"].map((status) => (
+            <FormControlLabel key={status} value={status} control={<Radio />} label={status} />
+          ))}
+        </RadioGroup>
+      </SoftBox>
+      {formData.maritalStatus === "Otros" && (
+        <SoftBox mb={2}>
+          <textarea
+            id="otherStatus"
+            name="otherStatus"
+            placeholder="Especifique"
+            value={formData.otherStatus}
+            onChange={handleChange}
+            required
+            rows="1"
+            style={{
+              width: "100%",
+              padding: "10px",
+              fontSize: "16px",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              resize: "none",
+            }}
+          />
+        </SoftBox>
+      )}
 
-                <SoftBox mb={2}>
-                  <label htmlFor="age">Edad *</label>
-                  <TextField
-                    id="age"
-                    name="age"
-                    value={formData.age}
-                    onChange={handleChange}
-                    required
-                    fullWidth
-                    className="global-textarea"
-                  />
-                </SoftBox>
+      <SoftBox mb={2}>
+        <label htmlFor="religion">¿Su RELIGIÓN le impide comer algún tipo de alimento?</label>
+        <RadioGroup
+          id="religion"
+          name="religion"
+          value={formData.religion}
+          onChange={handleChange}
+          required
+        >
+          <FormControlLabel value="Si" control={<Radio />} label="Si" />
+          <FormControlLabel value="No" control={<Radio />} label="No" />
+        </RadioGroup>
+      </SoftBox>
+      {formData.religion === "Si" && (
+        <SoftBox mb={2}>
+          <textarea
+            id="otherReligion"
+            name="otherReligion"
+            placeholder="Especifique"
+            value={formData.otherReligion}
+            onChange={handleChange}
+            required
+            rows="1"
+            style={{
+              width: "100%",
+              padding: "10px",
+              fontSize: "16px",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              resize: "none",
+            }}
+          />
+        </SoftBox>
+      )}
 
-                <SoftBox mb={2}>
-                  <label htmlFor="city">Ciudad o municipio de residencia actual *</label>
-                  <textarea
-                    id="city"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleChange}
-                    required
-                    rows="1"
-                    className="global-textarea"
-                  />
-                </SoftBox>
+      <SoftBox mb={2}>
+        <label htmlFor="gender">Género</label>
+        <RadioGroup
+          id="gender"
+          name="gender"
+          value={formData.gender}
+          onChange={handleChange}
+          required
+        >
+          {["H", "M", "Otros"].map((gender) => (
+            <FormControlLabel key={gender} value={gender} control={<Radio />} label={gender} />
+          ))}
+        </RadioGroup>
+      </SoftBox>
+      {formData.gender === "Otros" && (
+        <SoftBox mb={2}>
+          <textarea
+            id="otherGender"
+            name="otherGender"
+            placeholder="Especifique"
+            value={formData.otherGender}
+            onChange={handleChange}
+            required
+            rows="1"
+            style={{
+              width: "100%",
+              padding: "10px",
+              fontSize: "16px",
+              border: "1px solid #ccc",
+              borderRadius: "4px",
+              resize: "none",
+            }}
+          />
+        </SoftBox>
+      )}
+    </SoftBox>
+  </Card>
+</SoftBox>
 
-                <SoftBox mb={2}>
-                  <label htmlFor="occupation">Ocupación *</label>
-                  <textarea
-                    id="occupation"
-                    name="occupation"
-                    value={formData.occupation}
-                    onChange={handleChange}
-                    required
-                    rows="1"
-                    className="global-textarea"
-                  />
-                </SoftBox>
-
-                <SoftBox mb={2}>
-                  <label htmlFor="maritalStatus">Estado civil *</label>
-                  <RadioGroup
-                    id="maritalStatus"
-                    name="maritalStatus"
-                    value={formData.maritalStatus}
-                    onChange={handleChange}
-                    required
-                  >
-                    <FormControlLabel value="Soltero(a)" control={<Radio />} label="Soltero(a)" />
-                    <FormControlLabel value="Casado(a)" control={<Radio />} label="Casado(a)" />
-                    <FormControlLabel value="Union Libre" control={<Radio />} label="Unión libre" />
-                    <FormControlLabel value="Otros" control={<Radio />} label="Otros" />
-                  </RadioGroup>
-                </SoftBox>
-                {formData.maritalStatus === "Otros" && (
-                  <SoftBox mb={2}>
-                    <textarea
-                      id="otherStatus"
-                      name="otherStatus"
-                      placeholder="Especifique"
-                      value={formData.otherStatus}
-                      onChange={handleChange}
-                      required
-                      rows="1"
-                      className="global-textarea"
-                    />
-                  </SoftBox>
-                )}
-
-                <SoftBox mb={2}>
-                  <label htmlFor="religion">
-                    ¿Su RELIGIÓN le impide comer algún tipo de alimento?
-                  </label>
-                  <RadioGroup
-                    id="religion"
-                    name="religion"
-                    value={formData.religion}
-                    onChange={handleChange}
-                    required
-                  >
-                    <FormControlLabel value="Si" control={<Radio />} label="Si" />
-                    <FormControlLabel value="No" control={<Radio />} label="No" />
-                  </RadioGroup>
-                </SoftBox>
-                {formData.religion === "Si" && (
-                  <SoftBox mb={2}>
-                    <textarea
-                      id="otherReligion"
-                      name="otherReligion"
-                      placeholder="Especifique"
-                      value={formData.otherReligion}
-                      onChange={handleChange}
-                      required
-                      rows="1"
-                      className="global-textarea"
-                    />
-                  </SoftBox>
-                )}
-
-                <SoftBox mb={2}>
-                  <label htmlFor="gender">Genero</label>
-                  <RadioGroup
-                    id="gender"
-                    name="gender"
-                    value={formData.gender}
-                    onChange={handleChange}
-                    required
-                  >
-                    <FormControlLabel value="H" control={<Radio />} label="H" />
-                    <FormControlLabel value="M" control={<Radio />} label="M" />
-                    <FormControlLabel value="Otros" control={<Radio />} label="Otros" />
-                  </RadioGroup>
-                </SoftBox>
-                {formData.gender === "Otros" && (
-                  <SoftBox mb={2}>
-                    <textarea
-                      id="otherGender"
-                      name="otherGender"
-                      placeholder="Especifique"
-                      value={formData.otherGender}
-                      onChange={handleChange}
-                      required
-                      rows="1"
-                      className="global-textarea"
-                    />
-                  </SoftBox>
-                )}
-              </SoftBox>
-            </Card>
-          </SoftBox>
 
           <SoftBox mt={4}>
             <Card>

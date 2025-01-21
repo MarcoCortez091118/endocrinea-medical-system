@@ -12,12 +12,12 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Box from '@mui/material/Box';
-import NativeSelect from '@mui/material/NativeSelect';
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import Box from "@mui/material/Box";
+import NativeSelect from "@mui/material/NativeSelect";
 
 function HistorialEvolucion() {
   const [formData, setFormData] = useState({
@@ -28,7 +28,7 @@ function HistorialEvolucion() {
     comments: "",
     prognostic: "",
   });
-  const [age, setAge] = React.useState('');
+  const [age, setAge] = React.useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,124 +61,57 @@ function HistorialEvolucion() {
       <SoftBox py={3}>
         <SoftBox mb={3}>
           <SoftBox mb={3}>
-            <Card>
-              <SoftBox display="flex" flexDirection="column" alignItems="flex-start" p={3}>
-                <SoftTypography variant="h4">Nota de evolución -</SoftTypography>
-                <SoftTypography variant="h4">Endocrinea Care</SoftTypography>
-                <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
-                  Estimado paciente los siguientes datos de contacto y antecedentes médicos recabados
-                  en el presente documento serán utilizados para llenar su historial médico.
-                </SoftTypography>
-                <SoftTypography variant="subtitle2" fontWeight="medium" mt={2}>
-                  Todos sus datos serán tratados con total confidencialidad, la información sera
-                  utilizada única y exclusivamente para mejorar la calidad de la atención durante su
-                  consulta y brindarle un mejor servicio.
-                </SoftTypography>
-                {/* 
-                <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
-                  Dr. Francisco Javier Porquillo. C.P. 10550033 / 12467290 <br />
-                  Dra. Carolain Ulrrich García. C.P. 13035875 <br />
-                  Dra. Elizabeth Raquel Juárez Juárez. C.P. 1075112 / 12550599 <br />
-                  Dra. Isbeth Gómez Díaz. C.P. 12611063 <br />
-                  Dra. Victoria Sandoval Nava. C.P. 10101155 / 12655823
-                </SoftTypography>
-                */}
-                <SoftTypography variant="subtitle2" fontWeight="medium" mt={4}>
-                  Circuito Juan Pablo II. PB No. 3113. Colonia Fraccionamiento Las Ánimas, Puebla.
-                </SoftTypography>
-              </SoftBox>
+            <Card sx={{ p: 3, mb: 2 }}>
+              <SoftTypography variant="h5" mb={2}>
+                Nota de evolución - Endocrinea Care
+              </SoftTypography>
+              <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
+                Los siguientes datos serán utilizados para llenar su historial médico. La
+                información será tratada con total confidencialidad.
+              </SoftTypography>
             </Card>
-          </SoftBox>
 
-          <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-            <SoftBox mt={4}>
-              <Card>
-                <SoftBox p={3}>
-                  <SoftBox mb={2}>
-                  <Box
-                    sx={{ py: 2, display: 'grid', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}
-                  >
-                    <label htmlFor="presentation">1. Presentación *</label>
-                    <textarea
-                      id="presentation"
-                      name="presentation"
-                      value={formData.presentation}
-                      onChange={handleChange}
-                      required
-                      rows="2"
-                      className="global-textarea"
-                    />
-                    </Box>
-                  </SoftBox>
+            <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+              <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
+                <SoftTypography variant="h6" color="secondary" mb={2}>
+                  Información del paciente
+                </SoftTypography>
 
-                  <SoftBox mb={2}>
-                    <label htmlFor="evolution">2. Evolución  *</label>
-                    <textarea
-                      id="evolution"
-                      name="evolution"
-                      value={formData.evolution}
-                      onChange={handleChange}
-                      required
-                      rows="2"
-                      className="global-textarea"
-                    />
-                  </SoftBox>
-
-                  <SoftBox mb={2}>
-                    <label htmlFor="notes">3. Notas de la sesión *</label>
-                    <textarea
-                      id="notes"
-                      name="notes"
-                      value={formData.notes}
-                      onChange={handleChange}
-                      required
-                      rows="2"
-                      className="global-textarea"
-                    />
-                  </SoftBox>
-
-                  <SoftBox mb={2}>
-                    <label htmlFor="tasks">4. Tareas de seguimiento *</label>
-                    <textarea
-                      id="tasks"
-                      name="tasks"
-                      value={formData.tasks}
-                      onChange={handleChange}
-                      required
-                      rows="2"
-                      className="global-textarea"
-                    />
-                  </SoftBox>
-
-                  <SoftBox mb={2}>
-                    <label htmlFor="comments">5. Comentarios / Observaciones *</label>
-                    <textarea
-                      id="comments"
-                      name="comments"
-                      value={formData.comments}
-                      onChange={handleChange}
-                      required
-                      rows="2"
-                      className="global-textarea"
-                    />
-                  </SoftBox>
-
-                  <SoftBox mb={2}>
-                    <label htmlFor="prognostic">6. Pronostico *</label>
-                    <textarea
-                      id="prognostic"
-                      name="prognostic"
-                      value={formData.prognostic}
-                      onChange={handleChange}
-                      required
-                      rows="2"
-                      className="global-textarea"
-                    />
-                  </SoftBox>
+                <SoftBox
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, // Una columna en pantallas pequeñas y dos en pantallas medianas o más grandes
+                    gap: 3,
+                  }}
+                >
+                  {[
+                    { id: "presentation", label: "1. Presentación *" },
+                    { id: "evolution", label: "2. Evolución *" },
+                    { id: "notes", label: "3. Notas de la sesión *" },
+                    { id: "tasks", label: "4. Tareas de seguimiento *" },
+                    { id: "comments", label: "5. Comentarios / Observaciones *" },
+                    { id: "prognostic", label: "6. Pronóstico *" },
+                  ].map((field) => (
+                    <SoftBox key={field.id}>
+                      <label htmlFor={field.id}>
+                        <SoftTypography variant="body1" color="textPrimary" fontWeight="bold">
+                          {field.label}
+                        </SoftTypography>
+                      </label>
+                      <textarea
+                        id={field.id}
+                        name={field.id}
+                        value={formData[field.id]}
+                        onChange={handleChange}
+                        className="global-textarea"
+                        rows={3}
+                      />
+                    </SoftBox>
+                  ))}
                 </SoftBox>
-              </Card>
+              </SoftBox>
 
-              <SoftBox mt={2}>
+              <SoftBox textAlign="center">
                 <Button
                   type="submit"
                   variant="contained"
@@ -190,10 +123,8 @@ function HistorialEvolucion() {
                   Enviar
                 </Button>
               </SoftBox>
-
-            </SoftBox>
-          </form>
-
+            </form>
+          </SoftBox>
         </SoftBox>
       </SoftBox>
       <Footer />

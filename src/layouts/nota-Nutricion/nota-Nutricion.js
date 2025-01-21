@@ -4,20 +4,20 @@ import Card from "@mui/material/Card";
 import {
   TextField,
   MenuItem,
-  Select as MuiSelect,
+  Select,
   Input,
   Grid,
   Button,
-  FormControl as MuiFormControl,
+  FormControl,
   InputLabel,
-  FormControlLabel as MuiFormControlLabel,
+  FormControlLabel,
   Radio,
   RadioGroup,
   DatePicker,
   Checkbox,
-  Box as MuiBox,
+  Box,
   NativeSelect,
-  FormLabel as MuiFormLabel,
+  FormLabel,
   Table,
   TableBody,
   TableCell,
@@ -26,8 +26,13 @@ import {
   TableRow,
   Paper,
   tableCellClasses,
-  Box,
 } from "@mui/material";
+
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import Typography from '@mui/material/Typography';
+
 import { styled } from "@mui/system";
 
 // Soft UI Dashboard React components
@@ -218,7 +223,6 @@ function NotaNutricional() {
 
   // Mapeo de nombres legibles para las claves
   const visibleFieldsMediciones = {
-    fechaMediciones: "Fecha",
     cintura: "Cintura",
     abdomen: "Abdomen",
     cadera: "Cadera",
@@ -299,47 +303,102 @@ function NotaNutricional() {
   };
   
 
+   const steps = ['Subjetivo', 'Objetivo', 'Evaluación dietética', 'Exploración Física ', 'Plan'];
+  
+    const [activeStep, setActiveStep] = React.useState(0);
+    const [skipped, setSkipped] = React.useState(new Set());
+  
+    const isStepOptional = (step) => {
+      return step === 1;
+    };
+  
+    const isStepSkipped = (step) => {
+      return skipped.has(step);
+    };
+  
+    const handleNext = () => {
+      let newSkipped = skipped;
+      if (isStepSkipped(activeStep)) {
+        newSkipped = new Set(newSkipped.values());
+        newSkipped.delete(activeStep);
+      }
+  
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      setSkipped(newSkipped);
+    };
+  
+    const handleBack = () => {
+      setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
+  
+    const handleSkip = () => {
+      if (!isStepOptional(activeStep)) {
+        // You probably want to guard against something like this,
+        // it should never occur unless someone's actively trying to break something.
+        throw new Error("You can't skip a step that isn't optional.");
+      }
+  
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      setSkipped((prevSkipped) => {
+        const newSkipped = new Set(prevSkipped.values());
+        newSkipped.add(activeStep);
+        return newSkipped;
+      });
+    };
+  
+    const handleReset = () => {
+      setActiveStep(0);
+    };
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <SoftBox py={3}>
         <SoftBox mb={3}>
-          <Card>
-            <SoftBox display="flex" flexDirection="column" alignItems="flex-start" p={3}>
-              <SoftTypography variant="h4">Nota Nutricional -</SoftTypography>
-              <SoftTypography variant="h4">Endocrinea Care</SoftTypography>
-              <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
-                Estimado paciente los siguientes datos de contacto y antecedentes médicos recabados
-                en el presente documento serán utilizados para llenar su historial médico.
-              </SoftTypography>
-              <SoftTypography variant="subtitle2" fontWeight="medium" mt={2}>
-                Todos sus datos serán tratados con total confidencialidad, la información sera
-                utilizada única y exclusivamente para mejorar la calidad de la atención durante su
-                consulta y brindarle un mejor servicio.
-              </SoftTypography>
-              <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
-                Dra. Elizabeth Raquel Juárez <br />
-                Mtra. Isbeth Gómez Díaz
-                <br />
-                LNC Laura Elizabeth Jiménez Criollo (Licenciada en Nutrición Clinica)
-                <br />
-                Dra. Victoria Sandoval Nava
-                <br />
-              </SoftTypography>
-              <SoftTypography variant="subtitle2" fontWeight="medium" mt={4}>
-                Circuito Juan Pablo II. PB No. 3113. Colonia Fraccionamiento Las Ánimas, Puebla.
-              </SoftTypography>
-            </SoftBox>
+          <Card sx={{p: 3, mb: 2 }}>
+            <SoftTypography variant="h5" mb={2}>Nota Nutricional -</SoftTypography>
+            <SoftTypography variant="h5" mb={2}>Endocrinea Care</SoftTypography>
+            <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
+              Estimado paciente los siguientes datos de contacto y antecedentes médicos recabados
+              en el presente documento serán utilizados para llenar su historial médico.
+            </SoftTypography>
+            <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
+              Todos sus datos serán tratados con total confidencialidad, la información sera
+              utilizada única y exclusivamente para mejorar la calidad de la atención durante su
+              consulta y brindarle un mejor servicio.
+            </SoftTypography>
+            <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
+              Dra. Elizabeth Raquel Juárez <br />
+              Mtra. Isbeth Gómez Díaz
+              <br />
+              LNC Laura Elizabeth Jiménez Criollo (Licenciada en Nutrición Clinica)
+              <br />
+              Dra. Victoria Sandoval Nava
+              <br />
+            </SoftTypography>
+            <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
+              Circuito Juan Pablo II. PB No. 3113. Colonia Fraccionamiento Las Ánimas, Puebla.
+            </SoftTypography>
           </Card>
         </SoftBox>
+
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
           {/* Generales */}
-          <SoftBox mt={4}>
-            <Card>
-              <SoftBox p={3}>
-                <SoftTypography variant="h5">Subjetivo</SoftTypography>
+          {activeStep === 0 && (
+          <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
+            <SoftTypography variant="h5" color="secondary" mb={3}>
+              Subjetivo
+            </SoftTypography>
+            
+            {/* Síntomas */}
+            <Grid container spacing={2}>
+              {/* Síntomas */}
+              <Grid item xs={12} md={6}>
                 <SoftBox mb={2}>
-                  <label htmlFor="sintomas" style={{ display: "block", marginBottom: "8px" }}>
+                  <label
+                    htmlFor="sintomas"
+                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
+                  >
                     Síntomas:
                   </label>
                   <textarea
@@ -351,8 +410,15 @@ function NotaNutricional() {
                     style={{ width: "100%", height: "40px" }}
                   />
                 </SoftBox>
+              </Grid>
+
+              {/* Energía */}
+              <Grid item xs={12} md={6}>
                 <SoftBox mb={2}>
-                  <label htmlFor="energia" style={{ display: "block", marginBottom: "8px" }}>
+                  <label
+                    htmlFor="energia"
+                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
+                  >
                     Energía:
                   </label>
                   <textarea
@@ -364,376 +430,441 @@ function NotaNutricional() {
                     style={{ width: "100%", height: "40px" }}
                   />
                 </SoftBox>
+              </Grid>
+            </Grid>
 
-                <SoftBox mb={2}>
-                  <label htmlFor="sintomasGastrointestinales">Sintomas gastrointestinales:</label>
-                  <RadioGroup
-                    id="sintomasGastrointestinales"
-                    name="sintomasGastrointestinales"
-                    value={formData.sintomasGastrointestinales}
-                    onChange={handleChange}
-                    required
-                    >
-                    <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
-                    </RadioGroup>
-                    {formData.sintomasGastrointestinales === "Si" && (
-                    <>
-                        <SoftBox ml={4}>
-                        <label>Síntomas:</label>
-                        <MuiFormControlLabel
-                            control={
-                            <Checkbox
-                                checked={formData.detalleSintomas?.includes("Estreñimiento")}
-                                onChange={(e) => handleCheckboxChange1(e, "Estreñimiento")}
-                            />
-                            }
-                            label="Estreñimiento"
+
+            {/* Síntomas gastrointestinales */}
+            <SoftBox mb={2}>
+              <label htmlFor="sintomasGastrointestinales" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+                Síntomas gastrointestinales:
+              </label>
+              <RadioGroup
+                id="sintomasGastrointestinales"
+                name="sintomasGastrointestinales"
+                value={formData.sintomasGastrointestinales}
+                onChange={handleChange}
+                required
+              >
+                <FormControlLabel value="Si" control={<Radio />} label="Sí" />
+                {formData.sintomasGastrointestinales === "Si" && (
+                  <SoftBox ml={4}>
+                    {/* Estreñimiento */}
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={formData.detalleSintomas?.includes("Estreñimiento")}
+                          onChange={(e) => handleCheckboxChange1(e, "Estreñimiento")}
                         />
-
-                        {formData.detalleSintomas?.includes("Estreñimiento") && (
-                        <SoftBox ml={4}>
-                            <label htmlFor="frecuenciaEstrenimiento">Frecuencia (Estreñimiento):</label>
-                            <textarea
-                            id="frecuenciaEstrenimiento"
-                            name="frecuenciaEstrenimiento"
-                            value={formData.frecuenciaEstrenimiento || ""}
-                            onChange={handleChange}
-                            className="global-textarea"
-                            />
-                        </SoftBox>
-                        )}
-
-                        <MuiFormControlLabel
-                            control={
-                            <Checkbox
-                                checked={formData.detalleSintomas?.includes("Diarréa")}
-                                onChange={(e) => handleCheckboxChange1(e, "Diarréa")}
-                            />
-                            }
-                            label="Diarréa"
+                      }
+                      label="Estreñimiento"
+                    />
+                    {formData.detalleSintomas?.includes("Estreñimiento") && (
+                      <SoftBox ml={4}>
+                        <label htmlFor="frecuenciaEstrenimiento">Frecuencia (Estreñimiento):</label>
+                        <textarea
+                          id="frecuenciaEstrenimiento"
+                          name="frecuenciaEstrenimiento"
+                          value={formData.frecuenciaEstrenimiento || ""}
+                          onChange={handleChange}
+                          className="global-textarea"
+                          style={{ width: "100%", height: "40px" }}
                         />
-                        {formData.detalleSintomas?.includes("Diarréa") && (
-                        <SoftBox ml={4}>
-                            <label htmlFor="frecuenciaDiarrea">Frecuencia (Diarréa):</label>
-                            <textarea
-                            id="frecuenciaDiarrea"
-                            name="frecuenciaDiarrea"
-                            value={formData.frecuenciaDiarrea || ""}
-                            onChange={handleChange}
-                            className="global-textarea"
-                            />
-                        </SoftBox>
-                        )}
-                        </SoftBox>
-                        
-                    </>
+                      </SoftBox>
                     )}
 
+                    {/* Diarrea */}
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={formData.detalleSintomas?.includes("Diarréa")}
+                          onChange={(e) => handleCheckboxChange1(e, "Diarréa")}
+                        />
+                      }
+                      label="Diarréa"
+                    />
+                    {formData.detalleSintomas?.includes("Diarréa") && (
+                      <SoftBox ml={4}>
+                        <label htmlFor="frecuenciaDiarrea">Frecuencia (Diarréa):</label>
+                        <textarea
+                          id="frecuenciaDiarrea"
+                          name="frecuenciaDiarrea"
+                          value={formData.frecuenciaDiarrea || ""}
+                          onChange={handleChange}
+                          className="global-textarea"
+                          style={{ width: "100%", height: "40px" }}
+                        />
+                      </SoftBox>
+                    )}
+                  </SoftBox>
+                )}
+                <FormControlLabel value="No" control={<Radio />} label="No" />
+              </RadioGroup>
+            </SoftBox>
 
-                  <RadioGroup
-                    id="sintomasGastrointestinales"
-                    name="sintomasGastrointestinales"
-                    value={formData.sintomasGastrointestinales}
-                    onChange={handleChange}
-                    required
-                  >
-                    <MuiFormControlLabel value="No" control={<Radio />} label="No" />
-                  </RadioGroup>
-                </SoftBox>
+            {/* Enfermedades */}
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={4}>
                 <SoftBox mb={2}>
-                  <label>Enfermedades:</label>
+                  <label
+                    htmlFor="padecimientosActuales"
+                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
+                  >
+                    Enfermedades:
+                  </label>
                   <textarea
-                    id="padecimientoActuales"
-                    name="padecimientoActuales"
+                    id="padecimientosActuales"
+                    name="padecimientosActuales"
                     placeholder="Especifique"
                     value={formData.padecimientosActuales}
                     onChange={handleChange}
-                    required
-                    rows="1"
                     className="global-textarea"
+                    style={{ width: "100%", height: "40px" }}
                   />
                 </SoftBox>
+              </Grid>
+
+              {/* Complicaciones */}
+              <Grid item xs={12} md={4}>
                 <SoftBox mb={2}>
-                  <label>Complicaciones:</label>
+                  <label
+                    htmlFor="complicaciones"
+                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
+                  >
+                    Complicaciones:
+                  </label>
                   <textarea
                     id="complicaciones"
                     name="complicaciones"
                     placeholder="Especifique"
                     value={formData.complicaciones}
                     onChange={handleChange}
-                    required
-                    rows="1"
                     className="global-textarea"
+                    style={{ width: "100%", height: "40px" }}
                   />
                 </SoftBox>
+              </Grid>
+
+              {/* Líquidos */}
+              <Grid item xs={12} md={4}>
                 <SoftBox mb={2}>
-                  <label>Liquidos:</label>
+                  <label
+                    htmlFor="liquidos"
+                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
+                  >
+                    Líquidos:
+                  </label>
                   <textarea
                     id="liquidos"
                     name="liquidos"
                     placeholder="Especifique"
                     value={formData.liquidos}
                     onChange={handleChange}
-                    required
+                    className="global-textarea"
+                    style={{ width: "100%", height: "40px" }}
+                  />
+                </SoftBox>
+              </Grid>
+            </Grid>
+
+          </SoftBox>
+          )}
+            
+
+          {activeStep === 1 && (
+          <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
+            <SoftTypography variant="h5" color="secondary" mb={3}>
+              Objetivo
+            </SoftTypography>
+            
+            <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
+              Ejercicio:
+            </SoftTypography>
+
+            <SoftBox mb={2}>
+              <Grid container spacing={2} alignItems="center">
+                {/* Tipo de ejercicio */}
+                <Grid item xs={12} sm={4}>
+                  <label htmlFor="TiposEjercicios" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+                    Tipo de ejercicio:
+                  </label>
+                  <textarea
+                    id="TiposEjercicios"
+                    name="TiposEjercicios"
+                    placeholder="Especifique"
+                    value={formData.TiposEjercicios}
+                    onChange={handleChange}
                     rows="1"
+                    className="global-textarea"
+                    style={{ width: "100%", height: "40px" }}
+                  />
+                </Grid>
+
+                {/* Días a la semana */}
+                <Grid item xs={12} sm={4}>
+                  <label htmlFor="ejercicioDiasSemana" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+                    Días a la semana:
+                  </label>
+                  <textarea
+                    id="ejercicioDiasSemana"
+                    name="ejercicioDiasSemana"
+                    placeholder="Especifique"
+                    value={formData.ejercicioDiasSemana}
+                    onChange={handleChange}
+                    rows="1"
+                    className="global-textarea"
+                    style={{ width: "100%", height: "40px" }}
+                  />
+                </Grid>
+
+                {/* Intensidad */}
+                <Grid item xs={12} sm={4}>
+                  <label htmlFor="ejercicioIntensidad" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+                    Intensidad:
+                  </label>
+                  <textarea
+                    id="ejercicioIntensidad"
+                    name="ejercicioIntensidad"
+                    placeholder="Especifique"
+                    value={formData.ejercicioIntensidad}
+                    onChange={handleChange}
+                    rows="1"
+                    className="global-textarea"
+                    style={{ width: "100%", height: "40px" }}
+                  />
+                </Grid>
+              </Grid>
+            </SoftBox>
+          </SoftBox>
+          )}
+
+          
+          {activeStep === 2 && (
+          <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
+            <SoftTypography variant="h5" color="secondary" mb={3}>Evaluación dietética</SoftTypography>
+
+            <SoftTypography variant="subtitle2" sx={{ fontWeight: "bold" }} mb={2}>
+              RECORDATORIO DE 24 HORAS
+            </SoftTypography>
+
+            <Grid container spacing={2}>
+              {/* Desayuno */}
+              <Grid item xs={12} sm={6}>
+                <SoftBox mb={2}>
+                  <label htmlFor="desayuno" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+                    Desayuno:
+                  </label>
+                  <textarea
+                    id="desayuno"
+                    name="desayuno"
+                    placeholder="Especifique"
+                    value={formData.desayuno}
+                    onChange={handleChange}
+                    required
+                    rows="3"
                     className="global-textarea"
                   />
                 </SoftBox>
-              </SoftBox>
-            </Card>
-          </SoftBox>
+              </Grid>
 
-          <SoftBox mt={4}>
-            <Card>
-              <SoftBox p={3}>
-                <SoftTypography variant="h5">Objetivo</SoftTypography>
-                <SoftTypography variant="subtitle2">Ejercicio:</SoftTypography>
+              {/* Colación 1 */}
+              <Grid item xs={12} sm={6}>
                 <SoftBox mb={2}>
-                  <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={12} sm={4}>
-                      <label>Tipo de ejercicio:</label>
-                      <textarea
-                        id="TiposEjercicios"
-                        name="TiposEjercicios"
-                        placeholder="Especifique"
-                        value={formData.TiposEjercicios}
-                        onChange={handleChange}
-                        rows="1"
-                        className="global-textarea"
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                      <label>Días a la semana:</label>
-                      <textarea
-                        id="ejercicioDiasSemana"
-                        name="ejercicioDiasSemana"
-                        placeholder="Especifique"
-                        value={formData.ejercicioDiasSemana}
-                        onChange={handleChange}
-                        rows="1"
-                        className="global-textarea"
-                      />
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                      <label>Intensidad:</label>
-                      <textarea
-                        id="ejercicioIntensidad"
-                        name="ejercicioIntensidad"
-                        placeholder="Especifique"
-                        value={formData.ejercicioIntensidad}
-                        onChange={handleChange}
-                        rows="1"
-                        className="global-textarea"
-                      />
-                    </Grid>
-                  </Grid>
+                  <label htmlFor="colacion1" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+                    Colación:
+                  </label>
+                  <textarea
+                    id="colacion1"
+                    name="colacion1"
+                    placeholder="Especifique"
+                    value={formData.colacion1}
+                    onChange={handleChange}
+                    required
+                    rows="3"
+                    className="global-textarea"
+                  />
                 </SoftBox>
-              </SoftBox>
-            </Card>
-          </SoftBox>
+              </Grid>
 
-          {/* Evaluacion dietetica */}
-          <SoftBox mt={4}>
-            <Card>
-              <SoftBox p={3}>
+              {/* Comida */}
+              <Grid item xs={12} sm={6}>
                 <SoftBox mb={2}>
-                  <SoftTypography variant="h4">Evaluación dietética</SoftTypography>
-                  <SoftTypography variant="subtitle2" sx={{ fontWeight: "bold" }} mt={3}>
-                    RECORDATORIO DE 24 HORAS
-                  </SoftTypography>
-                  <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={12} sm={6}>
-                      <SoftBox mb={2}>
-                        <label>Desayuno:</label>
-                        <textarea
-                          id="desayuno"
-                          name="desayuno"
-                          placeholder="Especifique"
-                          value={formData.desayuno}
-                          onChange={handleChange}
-                          required
-                          rows="1"
-                          className="global-textarea"
-                        />
-                      </SoftBox>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <SoftBox mb={2}>
-                        <label>Colacion:</label>
-                        <textarea
-                          id="colacion1"
-                          name="colacion1"
-                          placeholder="Especifique"
-                          value={formData.colacion1}
-                          onChange={handleChange}
-                          required
-                          rows="1"
-                          className="global-textarea"
-                        />
-                      </SoftBox>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <SoftBox mb={2}>
-                        <label>Comida:</label>
-                        <textarea
-                          id="comida"
-                          name="comida"
-                          placeholder="Especifique"
-                          value={formData.comina}
-                          onChange={handleChange}
-                          required
-                          rows="1"
-                          className="global-textarea"
-                        />
-                      </SoftBox>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <SoftBox mb={2}>
-                        <label>Colacion 2:</label>
-                        <textarea
-                          id="colacion2"
-                          name="colacion2"
-                          placeholder="Especifique"
-                          value={formData.colacion2}
-                          onChange={handleChange}
-                          required
-                          rows="1"
-                          className="global-textarea"
-                        />
-                      </SoftBox>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <SoftBox mb={2}>
-                        <label>Extras:</label>
-                        <textarea
-                          id="extras"
-                          name="extras"
-                          placeholder="Especifique"
-                          value={formData.extras}
-                          onChange={handleChange}
-                          required
-                          rows="1"
-                          className="global-textarea"
-                        />
-                      </SoftBox>
-                    </Grid>
-                  </Grid>
+                  <label htmlFor="comida" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+                    Comida:
+                  </label>
+                  <textarea
+                    id="comida"
+                    name="comida"
+                    placeholder="Especifique"
+                    value={formData.comida}
+                    onChange={handleChange}
+                    required
+                    rows="3"
+                    className="global-textarea"
+                  />
                 </SoftBox>
-              </SoftBox>
-            </Card>
-          </SoftBox>
+              </Grid>
 
+              {/* Colación 2 */}
+              <Grid item xs={12} sm={6}>
+                <SoftBox mb={2}>
+                  <label htmlFor="colacion2" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+                    Colación 2:
+                  </label>
+                  <textarea
+                    id="colacion2"
+                    name="colacion2"
+                    placeholder="Especifique"
+                    value={formData.colacion2}
+                    onChange={handleChange}
+                    required
+                    rows="3"
+                    className="global-textarea"
+                  />
+                </SoftBox>
+              </Grid>
+
+              {/* Extras */}
+              <Grid item xs={12} sm={6}>
+                <SoftBox mb={2}>
+                  <label htmlFor="extras" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+                    Extras:
+                  </label>
+                  <textarea
+                    id="extras"
+                    name="extras"
+                    placeholder="Especifique"
+                    value={formData.extras}
+                    onChange={handleChange}
+                    required
+                    rows="3"
+                    className="global-textarea"
+                  />
+                </SoftBox>
+              </Grid>
+            </Grid>
+          </SoftBox>
+          )}
           {/* mediciones */}
-          <SoftBox mt={4}>
-            <Card>
-              <SoftBox p={3}>
-                <SoftBox mb={2}>
-                  <SoftBox mb={2}>
-                    {/* Tabla de mediciones */}
-                    <div className="overflow-x-auto mt-4">
-                      <h2 className="text-md font-bold">Exploración Física (antropometría):</h2>
-                      <TableContainer component={Paper}>
-                        <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                          <TableBody>
-                            <StyledTableRow>
-                              <StyledTableCell component="th" scope="row">
-                                Fecha
-                              </StyledTableCell>
-                              <StyledTableCell align="center">{actualDate}</StyledTableCell>
-                              {datesMediciones.map((date, colIndex) => (
-                                <StyledTableCell key={`date-col-${colIndex}`} align="center">
-                                  {date}
-                                </StyledTableCell>
-                              ))}
-                            </StyledTableRow>
-                            {Object.keys(visibleFieldsMediciones).map((measurement, rowIndex) => (
-                              <StyledTableRow key={measurement}>
-                                <StyledTableCell component="th" scope="row">
-                                  {visibleFieldsMediciones[measurement]}
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                  <input
-                                    type="text"
-                                    style={{
-                                      width: "100%",
-                                      padding: "8px",
-                                      border: "1px solid #ccc",
-                                      borderRadius: "4px",
-                                    }}
-                                    value={formData[measurement]}
-                                    onChange={(e) => handleInputChange(e, measurement)}
-                                  />
-                                </StyledTableCell>
-                                {columnsMediciones.map((col, colIndex) => (
-                                  <StyledTableCell key={`cell-${colIndex}-${rowIndex}`}>
-                                    <input
-                                      type="text"
-                                      style={{
-                                        width: "100%",
-                                        padding: "8px",
-                                        border: "1px solid #ccc",
-                                        borderRadius: "4px",
-                                      }}
-                                      value={col[rowIndex] || ""}
-                                      onChange={(e) =>
-                                        handleNewMeasurementChange(
-                                          e,
-                                          rowIndex,
-                                          colIndex,
-                                          "mediciones"
-                                        )
-                                      }
-                                    />
-                                  </StyledTableCell>
-                                ))}
-                              </StyledTableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
+          {activeStep === 3 && (
+          <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
+            {/* Título de la tabla */}
+            <SoftTypography variant="h5" color="secondary" mb={3}>
+              Exploración Física (antropometría)
+            </SoftTypography>
 
-                      <SoftBox mt={2}>
-                        <Button
-                          type="submit"
-                          variant="contained"
-                          color="primary"
-                          style={{ color: "white" }}
-                          onClick={() => addColumn("mediciones")}
-                          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
-                        >
-                          Agregar Columna
-                        </Button>
-                      </SoftBox>
-                    </div>
-                  </SoftBox>
-                </SoftBox>
-              </SoftBox>
-            </Card>
+            {/* Contenedor de la tabla */}
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 700 }} aria-label="tabla de mediciones">
+                <TableBody>
+                  {/* Fila de fechas */}
+                  <StyledTableRow>
+                    <StyledTableCell component="th" scope="row">
+                      Fecha
+                    </StyledTableCell>
+                    <StyledTableCell align="center">{actualDate}</StyledTableCell>
+                    {datesMediciones.map((date, colIndex) => (
+                      <StyledTableCell key={`date-col-${colIndex}`} align="center">
+                        {date}
+                      </StyledTableCell>
+                    ))}
+                  </StyledTableRow>
+
+                  {/* Filas dinámicas de mediciones */}
+                  {Object.keys(visibleFieldsMediciones).map((measurement, rowIndex) => (
+                    <StyledTableRow key={measurement}>
+                      {/* Nombre de la medición */}
+                      <StyledTableCell component="th" scope="row">
+                        {visibleFieldsMediciones[measurement]}
+                      </StyledTableCell>
+
+                      {/* Entrada para el valor actual */}
+                      <StyledTableCell>
+                        <input
+                          type="text"
+                          style={{
+                            width: "100%",
+                            padding: "8px",
+                            border: "1px solid #ccc",
+                            borderRadius: "4px",
+                          }}
+                          value={formData[measurement] || ""}
+                          onChange={(e) => handleInputChange(e, measurement)}
+                        />
+                      </StyledTableCell>
+
+                      {/* Columnas dinámicas de datos históricos */}
+                      {columnsMediciones.map((col, colIndex) => (
+                        <StyledTableCell key={`cell-${colIndex}-${rowIndex}`}>
+                          <input
+                            type="text"
+                            style={{
+                              width: "100%",
+                              padding: "8px",
+                              border: "1px solid #ccc",
+                              borderRadius: "4px",
+                            }}
+                            value={col[rowIndex] || ""}
+                            onChange={(e) =>
+                              handleNewMeasurementChange(e, rowIndex, colIndex, "mediciones")
+                            }
+                          />
+                        </StyledTableCell>
+                      ))}
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+
+            {/* Botón para agregar columna */}
+            <SoftBox mt={2}>
+              <Button
+                type="button"
+                variant="contained"
+                color="primary"
+                style={{ color: "white" }}
+                onClick={() => addColumn("mediciones")}
+              >
+                Agregar Columna
+              </Button>
+            </SoftBox>
           </SoftBox>
-
+          )}
           {/* Diagnostico */}
-          <SoftBox mt={4}>
-            <Card>
-              <SoftBox p={3}>
-                <SoftBox mb={2}>
-                  <SoftTypography variant="h4">Plan:</SoftTypography>
-                  <SoftBox mb={2}>
-                    <textarea
-                      id="diagnostico"
-                      value={formData.diagnostico}
-                      placeholder="Especifique"
-                      onChange={handleChange}
-                      required
-                      rows="4"
-                      className="global-textarea"
-                    />
-                  </SoftBox>
-                </SoftBox>
-              </SoftBox>
-            </Card>
-          </SoftBox>
+          {activeStep === 4 && (
+          <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
+            {/* Título del componente */}
+            <SoftTypography variant="h5" color="secondary" mb={3}>
+              Plan
+            </SoftTypography>
 
-          {/* Boton enviar */}
+            {/* Caja de texto */}
+            <SoftBox mb={2}>
+              <textarea
+                id="diagnostico"
+                name="diagnostico"
+                value={formData.diagnostico || ""}
+                placeholder="Especifique"
+                onChange={handleChange}
+                required
+                rows="4"
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  fontSize: "16px",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px",
+                  resize: "vertical", // Permite cambiar el tamaño solo en dirección vertical
+                  outline: "none",
+                }}
+              />
+            </SoftBox>
+          </SoftBox>
+          )}
+             
+
+          {/* Boton enviar 
           <SoftBox mt={2}>
             <Button
               type="submit"
@@ -745,7 +876,45 @@ function NotaNutricional() {
             >
               Enviar
             </Button>
-          </SoftBox>
+          </SoftBox> */}
+
+          {/* Stepper */}
+          <Stepper activeStep={activeStep}>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+
+          {/* Botones de navegación */}
+          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+            <Button
+              color="inherit"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{ mr: 1 }}
+            >
+              Atrás
+            </Button>
+            <Box sx={{ flex: '1 1 auto' }} />
+            {activeStep < steps.length - 1 ? (
+              <Button onClick={handleNext}>Siguiente</Button>
+            ) : (
+              <Button variant="contained" color="primary" onClick={handleSubmit}>
+                Enviar
+              </Button>
+            )}
+          </Box>
+          {/* Botón de reinicio */}
+          {activeStep === steps.length && (
+            <Box sx={{ textAlign: 'center', mt: 2 }}>
+              <Button variant="outlined" onClick={handleReset}>
+                Reiniciar
+              </Button>
+            </Box>
+          )}
+
         </form>
       </SoftBox>
       <Footer />

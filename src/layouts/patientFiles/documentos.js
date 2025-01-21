@@ -1,61 +1,127 @@
 import React from "react";
-import { Card, Divider, Table, TableBody, TableCell, TableHead, TableRow, IconButton, Button, Box, Typography } from "@mui/material";
+import {
+  Card,
+  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  IconButton,
+  Button,
+  Box,
+  Typography,
+} from "@mui/material";
 import { Download, Edit, Delete, Upload, Add } from "@mui/icons-material";
 
 function Documentos() {
   const files = [
-    { id: 1, name: "NOMBRE", author: "AUTHOR", date: "29/10/2024" },
-    { id: 2, name: "jUAN LOPEZ AH", author: "Dr Oscar Lopez", date: "02/08/2024" },
-    { id: 3, name: "JUAN LOPEZ rc", author: "Dr Oscar Lopez", date: "01/08/2024" },
+    { id: 1, name: "Juan Lopez ", author: "DR Bryan Pichon", date: "29/10/2024" },
+    { id: 2, name: "Juan Lopez AH", author: "Dr Oscar Lopez", date: "02/08/2024" },
+    { id: 3, name: "Juan Lopez RC", author: "Dr Oscar Lopez", date: "01/08/2024" },
   ];
 
-  const renderNoDocuments = () => (
-    <Box textAlign="center" py={5} style={{ backgroundColor: "#f9f9f9", borderRadius: "8px" }}>
-      <Typography variant="body1" color="textSecondary">
-        Todavía no hay documentos añadidos a la ficha de este paciente.
-      </Typography>
-      <Typography variant="body2" color="textSecondary" mt={2}>
-        Haga clic en &quot;Crear documento&quot; o arrastre aquí los documentos que desea subir.
-      </Typography>
-      <Button variant="contained" color="primary" startIcon={<Upload />} style={{ marginTop: "16px" }}>
-        Subir archivo
-      </Button>
-    </Box>
-  );
-
-  const renderDocumentsTable = () => (
-    <Table style={{ marginTop: "16px" }}>
-
-      <TableBody>
-        {files.map((file) => (
-          <TableRow key={file.id}>
-            <TableCell style={{ textAlign: "center" }}>
-              <Button variant="outlined" size="small" style={{ borderColor: "#1976d2", color: "#1976d2" }}>PDF</Button>
-            </TableCell>
-            <TableCell style={{ wordWrap: "break-word", whiteSpace: "normal" }}>{file.name}</TableCell>
-            <TableCell style={{ wordWrap: "break-word", whiteSpace: "normal" }}>{file.author}</TableCell>
-            <TableCell style={{ textAlign: "center" }}>{file.date}</TableCell>
-            <TableCell style={{ textAlign: "center" }}>
-              <IconButton color="primary"><Download /></IconButton>
-              <IconButton color="warning"><Edit /></IconButton>
-              <IconButton color="error"><Delete /></IconButton>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
-
   return (
-    <Card style={{ padding: "16px", borderRadius: "12px", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)" }}>
-      <Typography variant="h6" style={{ fontWeight: "bold", marginBottom: "16px" }}>Documentos</Typography>
+    <Card
+      style={{
+        padding: "16px",
+        borderRadius: "10px",
+        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+        margin: "0 auto",
+      }}
+    >
+      <Typography
+        variant="h6"
+        style={{
+          fontWeight: "bold",
+          marginBottom: "16px",
+          color: "#183A64",
+        }}
+      >
+        Documentos
+      </Typography>
       <Box display="flex" gap={2} mt={2} mb={2}>
-        <Button variant="outlined" startIcon={<Upload />}>Subir archivo</Button>
-        <Button variant="contained" color="success" startIcon={<Add />}>Crear documento</Button>
-        <Button variant="text" style={{ color: "#1976d2", fontWeight: "bold" }}>Solicitar resultados de una prueba</Button>
+        {/* Botón "Subir archivo" con gradiente */}
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<Upload />}
+          style={{
+            fontWeight: "bold",
+            textTransform: "capitalize",
+            boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)",
+             color: "#FFFFFF",
+          }}
+        >
+          Subir archivo
+        </Button>
+        {/* Botón "Crear documento" con color suave */}
+        <Button
+          variant="contained"
+          startIcon={<Add />}
+          style={{
+            backgroundColor: "#66bb6a", // Verde suave
+            color: "#FFFFFF",
+            fontWeight: "bold",
+            fontSize: "14px",
+            padding: "10px 20px",
+            textTransform: "capitalize",
+            boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)",
+          }}
+        >
+          Crear documento
+        </Button>
       </Box>
       <Divider />
-      {files.length > 0 ? renderDocumentsTable() : renderNoDocuments()}
+      <Table
+        style={{
+          marginTop: "16px",
+          borderCollapse: "collapse",
+          width: "100%",
+          textAlign: "center",
+        }}
+      >
+        <TableBody>
+          {files.map((file, index) => (
+            <TableRow
+              key={file.id}
+              style={{
+                backgroundColor: index % 2 === 0 ? "#f9f9f9" : "#ffffff",
+                borderBottom: "1px solid #e0e0e0",
+              }}
+            >
+              <TableCell style={{ textAlign: "center", padding: "12px", width: "15%" }}>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  style={{ borderColor: "#183A64", color: "#183A64" }}
+                >
+                  PDF
+                </Button>
+              </TableCell>
+              <TableCell style={{ padding: "12px", textAlign: "center", width: "30%" }}>
+                {file.name}
+              </TableCell>
+              <TableCell style={{ padding: "12px", textAlign: "center", width: "25%" }}>
+                {file.author}
+              </TableCell>
+              <TableCell style={{ textAlign: "center", padding: "12px", width: "15%" }}>
+                {file.date}
+              </TableCell>
+              <TableCell style={{ textAlign: "center", padding: "12px", width: "15%" }}>
+                <IconButton style={{ color: "#183A64" }}>
+                  <Download />
+                </IconButton>
+                <IconButton style={{ color: "#183A64" }}>
+                  <Edit />
+                </IconButton>
+                <IconButton color="error">
+                  <Delete />
+                </IconButton>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </Card>
   );
 }
