@@ -38,7 +38,7 @@ function PatientDetails() {
         return < HistorialEvolucion />;
       case 4:
         return <NotaClinico />;
-      case 4:
+      case 5:
         return < NotaNutricional />;  
       default:
         return null;
