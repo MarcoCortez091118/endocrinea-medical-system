@@ -17,8 +17,6 @@ import {
   Checkbox,
 } from "@mui/material";
 
-
-
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
@@ -34,131 +32,8 @@ import { Margin, WidthFull } from "@mui/icons-material";
 
 function NotaClinico() {
   const [formData, setFormData] = useState({
-    email: "",
-    phoneNumber: "",
-    fullName: "",
-    birthDate: "",
-    age: "",
-    city: "",
-    occupation: "",
-    maritalStatus: "",
-    otherStatus: "",
-    religion: "",
-    otherReligion: "",
-    gender: "",
-    otherGender: "",
-    familyHistory: {
-      Diabetes: {
-        Madre: false,
-        Padre: false,
-        Hermanos: false,
-        "Tíos paternos": false,
-        "Tíos maternos": false,
-      },
-      Hipertensión: {
-        Madre: false,
-        Padre: false,
-        Hermanos: false,
-        "Tíos paternos": false,
-        "Tíos maternos": false,
-      },
-      "Colesterol alto": {
-        Madre: false,
-        Padre: false,
-        Hermanos: false,
-        "Tíos paternos": false,
-        "Tíos maternos": false,
-      },
-      Infartos: {
-        Madre: false,
-        Padre: false,
-        Hermanos: false,
-        "Tíos paternos": false,
-        "Tíos maternos": false,
-      },
-    },
-    smoke: "",
-    smokeHistory: "",
-    smokeOther: "",
-    alcohol: "",
-    alcoholHistory: "",
-    alcoholOther: "",
-    drug: "",
-    drugHistory: "",
-    exercise: "",
-    allergicMedicine: "",
-    allergicFood: "",
-    surgery: "",
-    surgeryHistory: [],
-    surgeryOther: "",
-    diagnosedDiseases: [],
-    diagnosedDiseasesOther: "",
-    takeMedications: "",
-    menstruation: "",
-    menstruationTrue: "",
-    menstruationNull: "",
-    menstruationDate: "",
-    pregnancies: "",
-    otherPregnancies: "",
-    pregnanciesComplications: [],
-    reasonConsultation: [],
-    consultationOther: "",
+    medicNote: "",
   });
-
-  // Maneja el cambio de los checkboxes
-  const handleCheckboxChange = (e, disease, familyMember) => {
-    const { checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      familyHistory: {
-        ...prevData.familyHistory,
-        [disease]: {
-          ...prevData.familyHistory[disease],
-          [familyMember]: checked,
-        },
-      },
-    }));
-  };
-
-  const handleSurgeryCheckboxChange = (e, surgeryType) => {
-    const { checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      surgeryHistory: checked
-        ? [...prevData.surgeryHistory, surgeryType] // Agregar si está marcado
-        : prevData.surgeryHistory.filter((item) => item !== surgeryType), // Quitar si está desmarcado
-    }));
-  };
-
-  const handleDiagnosedCheckboxChange = (e, disease) => {
-    const { checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      diagnosedDiseases: checked
-        ? [...prevData.diagnosedDiseases, disease] // Agrega la enfermedad si está seleccionada
-        : prevData.diagnosedDiseases.filter((item) => item !== disease), // Remueve la enfermedad si se deselecciona
-    }));
-  };
-
-  const handleComplicationsCheckboxChange = (e, complications) => {
-    const { checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      pregnanciesComplications: checked
-        ? [...prevData.pregnanciesComplications, complications] // Agrega la enfermedad si está seleccionada
-        : prevData.pregnanciesComplications.filter((item) => item !== complications), // Remueve la enfermedad si se deselecciona
-    }));
-  };
-
-  const handleReasonsCheckboxChange = (e, reasons) => {
-    const { checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      reasonConsultation: checked
-        ? [...prevData.reasonConsultation, reasons] // Agrega la enfermedad si está seleccionada
-        : prevData.reasonConsultation.filter((item) => item !== reasons), // Remueve la enfermedad si se deselecciona
-    }));
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -234,52 +109,63 @@ function NotaClinico() {
       <DashboardNavbar />
       <SoftBox py={3}>
         <SoftBox mb={3}>
-          <Card>
-            <SoftBox display="flex" flexDirection="column" alignItems="flex-start" p={3}>
-              <SoftTypography variant="h4">Nota Clínica Médica -</SoftTypography>
-              <SoftTypography variant="h4">Endocrinea Care</SoftTypography>
-              <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
-                Estimado paciente los siguientes datos de contacto y antecedentes médicos recabados
-                en el presente documento serán utilizados para llenar su historial médico.
-              </SoftTypography>
-              <SoftTypography variant="subtitle2" fontWeight="medium" mt={2}>
-                Todos sus datos serán tratados con total confidencialidad, la información sera
-                utilizada única y exclusivamente para mejorar la calidad de la atención durante su
-                consulta y brindarle un mejor servicio.
-              </SoftTypography>
-              <SoftTypography variant="subtitle2" fontWeight="medium" mt={3}>
-                Dr. Francisco Javier Porquillo. C.P. 10550033 / 12467290 <br />
-                Dra. Carolain Ulrrich García. C.P. 13035875 <br />
-                Dra. Elizabeth Raquel Juárez Juárez. C.P. 1075112 / 12550599 <br />
-                Dra. Isbeth Gómez Díaz. C.P. 12611063 <br />
-                Dra. Victoria Sandoval Nava. C.P. 10101155 / 12655823
-              </SoftTypography>
-              <SoftTypography variant="subtitle2" fontWeight="medium" mt={4}>
-                Circuito Juan Pablo II. PB No. 3113. Colonia Fraccionamiento Las Ánimas, Puebla.
-              </SoftTypography>
-            </SoftBox>
+          <Card sx={{ p: 3, mb: 2 }}>
+            <SoftTypography variant="h5" mb={2}>
+              Nota Clínica Médica -
+            </SoftTypography>
+            <SoftTypography variant="h5" mb={2}>
+              Endocrinea Care
+            </SoftTypography>
+            <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
+              Estimado paciente los siguientes datos de contacto y antecedentes médicos recabados en
+              el presente documento serán utilizados para llenar su historial médico.
+            </SoftTypography>
+            <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
+              Todos sus datos serán tratados con total confidencialidad, la información sera
+              utilizada única y exclusivamente para mejorar la calidad de la atención durante su
+              consulta y brindarle un mejor servicio.
+            </SoftTypography>
+            <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
+              Dr. Francisco Javier Porquillo. C.P. 10550033 / 12467290 <br />
+              Dra. Carolain Ulrrich García. C.P. 13035875 <br />
+              Dra. Elizabeth Raquel Juárez Juárez. C.P. 1075112 / 12550599 <br />
+              Dra. Isbeth Gómez Díaz. C.P. 12611063 <br />
+              Dra. Victoria Sandoval Nava. C.P. 10101155 / 12655823
+            </SoftTypography>
+            <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
+              Circuito Juan Pablo II. PB No. 3113. Colonia Fraccionamiento Las Ánimas, Puebla.
+            </SoftTypography>
           </Card>
         </SoftBox>
+
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-          <SoftBox mt={4}>
-            <Card>
-              <SoftBox p={3}>
-                <SoftBox mb={2}>
-                  <label htmlFor="email">Información de la nota clinica</label>
-                  <textarea
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    rows="4"
-                    className="global-textarea"
-                  />
-                </SoftBox>
+          {/* Información de la nota clinica */}
 
-                </SoftBox>
-            </Card>
+          <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
+            <SoftTypography
+              htmlFor="medicNote"
+              variant="body1"
+              color="textPrimary"
+              fontWeight="bold"
+            >
+              Información de la nota clinica
+            </SoftTypography>
+            <textarea
+              id="medicNote"
+              name="medicNote"
+              placeholder="Escriba las especificaciones..."
+              value={formData.medicNote}
+              onChange={handleChange}
+              rows="4"
+              className="global-textarea"
+              style={{
+                width: "100%",
+                padding: "8px",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+              }}
+            />
           </SoftBox>
-
 
           <SoftBox mt={2}>
             <Button
