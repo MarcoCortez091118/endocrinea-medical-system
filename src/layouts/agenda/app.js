@@ -14,6 +14,7 @@ import { Scheduler } from "@aldabil/react-scheduler";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import { DOCTOR, EVENTS, PATIENTS } from "./data";
 import { es } from "date-fns/locale";
+import "./styles.css";
 
 function App() {
     const [mode, setMode] = useState("default");
@@ -56,6 +57,7 @@ function App() {
                 ref={calendarRef}
                 view="day"
                 locale={es}
+                style={{ width: "80%" }}
                 translations={{
                     navigation: {
                         today: "Hoy",
@@ -73,9 +75,9 @@ function App() {
                         title: "Paciente",
                     },
                     event: {
-                        title: "Paciente",
                         start: "Inicio",
                         end: "Fin",
+                        title: "Paciente",
                         allDay: "Todo el día",
                     },
                     moreEvents: "Más eventos",
@@ -134,9 +136,37 @@ function App() {
                         config: {
                             label: "Estatus",
                             required: true,
-                            icon: (value) => (
-                                <div className={`status-icon ${value}`} />
-                            )
+                        },
+                    },
+                    {
+                        name: "start",
+                        type: "date",
+                        config: {
+                            label: "Inicio",
+                            required: true,
+                            type: "datetime",
+                        },
+                    },
+                    {
+                        name: "end",
+                        type: "date",
+                        config: {
+                            label: "Fin",
+                            required: true,
+                            type: "datetime",
+                        },
+                    },
+                    {
+                        name: "confirmation_status",
+                        type: "select",
+                        default: "no_confirmado",
+                        options: [
+                            { id: "no_confirmado", text: "El paciente no ha confirmado asistencia", value: "no_confirmado" },
+                            { id: "confirmado", text: "El paciente ha confirmado que asistirá", value: "confirmado" }
+                        ],
+                        config: {
+                            label: "Confirmación de Asistencia",
+                            required: true,
                         },
                     },
                     {
@@ -210,8 +240,22 @@ function App() {
                     },
                 ]}
                 viewerExtraComponent={(fields, event) => {
+
+                    const statusColors = {
+                        programada: "#9b9b9b",
+                        sala_espera: "#572364",
+                        visita_curso: "#eccd6a",
+                        visita_realizada: "##00913f",
+                        no_visita: "#c81d11"
+                    };
+
+                    const confirmationIcons = {
+                        no_confirmado: "✔",
+                        confirmado: "✔✔"
+                    };
+
                     return (
-                        <div>
+                        <div className="customComponentWrapper">
                             {fields.map((field, i) => {
                                 if (field.name === "doctor_id") {
                                     const admin = field.options.find(
@@ -228,9 +272,39 @@ function App() {
                                             <PersonRoundedIcon /> {admin.text}
                                         </Typography>
                                     );
-                                } else {
-                                    return null;
+                                } else if (field.name === "subtitle") {
+                                    return (
+                                        <Typography
+                                            key={i}
+                                            style={{ display: "flex", alignItems: "center", gap: "8px" }}
+                                            color="textSecondary"
+                                            variant="caption"
+                                            noWrap
+                                        >
+                                            <span style={{
+                                                width: "10px",
+                                                height: "10px",
+                                                borderRadius: "50%",
+                                                backgroundColor: statusColors[event.subtitle] || "#000",
+                                                display: "inline-block"
+                                            }}></span>
+                                            {field.options.find(opt => opt.value === event.subtitle)?.text || event.subtitle}
+                                        </Typography>
+                                    );
+                                } else if (field.name === "confirmation_status") {
+                                    return (
+                                        <Typography
+                                            key={i}
+                                            style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "4px" }}
+                                            color="textSecondary"
+                                            variant="caption"
+                                            noWrap
+                                        >
+                                            {confirmationIcons[event.confirmation_status] || "✔"} {field.options.find(opt => opt.value === event.confirmation_status)?.text || event.confirmation_status}
+                                        </Typography>
+                                    );
                                 }
+                                return null;
                             })}
                         </div>
                     );
