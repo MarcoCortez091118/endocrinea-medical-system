@@ -1,0 +1,38 @@
+/* Definir en tu archivo CSS */
+.customComponentWrapper {
+    background-color: #f5f5f5;
+    /* Color de fondo personalizado */
+    border-radius: 8px;
+    /* Bordes redondeados */
+}
+
+/* Asegúrate de que el contenedor del DatePicker tenga un tamaño adecuado */
+.react-scheduler__appointment-form input[type="datetime-local"] {
+    width: 100%;
+    /* Ajusta el tamaño al 100% para que se ajuste a su contenedor */
+    box-sizing: border-box;
+    /* Asegura que el padding no afecte el tamaño total */
+}
+
+/* Asegúrate de que el calendario y el selector de horas no se recorten */
+.react-scheduler__datepicker .MuiDateTimePicker-root {
+    width: auto;
+    /* Deja que el calendario ajuste su tamaño según el contenido */
+    max-width: none;
+    /* Elimina el límite de ancho máximo si existe */
+    overflow: visible;
+    /* Permite que el contenido no se recorte */
+}
+
+/* Ajustes adicionales si es necesario */
+.react-scheduler__datepicker .MuiInputBase-root {
+    min-width: 200px;
+    /* Ajusta el ancho mínimo si es necesario */
+}
+
+/* Estilos adicionales para la apariencia */
+.react-scheduler__datepicker .MuiPickersDay-daySelected {
+    background-color: #3f51b5;
+    /* Color de fondo para el día seleccionado */
+    color: white;
+}
