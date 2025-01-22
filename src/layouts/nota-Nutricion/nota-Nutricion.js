@@ -40,8 +40,6 @@ import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 // Soft UI Dashboard React examples
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
 
 // Global style textarea
 import "layouts/TextareaStyles.css";
@@ -352,7 +350,7 @@ function NotaNutricional() {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+      
       <SoftBox py={3}>
         <SoftBox mb={3}>
           <Card sx={{p: 3, mb: 2 }}>
@@ -917,7 +915,7 @@ function NotaNutricional() {
 
         </form>
       </SoftBox>
-      <Footer />
+      
     </DashboardLayout>
   );
 }

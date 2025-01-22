@@ -9,8 +9,8 @@ import Button from "@mui/material/Button";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
+
+
 
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -57,7 +57,7 @@ function HistorialEvolucion() {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
+    
       <SoftBox py={3}>
         <SoftBox mb={3}>
           <SoftBox mb={3}>
@@ -127,7 +127,7 @@ function HistorialEvolucion() {
           </SoftBox>
         </SoftBox>
       </SoftBox>
-      <Footer />
+    
     </DashboardLayout>
   );
 }
