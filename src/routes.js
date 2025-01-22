@@ -52,17 +52,17 @@ const routes = (isAuthenticated) => [
     noCollapse: true,
   },
   {
-    type: "collapse",
-    name: "Nota de Evolución",
+    //type: "collapse",
+    //name: "Nota de Evolución",
     key: "HistorialEvolucion",
     route: "/HistorialEvolucion",
-    icon: <HistoryIcon size="12px" />,
+    //icon: <HistoryIcon size="12px" />,
     component: (
       <ProtectedRoute>
         <HistorialEvolucion />
       </ProtectedRoute>
     ),
-    noCollapse: true,
+    //noCollapse: true,
   },
   {
     type: "collapse",
@@ -91,17 +91,17 @@ const routes = (isAuthenticated) => [
     noCollapse: true,
   },
   {
-    type: "collapse",
-    name: "Nota Nutricional",
+    //type: "collapse",
+    //name: "Nota Nutricional",
     key: "NotaNutricional",
     route: "/NotaNutricional",
-    icon: <HistoryIcon size="12px" />,
+    //icon: <HistoryIcon size="12px" />,
     component: (
       <ProtectedRoute>
         <NotaNutricional />
       </ProtectedRoute>
     ),
-    noCollapse: true,
+   // noCollapse: true,
   },
  {
   //  type: "collapse",
@@ -131,23 +131,23 @@ const routes = (isAuthenticated) => [
   },
 
   {
-    type: "collapse",
-    name: "Nota Clínica Médica",
+   // type: "collapse",
+    //name: "Nota Clínica Médica",
     key: "NotaClinico",
     route: "/nota-Clinica",
-    icon: <HistoryIcon size="12px" />,
+    //icon: <HistoryIcon size="12px" />,
     component: (
       <ProtectedRoute>
         <NotaClinico />
       </ProtectedRoute>
     ),
-    noCollapse: true,
+    //noCollapse: true,
   },
   {
     type: "collapse",
     name: "Agenda",
     key: "Agenda",
-    route: "/agenda",
+    route: "/Agenda",
     icon: <HistoryIcon size="12px" />,
     component: (
       <ProtectedRoute>

@@ -349,7 +349,6 @@ function NotaNutricional() {
     };
 
   return (
-    <DashboardLayout>
       
       <SoftBox py={3}>
         <SoftBox mb={3}>
@@ -916,7 +915,6 @@ function NotaNutricional() {
         </form>
       </SoftBox>
       
-    </DashboardLayout>
   );
 }
 
