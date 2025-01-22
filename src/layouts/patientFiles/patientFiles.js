@@ -6,13 +6,13 @@ import Footer from "examples/Footer";
 import SoftBox from "components/SoftBox";
 import { Card, Tabs, Tab, Divider } from "@mui/material";
 import SoftTypography from "components/SoftTypography";
+import "./PatientDetails.css"; // Importar archivo CSS
 
 // Importar las secciones
-
 import Documentos from "./documentos";
 import DatosPaciente from "./DatosPaciente";
 import Citas from "./citas";
-import NotaClinico from "layouts/nota-Clinica copy/nota-Clinica";
+import NotaClinico from "layouts/nota-Clinica/nota-Clinica";
 import HistorialEvolucion from "layouts/historial-evolucion";
 import NotaNutricional from "layouts/nota-Nutricion/nota-Nutricion";
 
@@ -35,11 +35,11 @@ function PatientDetails() {
       case 2:
         return <DatosPaciente />;
       case 3:
-        return < HistorialEvolucion />;
+        return <HistorialEvolucion />;
       case 4:
         return <NotaClinico />;
-      case 4:
-        return < NotaNutricional />;  
+      case 5:
+        return <NotaNutricional />;
       default:
         return null;
     }
@@ -65,7 +65,7 @@ function PatientDetails() {
                 fontSize: "18px",
               }}
             >
-              {patient ? `${patient.firstName.charAt(0)}${patient.lastName.charAt(0)}` : "nombre"}
+              {patient ? `${patient.firstName.charAt(0)}${patient.lastName.charAt(0)}` : "N"}
             </SoftBox>
             <SoftTypography variant="h6" mt={2}>
               {patient ? `${patient.firstName} ${patient.lastName}` : "Nombre del paciente"}
@@ -85,13 +85,35 @@ function PatientDetails() {
 
         {/* Panel Derecho - Contenido de pestañas */}
         <SoftBox style={{ width: "75%" }}>
-          <Tabs value={activeTab} onChange={handleTabChange} indicatorColor="primary" textColor="primary">
-            <Tab label="citas" />
-            <Tab label="documentos" />
-            <Tab label="Datos del Paciente" />
-            <Tab label="Nota de Evolucion" />
-            <Tab label="Nota Clínica Médica" />
-            <Tab label="Nota Nutricional" />
+          <Tabs
+            value={activeTab}
+            onChange={handleTabChange}
+            TabIndicatorProps={{ style: { display: "none" } }} // Sin indicador predeterminado
+          >
+            <Tab
+              label="Citas"
+              className={activeTab === 0 ? "tab-active" : "tab"}
+            />
+            <Tab
+              label="Documentos"
+              className={activeTab === 1 ? "tab-active" : "tab"}
+            />
+            <Tab
+              label="Datos del Paciente"
+              className={activeTab === 2 ? "tab-active" : "tab"}
+            />
+            <Tab
+              label="Nota de Evolución"
+              className={activeTab === 3 ? "tab-active" : "tab"}
+            />
+            <Tab
+              label="Nota Clínica Médica"
+              className={activeTab === 4 ? "tab-active" : "tab"}
+            />
+            <Tab
+              label="Nota Nutricional"
+              className={activeTab === 5 ? "tab-active" : "tab"}
+            />
           </Tabs>
           <Divider style={{ margin: "16px 0" }} />
           {renderTabContent()}
