@@ -1,32 +1,19 @@
 const apiService = {
-  async getForms() {
+  getPatients: async () => {
     try {
-
-      const token = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("token="))
-        ?.split("=")[1];
-
-      if (!token) {
-        throw new Error("Token no encontrado. Inicia sesión para continuar.");
-      }
-
-      const response = await fetch("https://bituin-fastapi-data.azurewebsites.net/forms/get?clients=uc", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        "https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients"
+      );
 
       if (!response.ok) {
         throw new Error(`Error en la solicitud: ${response.status}`);
       }
+
       const data = await response.json();
-      return data;
+      return data; // Retorna los datos en formato JSON
     } catch (error) {
-      console.error("Error al obtener los datos de la API:", error);
-      return [];
+      console.error("Error al obtener los pacientes:", error);
+      throw error; // Propaga el error para manejarlo más adelante
     }
   },
 };
