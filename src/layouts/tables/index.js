@@ -17,7 +17,7 @@ function Tables() {
   const navigate = useNavigate();
 
   const [page, setPage] = useState(1);
-  const rowsPerPage = 10;
+  const rowsPerPage = 20;
   const totalPages = Math.ceil(rows.length / rowsPerPage);
   const displayedRows = rows.slice((page - 1) * rowsPerPage, page * rowsPerPage);
   const [openModal, setOpenModal] = useState(false);
@@ -32,7 +32,7 @@ function Tables() {
   const handleRowClick = (patient) => {
     console.log("Paciente seleccionado:", patient); // Verifica los datos
     if (patient) {
-      navigate("/PatientDetails", { state: { } });
+      navigate("/PatientDetails", { state: {} });
     } else {
       console.error("No se pasaron datos del paciente.");
     }
