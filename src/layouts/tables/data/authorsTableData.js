@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SoftTypography from "components/SoftTypography";
 import SoftAvatar from "components/SoftAvatar";
+import apiService from "components/ApiService/apiService";
 import team2 from "assets/images/team-2.jpg";
 
 export default function useUsuarioTableData() {
@@ -9,57 +10,41 @@ export default function useUsuarioTableData() {
   useEffect(() => {
     async function fetchData() {
       try {
-        // Datos de prueba en lugar de la API
-        const mockUsers = [
-          {
-            name: "Juan Pérez",
-            phone: "555-123-4567",
-            email: "juan.perez@example.com",
-            city: "Ciudad de México",
-            timestamp: "2025-01-21",
-          },
-          {
-            name: "María López",
-            phone: "555-987-6543",
-            email: "maria.lopez@example.com",
-            city: "Guadalajara",
-            timestamp: "2025-01-20",
-          },
-          {
-            name: "Carlos Rodríguez",
-            phone: "555-765-4321",
-            email: "carlos.rod@example.com",
-            city: "Monterrey",
-            timestamp: "2025-01-19",
-          },
-        ];
+        const patients = await apiService.getPatients();
+        console.log("Pacientes obtenidos:", patients);
 
-        // Transformar los datos para la tabla
-        const rows = mockUsers.map((user) => ({
-          foto: <SoftAvatar src={team2} size="sm" variant="rounded" />,
+        const rows = patients.map((patient) => ({
+          foto: (
+            <SoftAvatar src={team2} size="sm" variant="rounded" />
+          ),
+          id: (
+            <SoftTypography variant="caption" color="secondary" fontWeight="medium">
+              {patient.id}
+            </SoftTypography>
+          ),
           nombre: (
             <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-              {user.name}
+              {patient.first_name} {patient.last_name}
             </SoftTypography>
           ),
           teléfono: (
             <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-              {user.phone}
+              {patient.phone}
             </SoftTypography>
           ),
           correo: (
             <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-              {user.email}
+              {patient.email}
             </SoftTypography>
           ),
-          ciudad: (
+          género: (
             <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-              {user.city}
+              {patient.gender === "male" ? "Masculino" : "Femenino"}
             </SoftTypography>
           ),
-          fecha: (
+          estatus: (
             <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-              {user.timestamp}
+              {patient.status}
             </SoftTypography>
           ),
         }));
@@ -67,16 +52,17 @@ export default function useUsuarioTableData() {
         setData({
           columns: [
             { name: "foto", align: "center" },
+            { name: "id", align: "left" },
             { name: "nombre", align: "left" },
             { name: "teléfono", align: "left" },
             { name: "correo", align: "left" },
-            { name: "ciudad", align: "left" },
-            { name: "fecha", align: "left" },
+            { name: "género", align: "left" },
+            { name: "estatus", align: "left" },
           ],
           rows,
         });
       } catch (error) {
-        console.error("Error al cargar los datos locales:", error);
+        console.error("Error al procesar los datos:", error);
       }
     }
 
