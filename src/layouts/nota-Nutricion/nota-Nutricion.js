@@ -1,5 +1,6 @@
 // Importaciones necesarias
 import React, { useState } from "react";
+import Notas from "./Notas"
 import Card from "@mui/material/Card";
 import {
   TextField,
@@ -28,10 +29,10 @@ import {
   tableCellClasses,
 } from "@mui/material";
 
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import Typography from '@mui/material/Typography';
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import Typography from "@mui/material/Typography";
 
 import { styled } from "@mui/system";
 
@@ -53,120 +54,82 @@ function NotaNutricional() {
     /* Variables */
   }
   const [formData, setFormData] = useState({
-    sintomas: "",
-    energia: "",
-    liquidos: "",
-    ejercicio: "",
-    TiposEjercicios: "",
-    ejercicioDiasSemana: "",
-    ejercicioIntensidad: "",
+    symptoms: "",
+    energy: "",
+    liquids: "",
+    TypesExercise: "",
+    exerciseDaysWeek: "",
+    exerciseIntensity: "",
 
-    padecimientosActuales: "",
-    complicaciones: "",
+    currentConditions: "",
+    complications: "",
 
-    
-    sintomasGastrointestinales: "",
-    detalleSintomas: [],
-    frecuenciaEstrenimiento: "",
-    frecuenciaDiarrea: "",
+    symptomsGastrointestinal: "",
+    detailSymptoms: [],
+    frequencyStraining: "",
+    frequencyDiarrhea: "",
 
-    desayuno: "",
-    colacion1: "",
-    comina: "",
-    colacion2: "",
+    breakfast: "",
+    collation1: "",
+    meal: "",
+    collation2: "",
     extras: "",
 
-    fechaMediciones: "",
-    cintura: "",
+    measurementDates: "",
+    waist: "",
     abdomen: "",
-    cadera: "",
-    brazoIzquierdo: "",
-    brazoDerecho: "",
-    pantorrillaDerecha: "",
-    pantorrillaIzquierda: "",
-    nuevasMediciones: [],
+    hips: "",
+    leftArm: "",
+    rightArm: "",
+    rightCalf: "",
+    leftCalf: "",
+    newMeasurements: [],
 
-    diagnostico: "",
+    diagnosis: "",
   });
 
-  // Maneja el cambio de los checkboxes
-  const handleCheckboxChange = (e, disease, familyMember) => {
-    const { checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      familyHistory: {
-        ...prevData.familyHistory,
-        [disease]: {
-          ...prevData.familyHistory[disease],
-          [familyMember]: checked,
-        },
-      },
-    }));
-  };
-
-  const handleSurgeryCheckboxChange = (e, surgeryType) => {
-    const { checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      surgeryHistory: checked
-        ? [...prevData.surgeryHistory, surgeryType] // Agregar si está marcado
-        : prevData.surgeryHistory.filter((item) => item !== surgeryType), // Quitar si está desmarcado
-    }));
-  };
-
-  const handleDiagnosedCheckboxChange = (e, disease) => {
-    const { checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      diagnosedDiseases: checked
-        ? [...prevData.diagnosedDiseases, disease] // Agrega la enfermedad si está seleccionada
-        : prevData.diagnosedDiseases.filter((item) => item !== disease), // Remueve la enfermedad si se deselecciona
-    }));
-  };
-
-  const handleComplicationsCheckboxChange = (e, complications) => {
-    const { checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      pregnanciesComplications: checked
-        ? [...prevData.pregnanciesComplications, complications] // Agrega la enfermedad si está seleccionada
-        : prevData.pregnanciesComplications.filter((item) => item !== complications), // Remueve la enfermedad si se deselecciona
-    }));
-  };
-
-  const handleReasonsCheckboxChange = (e, reasons) => {
-    const { checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      reasonConsultation: checked
-        ? [...prevData.reasonConsultation, reasons] // Agrega la enfermedad si está seleccionada
-        : prevData.reasonConsultation.filter((item) => item !== reasons), // Remueve la enfermedad si se deselecciona
-    }));
-  };
+  const [notas, setNotas] = useState([]); // Almacena las notas enviadas
+  const [mostrarNotas, setMostrarNotas] = useState(false); // Controla la visualización de la sección de notas
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // Si cambia el estado civil y no es "Otros", limpiamos el campo otherStatus
+  
+    // Manejamos el cambio de estado civil y limpiamos "otherStatus" si no es "otros"
     if (name === "maritalStatus" && value !== "otros") {
       setFormData((prevData) => ({
         ...prevData,
         [name]: value,
         otherStatus: "", // Limpiamos el campo "otherStatus"
       }));
-    } else if (name === "surgery") {
+    } 
+    // Manejamos el cambio de cirugía y limpiamos los campos relacionados
+    else if (name === "surgery") {
       setFormData((prevData) => ({
         ...prevData,
         [name]: value,
-        surgeryHistory: [], // Limpiamos el historial de cirugías si cambia
+        surgeryHistory: [], // Limpiamos el historial de cirugías
         surgeryOther: "", // Limpiamos el campo de especificaciones
       }));
-    } else {
+    } 
+    // Manejamos casos relacionados con síntomas gastrointestinales
+    else if (name === "symptomsGastrointestinal" && value !== "Si") {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+        detailSymptoms: [], // Limpiamos los detalles si no hay síntomas gastrointestinales
+        frequencyStraining: "",
+        frequencyDiarrhea: "",
+      }));
+    } 
+    // Actualización genérica para los demás campos
+    else {
       setFormData((prevData) => ({
         ...prevData,
         [name]: value,
       }));
     }
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -176,58 +139,62 @@ function NotaNutricional() {
       delete dataToSend.otherStatus;
     }
 
-    // Aquí debes enviar formData a la API
-    /* 
-    try {
-      // Aquí iría la lógica para enviar los datos a la API
-      const response = await fetch('https://api.example.com/submit-historial', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+    const newNote = {
+      id: notas.length + 1,
+      date: new Date().toLocaleString(),
+      ...formData,
+    };
+    setNotas((prevNotas) => [newNote, ...prevNotas]); // Guarda una copia del formulario en las notas
+    setFormData({
+      symptoms: "",
+      energy: "",
+      symptomsGastrointestinal: "",
+      detailSymptoms: [],
+      frequencyStraining: "",
+      frequencyDiarrhea: "",
+      currentConditions: "",
+      complications: "",
+      liquids: "",
+      TypesExercise: "",
+      exerciseDaysWeek: "",
+      exerciseIntensity: "",
 
-      if (response.ok) {
-        console.log('Historial enviado exitosamente');
-        // Manejar la respuesta de éxito aquí
-      } else {
-        console.error('Error al enviar el historial');
-        // Manejar errores aquí
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-    */
+      breakfast: "",
+      collation1: "",
+      breakfast: "",
+      collation2: "",
+      extras: "",
 
-    /*
-    const blob = new Blob([JSON.stringify(dataToSend, null, 2)], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "historial-clinico.txt";
-    link.click();
-    URL.revokeObjectURL(url);
-    */
+      measurementDates: "",
+      waist: "",
+      abdomen: "",
+      hips: "",
+      leftArm: "",
+      rightArm: "",
+      rightCalf: "",
+      leftCalf: "",
+
+      diagnosis: "",
+      
+    }); // Limpia el formulario
+    setMostrarNotas(true); // Muestra las notas después de enviar
 
     console.log("Datos a enviar:", formData);
   };
 
   const [columnsMediciones, setColumnsMediciones] = useState([]);
   const [datesMediciones, setDatesMediciones] = useState([]);
-  const [columnsPesos, setColumnsPesos] = useState([]);
-  const [datesPesos, setDatesPesos] = useState([]);
-  const [actualDate] = useState(new Date().toISOString().split("T")[0]); // Fecha para "Actual"
+  const [lastMeasurements, setLastMeasurements] = useState(null);
 
   // Mapeo de nombres legibles para las claves
   const visibleFieldsMediciones = {
-    cintura: "Cintura",
+    waist: "Cintura",
     abdomen: "Abdomen",
-    cadera: "Cadera",
-    brazoIzquierdo: "Brazo Izquierdo",
-    brazoDerecho: "Brazo Derecho",
-    pantorrillaDerecha: "Pantorrilla Derecha",
-    pantorrillaIzquierda: "Pantorrilla Izquierda",
+    hips: "Cadera",
+    leftArm: "Brazo Izquierdo",
+    rightArm: "Brazo Derecho",
+    rightCalf: "Pantorrilla Derecha",
+    leftCalf: "Pantorrilla Izquierda",
   };
 
   const handleInputChange = (event, measurement) => {
@@ -237,28 +204,47 @@ function NotaNutricional() {
     });
   };
 
+  const showPreviousMeasurements = () => {
+    if (columnsMediciones.length > 0) {
+      // Si hay registros, mostramos la última columna en la tabla
+      const lastColumn = columnsMediciones[columnsMediciones.length - 1];
+      const lastDate = datesMediciones[columnsMediciones.length - 1];
+      setLastMeasurements({ data: lastColumn, date: lastDate });
+    } else {
+      // Si no hay registros, mostramos una alerta
+      alert("No hay registros previos para comparar.");
+    }
+  };
+
   const handleNewMeasurementChange = (event, rowIndex, colIndex, tableType) => {
-    if (tableType === "mediciones") {
-      const updatedColumns = [...columnsMediciones];
-      updatedColumns[colIndex][rowIndex] = event.target.value;
-      setColumnsMediciones(updatedColumns);
-    } else if (tableType === "pesos") {
-      const updatedColumns = [...columnsPesos];
-      updatedColumns[colIndex][rowIndex] = event.target.value;
-      setColumnsPesos(updatedColumns);
+    const { value } = event.target;
+    if (tableType === "pesos") {
+      setColumnsPesos((prevColumns) => {
+        const updatedColumns = [...prevColumns];
+        // Asegúrate de que la columna y la fila existan antes de asignar valores
+        if (!updatedColumns[colIndex]) updatedColumns[colIndex] = [];
+        updatedColumns[colIndex][rowIndex] = value;
+        return updatedColumns;
+      });
+    } else if (tableType === "mediciones") {
+      setColumnsMediciones((prevColumns) => {
+        const updatedColumns = [...prevColumns];
+        if (!updatedColumns[colIndex]) updatedColumns[colIndex] = [];
+        updatedColumns[colIndex][rowIndex] = value;
+        return updatedColumns;
+      });
     }
   };
 
   const addColumn = (tableType) => {
-    const currentDate = new Date().toISOString().split("T")[0]; // Fecha actual en formato "YYYY-MM-DD"
     if (tableType === "mediciones") {
       const newColumn = Object.keys(visibleFieldsMediciones).map(() => ""); // Nueva columna vacía
       setColumnsMediciones([...columnsMediciones, newColumn]);
-      setDatesMediciones([...datesMediciones, currentDate]);
+      setDatesMediciones([...datesMediciones, ""]); // Agregar un campo vacío para la fecha
     } else if (tableType === "pesos") {
       const newColumn = Object.keys(visibleFieldsPesos).map(() => ""); // Nueva columna vacía
-      setColumnsPesos([...columnsPesos, newColumn]);
-      setDatesPesos([...datesPesos, currentDate]);
+      setColumnsPesos((prevColumns) => [...prevColumns, newColumn]);
+      setDatesPesos((prevDates) => [...prevDates, ""]); // Agregar un campo vacío para la fecha
     }
   };
 
@@ -282,126 +268,106 @@ function NotaNutricional() {
     },
   }));
 
-  const [values, setValues] = React.useState({});
-  const handleChange1 = (rowIndex, colIndex, value) => {
-    setValues((prevValues) => ({
-      ...prevValues,
-      [`${rowIndex}-${colIndex}`]: value,
-    }));
-  };
-
-  const handleCheckboxChange1 = (e, value) => {
-    const isChecked = e.target.checked;
+  const handleCheckboxChange1 = (e, detalle) => {
+    const { checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      detalleSintomas: isChecked
-        ? [...(prev.detalleSintomas || []), value]
-        : prev.detalleSintomas.filter((item) => item !== value),
+      detailSymptoms: checked
+        ? [...prev.detailSymptoms, detalle]
+        : prev.detailSymptoms.filter((item) => item !== detalle),
     }));
+  };
+
+  const steps = ["Subjetivo", "Objetivo", "Evaluación dietética", "Exploración Física ", "Plan"];
+
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [skipped, setSkipped] = React.useState(new Set());
+
+  const isStepOptional = (step) => {
+    return step === 1;
+  };
+
+  const isStepSkipped = (step) => {
+    return skipped.has(step);
+  };
+
+  const handleNext = () => {
+    let newSkipped = skipped;
+    if (isStepSkipped(activeStep)) {
+      newSkipped = new Set(newSkipped.values());
+      newSkipped.delete(activeStep);
+    }
+
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setSkipped(newSkipped);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
   };
   
 
-   const steps = ['Subjetivo', 'Objetivo', 'Evaluación dietética', 'Exploración Física ', 'Plan'];
-  
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [skipped, setSkipped] = React.useState(new Set());
-  
-    const isStepOptional = (step) => {
-      return step === 1;
-    };
-  
-    const isStepSkipped = (step) => {
-      return skipped.has(step);
-    };
-  
-    const handleNext = () => {
-      let newSkipped = skipped;
-      if (isStepSkipped(activeStep)) {
-        newSkipped = new Set(newSkipped.values());
-        newSkipped.delete(activeStep);
-      }
-  
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
-      setSkipped(newSkipped);
-    };
-  
-    const handleBack = () => {
-      setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
-  
-    const handleSkip = () => {
-      if (!isStepOptional(activeStep)) {
-        // You probably want to guard against something like this,
-        // it should never occur unless someone's actively trying to break something.
-        throw new Error("You can't skip a step that isn't optional.");
-      }
-  
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
-      setSkipped((prevSkipped) => {
-        const newSkipped = new Set(prevSkipped.values());
-        newSkipped.add(activeStep);
-        return newSkipped;
-      });
-    };
-  
-    const handleReset = () => {
-      setActiveStep(0);
-    };
-
   return (
-      
-      <SoftBox py={3}>
-        <SoftBox mb={3}>
-          <Card sx={{p: 3, mb: 2 }}>
-            <SoftTypography variant="h5" mb={2}>Nota Nutricional -</SoftTypography>
-            <SoftTypography variant="h5" mb={2}>Endocrinea Care</SoftTypography>
-            <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
-              Estimado paciente los siguientes datos de contacto y antecedentes médicos recabados
-              en el presente documento serán utilizados para llenar su historial médico.
-            </SoftTypography>
-            <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
-              Todos sus datos serán tratados con total confidencialidad, la información sera
-              utilizada única y exclusivamente para mejorar la calidad de la atención durante su
-              consulta y brindarle un mejor servicio.
-            </SoftTypography>
-            <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
-              Dra. Elizabeth Raquel Juárez <br />
-              Mtra. Isbeth Gómez Díaz
-              <br />
-              LNC Laura Elizabeth Jiménez Criollo (Licenciada en Nutrición Clinica)
-              <br />
-              Dra. Victoria Sandoval Nava
-              <br />
-            </SoftTypography>
-            <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
-              Circuito Juan Pablo II. PB No. 3113. Colonia Fraccionamiento Las Ánimas, Puebla.
-            </SoftTypography>
-          </Card>
-        </SoftBox>
+    <SoftBox py={3}>
+      <SoftBox mb={3}>
+        <Card sx={{ p: 3, mb: 2 }}>
+          <SoftTypography variant="h5" mb={2}>
+            Nota Nutricional -
+          </SoftTypography>
+          <SoftTypography variant="h5" mb={2}>
+            Endocrinea Care
+          </SoftTypography>
+          <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
+            Estimado paciente los siguientes datos de contacto y antecedentes médicos recabados en
+            el presente documento serán utilizados para llenar su historial médico.
+          </SoftTypography>
+          <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
+            Todos sus datos serán tratados con total confidencialidad, la información sera utilizada
+            única y exclusivamente para mejorar la calidad de la atención durante su consulta y
+            brindarle un mejor servicio.
+          </SoftTypography>
+          <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
+            Dra. Elizabeth Raquel Juárez <br />
+            Mtra. Isbeth Gómez Díaz
+            <br />
+            LNC Laura Elizabeth Jiménez Criollo (Licenciada en Nutrición Clinica)
+            <br />
+            Dra. Victoria Sandoval Nava
+            <br />
+          </SoftTypography>
+          <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
+            Circuito Juan Pablo II. PB No. 3113. Colonia Fraccionamiento Las Ánimas, Puebla.
+          </SoftTypography>
+        </Card>
+      </SoftBox>
 
-        <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-          {/* Generales */}
-          {activeStep === 0 && (
+      <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+        {/* Generales */}
+        {activeStep === 0 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             <SoftTypography variant="h5" color="secondary" mb={3}>
               Subjetivo
             </SoftTypography>
-            
+
             {/* Síntomas */}
             <Grid container spacing={2}>
               {/* Síntomas */}
               <Grid item xs={12} md={6}>
                 <SoftBox mb={2}>
                   <label
-                    htmlFor="sintomas"
+                    htmlFor="symptoms"
                     style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
                   >
                     Síntomas:
                   </label>
                   <textarea
-                    id="sintomas"
-                    name="sintomas"
-                    value={formData.sintomas}
+                    id="symptoms"
+                    name="symptoms"
+                    value={formData.symptoms}
                     onChange={handleChange}
                     className="global-textarea"
                     style={{ width: "100%", height: "40px" }}
@@ -413,15 +379,15 @@ function NotaNutricional() {
               <Grid item xs={12} md={6}>
                 <SoftBox mb={2}>
                   <label
-                    htmlFor="energia"
+                    htmlFor="energy"
                     style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
                   >
                     Energía:
                   </label>
                   <textarea
-                    id="energia"
-                    name="energia"
-                    value={formData.energia}
+                    id="energy"
+                    name="energy"
+                    value={formData.energy}
                     onChange={handleChange}
                     className="global-textarea"
                     style={{ width: "100%", height: "40px" }}
@@ -430,39 +396,41 @@ function NotaNutricional() {
               </Grid>
             </Grid>
 
-
             {/* Síntomas gastrointestinales */}
             <SoftBox mb={2}>
-              <label htmlFor="sintomasGastrointestinales" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+              <label
+                htmlFor="symptomsGastrointestinal"
+                style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
+              >
                 Síntomas gastrointestinales:
               </label>
               <RadioGroup
-                id="sintomasGastrointestinales"
-                name="sintomasGastrointestinales"
-                value={formData.sintomasGastrointestinales}
+                id="symptomsGastrointestinal"
+                name="symptomsGastrointestinal"
+                value={formData.symptomsGastrointestinal}
                 onChange={handleChange}
                 required
               >
                 <FormControlLabel value="Si" control={<Radio />} label="Sí" />
-                {formData.sintomasGastrointestinales === "Si" && (
+                {formData.symptomsGastrointestinal === "Si" && (
                   <SoftBox ml={4}>
                     {/* Estreñimiento */}
                     <FormControlLabel
                       control={
                         <Checkbox
-                          checked={formData.detalleSintomas?.includes("Estreñimiento")}
+                          checked={formData.detailSymptoms?.includes("Estreñimiento")}
                           onChange={(e) => handleCheckboxChange1(e, "Estreñimiento")}
                         />
                       }
                       label="Estreñimiento"
                     />
-                    {formData.detalleSintomas?.includes("Estreñimiento") && (
+                    {formData.detailSymptoms?.includes("Estreñimiento") && (
                       <SoftBox ml={4}>
-                        <label htmlFor="frecuenciaEstrenimiento">Frecuencia (Estreñimiento):</label>
+                        <label htmlFor="frequencyStraining">Frecuencia (Estreñimiento):</label>
                         <textarea
-                          id="frecuenciaEstrenimiento"
-                          name="frecuenciaEstrenimiento"
-                          value={formData.frecuenciaEstrenimiento || ""}
+                          id="frequencyStraining"
+                          name="frequencyStraining"
+                          value={formData.frequencyStraining || ""}
                           onChange={handleChange}
                           className="global-textarea"
                           style={{ width: "100%", height: "40px" }}
@@ -474,19 +442,19 @@ function NotaNutricional() {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          checked={formData.detalleSintomas?.includes("Diarréa")}
+                          checked={formData.detailSymptoms?.includes("Diarréa")}
                           onChange={(e) => handleCheckboxChange1(e, "Diarréa")}
                         />
                       }
                       label="Diarréa"
                     />
-                    {formData.detalleSintomas?.includes("Diarréa") && (
+                    {formData.detailSymptoms?.includes("Diarréa") && (
                       <SoftBox ml={4}>
-                        <label htmlFor="frecuenciaDiarrea">Frecuencia (Diarréa):</label>
+                        <label htmlFor="frequencyDiarrhea">Frecuencia (Diarréa):</label>
                         <textarea
-                          id="frecuenciaDiarrea"
-                          name="frecuenciaDiarrea"
-                          value={formData.frecuenciaDiarrea || ""}
+                          id="frequencyDiarrhea"
+                          name="frequencyDiarrhea"
+                          value={formData.frequencyDiarrhea || ""}
                           onChange={handleChange}
                           className="global-textarea"
                           style={{ width: "100%", height: "40px" }}
@@ -504,16 +472,16 @@ function NotaNutricional() {
               <Grid item xs={12} md={4}>
                 <SoftBox mb={2}>
                   <label
-                    htmlFor="padecimientosActuales"
+                    htmlFor="currentConditions"
                     style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
                   >
                     Enfermedades:
                   </label>
                   <textarea
-                    id="padecimientosActuales"
-                    name="padecimientosActuales"
+                    id="currentConditions"
+                    name="currentConditions"
                     placeholder="Especifique"
-                    value={formData.padecimientosActuales}
+                    value={formData.currentConditions}
                     onChange={handleChange}
                     className="global-textarea"
                     style={{ width: "100%", height: "40px" }}
@@ -525,16 +493,16 @@ function NotaNutricional() {
               <Grid item xs={12} md={4}>
                 <SoftBox mb={2}>
                   <label
-                    htmlFor="complicaciones"
+                    htmlFor="complications"
                     style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
                   >
                     Complicaciones:
                   </label>
                   <textarea
-                    id="complicaciones"
-                    name="complicaciones"
+                    id="complications"
+                    name="complications"
                     placeholder="Especifique"
-                    value={formData.complicaciones}
+                    value={formData.complications}
                     onChange={handleChange}
                     className="global-textarea"
                     style={{ width: "100%", height: "40px" }}
@@ -546,16 +514,16 @@ function NotaNutricional() {
               <Grid item xs={12} md={4}>
                 <SoftBox mb={2}>
                   <label
-                    htmlFor="liquidos"
+                    htmlFor="liquids"
                     style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
                   >
                     Líquidos:
                   </label>
                   <textarea
-                    id="liquidos"
-                    name="liquidos"
+                    id="liquids"
+                    name="liquids"
                     placeholder="Especifique"
-                    value={formData.liquidos}
+                    value={formData.liquids}
                     onChange={handleChange}
                     className="global-textarea"
                     style={{ width: "100%", height: "40px" }}
@@ -563,17 +531,15 @@ function NotaNutricional() {
                 </SoftBox>
               </Grid>
             </Grid>
-
           </SoftBox>
-          )}
-            
+        )}
 
-          {activeStep === 1 && (
+        {activeStep === 1 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             <SoftTypography variant="h5" color="secondary" mb={3}>
               Objetivo
             </SoftTypography>
-            
+
             <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
               Ejercicio:
             </SoftTypography>
@@ -582,14 +548,17 @@ function NotaNutricional() {
               <Grid container spacing={2} alignItems="center">
                 {/* Tipo de ejercicio */}
                 <Grid item xs={12} sm={4}>
-                  <label htmlFor="TiposEjercicios" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+                  <label
+                    htmlFor="TypesExercise"
+                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
+                  >
                     Tipo de ejercicio:
                   </label>
                   <textarea
-                    id="TiposEjercicios"
-                    name="TiposEjercicios"
+                    id="TypesExercise"
+                    name="TypesExercise"
                     placeholder="Especifique"
-                    value={formData.TiposEjercicios}
+                    value={formData.TypesExercise}
                     onChange={handleChange}
                     rows="1"
                     className="global-textarea"
@@ -599,14 +568,17 @@ function NotaNutricional() {
 
                 {/* Días a la semana */}
                 <Grid item xs={12} sm={4}>
-                  <label htmlFor="ejercicioDiasSemana" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+                  <label
+                    htmlFor="exerciseDaysWeek"
+                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
+                  >
                     Días a la semana:
                   </label>
                   <textarea
-                    id="ejercicioDiasSemana"
-                    name="ejercicioDiasSemana"
+                    id="exerciseDaysWeek"
+                    name="exerciseDaysWeek"
                     placeholder="Especifique"
-                    value={formData.ejercicioDiasSemana}
+                    value={formData.exerciseDaysWeek}
                     onChange={handleChange}
                     rows="1"
                     className="global-textarea"
@@ -616,14 +588,17 @@ function NotaNutricional() {
 
                 {/* Intensidad */}
                 <Grid item xs={12} sm={4}>
-                  <label htmlFor="ejercicioIntensidad" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+                  <label
+                    htmlFor="exerciseIntensity"
+                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
+                  >
                     Intensidad:
                   </label>
                   <textarea
-                    id="ejercicioIntensidad"
-                    name="ejercicioIntensidad"
+                    id="exerciseIntensity"
+                    name="exerciseIntensity"
                     placeholder="Especifique"
-                    value={formData.ejercicioIntensidad}
+                    value={formData.exerciseIntensity}
                     onChange={handleChange}
                     rows="1"
                     className="global-textarea"
@@ -633,12 +608,13 @@ function NotaNutricional() {
               </Grid>
             </SoftBox>
           </SoftBox>
-          )}
+        )}
 
-          
-          {activeStep === 2 && (
+        {activeStep === 2 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
-            <SoftTypography variant="h5" color="secondary" mb={3}>Evaluación dietética</SoftTypography>
+            <SoftTypography variant="h5" color="secondary" mb={3}>
+              Evaluación dietética
+            </SoftTypography>
 
             <SoftTypography variant="subtitle2" sx={{ fontWeight: "bold" }} mb={2}>
               RECORDATORIO DE 24 HORAS
@@ -648,14 +624,17 @@ function NotaNutricional() {
               {/* Desayuno */}
               <Grid item xs={12} sm={6}>
                 <SoftBox mb={2}>
-                  <label htmlFor="desayuno" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+                  <label
+                    htmlFor="breakfast"
+                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
+                  >
                     Desayuno:
                   </label>
                   <textarea
-                    id="desayuno"
-                    name="desayuno"
+                    id="breakfast"
+                    name="breakfast"
                     placeholder="Especifique"
-                    value={formData.desayuno}
+                    value={formData.breakfast}
                     onChange={handleChange}
                     required
                     rows="3"
@@ -667,14 +646,17 @@ function NotaNutricional() {
               {/* Colación 1 */}
               <Grid item xs={12} sm={6}>
                 <SoftBox mb={2}>
-                  <label htmlFor="colacion1" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+                  <label
+                    htmlFor="collation1"
+                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
+                  >
                     Colación:
                   </label>
                   <textarea
-                    id="colacion1"
-                    name="colacion1"
+                    id="collation1"
+                    name="collation1"
                     placeholder="Especifique"
-                    value={formData.colacion1}
+                    value={formData.collation1}
                     onChange={handleChange}
                     required
                     rows="3"
@@ -686,14 +668,17 @@ function NotaNutricional() {
               {/* Comida */}
               <Grid item xs={12} sm={6}>
                 <SoftBox mb={2}>
-                  <label htmlFor="comida" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+                  <label
+                    htmlFor="meal"
+                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
+                  >
                     Comida:
                   </label>
                   <textarea
-                    id="comida"
-                    name="comida"
+                    id="meal"
+                    name="meal"
                     placeholder="Especifique"
-                    value={formData.comida}
+                    value={formData.meal}
                     onChange={handleChange}
                     required
                     rows="3"
@@ -705,14 +690,17 @@ function NotaNutricional() {
               {/* Colación 2 */}
               <Grid item xs={12} sm={6}>
                 <SoftBox mb={2}>
-                  <label htmlFor="colacion2" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+                  <label
+                    htmlFor="collation2"
+                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
+                  >
                     Colación 2:
                   </label>
                   <textarea
-                    id="colacion2"
-                    name="colacion2"
+                    id="collation2"
+                    name="collation2"
                     placeholder="Especifique"
-                    value={formData.colacion2}
+                    value={formData.collation2}
                     onChange={handleChange}
                     required
                     rows="3"
@@ -724,7 +712,10 @@ function NotaNutricional() {
               {/* Extras */}
               <Grid item xs={12} sm={6}>
                 <SoftBox mb={2}>
-                  <label htmlFor="extras" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+                  <label
+                    htmlFor="extras"
+                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
+                  >
                     Extras:
                   </label>
                   <textarea
@@ -741,9 +732,9 @@ function NotaNutricional() {
               </Grid>
             </Grid>
           </SoftBox>
-          )}
-          {/* mediciones */}
-          {activeStep === 3 && (
+        )}
+        {/* mediciones */}
+        {activeStep === 3 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             {/* Título de la tabla */}
             <SoftTypography variant="h5" color="secondary" mb={3}>
@@ -752,30 +743,82 @@ function NotaNutricional() {
 
             {/* Contenedor de la tabla */}
             <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 700 }} aria-label="tabla de mediciones">
+              <Table sx={{ minWidth: 700 }} aria-label="customized table">
                 <TableBody>
-                  {/* Fila de fechas */}
+                  {/* Fila de Fechas */}
                   <StyledTableRow>
                     <StyledTableCell component="th" scope="row">
                       Fecha
                     </StyledTableCell>
-                    <StyledTableCell align="center">{actualDate}</StyledTableCell>
+                    {/* Campo de fecha actual */}
+                    <StyledTableCell align="center">
+                      <input
+                        type="date"
+                        value={formData.measurementDates}
+                        onChange={(e) =>
+                          setFormData({ ...formData, measurementDates: e.target.value })
+                        }
+                        style={{
+                          width: "100%",
+                          padding: "8px",
+                          border: "1px solid #ccc",
+                          borderRadius: "4px",
+                        }}
+                      />
+                    </StyledTableCell>
+                    {/* Campos de fecha para las columnas existentes */}
                     {datesMediciones.map((date, colIndex) => (
                       <StyledTableCell key={`date-col-${colIndex}`} align="center">
-                        {date}
+                        <input
+                          type="date"
+                          value={date}
+                          onChange={(e) => {
+                            const updatedDates = [...datesMediciones];
+                            updatedDates[colIndex] = e.target.value;
+                            setDatesMediciones(updatedDates); // Actualiza la fecha en el estado
+                          }}
+                          style={{
+                            width: "100%",
+                            padding: "8px",
+                            border: "1px solid #ccc",
+                            borderRadius: "4px",
+                          }}
+                        />
                       </StyledTableCell>
                     ))}
                   </StyledTableRow>
 
-                  {/* Filas dinámicas de mediciones */}
+                  {/* Mostrar registro anterior si existe */}
+                  {lastMeasurements && (
+                    <>
+                      <StyledTableRow>
+                        <StyledTableCell component="th" scope="row">
+                          Registro Anterior
+                        </StyledTableCell>
+                        <StyledTableCell align="center" colSpan={columnsMediciones.length + 1}>
+                          {lastMeasurements.date || "Fecha no disponible"}
+                        </StyledTableCell>
+                      </StyledTableRow>
+                      {Object.keys(visibleFieldsMediciones).map((measurement, rowIndex) => (
+                        <StyledTableRow key={`prev-${measurement}`}>
+                          <StyledTableCell component="th" scope="row">
+                            {visibleFieldsMediciones[measurement]}
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            {lastMeasurements.data[rowIndex] || "Sin datos"}
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                    </>
+                  )}
+
+                  {/* Fila de Mediciones */}
                   {Object.keys(visibleFieldsMediciones).map((measurement, rowIndex) => (
                     <StyledTableRow key={measurement}>
-                      {/* Nombre de la medición */}
                       <StyledTableCell component="th" scope="row">
                         {visibleFieldsMediciones[measurement]}
                       </StyledTableCell>
-
-                      {/* Entrada para el valor actual */}
+                      {/* Input para cada medición en la fila */}
                       <StyledTableCell>
                         <input
                           type="text"
@@ -785,12 +828,12 @@ function NotaNutricional() {
                             border: "1px solid #ccc",
                             borderRadius: "4px",
                           }}
-                          value={formData[measurement] || ""}
+                          value={formData[measurement]}
                           onChange={(e) => handleInputChange(e, measurement)}
                         />
                       </StyledTableCell>
 
-                      {/* Columnas dinámicas de datos históricos */}
+                      {/* Celdas para las columnas de mediciones */}
                       {columnsMediciones.map((col, colIndex) => (
                         <StyledTableCell key={`cell-${colIndex}-${rowIndex}`}>
                           <input
@@ -821,15 +864,15 @@ function NotaNutricional() {
                 variant="contained"
                 color="primary"
                 style={{ color: "white" }}
-                onClick={() => addColumn("mediciones")}
+                onClick={showPreviousMeasurements} // Cambiar de addColumn a showPreviousMeasurements
               >
-                Agregar Columna
+                Mostrar registro anterior
               </Button>
             </SoftBox>
           </SoftBox>
-          )}
-          {/* Diagnostico */}
-          {activeStep === 4 && (
+        )}
+        {/* Diagnostico */}
+        {activeStep === 4 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             {/* Título del componente */}
             <SoftTypography variant="h5" color="secondary" mb={3}>
@@ -839,9 +882,9 @@ function NotaNutricional() {
             {/* Caja de texto */}
             <SoftBox mb={2}>
               <textarea
-                id="diagnostico"
-                name="diagnostico"
-                value={formData.diagnostico || ""}
+                id="diagnosis"
+                name="diagnosis"
+                value={formData.diagnosis || ""}
                 placeholder="Especifique"
                 onChange={handleChange}
                 required
@@ -858,10 +901,9 @@ function NotaNutricional() {
               />
             </SoftBox>
           </SoftBox>
-          )}
-             
+        )}
 
-          {/* Boton enviar 
+        {/* Boton enviar 
           <SoftBox mt={2}>
             <Button
               type="submit"
@@ -875,46 +917,52 @@ function NotaNutricional() {
             </Button>
           </SoftBox> */}
 
-          {/* Stepper */}
-          <Stepper activeStep={activeStep}>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
+        {/* Stepper */}
+        <Stepper activeStep={activeStep}>
+          {steps.map((label) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
 
-          {/* Botones de navegación */}
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              Atrás
+        {/* Botones de navegación */}
+        <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+          <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>
+            Atrás
+          </Button>
+          <Box sx={{ flex: "1 1 auto" }} />
+          {activeStep < steps.length - 1 ? (
+            <Button onClick={handleNext}>Siguiente</Button>
+          ) : (
+            <Button variant="contained" color="primary" onClick={handleSubmit}>
+              Enviar
             </Button>
-            <Box sx={{ flex: '1 1 auto' }} />
-            {activeStep < steps.length - 1 ? (
-              <Button onClick={handleNext}>Siguiente</Button>
-            ) : (
-              <Button variant="contained" color="primary" onClick={handleSubmit}>
-                Enviar
-              </Button>
-            )}
-          </Box>
-          {/* Botón de reinicio */}
-          {activeStep === steps.length && (
-            <Box sx={{ textAlign: 'center', mt: 2 }}>
-              <Button variant="outlined" onClick={handleReset}>
-                Reiniciar
-              </Button>
-            </Box>
           )}
+        </Box>
+        {/* Botón de reinicio */}
+        {activeStep === steps.length && (
+          <Box sx={{ textAlign: "center", mt: 2 }}>
+            <Button variant="outlined" onClick={handleReset}>
+              Reiniciar
+            </Button>
+          </Box>
+        )}
 
-        </form>
-      </SoftBox>
+
+        
+      </form>
+      {/* Sección de notas */}
+      <Card sx={{ p: 3, mb: 3, boxShadow: 3 }} >
+        {mostrarNotas && <Notas notas={notas} />}
+      </Card>
       
+        
+      
+    </SoftBox>
+
+    
+    
   );
 }
 

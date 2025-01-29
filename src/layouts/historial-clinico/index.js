@@ -52,35 +52,36 @@ function HistorialClinico() {
     gender: "",
     otherGender: "",
     familyHistory: {
-      Diabetes: {
-        Madre: false,
-        Padre: false,
-        Hermanos: false,
-        "Tíos paternos": false,
-        "Tíos maternos": false,
-      },
-      Hipertensión: {
-        Madre: false,
-        Padre: false,
-        Hermanos: false,
-        "Tíos paternos": false,
-        "Tíos maternos": false,
-      },
-      "Colesterol alto": {
-        Madre: false,
-        Padre: false,
-        Hermanos: false,
-        "Tíos paternos": false,
-        "Tíos maternos": false,
-      },
-      Infartos: {
-        Madre: false,
-        Padre: false,
-        Hermanos: false,
-        "Tíos paternos": false,
-        "Tíos maternos": false,
-      },
+    "Diabetes": {
+        "Mother": false,
+        "Father": false,
+        "Siblings": false,
+        "Paternal Uncles": false,
+        "Maternal Uncles": false
     },
+    "Hypertension": {
+        "Mother": false,
+        "Father": false,
+        "Siblings": false,
+        "Paternal Uncles": false,
+        "Maternal Uncles": false
+    },
+    "High Cholesterol": {
+        "Mother": false,
+        "Father": false,
+        "Siblings": false,
+        "Paternal Uncles": false,
+        "Maternal Uncles": false
+    },
+    "Heart Attacks": {
+        "Mother": false,
+        "Father": false,
+        "Siblings": false,
+        "Paternal Uncles": false,
+        "Maternal Uncles": false
+    }
+},
+
     smoke: "",
     smokeHistory: "",
     smokeOther: "",

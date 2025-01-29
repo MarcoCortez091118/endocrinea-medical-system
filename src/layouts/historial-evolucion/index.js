@@ -42,6 +42,7 @@ function HistorialEvolucion() {
       comments: "",
       prognostic: "",
     });
+    console.log("Datos a enviar:", formData);
   };
 
   const handleToggle = (id) => {
