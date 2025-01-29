@@ -14,39 +14,13 @@ export default function useUsuarioTableData() {
         console.log("Pacientes obtenidos:", patients);
 
         const rows = patients.map((patient) => ({
-          foto: (
-            <SoftAvatar src={team2} size="sm" variant="rounded" />
-          ),
-          id: (
-            <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-              {patient.id}
-            </SoftTypography>
-          ),
-          nombre: (
-            <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-              {patient.first_name} {patient.last_name}
-            </SoftTypography>
-          ),
-          teléfono: (
-            <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-              {patient.phone}
-            </SoftTypography>
-          ),
-          correo: (
-            <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-              {patient.email}
-            </SoftTypography>
-          ),
-          género: (
-            <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-              {patient.gender === "male" ? "Masculino" : "Femenino"}
-            </SoftTypography>
-          ),
-          estatus: (
-            <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-              {patient.status}
-            </SoftTypography>
-          ),
+          foto: <SoftAvatar src={team2} size="sm" variant="rounded" />,
+          id: patient.id ?? 'No especificado',
+          nombre: `${patient.first_name ?? 'No first name'} ${patient.last_name ?? 'No last name'}`,
+          teléfono: patient.phone ?? 'Teléfono no proporcionado',
+          correo: patient.email ?? 'Correo no proporcionado',
+          género: patient.gender ?? 'Género no especificado',
+          estatus: patient.status ?? 'Estatus no proporcionado',
         }));
 
         setData({
