@@ -11,6 +11,8 @@ import useUsuarioTableData from "./data/authorsTableData";
 import CustomPagination from "./CustomPagination";
 import { useNavigate } from "react-router-dom";
 import AddPatient from "./AddPatient";
+import SoftAvatar from "components/SoftAvatar";
+import team2 from "assets/images/team-2.jpg";
 
 function Tables() {
   const { columns, rows } = useUsuarioTableData();
@@ -32,7 +34,16 @@ function Tables() {
   const handleRowClick = (patient) => {
     console.log("Paciente seleccionado:", patient); // Verifica los datos
     if (patient) {
-      navigate("/PatientDetails", { state: {} });
+      navigate("/PatientDetails", {
+        state: {
+          patient: {
+            name: patient.nombre,
+            id: patient.id,
+            email: patient.correo,
+            phone: patient.teléfono,
+          },
+        }
+      });
     } else {
       console.error("No se pasaron datos del paciente.");
     }
@@ -88,6 +99,39 @@ function Tables() {
                 ]}
                 rows={displayedRows.map((row) => ({
                   ...row,
+                  foto: (
+                    <SoftAvatar src={team2} size="sm" variant="rounded" />
+                  ),
+                  id: (
+                    <SoftTypography variant="caption" color="secondary" fontWeight="medium">
+                      {row.id}
+                    </SoftTypography>
+                  ),
+                  nombre: (
+                    <SoftTypography variant="caption" color="secondary" fontWeight="medium">
+                      {row.nombre}
+                    </SoftTypography>
+                  ),
+                  teléfono: (
+                    <SoftTypography variant="caption" color="secondary" fontWeight="medium">
+                      {row.teléfono}
+                    </SoftTypography>
+                  ),
+                  correo: (
+                    <SoftTypography variant="caption" color="secondary" fontWeight="medium">
+                      {row.correo}
+                    </SoftTypography>
+                  ),
+                  género: (
+                    <SoftTypography variant="caption" color="secondary" fontWeight="medium">
+                      {row.género}
+                    </SoftTypography>
+                  ),
+                  estatus: (
+                    <SoftTypography variant="caption" color="secondary" fontWeight="medium">
+                      {row.estatus}
+                    </SoftTypography>
+                  ),
                   Acciones: (
                     <Button
                       onClick={() => handleRowClick(row)}
