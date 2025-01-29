@@ -46,8 +46,8 @@ import team2 from "assets/images/team-2.jpg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 
 //Auth 
-import { useAuth } from "context/AuthContext";
-import logoutUser from "components/ApiService/logout";
+// import { useAuth } from "context/AuthContext";
+// import logoutUser from "components/ApiService/logout";
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
@@ -56,7 +56,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const [openMenu, setOpenMenu] = useState(false);
   const [message, setMessage] = useState("");
   const route = useLocation().pathname.split("/").slice(1);
-  const { isAuthenticated, logout } = useAuth();
+  //const { isAuthenticated, logout } = useAuth();
 
   const handleLogout = () => {
     logoutUser(setMessage);
@@ -140,9 +140,9 @@ function DashboardNavbar({ absolute, light, isMini }) {
     >
       <Toolbar sx={(theme) => navbarContainer(theme)}>
         <SoftBox color="inherit" mb={{ xs: 1, md: 0 }} sx={(theme) => navbarRow(theme, { isMini })}>
-          <Breadcrumbs icon={ <Link to="/dashboard"> 
-          <Icon sx={{ cursor: "pointer" }}>home</Icon>
-          </Link> } title={route[route.length - 1]} route={route} light={light} />
+          <Breadcrumbs icon={<Link to="/dashboard">
+            <Icon sx={{ cursor: "pointer" }}>home</Icon>
+          </Link>} title={route[route.length - 1]} route={route} light={light} />
         </SoftBox>
         {isMini ? null : (
           <SoftBox sx={(theme) => navbarRow(theme, { isMini })}>
@@ -154,17 +154,17 @@ function DashboardNavbar({ absolute, light, isMini }) {
             </SoftBox>
             <SoftBox color={light ? "white" : "inherit"}>
 
-              {isAuthenticated ? (
-                <SoftTypography
-                  variant="button"
-                  fontWeight="medium"
-                  color={light ? "white" : "dark"}
-                  onClick={handleLogout}
-                  sx={{ cursor: "pointer" }}
-                >
-                  Cerrar sesión
-                </SoftTypography>
-              ) : (
+              {/*{isAuthenticated ? (*/}
+              <SoftTypography
+                variant="button"
+                fontWeight="medium"
+                color={light ? "white" : "dark"}
+                onClick={handleLogout}
+                sx={{ cursor: "pointer" }}
+              >
+                Cerrar sesión
+              </SoftTypography>
+              {/* ) : (
 
                 <Link to="/authentication/sign-in">
                   <IconButton sx={navbarIconButton} size="small">
@@ -184,7 +184,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                     </SoftTypography>
                   </IconButton>
                 </Link>
-              )}
+              )} */}
               <IconButton
                 size="small"
                 color="inherit"

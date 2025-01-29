@@ -22,9 +22,9 @@ import CreditCard from "examples/Icons/CreditCard";
 import Cube from "examples/Icons/Cube";
 import HistoryIcon from "@mui/icons-material/History";
 import PatientDetails from "layouts/patientFiles/patientFiles";
-import ProtectedRoute from "components/ProtectedRoutes/ProtectedRoute";
+// import ProtectedRoute from "components/ProtectedRoutes/ProtectedRoute";
 
-const routes = (isAuthenticated) => [
+const routes = /*(isAuthenticated) =>*/[
   {
     type: "collapse",
     name: "Dashboard",
@@ -32,9 +32,9 @@ const routes = (isAuthenticated) => [
     route: "/dashboard",
     icon: <Shop size="12px" />,
     component: (
-      <ProtectedRoute>
-        <Dashboard />
-      </ProtectedRoute>
+      /*<ProtectedRoute>*/
+      <Dashboard />
+      /*</ProtectedRoute>*/
     ),
     noCollapse: true,
   },
@@ -45,9 +45,9 @@ const routes = (isAuthenticated) => [
     route: "/tables",
     icon: <Office size="12px" />,
     component: (
-      <ProtectedRoute>
-        <Tables />
-      </ProtectedRoute>
+      /*<ProtectedRoute>*/
+      <Tables />
+      /*</ProtectedRoute>*/
     ),
     noCollapse: true,
   },
@@ -58,9 +58,9 @@ const routes = (isAuthenticated) => [
     route: "/HistorialEvolucion",
     //icon: <HistoryIcon size="12px" />,
     component: (
-      <ProtectedRoute>
-        <HistorialEvolucion />
-      </ProtectedRoute>
+      /*<ProtectedRoute>*/
+      <HistorialEvolucion />
+      /*</ProtectedRoute>*/
     ),
     //noCollapse: true,
   },
@@ -71,9 +71,9 @@ const routes = (isAuthenticated) => [
     route: "/ClinicalForm",
     icon: <HistoryIcon size="12px" />,
     component: (
-      <ProtectedRoute>
-        <ClinicalForm />
-      </ProtectedRoute>
+      /*<ProtectedRoute>*/
+      <ClinicalForm />
+      /*</ProtectedRoute>*/
     ),
     noCollapse: true,
   },
@@ -84,9 +84,9 @@ const routes = (isAuthenticated) => [
     route: "/HistorialNutricional",
     icon: <HistoryIcon size="12px" />,
     component: (
-      <ProtectedRoute>
-        <HistorialNutricional />
-      </ProtectedRoute>
+      /*<ProtectedRoute>*/
+      <HistorialNutricional />
+      /*</ProtectedRoute>*/
     ),
     noCollapse: true,
   },
@@ -97,22 +97,22 @@ const routes = (isAuthenticated) => [
     route: "/NotaNutricional",
     //icon: <HistoryIcon size="12px" />,
     component: (
-      <ProtectedRoute>
-        <NotaNutricional />
-      </ProtectedRoute>
+      /*<ProtectedRoute>*/
+      <NotaNutricional />
+      /*</ProtectedRoute>*/
     ),
-   // noCollapse: true,
+    // noCollapse: true,
   },
- {
-  //  type: "collapse",
-   // name: "Historial pacientes",
+  {
+    //  type: "collapse",
+    // name: "Historial pacientes",
     key: "PatientDetails",
     route: "/PatientDetails",
     //icon: <HistoryIcon size="12px" />,
     component: (
-      <ProtectedRoute>
-        <PatientDetails />
-      </ProtectedRoute>
+      /*<ProtectedRoute>*/
+      <PatientDetails />
+      /*</ProtectedRoute>*/
     ),
     //noCollapse: true,
   },
@@ -123,23 +123,23 @@ const routes = (isAuthenticated) => [
     route: "/HistorialClinico",
     icon: <HistoryIcon size="12px" />,
     component: (
-      <ProtectedRoute>
-        <HistorialClinico />
-      </ProtectedRoute>
+      /*<ProtectedRoute>*/
+      <HistorialClinico />
+      /*</ProtectedRoute>*/
     ),
     noCollapse: true,
   },
 
   {
-   // type: "collapse",
+    // type: "collapse",
     //name: "Nota Clínica Médica",
     key: "NotaClinico",
     route: "/nota-Clinica",
     //icon: <HistoryIcon size="12px" />,
     component: (
-      <ProtectedRoute>
-        <NotaClinico />
-      </ProtectedRoute>
+      /*<ProtectedRoute>*/
+      <NotaClinico />
+      /*</ProtectedRoute>*/
     ),
     //noCollapse: true,
   },
@@ -150,49 +150,50 @@ const routes = (isAuthenticated) => [
     route: "/Agenda",
     icon: <HistoryIcon size="12px" />,
     component: (
-      <ProtectedRoute>
-        <Agenda />
-      </ProtectedRoute>
+      /*<ProtectedRoute>*/
+      <Agenda />
+      /*</ProtectedRoute>*/
     ),
     noCollapse: true,
   },
   { type: "title", title: "Account Pages", key: "account-pages" },
-  ...(isAuthenticated
-    ? [
-      {
-        type: "collapse",
-        name: "Perfil",
-        key: "profile",
-        route: "/profile",
-        icon: <CustomerSupport size="12px" />,
-        component: (
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        ),
-        noCollapse: true,
-      },
-    ]
-    : [
-      {
-        type: "collapse",
-        name: "Iniciar sesión",
-        key: "sign-in",
-        route: "/authentication/sign-in",
-        icon: <Document size="12px" />,
-        component: <SignIn />,
-        noCollapse: true,
-      },
-      {
-        type: "collapse",
-        name: "Registrarme",
-        key: "sign-up",
-        route: "/authentication/sign-up",
-        icon: <SpaceShip size="12px" />,
-        component: <SignUp />,
-        noCollapse: true,
-      },
-    ]),
+  /*...(isAuthenticated
+    ? 
+    [*/
+  {
+    type: "collapse",
+    name: "Perfil",
+    key: "profile",
+    route: "/profile",
+    icon: <CustomerSupport size="12px" />,
+    component: (
+      /*<ProtectedRoute>*/
+      <Profile />
+      /*</ProtectedRoute>*/
+    ),
+    noCollapse: true,
+  },
+  /*]*/
+  /*: [*/
+  {
+    type: "collapse",
+    name: "Iniciar sesión",
+    key: "sign-in",
+    route: "/authentication/sign-in",
+    icon: <Document size="12px" />,
+    component: <SignIn />,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Registrarme",
+    key: "sign-up",
+    route: "/authentication/sign-up",
+    icon: <SpaceShip size="12px" />,
+    component: <SignUp />,
+    noCollapse: true,
+  },
+  /*],),*/
 ];
 
 export default routes;
