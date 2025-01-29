@@ -103,6 +103,7 @@ function ClinicalForm() {
     };
 
     console.log("Generated JSON:", JSON.stringify(jsonData, null, 2));
+    console.log("Datos a enviar:", formData);
   };
 
   const handleSubmit = (event) => {

@@ -30,6 +30,7 @@ function NotaClinica() {
     };
     setNotes((prevNotes) => [newNote, ...prevNotes]);
     setFormData({ medicNote: "" }); // Resetea el formulario
+    console.log("Datos a enviar:", formData);
   };
 
   const handleToggle = (id) => {
