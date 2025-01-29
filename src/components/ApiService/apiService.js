@@ -17,10 +17,16 @@ function openDB() {
 
 // Función para guardar datos en IndexedDB
 async function saveToIndexedDB(data) {
+  if (!Array.isArray(data)) {
+    console.error("Los datos recibidos no son un array:", data);
+    return Promise.reject(new Error("Formato de datos inválido en IndexedDB"));
+  }
+
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction("patients", "readwrite");
     const store = transaction.objectStore("patients");
+
     store.clear(); // Limpiar datos previos antes de guardar nuevos
     data.forEach(patient => store.add(patient));
 
@@ -28,6 +34,7 @@ async function saveToIndexedDB(data) {
     transaction.onerror = event => reject(event.target.error);
   });
 }
+
 
 // Función para recuperar datos de IndexedDB
 async function getFromIndexedDB() {
@@ -59,15 +66,23 @@ const apiService = {
         throw new Error(`Error en la solicitud: ${response.status}`);
       }
 
-      const data = await response.json();
-      await saveToIndexedDB(data); // Guardar en IndexedDB en lugar de localStorage
+      let responseData = await response.json();
 
-      return data;
+      // Verificar si `responseData.data` existe y es un array
+      const patients = Array.isArray(responseData.data) ? responseData.data : [];
+
+      // Guardar en IndexedDB solo si hay datos válidos
+      if (patients.length > 0) {
+        await saveToIndexedDB(patients);
+      }
+
+      return patients;
     } catch (error) {
       console.error("Error al obtener los pacientes:", error);
       throw error;
     }
   },
 };
+
 
 export default apiService;
