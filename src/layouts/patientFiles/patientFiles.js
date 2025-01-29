@@ -65,10 +65,10 @@ function PatientDetails() {
                 fontSize: "18px",
               }}
             >
-              {patient ? `${patient.firstName.charAt(0)}${patient.lastName.charAt(0)}` : "N"}
+              {patient ? patient.name.charAt(0) : "N"}
             </SoftBox>
             <SoftTypography variant="h6" mt={2}>
-              {patient ? `${patient.firstName} ${patient.lastName}` : "Nombre del paciente"}
+              {patient ? patient.name.toUpperCase() : "Nombre del paciente".toUpperCase()}
             </SoftTypography>
             <SoftTypography variant="body2" color="textSecondary">
               Nº {patient?.id || "000"}
