@@ -15,20 +15,33 @@ import Citas from "./citas";
 import NotaClinico from "layouts/nota-Clinica/nota-Clinica";
 import HistorialEvolucion from "layouts/historial-evolucion";
 import NotaNutricional from "layouts/nota-Nutricion/nota-Nutricion";
+import HCP from "layouts/FormsHistoryPsychological";
+import HCN from "layouts/historial-nutricional";
+import HCM from "layouts/historial-clinico";
 import NoteDisplay from "../historial-evolucion/NoteDisplay";
 import HistoryNotes from "layouts/notesHistory/historyNotes";
+
 
 function PatientDetails() {
   const location = useLocation();
   const { patient } = location.state || {}; // Datos del paciente seleccionados
 
-  const [activeTab, setActiveTab] = useState(0); // Control de pestañas
+  const [activeTab, setActiveTab] = useState(0); // Estado para la primera fila de pestañas
+  const [activeSubTab, setActiveSubTab] = useState(null); // Estado para la segunda fila de pestañas
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
+    setActiveSubTab(null); // Al cambiar el tab principal, desactivar el sub-tab
+  };
+
+  const handleSubTabChange = (event, newValue) => {
+    setActiveSubTab(newValue);
+    setActiveTab(null); // Al cambiar el sub-tab, desactivar el tab principal
   };
 
   const renderTabContent = () => {
+    if (activeSubTab !== null) return null; // Oculta el contenido del tab principal si hay un sub-tab activo
+
     switch (activeTab) {
       case 0:
         return <Citas />;
@@ -46,6 +59,21 @@ function PatientDetails() {
         return <NotaNutricional />;
       case 7:
         return <NoteDisplay patientId={patient?.id} />; // 👈 Pasamos el ID del paciente a NoteDisplay
+      default:
+        return null;
+    }
+  };
+
+  const renderSubTabContent = () => {
+    if (activeTab !== null) return null; // Oculta el contenido del sub-tab si hay un tab principal activo
+
+    switch (activeSubTab) {
+      case 0:
+        return <HCP />;
+      case 1:
+        return <HCN />;
+      case 2:
+        return <HCM />;
       default:
         return null;
     }
@@ -91,6 +119,7 @@ function PatientDetails() {
 
         {/* Panel Derecho - Contenido de pestañas */}
         <SoftBox style={{ width: "75%" }}>
+          {/* Primera fila de pestañas */}
           <Tabs
             value={activeTab}
             onChange={handleTabChange}
@@ -125,8 +154,27 @@ function PatientDetails() {
               className={activeTab === 6 ? "tab-active" : "tab"}
             />
           </Tabs>
+
           <Divider style={{ margin: "16px 0" }} />
+
+          {/* Segunda fila de pestañas */}
+          <Tabs
+            value={activeSubTab}
+            onChange={handleSubTabChange}
+            TabIndicatorProps={{ style: { display: "none" } }} // Sin indicador predeterminado
+          >
+            <Tab label="HCP" className={activeSubTab === 0 ? "sub-tab-active" : "sub-tab"} />
+            <Tab label="HCN" className={activeSubTab === 1 ? "sub-tab-active" : "sub-tab"} />
+            <Tab label="HCM" className={activeSubTab === 2 ? "sub-tab-active" : "sub-tab"} />
+          </Tabs>
+
+          <Divider style={{ margin: "16px 0" }} />
+
+          {/* Contenido de la pestaña principal (solo si no hay sub-tab activo) */}
           {renderTabContent()}
+
+          {/* Contenido del sub-tab (solo si no hay tab principal activo) */}
+          {renderSubTabContent()}
         </SoftBox>
       </SoftBox>
       <Footer />

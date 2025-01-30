@@ -11,6 +11,7 @@ import HistorialClinico from "layouts/historial-clinico";
 import NotaClinico from "layouts/nota-Clinica/nota-Clinica";
 import HistorialNutricional from "layouts/historial-nutricional";
 import NotaNutricional from "layouts/nota-Nutricion/nota-Nutricion";
+import NuevoRegistro from "layouts/registro-Paciente/nuevo-Registro";
 import Agenda from "layouts/agenda";
 import Shop from "examples/Icons/Shop";
 import Office from "examples/Icons/Office";
@@ -52,44 +53,44 @@ const routes = /*(isAuthenticated) =>*/[
     noCollapse: true,
   },
   {
-    //type: "collapse",
-    //name: "Nota de Evolución",
-    key: "HistorialEvolucion",
-    route: "/HistorialEvolucion",
-    //icon: <HistoryIcon size="12px" />,
+    type: "collapse",
+    name: "Nuevo registro",
+    key: "NuevoRegistro",
+    route: "/NuevoRegistro",
+    icon: <HistoryIcon size="12px" />,
     component: (
       /*<ProtectedRoute>*/
-      <HistorialEvolucion />
+      <NuevoRegistro />
       /*</ProtectedRoute>*/
     ),
     //noCollapse: true,
   },
-  {
-    type: "collapse",
-    name: "HCP",
-    key: "ClinicalForm",
-    route: "/ClinicalForm",
-    icon: <HistoryIcon size="12px" />,
-    component: (
+  //{
+    //type: "collapse",
+    //name: "HCP",
+    //key: "ClinicalForm",
+    //route: "/ClinicalForm",
+    //icon: <HistoryIcon size="12px" />,
+    //component: (
       /*<ProtectedRoute>*/
-      <ClinicalForm />
+      //<ClinicalForm />
       /*</ProtectedRoute>*/
-    ),
-    noCollapse: true,
-  },
-  {
-    type: "collapse",
-    name: "HCN",
-    key: "HistorialNutricional",
-    route: "/HistorialNutricional",
-    icon: <HistoryIcon size="12px" />,
-    component: (
+   // ),
+    //noCollapse: true,
+ // },
+ // {
+  //  type: "collapse",
+  //  name: "HCN",
+  //  key: "HistorialNutricional",
+  //  route: "/HistorialNutricional",
+  //  icon: <HistoryIcon size="12px" />,
+ //   component: (
       /*<ProtectedRoute>*/
-      <HistorialNutricional />
+   //   <HistorialNutricional />
       /*</ProtectedRoute>*/
-    ),
-    noCollapse: true,
-  },
+  //  ),
+  //  noCollapse: true,
+ // },
   {
     //type: "collapse",
     //name: "Nota Nutricional",
@@ -116,19 +117,19 @@ const routes = /*(isAuthenticated) =>*/[
     ),
     //noCollapse: true,
   },
-  {
-    type: "collapse",
-    name: "HCM",
-    key: "HistorialClinico",
-    route: "/HistorialClinico",
-    icon: <HistoryIcon size="12px" />,
-    component: (
+ // {
+ //   type: "collapse",
+ //   name: "HCM",
+ //   key: "HistorialClinico",
+ //   route: "/HistorialClinico",
+ //   icon: <HistoryIcon size="12px" />,
+ //   component: (
       /*<ProtectedRoute>*/
-      <HistorialClinico />
+  //    <HistorialClinico />
       /*</ProtectedRoute>*/
-    ),
-    noCollapse: true,
-  },
+ //   ),
+ //   noCollapse: true,
+ // },
 
   {
     // type: "collapse",
