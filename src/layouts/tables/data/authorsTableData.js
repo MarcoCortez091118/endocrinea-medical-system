@@ -11,22 +11,28 @@ export default function useUsuarioTableData() {
     async function fetchData() {
       try {
         const patients = await apiService.getPatients();
+
+        if (!Array.isArray(patients)) {
+          console.error("Formato de pacientes inválido:", patients);
+          return;
+        }
+
         console.log("Pacientes obtenidos:", patients);
 
         const rows = patients.map((patient) => ({
           foto: <SoftAvatar src={team2} size="sm" variant="rounded" />,
-          id: patient.id ?? 'No especificado',
-          nombre: `${patient.first_name ?? 'No first name'} ${patient.last_name ?? 'No last name'}`,
-          teléfono: patient.phone ?? 'Teléfono no proporcionado',
-          correo: patient.email ?? 'Correo no proporcionado',
-          género: patient.gender ?? 'Género no especificado',
-          estatus: patient.status ?? 'Estatus no proporcionado',
+          numero: patient.number ?? "No especificado",
+          nombre: `${patient.first_name ?? "No first name"} ${patient.last_name ?? "No last name"}`,
+          teléfono: patient.phone ?? "Teléfono no proporcionado",
+          correo: patient.email ?? "Correo no proporcionado",
+          género: patient.gender ?? "Género no especificado",
+          estatus: patient.status ?? "Estatus no proporcionado",
         }));
 
         setData({
           columns: [
             { name: "foto", align: "center" },
-            { name: "id", align: "left" },
+            { name: "numero", align: "left" },
             { name: "nombre", align: "left" },
             { name: "teléfono", align: "left" },
             { name: "correo", align: "left" },
@@ -42,6 +48,7 @@ export default function useUsuarioTableData() {
 
     fetchData();
   }, []);
+
 
   return data;
 }
