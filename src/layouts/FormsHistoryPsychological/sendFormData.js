@@ -1,18 +1,24 @@
-// utils/formHelper.js
-export const sendFormData = (formData) => {
-    fetch("https://tuservidor.com/api/formulario", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Formulario enviado:", data);
-      })
-      .catch((error) => {
-        console.error("Error al enviar el formulario:", error);
-      });
-  };
-  
+export const sendFormData = async (formData) => {
+  try {
+    const response = await fetch(
+      "https://endocrinea-fastapi-datacolletion.azurewebsites.net/psychology/create",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return { success: true, data };
+  } catch (error) {
+    console.error("Error sending form data:", error);
+    return { success: false, error: error.message };
+  }
+};

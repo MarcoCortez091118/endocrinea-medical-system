@@ -17,7 +17,14 @@ function NoteDisplay({ note, expandedNoteId, onToggle }) {
     <SoftBox sx={{ p: 3, mb: 3, border: "1px solid #ccc", borderRadius: "4px" }}>
       <SoftBox sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <SoftTypography variant="h6">
-          Fecha de creación: {note.date}
+          Fecha de creación: {new Date(note.created_at).toLocaleString("es-ES", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+          })}
         </SoftTypography>
       </SoftBox>
       <SoftBox

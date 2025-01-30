@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import Form from "./Form";
 import NoteDisplay from "./NoteDisplay";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import Card from "@mui/material/Card";
 
-function HistorialEvolucion() {
+function HistorialEvolucion({ patientId }) {
   const [formData, setFormData] = useState({
     presentation: "",
     evolution: "",
@@ -17,6 +18,31 @@ function HistorialEvolucion() {
 
   const [notes, setNotes] = useState([]);
   const [expandedNoteId, setExpandedNoteId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const apiUrl = `https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/${patientId}/psychology_notes`;
+
+  useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error(`Error HTTP: ${response.status}`);
+        }
+        const data = await response.json();
+        setNotes(data); // Guardamos las notas obtenidas
+      } catch (err) {
+        setError("Error al cargar las notas");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (patientId) {
+      fetchNotes();
+    }
+  }, [patientId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,7 +94,11 @@ function HistorialEvolucion() {
 
       {/* Notas registradas */}
       <SoftBox mt={4}>
-        {notes.length > 0 ? (
+        {loading ? (
+          <SoftTypography variant="body1" textAlign="center">Cargando notas...</SoftTypography>
+        ) : error ? (
+          <SoftTypography variant="body1" color="error" textAlign="center">{error}</SoftTypography>
+        ) : notes.length > 0 ? (
           <>
             <SoftTypography variant="h4" mb={3} fontWeight="bold" textAlign="center">
               Historial de Notas de Evolución
@@ -102,5 +132,8 @@ function HistorialEvolucion() {
     </SoftBox>
   );
 }
+HistorialEvolucion.propTypes = {
+  patientId: PropTypes.string.isRequired,
+};
 
 export default HistorialEvolucion;

@@ -15,6 +15,7 @@ import Citas from "./citas";
 import NotaClinico from "layouts/nota-Clinica/nota-Clinica";
 import HistorialEvolucion from "layouts/historial-evolucion";
 import NotaNutricional from "layouts/nota-Nutricion/nota-Nutricion";
+import NoteDisplay from "../historial-evolucion/NoteDisplay";
 import HistoryNotes from "layouts/notesHistory/historyNotes";
 
 function PatientDetails() {
@@ -38,11 +39,13 @@ function PatientDetails() {
       case 3:
         return <DatosPaciente />;
       case 4:
-        return <HistorialEvolucion />;
+        return return <HistorialEvolucion patientId={patient?.id} />;
       case 5:
         return <NotaClinico />;
       case 6:
         return <NotaNutricional />;
+      case 7:
+        return <NoteDisplay patientId={patient?.id} />; // 👈 Pasamos el ID del paciente a NoteDisplay
       default:
         return null;
     }
