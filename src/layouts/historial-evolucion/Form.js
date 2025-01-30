@@ -30,7 +30,7 @@ function Form({ formData, onChange, onSubmit }) {
 
     setLoading(true); // Mostrar estado de carga
 
-    const apiUrl = `https://endocrinea-fastapi-datacolletion.azurewebsites.net/psychology/${patient.id}/note`;
+    const apiUrl = `https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/${patient.id}/psychology_notes`;
 
     const requestBody = {
       presentation: formData.presentation,
@@ -92,7 +92,7 @@ function Form({ formData, onChange, onSubmit }) {
               <textarea
                 id={field.id}
                 name={field.id}
-                value={formData[field.id]}
+                value={formData[field.id] || ""}
                 onChange={onChange}
                 rows={3}
                 className="global-textarea"
