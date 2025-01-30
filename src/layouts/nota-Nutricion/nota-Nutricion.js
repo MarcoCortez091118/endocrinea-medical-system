@@ -1,6 +1,6 @@
 // Importaciones necesarias
 import React, { useState } from "react";
-import Notas from "./Notas"
+import Notas from "./Notas";
 import Card from "@mui/material/Card";
 import {
   TextField,
@@ -86,6 +86,7 @@ function NotaNutricional() {
     newMeasurements: [],
 
     diagnosis: "",
+    created_at: new Date().toISOString(),
   });
 
   const [notas, setNotas] = useState([]); // Almacena las notas enviadas
@@ -93,7 +94,7 @@ function NotaNutricional() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-  
+
     // Manejamos el cambio de estado civil y limpiamos "otherStatus" si no es "otros"
     if (name === "maritalStatus" && value !== "otros") {
       setFormData((prevData) => ({
@@ -101,7 +102,7 @@ function NotaNutricional() {
         [name]: value,
         otherStatus: "", // Limpiamos el campo "otherStatus"
       }));
-    } 
+    }
     // Manejamos el cambio de cirugía y limpiamos los campos relacionados
     else if (name === "surgery") {
       setFormData((prevData) => ({
@@ -110,7 +111,7 @@ function NotaNutricional() {
         surgeryHistory: [], // Limpiamos el historial de cirugías
         surgeryOther: "", // Limpiamos el campo de especificaciones
       }));
-    } 
+    }
     // Manejamos casos relacionados con síntomas gastrointestinales
     else if (name === "symptomsGastrointestinal" && value !== "Si") {
       setFormData((prevData) => ({
@@ -120,7 +121,7 @@ function NotaNutricional() {
         frequencyStraining: "",
         frequencyDiarrhea: "",
       }));
-    } 
+    }
     // Actualización genérica para los demás campos
     else {
       setFormData((prevData) => ({
@@ -129,7 +130,6 @@ function NotaNutricional() {
       }));
     }
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -145,6 +145,7 @@ function NotaNutricional() {
       ...formData,
     };
     setNotas((prevNotas) => [newNote, ...prevNotas]); // Guarda una copia del formulario en las notas
+    // Limpia el formulario después de enviar
     setFormData({
       symptoms: "",
       energy: "",
@@ -158,13 +159,11 @@ function NotaNutricional() {
       TypesExercise: "",
       exerciseDaysWeek: "",
       exerciseIntensity: "",
-
       breakfast: "",
       collation1: "",
-      breakfast: "",
+      meal: "",
       collation2: "",
       extras: "",
-
       measurementDates: "",
       waist: "",
       abdomen: "",
@@ -173,11 +172,12 @@ function NotaNutricional() {
       rightArm: "",
       rightCalf: "",
       leftCalf: "",
-
       diagnosis: "",
-      
-    }); // Limpia el formulario
+      created_at: new Date().toISOString(),
+    });
     setMostrarNotas(true); // Muestra las notas después de enviar
+
+    alert("Formulario enviado con éxito.");
 
     console.log("Datos a enviar:", formData);
   };
@@ -309,7 +309,6 @@ function NotaNutricional() {
   const handleReset = () => {
     setActiveStep(0);
   };
-  
 
   return (
     <SoftBox py={3}>
@@ -948,21 +947,10 @@ function NotaNutricional() {
             </Button>
           </Box>
         )}
-
-
-        
       </form>
       {/* Sección de notas */}
-      <Card sx={{ p: 3, mb: 3, boxShadow: 3 }} >
-        {mostrarNotas && <Notas notas={notas} />}
-      </Card>
-      
-        
-      
+      <Card sx={{ p: 3, mb: 3, boxShadow: 3 }}>{mostrarNotas && <Notas notas={notas} />}</Card>
     </SoftBox>
-
-    
-    
   );
 }
 

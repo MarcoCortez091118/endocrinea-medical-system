@@ -18,31 +18,31 @@ function NoteDisplay({ nota }) {
     {
       label: "Subjetivo",
       fields: [
-        { id: "sintomas", label: "1. Síntomas *" },
-        { id: "energia", label: "2. Energía *" },
-        { id: "sintomasGastrointestinales", label: "3. Síntomas gastrointestinales *" },
-        { id: "frecuenciaEstrenimiento", label: "3.1. Frecuencia (Estreñimiento)" },
-        { id: "frecuenciaDiarrea", label: "3.2 Frecuencia (Diarréa)" },
-        { id: "padecimientosActuales", label: "4. Enfermedades *" },
-        { id: "complicaciones", label: "5. Complicaciones *" },
-        { id: "liquidos", label: "6. Líquidos *" },
+        { id: "symptoms", label: "1. Síntomas *" },
+        { id: "energy", label: "2. Energía *" },
+        { id: "symptomsGastrointestinal", label: "3. Síntomas gastrointestinales *" },
+        { id: "frequencyStraining", label: "3.1. Frecuencia (Estreñimiento)" },
+        { id: "frequencyDiarrhea", label: "3.2 Frecuencia (Diarréa)" },
+        { id: "currentConditions", label: "4. Enfermedades *" },
+        { id: "complications", label: "5. Complicaciones *" },
+        { id: "liquids", label: "6. Líquidos *" },
       ],
     },
     {
       label: "Objetivo",
       fields: [
-        { id: "TiposEjercicios", label: "7. Tipo de ejercicio" },
-        { id: "ejercicioDiasSemana", label: "8. Días a la semana" },
-        { id: "ejercicioIntensidad", label: "9. Intensidad" },
+        { id: "TypesExercise", label: "7. Tipo de ejercicio" },
+        { id: "exerciseDaysWeek", label: "8. Días a la semana" },
+        { id: "exerciseIntensity", label: "9. Intensidad" },
       ],
     },
     {
       label: "Evaluación dietética",
       fields: [
-        { id: "desayuno", label: "10. Desayuno" },
-        { id: "colacion1", label: "11. Colación" },
-        { id: "comina", label: "12. Comida" },
-        { id: "colacion2", label: "13. Colación 2" },
+        { id: "breakfast", label: "10. Desayuno" },
+        { id: "collation1", label: "11. Colación" },
+        { id: "meal", label: "12. Comida" },
+        { id: "collation2", label: "13. Colación 2" },
         { id: "extras", label: "14. Extras" },
       ],
     },
@@ -61,7 +61,7 @@ function NoteDisplay({ nota }) {
     },
     {
       label: "Plan",
-      fields: [{ id: "diagnostico", label: "23. Plan" }],
+      fields: [{ id: "diagnosis", label: "23. Plan" }],
     },
   ];
 
