@@ -38,7 +38,7 @@ function Tables() {
         state: {
           patient: {
             name: patient.nombre,
-            numero: patient.number,
+            id: patient.id,
             email: patient.correo,
             phone: patient.teléfono,
           },
@@ -104,7 +104,7 @@ function Tables() {
                   ),
                   id: (
                     <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-                      {row.number}
+                      {row.id}
                     </SoftTypography>
                   ),
                   nombre: (
