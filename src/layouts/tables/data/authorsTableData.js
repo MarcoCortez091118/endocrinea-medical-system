@@ -21,7 +21,7 @@ export default function useUsuarioTableData() {
 
         const rows = patients.map((patient) => ({
           foto: <SoftAvatar src={team2} size="sm" variant="rounded" />,
-          numero: patient.number ?? "No especificado",
+          id: patient.id ?? "No especificado",
           nombre: `${patient.first_name ?? "No first name"} ${patient.last_name ?? "No last name"}`,
           teléfono: patient.phone ?? "Teléfono no proporcionado",
           correo: patient.email ?? "Correo no proporcionado",
@@ -32,7 +32,7 @@ export default function useUsuarioTableData() {
         setData({
           columns: [
             { name: "foto", align: "center" },
-            { name: "numero", align: "left" },
+            { name: "id", align: "left" },
             { name: "nombre", align: "left" },
             { name: "teléfono", align: "left" },
             { name: "correo", align: "left" },

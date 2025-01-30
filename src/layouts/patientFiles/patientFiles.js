@@ -46,13 +46,13 @@ function PatientDetails() {
       case 0:
         return <Citas />;
       case 1:
-        return <HistoryNotes />;  
+        return <HistoryNotes />;
       case 2:
         return <Documentos />;
       case 3:
         return <DatosPaciente />;
       case 4:
-        return return <HistorialEvolucion patientId={patient?.id} />;
+        return <HistorialEvolucion patientId={patient?.id} />;
       case 5:
         return <NotaClinico />;
       case 6:
