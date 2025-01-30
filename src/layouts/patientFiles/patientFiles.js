@@ -16,6 +16,7 @@ import NotaClinico from "layouts/nota-Clinica/nota-Clinica";
 import HistorialEvolucion from "layouts/historial-evolucion";
 import NotaNutricional from "layouts/nota-Nutricion/nota-Nutricion";
 import NoteDisplay from "../historial-evolucion/NoteDisplay";
+import HistoryNotes from "layouts/notesHistory/historyNotes";
 
 function PatientDetails() {
   const location = useLocation();
@@ -32,16 +33,18 @@ function PatientDetails() {
       case 0:
         return <Citas />;
       case 1:
-        return <Documentos />;
+        return <HistoryNotes />;  
       case 2:
-        return <DatosPaciente />;
+        return <Documentos />;
       case 3:
-        return <HistorialEvolucion patientId={patient?.id} />;
+        return <DatosPaciente />;
       case 4:
-        return <NotaClinico />;
+        return return <HistorialEvolucion patientId={patient?.id} />;
       case 5:
-        return <NotaNutricional />;
+        return <NotaClinico />;
       case 6:
+        return <NotaNutricional />;
+      case 7:
         return <NoteDisplay patientId={patient?.id} />; // 👈 Pasamos el ID del paciente a NoteDisplay
       default:
         return null;
@@ -98,24 +101,28 @@ function PatientDetails() {
               className={activeTab === 0 ? "tab-active" : "tab"}
             />
             <Tab
-              label="Documentos"
+              label="Historial de Notas"
               className={activeTab === 1 ? "tab-active" : "tab"}
             />
             <Tab
-              label="Datos del Paciente"
+              label="Documentos"
               className={activeTab === 2 ? "tab-active" : "tab"}
             />
             <Tab
-              label="Nota de Evolución"
+              label="Datos del Paciente"
               className={activeTab === 3 ? "tab-active" : "tab"}
             />
             <Tab
-              label="Nota Clínica Médica"
+              label="Nota de Evolución"
               className={activeTab === 4 ? "tab-active" : "tab"}
             />
             <Tab
-              label="Nota Nutricional"
+              label="Nota Clínica Médica"
               className={activeTab === 5 ? "tab-active" : "tab"}
+            />
+            <Tab
+              label="Nota Nutricional"
+              className={activeTab === 6 ? "tab-active" : "tab"}
             />
           </Tabs>
           <Divider style={{ margin: "16px 0" }} />
