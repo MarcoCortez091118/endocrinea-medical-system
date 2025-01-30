@@ -106,11 +106,37 @@ function ClinicalForm() {
     console.log("Datos a enviar:", formData);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    generateJSON();
-    // Aquí puedes enviar los datos generados a tu API si es necesario
+    const jsonData = {
+      id: crypto.randomUUID(), // Genera un ID único
+      name: formData.name,
+      birthDate: formData.birthDate,
+      gender: formData.gender,
+      maritalStatus: formData.maritalStatus,
+      highestEducation: formData.highestEducation,
+      occupation: formData.occupation,
+      religiousBeliefs: formData.religiousBeliefs,
+      medicalHistory: formData.medicalHistory,
+      substanceAbuse: formData.substanceAbuse,
+      lifestyle: formData.lifestyle,
+      otherSections: formData.otherSections,
+      created_at: new Date().toISOString(), // Genera la fecha actual en formato ISO
+    };
+
+    console.log("Enviando datos:", JSON.stringify(jsonData, null, 2));
+
+    const response = await sendFormData(jsonData);
+
+    if (response.success) {
+      alert("Formulario enviado con éxito");
+      console.log("Respuesta de la API:", response.data);
+      setActiveStep(0); // Reinicia el formulario
+    } else {
+      alert("Error al enviar el formulario: " + response.error);
+    }
   };
+
 
   const steps = ['Ficha de identificación', 'Antecedentes médicos', 'Toxicomanías', 'Estilo de vida', 'Evaluación psicológica integral'];
 
@@ -289,7 +315,7 @@ function ClinicalForm() {
                             borderColor: "#183A64",
                           },
                         }}
-                        
+
                       >
                         <MenuItem value="Single">Soltero/a</MenuItem>
                         <MenuItem value="Married">Casado/a</MenuItem>

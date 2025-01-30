@@ -71,7 +71,7 @@ function PatientDetails() {
               {patient ? patient.name.toUpperCase() : "Nombre del paciente".toUpperCase()}
             </SoftTypography>
             <SoftTypography variant="body2" color="textSecondary">
-              Nº {patient?.id || "000"}
+              Nº {patient?.number || "000"}
             </SoftTypography>
             <SoftTypography mt={1} variant="body2">
               {patient?.email || "Email no proporcionado"}
