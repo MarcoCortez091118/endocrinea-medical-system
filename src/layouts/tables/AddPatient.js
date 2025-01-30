@@ -32,7 +32,7 @@ function AddPatient({ open, onClose }) {
     const patientData = {
       first_name: formData.first_name,
       last_name: formData.last_name,
-      phone: formData.phone,
+      phoneNumber: formData.phone,
       email: formData.email,
       type: formData.type,
     };
