@@ -15,6 +15,7 @@ import Citas from "./citas";
 import NotaClinico from "layouts/nota-Clinica/nota-Clinica";
 import HistorialEvolucion from "layouts/historial-evolucion";
 import NotaNutricional from "layouts/nota-Nutricion/nota-Nutricion";
+import NoteDisplay from "../historial-evolucion/NoteDisplay";
 
 function PatientDetails() {
   const location = useLocation();
@@ -35,11 +36,13 @@ function PatientDetails() {
       case 2:
         return <DatosPaciente />;
       case 3:
-        return <HistorialEvolucion />;
+        return <HistorialEvolucion patientId={patient?.id} />;
       case 4:
         return <NotaClinico />;
       case 5:
         return <NotaNutricional />;
+      case 6:
+        return <NoteDisplay patientId={patient?.id} />; // 👈 Pasamos el ID del paciente a NoteDisplay
       default:
         return null;
     }
@@ -71,7 +74,7 @@ function PatientDetails() {
               {patient ? patient.name.toUpperCase() : "Nombre del paciente".toUpperCase()}
             </SoftTypography>
             <SoftTypography variant="body2" color="textSecondary">
-              Nº {patient?.number || "000"}
+              Nº {patient?.id || "000"}
             </SoftTypography>
             <SoftTypography mt={1} variant="body2">
               {patient?.email || "Email no proporcionado"}
