@@ -1,5 +1,6 @@
 // Importaciones necesarias
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import Notas from "./Notas";
 import Card from "@mui/material/Card";
 import {
@@ -49,7 +50,7 @@ import { Code, Margin, WidthFull } from "@mui/icons-material";
 
 // Libreria gluestacks
 
-function NotaNutricional() {
+function NotaNutricional({ patientId }) {
   {
     /* Variables */
   }
@@ -86,7 +87,6 @@ function NotaNutricional() {
     newMeasurements: [],
 
     diagnosis: "",
-    created_at: new Date().toISOString(),
   });
 
   const [notas, setNotas] = useState([]); // Almacena las notas enviadas
@@ -131,56 +131,96 @@ function NotaNutricional() {
     }
   };
 
+  // Reemplázalo con el ID real del paciente
+  //const patientId = "12345"; // Reemplázalo con el ID del paciente
+  const apiUrl = `https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/${patientId}/nutrition_notes`;
+
+  // ✅ Obtener notas al cargar la página
+  useEffect(() => {
+    const fetchNotas = async () => {
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error(`Error al obtener datos: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setNotas(data); // Guardar notas en el estado
+        setMostrarNotas(true);
+      } catch (error) {
+        console.error("Error al obtener notas:", error);
+      }
+    };
+
+    fetchNotas();
+  }, [apiUrl]); // Se ejecuta cuando cambia el `apiUrl`
+
+  // ✅ Enviar notas con POST
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const dataToSend = { ...formData };
-    if (dataToSend.maritalStatus !== "Otros") {
-      delete dataToSend.otherStatus;
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error al enviar datos: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      console.log("Nota enviada con éxito:", result);
+
+      alert("Nota guardada correctamente");
+
+      const newNote = {
+        id: result.id, // Usar el ID de la API
+        created_at: new Date().toISOString(), // Fecha actual
+        ...formData,
+      };
+
+      setNotas((prevNotas) => [newNote, ...prevNotas]); // Agregar nueva nota al estado
+      setMostrarNotas(true);
+
+      // Limpiar el formulario
+      setFormData({
+        symptoms: "",
+        symptomsGastrointestinal: "",
+        abdomen: "",
+        TypesExercise: "",
+        leftArm: "",
+        waist: "",
+        diagnosis: "",
+        breakfast: "",
+        meal: "",
+        rightArm: "",
+        rightCalf: "",
+        exerciseIntensity: "",
+        measurementDates: "",
+        complications: "",
+        leftCalf: "",
+        detailSymptoms: [],
+        frequencyDiarrhea: "",
+        extras: "",
+        liquids: "",
+        energy: "",
+        collation1: "",
+        hips: "",
+        currentConditions: "",
+        exerciseDaysWeek: "",
+        frequencyStraining: "",
+        collation2: "",
+      });
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+      alert("Hubo un error al guardar la nota. Inténtalo nuevamente.");
     }
-
-    const newNote = {
-      id: notas.length + 1,
-      date: new Date().toLocaleString(),
-      ...formData,
-    };
-    setNotas((prevNotas) => [newNote, ...prevNotas]); // Guarda una copia del formulario en las notas
-    // Limpia el formulario después de enviar
-    setFormData({
-      symptoms: "",
-      energy: "",
-      symptomsGastrointestinal: "",
-      detailSymptoms: [],
-      frequencyStraining: "",
-      frequencyDiarrhea: "",
-      currentConditions: "",
-      complications: "",
-      liquids: "",
-      TypesExercise: "",
-      exerciseDaysWeek: "",
-      exerciseIntensity: "",
-      breakfast: "",
-      collation1: "",
-      meal: "",
-      collation2: "",
-      extras: "",
-      measurementDates: "",
-      waist: "",
-      abdomen: "",
-      hips: "",
-      leftArm: "",
-      rightArm: "",
-      rightCalf: "",
-      leftCalf: "",
-      diagnosis: "",
-      created_at: new Date().toISOString(),
-    });
-    setMostrarNotas(true); // Muestra las notas después de enviar
-
-    alert("Formulario enviado con éxito.");
-
-    console.log("Datos a enviar:", formData);
   };
+
+  
 
   const [columnsMediciones, setColumnsMediciones] = useState([]);
   const [datesMediciones, setDatesMediciones] = useState([]);
@@ -950,8 +990,12 @@ function NotaNutricional() {
       </form>
       {/* Sección de notas */}
       <Card sx={{ p: 3, mb: 3, boxShadow: 3 }}>{mostrarNotas && <Notas notas={notas} />}</Card>
-    </SoftBox>
+        
+        
+      </SoftBox>
   );
 }
-
+NotaNutricional.propTypes = {
+  patientId: PropTypes.string.isRequired,
+};
 export default NotaNutricional;

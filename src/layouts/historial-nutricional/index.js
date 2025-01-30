@@ -1,5 +1,6 @@
 // Importaciones necesarias
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import Card from "@mui/material/Card";
 import {
   TextField,
@@ -48,10 +49,11 @@ import Footer from "examples/Footer";
 import "layouts/TextareaStyles.css";
 import button from "assets/theme/components/button";
 import { Code, Margin, WidthFull } from "@mui/icons-material";
+import Notas from "./nota-historial-nutricion";
 
 // Libreria gluestacks
 
-function HistorialNutricional() {
+function HistorialNutricional({ patientId }) {
   {
     /* Variables */
   }
@@ -214,49 +216,133 @@ function HistorialNutricional() {
     }
   };
 
+  const [notas, setNotas] = useState([]); // Almacena las notas enviadas
+  const [mostrarNotas, setMostrarNotas] = useState(false); // Controla la visualización de la sección de notas
+  
+
+ // const patientId = "12345"; // ⚠️ REEMPLAZA esto con el ID real del paciente
+  const apiUrl = `https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/${patientId}/nutrition_records`;
+
+  // ✅ Obtener historial nutricional al cargar el componente
+  useEffect(() => {
+    const fetchHistorial = async () => {
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error(`Error al obtener datos: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setNotas(data); // Guardar notas en el estado
+        setMostrarNotas(true);
+        
+      } catch (error) {
+        console.error("Error al obtener historial nutricional:", error);
+      }
+    };
+
+    fetchHistorial();
+  }, [apiUrl]); // Ejecuta cuando cambia el `apiUrl`
+
+  // ✅ Enviar datos con POST
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const dataToSend = { ...formData };
-    if (dataToSend.maritalStatus !== "Otros") {
-      delete dataToSend.otherStatus;
-    }
-
-    // Aquí debes enviar formData a la API
-    /* 
     try {
-      // Aquí iría la lógica para enviar los datos a la API
-      const response = await fetch('https://api.example.com/submit-historial', {
-        method: 'POST',
+      const response = await fetch(apiUrl, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
-        console.log('Historial enviado exitosamente');
-        // Manejar la respuesta de éxito aquí
-      } else {
-        console.error('Error al enviar el historial');
-        // Manejar errores aquí
+      if (!response.ok) {
+        throw new Error(`Error al enviar datos: ${response.statusText}`);
       }
+
+      const result = await response.json();
+      console.log("Historial enviado con éxito:", result);
+
+      alert("Historial guardado correctamente");
+
+      const newNote = {
+        id: result.id, // Usar el ID de la API
+        created_at: new Date().toISOString(), // Fecha actual
+        ...formData,
+      };
+      
+      setHistorial((prevHistorial) => [newNote, ...prevHistorial]); // Agregar nuevo historial a la lista
+      setMostrarNotas(true);
+      // Limpiar el formulario
+      setFormData({
+        name: "",
+        gender: "",
+        reasonVisit: "",
+        birthDate: "",
+        occupation: "",
+        familyHistory: {},
+        otherFamilyHistory: "",
+        drugAllergy: "",
+        otherDrugAllergies: "",
+        foodAllergy: "",
+        otherFoodAllergies: "",
+        prohibitedFoods: "",
+        otherProhibitedFoods: "",
+        exercise: "",
+        exerciseTypes: "",
+        exerciseDaysPerWeek: "",
+        exerciseIntensity: "",
+        sleepInsomnia: false,
+        sleepHours: "",
+        medications: "",
+        vitamins: "",
+        supplements: "",
+        relevantLabResults: "",
+        gastrointestinalSymptoms: "",
+        breakfast: "",
+        snack1: "",
+        lunch: "",
+        snack2: "",
+        extras: "",
+        foodNotLike: "",
+        glucose: "",
+        bloodPressure: "",
+        temperature: "",
+        heartRate: "",
+        weightDates: "",
+        usualWeight: "",
+        maximumWeight: "",
+        minimumWeight: "",
+        currentWeight: "",
+        measurementDates: "",
+        waist: "",
+        abdomen: "",
+        hips: "",
+        leftArm: "",
+        rightArm: "",
+        rightCalf: "",
+        leftCalf: "",
+        diagnosis: "",
+        goal: "",
+        medicationsGoal: "",
+        nutritionalPlanType: "",
+        specifications: "",
+        smoke: "",
+        smokeHistory: "",
+        smokeOther: "",
+        alcohol: "",
+        alcoholHistory: "",
+        alcoholOther: "",
+        surgery: "",
+        surgeryHistory: [],
+        surgeryOther: "",
+      });
+      console.log("Datos a enviar:", formData);
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error en la solicitud:", error);
+      alert("Hubo un error al guardar el historial. Inténtalo nuevamente.");
     }
-    */
-
-    /*
-    const blob = new Blob([JSON.stringify(dataToSend, null, 2)], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "historial-clinico.txt";
-    link.click();
-    URL.revokeObjectURL(url);
-    */
-
-    console.log("Datos a enviar:", formData);
+    
   };
 
   const data = [
@@ -1843,8 +1929,13 @@ function HistorialNutricional() {
           </Box>
         )}
       </form>
-    </SoftBox>
+      {/* Sección de notas 
+      <Card sx={{ p: 3, mt: 4, boxShadow: 3 }}>{mostrarNotas && <Notas notas={notas} />}</Card>
+   */}
+      </SoftBox>
   );
 }
-
+HistorialNutricional.propTypes = {
+  patientId: PropTypes.string.isRequired,
+};
 export default HistorialNutricional;
