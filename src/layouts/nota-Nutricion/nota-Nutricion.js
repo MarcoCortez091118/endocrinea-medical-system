@@ -27,6 +27,7 @@ import {
   TableRow,
   Paper,
   tableCellClasses,
+  Collapse
 } from "@mui/material";
 
 import Stepper from "@mui/material/Stepper";
@@ -102,13 +103,20 @@ function NotaNutricional() {
     fetchNotas();
   }, [apiUrl]);
 
-  const handleToggleExpand = (index) => {
-    setExpandedNotes((prev) => ({ ...prev, [index]: !prev[index] }));
+  const toggleExpand = (index) => {
+    setExpandedNotes(expandedNotes === index ? null : index);
   };
 
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-    return new Date(dateString).toLocaleDateString('es-ES', options);
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    };
+    return new Date(dateString).toLocaleDateString("es-ES", options);
   };
 
   const handleChange = (e) => {
@@ -210,7 +218,34 @@ function NotaNutricional() {
     }
   };
 
-
+  const translations = {
+    symptoms: "Síntomas",
+    symptomsGastrointestinal: "Síntomas gastrointestinales",
+    abdomen: "Abdomen",
+    TypesExercise: "Tipos de ejercicio",
+    leftArm: "Brazo izquierdo",
+    waist: "Cintura",
+    diagnosis: "Diagnóstico",
+    breakfast: "Desayuno",
+    meal: "Comida",
+    rightArm: "Brazo derecho",
+    rightCalf: "Pantorrilla derecha",
+    exerciseIntensity: "Intensidad del ejercicio",
+    measurementDates: "Fechas de mediciones",
+    complications: "Complicaciones",
+    leftCalf: "Pantorrilla izquierda",
+    detailSymptoms: "Detalle de síntomas",
+    frequencyDiarrhea: "Frecuencia de diarrea",
+    extras: "Extras",
+    liquids: "Líquidos",
+    energy: "Energía",
+    collation1: "Colación 1",
+    hips: "Caderas",
+    currentConditions: "Condiciones actuales",
+    exerciseDaysWeek: "Días de ejercicio por semana",
+    frequencyStraining: "Frecuencia de esfuerzo",
+    collation2: "Colación 2",
+  };
 
   const [columnsMediciones, setColumnsMediciones] = useState([]);
   const [datesMediciones, setDatesMediciones] = useState([]);
@@ -979,38 +1014,93 @@ function NotaNutricional() {
         )}
       </form>
       {/* Sección de notas */}
-      <Card sx={{ p: 3, mb: 3, boxShadow: 3 }}>
-        <Typography variant="h6" mb={2}>Historial de Notas</Typography>
-        {notas.length > 0 ? (
-          notas.map((nota, index) => (
-            <Box key={index} sx={{ mb: 3, p: 2, border: "1px solid #ccc", borderRadius: "8px" }}>
-              <Grid container spacing={2}>
-                {Object.keys(nota).slice(0, 5).map((key) => (
-                  <Grid item xs={6} key={key}>
-                    <Typography><strong>{key.replace(/([A-Z])/g, ' $1').trim()}:</strong> {nota[key]}</Typography>
-                  </Grid>
-                ))}
-              </Grid>
-              {expandedNotes[index] && (
-                <Grid container spacing={2} mt={2}>
-                  {Object.keys(nota).slice(5).map((key) => (
-                    <Grid item xs={6} key={key}>
-                      <Typography><strong>{key.replace(/([A-Z])/g, ' $1').trim()}:</strong> {nota[key]}</Typography>
-                    </Grid>
+      <SoftBox mb={3}>
+        <Card sx={{ p: 3, boxShadow: 3 }}>
+          <Typography variant="h6" color="secondary" mb={2}>
+            Historial de Notas
+          </Typography>
+          {notas.length === 0 ? (
+            <Typography variant="body1">No hay notas disponibles.</Typography>
+          ) : (
+            notas.map((nota, index) => (
+              <Card key={index} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
+                <Typography variant="h6" color="primary">
+                  Nota {index + 1}
+                </Typography>
+
+                {Object.entries(nota)
+                  .slice(0, 5)
+                  .map(([key, value]) => (
+                    <SoftTypography key={key} variant="body2" sx={{ mt: 1 }}>
+                      <strong>{translations[key] || key}:</strong>{" "}
+                      {typeof value === "object" ? (
+                        <ul>
+                          {Object.entries(value).map(([subKey, subValue]) => (
+                            <li key={subKey}>
+                              <strong>{translations[subKey] || subKey}:</strong>{" "}
+                              {typeof subValue === "object"
+                                ? Object.entries(subValue)
+                                    .map(
+                                      ([subItemKey, subItemValue]) =>
+                                        `${translations[subItemKey] || subItemKey}: ${
+                                          subItemValue ? "Sí" : "No"
+                                        }`
+                                    )
+                                    .join(", ")
+                                : subValue.toString()}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        value.toString()
+                      )}
+                    </SoftTypography>
                   ))}
-                </Grid>
-              )}
-              <Button onClick={() => handleToggleExpand(index)} sx={{ mt: 1 }}>
-                {expandedNotes[index] ? "Ver menos" : "Ver más"}
-              </Button>
-            </Box>
-          ))
-        ) : (
-          <Typography>No hay notas disponibles.</Typography>
-        )}
-      </Card>
 
+                <Collapse in={expandedNotes === index}>
+                  {Object.entries(nota)
+                    .slice(5)
+                    .map(([key, value]) => (
+                      <SoftTypography key={key} variant="body2" sx={{ mt: 1 }}>
+                        <strong>{translations[key] || key}:</strong>{" "}
+                        {typeof value === "object" ? (
+                          <ul>
+                            {Object.entries(value).map(([subKey, subValue]) => (
+                              <li key={subKey}>
+                                <strong>{translations[subKey] || subKey}:</strong>{" "}
+                                {typeof subValue === "object"
+                                  ? Object.entries(subValue)
+                                      .map(
+                                        ([subItemKey, subItemValue]) =>
+                                          `${translations[subItemKey] || subItemKey}: ${
+                                            subItemValue ? "Sí" : "No"
+                                          }`
+                                      )
+                                      .join(", ")
+                                  : subValue.toString()}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          value.toString()
+                        )}
+                      </SoftTypography>
+                    ))}
+                </Collapse>
 
+                <Button
+                  variant="contained"
+                  color={expandedNotes === index ? "secondary" : "primary"}
+                  onClick={() => toggleExpand(index)}
+                  sx={{ mt: 2 }}
+                >
+                  {expandedNotes === index ? "Ver menos" : "Ver más"}
+                </Button>
+              </Card>
+            ))
+          )}
+        </Card>
+      </SoftBox>
     </SoftBox>
   );
 }
