@@ -49,7 +49,7 @@ import Footer from "examples/Footer";
 import "layouts/TextareaStyles.css";
 import button from "assets/theme/components/button";
 import { Code, Margin, WidthFull } from "@mui/icons-material";
-import Notas from "./nota-historial-nutricion";
+import NutritionRecords from "./nota-historial-nutricion";
 
 // Libreria gluestacks
 
@@ -218,34 +218,10 @@ function HistorialNutricional({ patientId }) {
 
   const [notas, setNotas] = useState([]); // Almacena las notas enviadas
   const [mostrarNotas, setMostrarNotas] = useState(false); // Controla la visualización de la sección de notas
-  
 
- // const patientId = "12345"; // ⚠️ REEMPLAZA esto con el ID real del paciente
-  const apiUrl = `https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/${patientId}/nutrition_records`;
-
-  // ✅ Obtener historial nutricional al cargar el componente
-  useEffect(() => {
-    const fetchHistorial = async () => {
-      try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-          throw new Error(`Error al obtener datos: ${response.statusText}`);
-        }
-        const data = await response.json();
-        setNotas(data); // Guardar notas en el estado
-        setMostrarNotas(true);
-        
-      } catch (error) {
-        console.error("Error al obtener historial nutricional:", error);
-      }
-    };
-
-    fetchHistorial();
-  }, [apiUrl]); // Ejecuta cuando cambia el `apiUrl`
-
-  // ✅ Enviar datos con POST
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const apiUrl = "https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/10000003/nutrition_records";
 
     try {
       const response = await fetch(apiUrl, {
@@ -265,13 +241,11 @@ function HistorialNutricional({ patientId }) {
 
       alert("Historial guardado correctamente");
 
-      const newNote = {
-        id: result.id, // Usar el ID de la API
-        created_at: new Date().toISOString(), // Fecha actual
-        ...formData,
-      };
-      
-      setHistorial((prevHistorial) => [newNote, ...prevHistorial]); // Agregar nuevo historial a la lista
+      setNotas((prevNotas) => [
+        { id: result.id, created_at: new Date().toISOString(), ...formData },
+        ...prevNotas,
+      ]);
+
       setMostrarNotas(true);
       // Limpiar el formulario
       setFormData({
@@ -342,7 +316,7 @@ function HistorialNutricional({ patientId }) {
       console.error("Error en la solicitud:", error);
       alert("Hubo un error al guardar el historial. Inténtalo nuevamente.");
     }
-    
+
   };
 
   const data = [
@@ -1897,7 +1871,6 @@ function HistorialNutricional({ patientId }) {
             </Button>
           </SoftBox>*/}
 
-        {/* Stepper */}
         <Stepper activeStep={activeStep}>
           {steps.map((label) => (
             <Step key={label}>
@@ -1931,8 +1904,10 @@ function HistorialNutricional({ patientId }) {
       </form>
       {/* Sección de notas 
       <Card sx={{ p: 3, mt: 4, boxShadow: 3 }}>{mostrarNotas && <Notas notas={notas} />}</Card>
-   */}
-      </SoftBox>
+   */
+        <NutritionRecords />
+      }
+    </SoftBox>
   );
 }
 HistorialNutricional.propTypes = {

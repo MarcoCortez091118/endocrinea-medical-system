@@ -1,137 +1,82 @@
-/* eslint-disable react/prop-types */
-import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import StepContent from "@mui/material/StepContent";
-import Button from "@mui/material/Button";
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import SoftBox from "components/SoftBox";
-import SoftTypography from "components/SoftTypography";
+import React, { useEffect, useState } from "react";
+import { Card, Typography, Box, Button, Collapse } from "@mui/material";
 
-function NoteDisplay({ nota }) {
-  const [activeStep, setActiveStep] = useState(0);
+function NutritionRecords() {
+  const [records, setRecords] = useState([]);
+  const [expandedRecord, setExpandedRecord] = useState(null);
+  const apiUrl = "https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/10000003/nutrition_records";
 
-  const steps = [
-    {
-      label: "Información General",
-      fields: [
-        { id: "name", label: "1. Nombre del Paciente" },
-        { id: "gender", label: "2. Género" },
-        { id: "birthDate", label: "3. Fecha de Nacimiento" },
-        { id: "occupation", label: "4. Ocupación" },
-        { id: "reasonVisit", label: "5. Motivo de la Visita" },
-      ],
-    },
-    {
-      label: "Antecedentes Heredo-Familiares",
-      fields: [
-        { id: "familyHistory", label: "6. Antecedentes Familiares" },
-        { id: "otherFamilyHistory", label: "7. Otros Antecedentes Familiares" },
-      ],
-    },
-  ];
+  useEffect(() => {
+    const fetchRecords = async () => {
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error(`Error al obtener los datos: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setRecords(data);
+      } catch (error) {
+        console.error("Error al obtener registros nutricionales:", error);
+      }
+    };
 
-  const handleNext = () => setActiveStep((prev) => prev + 1);
-  const handleBack = () => setActiveStep((prev) => prev - 1);
-  const handleReset = () => setActiveStep(0);
+    fetchRecords();
+  }, []);
+
+  const toggleExpand = (index) => {
+    setExpandedRecord(expandedRecord === index ? null : index);
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    });
+  };
 
   return (
-    <SoftBox sx={{ p: 3, mb: 3, border: "1px solid #ccc", borderRadius: "4px" }}>
-      <SoftTypography variant="h6" mb={2}>
-        Fecha de creación: {new Date(nota.created_at).toLocaleString()}
-      </SoftTypography>
-
-      <Stepper activeStep={activeStep} orientation="vertical">
-        {steps.map((step, index) => (
-          <Step key={step.label}>
-            <StepLabel>{step.label}</StepLabel>
-            <StepContent>
-              <SoftBox
-                sx={{
-                  display: "grid",
-                  gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-                  gap: 3,
-                }}
-              >
-                {step.fields.map((field) => (
-                  <SoftBox key={field.id}>
-                    <label>
-                      <SoftTypography variant="body1" fontWeight="bold">
-                        {field.label}
-                      </SoftTypography>
-                    </label>
-                    <SoftBox
-                      sx={{
-                        padding: "8px",
-                        background: "#f9f9f9",
-                        borderRadius: "4px",
-                        border: "1px solid #ddd",
-                      }}
-                    >
-                      <SoftTypography>
-                        {typeof nota[field.id] === "object"
-                          ? Object.entries(nota[field.id])
-                              .map(([condition, relatives]) =>
-                                `${condition}: ${Object.entries(relatives)
-                                  .filter(([_, hasCondition]) => hasCondition)
-                                  .map(([relative]) => relative)
-                                  .join(", ") || "Ninguno"}`
-                              )
-                              .join(" | ")
-                          : nota[field.id] || "No especificado"}
-                      </SoftTypography>
-                    </SoftBox>
-                  </SoftBox>
-                ))}
-              </SoftBox>
-              <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
-                <Button
-                  variant="contained"
-                  onClick={handleNext}
-                  sx={{ mt: 1, mr: 1 }}
-                  disabled={index === steps.length - 1}
-                >
-                  Continuar
-                </Button>
-                <Button disabled={index === 0} onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
-                  Regresar
-                </Button>
-              </Box>
-            </StepContent>
-          </Step>
-        ))}
-      </Stepper>
-
-      {activeStep === steps.length && (
-        <Paper square elevation={0} sx={{ p: 3 }}>
-          <Typography>Todos los pasos completados</Typography>
-          <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-            Reiniciar
-          </Button>
-        </Paper>
+    <Box py={3}>
+      <Typography variant="h5" color="secondary" mb={3}>
+        Historial Nutricional del Paciente
+      </Typography>
+      {records.length === 0 ? (
+        <Typography variant="body1">No hay registros disponibles.</Typography>
+      ) : (
+        records.map((record, index) => (
+          <Card key={index} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
+            <Typography variant="h6" color="primary">
+              Registro {index + 1}
+            </Typography>
+            {Object.entries(record).slice(0, 5).map(([key, value]) => (
+              <Typography key={key} variant="body1" sx={{ mt: 1 }}>
+                <strong>{key}:</strong> {Array.isArray(value) ? value.join(", ") : value.toString()}
+              </Typography>
+            ))}
+            <Collapse in={expandedRecord === index}>
+              {Object.entries(record).slice(5).map(([key, value]) => (
+                <Typography key={key} variant="body1" sx={{ mt: 1 }}>
+                  <strong>{key}:</strong> {Array.isArray(value) ? value.join(", ") : value.toString()}
+                </Typography>
+              ))}
+            </Collapse>
+            <Button
+              variant="contained"
+              color={expandedRecord === index ? "secondary" : "primary"}
+              onClick={() => toggleExpand(index)}
+              sx={{ mt: 2 }}
+            >
+              {expandedRecord === index ? "Ver menos" : "Ver más"}
+            </Button>
+          </Card>
+        ))
       )}
-    </SoftBox>
+    </Box>
   );
 }
 
-const NotasHistorialNutricional = ({ notas }) => {
-  return (
-    <SoftBox mt={4}>
-      <SoftTypography variant="h6" color="secondary" mb={2}>
-        Historial Nutricional
-      </SoftTypography>
-      {notas.length === 0 ? (
-        <SoftTypography>No hay registros de historial nutricional.</SoftTypography>
-      ) : (
-        notas.map((nota) => <NoteDisplay key={nota.id} nota={nota} />)
-      )}
-    </SoftBox>
-  );
-};
-
-export default NotasHistorialNutricional;
-
-/* eslint-disable react/prop-types */
+export default NutritionRecords;
