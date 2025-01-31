@@ -7,9 +7,9 @@ function HistoryNotes() {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   const location = useLocation();
-  const { patient } = location.state || {}; 
+  const { patient } = location.state || {};
 
   useEffect(() => {
     if (patient?.id) {
@@ -19,10 +19,12 @@ function HistoryNotes() {
             `https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/${patient.id}/ehr`
           );
           if (!response.ok) {
-            throw new Error("Estamos realizando algunos ajustes para mejorar el servicio. Puede que la información no esté disponible por ahora, pero estamos en ello.");
+            throw new Error(
+              "Estamos realizando algunos ajustes para mejorar el servicio. Puede que la información no esté disponible por ahora, pero estamos en ello."
+            );
           }
           const data = await response.json();
-          setNotes(data); 
+          setNotes(data);
         } catch (err) {
           setError(err.message);
         } finally {
@@ -32,7 +34,7 @@ function HistoryNotes() {
 
       fetchNotes();
     } else {
-      setLoading(false); 
+      setLoading(false);
       setError("No se encontró información del paciente.");
     }
   }, [patient?.id]);
@@ -42,7 +44,43 @@ function HistoryNotes() {
   }
 
   if (error) {
-    return <Typography>Error: {error}</Typography>;
+    // Renderizamos el error en un Card estilizado
+    return (
+      <Card
+        style={{
+          padding: "16px",
+          marginTop: "16px",
+          borderRadius: "8px",
+          backgroundColor: "#ffff",
+          color: "#1834a64",
+        }}
+      >
+        <p style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
+          <span
+            style={{
+              fontSize: "20px",
+              marginRight: "8px",
+            }}
+            className="warning-icon"
+          >
+            ⚠️
+          </span>{" "}
+          Estamos realizando algunos ajustes para mejorar el servicio.
+        </p>
+        <p style={{ display: "flex", alignItems: "center" }}>
+          <span
+            style={{
+              fontSize: "16px",
+              marginRight: "8px",
+            }}
+            className="info-icon"
+          >
+            📌
+          </span>{" "}
+          Puede que la información no esté disponible por ahora, pero estamos en ello.
+        </p>
+      </Card>
+    );
   }
 
   return (
@@ -59,7 +97,6 @@ function HistoryNotes() {
                   mr={2}
                   position="relative"
                 >
-                 
                   <FiberManualRecordIcon
                     style={{
                       color: "#1976d2",
@@ -68,7 +105,6 @@ function HistoryNotes() {
                   />
                 </Box>
 
-                
                 <Box flexGrow={1}>
                   <Typography
                     variant="body2"
@@ -86,7 +122,8 @@ function HistoryNotes() {
                     variant="body2"
                     style={{ fontSize: "14px", marginTop: "8px" }}
                   >
-                    <strong>Nombre del paciente:</strong> {note.first_name} {note.last_name}
+                    <strong>Nombre del paciente:</strong> {note.first_name}{" "}
+                    {note.last_name}
                   </Typography>
                   <Typography
                     variant="body2"
