@@ -30,13 +30,20 @@ import SoftTypography from "components/SoftTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
+import { useLocation } from "react-router-dom";
 
 // Global style textarea
 import "layouts/TextareaStyles.css";
 import button from "assets/theme/components/button";
 import { Margin, WidthFull } from "@mui/icons-material";
 
+import MedicalRecordsList from "./MedicalRecordsList";
+
 function HistorialClinico() {
+  const location = useLocation();
+  const { patient } = location.state || {};
+  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     email: "",
     phoneNumber: "",
@@ -197,41 +204,114 @@ function HistorialClinico() {
       delete dataToSend.otherStatus;
     }
 
-    // Aquí debes enviar formData a la API
-    /* 
+    if (!patient || !patient.id) {
+      alert("Error: No se ha seleccionado un paciente.");
+      return;
+    }
+
+    setLoading(true); // Mostrar estado de carga
+
     try {
-      // Aquí iría la lógica para enviar los datos a la API
-      const response = await fetch('https://api.example.com/submit-historial', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients//${patient.id}/medical_records",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataToSend),
+        }
+      );
 
       if (response.ok) {
-        console.log('Historial enviado exitosamente');
-        // Manejar la respuesta de éxito aquí
+        console.log("Historial enviado exitosamente");
+        alert("Historial clínico enviado con éxito.");
+
+        setFormData({
+          email: "",
+          phoneNumber: "",
+          fullName: "",
+          birthDate: "",
+          age: "",
+          city: "",
+          occupation: "",
+          maritalStatus: "",
+          otherStatus: "",
+          religion: "",
+          otherReligion: "",
+          gender: "",
+          otherGender: "",
+          familyHistory: {
+            Diabetes: {
+              Mother: false,
+              Father: false,
+              Siblings: false,
+              "Paternal Uncles": false,
+              "Maternal Uncles": false,
+            },
+            Hypertension: {
+              Mother: false,
+              Father: false,
+              Siblings: false,
+              "Paternal Uncles": false,
+              "Maternal Uncles": false,
+            },
+            "High Cholesterol": {
+              Mother: false,
+              Father: false,
+              Siblings: false,
+              "Paternal Uncles": false,
+              "Maternal Uncles": false,
+            },
+            "Heart Attacks": {
+              Mother: false,
+              Father: false,
+              Siblings: false,
+              "Paternal Uncles": false,
+              "Maternal Uncles": false,
+            },
+          },
+          smoke: "",
+          smokeHistory: "",
+          smokeOther: "",
+          alcohol: "",
+          alcoholHistory: "",
+          alcoholOther: "",
+          drug: "",
+          drugHistory: "",
+          exercise: "",
+          allergicMedicine: "",
+          allergicFood: "",
+          surgery: "",
+          surgeryHistory: [],
+          surgeryOther: "",
+          diagnosedDiseases: [],
+          diagnosedDiseasesOther: "",
+          takeMedications: "",
+          menstruation: "",
+          menstruationTrue: "",
+          menstruationNull: "",
+          menstruationDate: "",
+          pregnancies: "",
+          otherPregnancies: "",
+          pregnanciesComplications: [],
+          reasonConsultation: [],
+          consultationOther: "",
+        });
+
+        // Reiniciar paso en el stepper si es necesario
+        setActiveStep(0);
       } else {
-        console.error('Error al enviar el historial');
-        // Manejar errores aquí
+        console.error("Error al enviar el historial");
+        alert("Hubo un error al enviar el historial. Inténtalo de nuevo.");
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
+      alert("Error de conexión con el servidor.");
     }
-    */
 
-    /*
-    const blob = new Blob([JSON.stringify(dataToSend, null, 2)], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "historial-clinico.txt";
-    link.click();
-    URL.revokeObjectURL(url);
-    */
-
-    console.log("Datos a enviar:", formData);
+    console.log("Datos enviados:", dataToSend);
+    setLoading(false);
   };
 
   const [isFemale, setIsFemale] = useState(false);
@@ -1413,7 +1493,19 @@ function HistorialClinico() {
         </Box>
         
       </form>
+
+      <SoftBox py={3}>
+        {/* Formulario */}
+        <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+          {/** Tu código del formulario aquí... */}
+        </form>
+
+        {/* Mostrar el historial médico debajo del formulario */}
+        <MedicalRecordsList />
+      </SoftBox>
+
     </SoftBox>
+
   );
 }
 

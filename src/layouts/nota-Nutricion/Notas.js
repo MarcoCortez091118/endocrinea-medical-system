@@ -63,7 +63,7 @@ function NoteDisplay({ nota }) {
       label: "Plan",
       fields: [{ id: "diagnosis", label: "23. Plan" }],
     },
-  ];
+  ].filter((step) => step.fields.length > 0);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);

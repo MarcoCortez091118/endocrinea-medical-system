@@ -73,7 +73,7 @@ function PatientDetails() {
       case 1:
         return <HCN />;
       case 2:
-        return <HCM />;
+        return <HCM patientId={patient?.id} />;
       default:
         return null;
     }
