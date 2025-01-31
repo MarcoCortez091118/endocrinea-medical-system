@@ -1,5 +1,5 @@
 // Importaciones necesarias
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "@mui/material/Card";
 import {
   TextField,
@@ -234,65 +234,32 @@ function HistorialClinico() {
     console.log("Datos a enviar:", formData);
   };
 
-  const allSteps = [
+  const [isFemale, setIsFemale] = useState(false);
+  const [activeStep, setActiveStep] = React.useState(0);
+
+  useEffect(() => {
+    setIsFemale(formData.gender === "Mujer");
+
+    // Si el usuario cambia a "Hombre" estando en "Antecedentes Ginecológicos", lo movemos a "Motivo de consulta"
+    if (activeStep === 4 && formData.gender !== "Mujer") {
+      setActiveStep(4);
+    }
+  }, [formData.gender]);
+
+  const steps = [
     "Generales",
     "Antecedentes familiares",
     "Antecedentes personales",
     "Antecedentes Médicos",
-    "Antecedentes Ginecológico",
-    "Motivo de la consulta",
+    ...(isFemale ? ["Antecedentes Ginecológico"] : []),
+    "Motivo de la consulta", // Siempre está presente
   ];
 
-  const [isFemale, setIsFemale] = useState(false);
 
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [skipped, setSkipped] = React.useState(new Set());
+  const goToNextStep = () => setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));
+  const goToPreviousStep = () => setActiveStep((prev) => Math.max(prev - 1, 0));
 
-  const steps = isFemale
-    ? allSteps
-    : allSteps.filter((step) => step !== "Antecedentes Ginecológico");
-
-  const isStepOptional = (step) => {
-    return step === 1;
-  };
-
-  const isStepSkipped = (step) => {
-    return skipped.has(step);
-  };
-
-  const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
-  };
+  
 
   return (
     <SoftBox py={3}>
@@ -1129,7 +1096,7 @@ function HistorialClinico() {
         )}
 
         {/* Sección de Antecedentes Ginecológicos */}
-        {isFemale && activeStep === 4 && formData.gender === "Mujer" && (
+        {activeStep === 4 && isFemale && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             <SoftTypography variant="h5" color="secondary" mb={3}>
               Antecedentes Ginecológicos
@@ -1304,7 +1271,7 @@ function HistorialClinico() {
           </SoftBox>
         )}
 
-        {activeStep === 5 && (
+        {activeStep === steps.length - 1 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             <SoftTypography variant="h5" color="secondary" mb={3}>
               Motivo de la consulta
@@ -1432,26 +1399,19 @@ function HistorialClinico() {
 
         {/* Botones de navegación */}
         <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-          <Button color="inherit" disabled={activeStep === 0} onClick={handleBack} sx={{ mr: 1 }}>
+          <Button color="inherit" disabled={activeStep === 0} onClick={goToPreviousStep} sx={{ mr: 1 }}>
             Atrás
           </Button>
           <Box sx={{ flex: "1 1 auto" }} />
           {activeStep < steps.length - 1 ? (
-            <Button onClick={handleNext}>Siguiente</Button>
+            <Button onClick={goToNextStep}>Siguiente</Button>
           ) : (
             <Button variant="contained" color="primary" onClick={handleSubmit}>
               Enviar
             </Button>
           )}
         </Box>
-        {/* Botón de reinicio */}
-        {activeStep === steps.length && (
-          <Box sx={{ textAlign: "center", mt: 2 }}>
-            <Button variant="outlined" onClick={handleReset}>
-              Reiniciar
-            </Button>
-          </Box>
-        )}
+        
       </form>
     </SoftBox>
   );
