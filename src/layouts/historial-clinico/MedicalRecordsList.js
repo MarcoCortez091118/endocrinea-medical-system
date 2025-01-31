@@ -51,48 +51,66 @@ function MedicalRecordDisplay({ record }) {
 
     const steps = [
         {
-            label: "Información General",
-            fields: [
-                { id: "fullName", label: "Nombre Completo" },
-                { id: "email", label: "Correo Electrónico" },
-                { id: "phoneNumber", label: "Número Telefónico" },
-                { id: "birthDate", label: "Fecha de Nacimiento" },
-                { id: "age", label: "Edad" },
-                { id: "city", label: "Ciudad" },
-                { id: "occupation", label: "Ocupación" },
-                { id: "maritalStatus", label: "Estado Civil", other: "otherStatus" },
-                { id: "religion", label: "Religión", other: "otherReligion" },
-                { id: "gender", label: "Género", other: "otherGender" },
-            ],
+          label: "Información General",
+          fields: [
+            { id: "fullName", label: "Nombre Completo" },
+            { id: "email", label: "Correo Electrónico" },
+            { id: "phoneNumber", label: "Número Telefónico" },
+            { id: "birthDate", label: "Fecha de Nacimiento" },
+            { id: "age", label: "Edad" },
+            { id: "city", label: "Ciudad" },
+            { id: "occupation", label: "Ocupación" },
+            { id: "maritalStatus", label: "Estado Civil", other: "otherStatus" },
+            { id: "religion", label: "Religión", other: "otherReligion" },
+            { id: "gender", label: "Género", other: "otherGender" },
+          ],
         },
         {
-            label: "Antecedentes Familiares",
-            fields: [{ id: "familyHistory", label: "Historia Familiar" }],
+          label: "Antecedentes Familiares",
+          fields: [
+            { id: "familyHistoryDiabetes", label: "Diabetes", options: ["Mother", "Father", "Siblings", "Paternal Uncles", "Maternal Uncles"] },
+            { id: "familyHistoryHypertension", label: "Hipertensión", options: ["Mother", "Father", "Siblings", "Paternal Uncles", "Maternal Uncles"] },
+            { id: "familyHistoryHighCholesterol", label: "Colesterol Alto", options: ["Mother", "Father", "Siblings", "Paternal Uncles", "Maternal Uncles"] },
+            { id: "familyHistoryHeartAttacks", label: "Ataques al Corazón", options: ["Mother", "Father", "Siblings", "Paternal Uncles", "Maternal Uncles"] },
+          ],
         },
         {
-            label: "Hábitos Personales",
-            fields: [
-                { id: "smoke", label: "Fuma", other: "smokeHistory", extra: "smokeOther" },
-                { id: "alcohol", label: "Consume Alcohol", other: "alcoholHistory", extra: "alcoholOther" },
-                { id: "drug", label: "Consumo de Drogas", other: "drugHistory" },
-                { id: "exercise", label: "Ejercicio" },
-            ],
+          label: "Hábitos Personales",
+          fields: [
+            { id: "smoke", label: "Fuma", other: "smokeHistory", extra: "smokeOther" },
+            { id: "alcohol", label: "Consume Alcohol", other: "alcoholHistory", extra: "alcoholOther" },
+            { id: "drug", label: "Consumo de Drogas", other: "drugHistory" },
+            { id: "exercise", label: "Ejercicio" },
+          ],
         },
         {
-            label: "Historial Médico",
-            fields: [
-                { id: "allergicMedicine", label: "Alergias a Medicamentos" },
-                { id: "allergicFood", label: "Alergias a Alimentos" },
-                { id: "surgery", label: "Cirugías", other: "surgeryHistory", extra: "surgeryOther" },
-                { id: "diagnosedDiseases", label: "Enfermedades Diagnosticadas", other: "diagnosedDiseasesOther" },
-                { id: "takeMedications", label: "Medicamentos Actuales" },
-            ],
+          label: "Historial Médico",
+          fields: [
+            { id: "allergicMedicine", label: "Alergias a Medicamentos" },
+            { id: "allergicFood", label: "Alergias a Alimentos" },
+            { id: "surgery", label: "Cirugías", other: "surgeryHistory", extra: "surgeryOther" },
+            { id: "diagnosedDiseases", label: "Enfermedades Diagnosticadas", other: "diagnosedDiseasesOther" },
+            { id: "takeMedications", label: "Medicamentos Actuales" },
+          ],
         },
         {
-            label: "Motivo de Consulta",
-            fields: [{ id: "reasonConsultation", label: "Motivo de la Consulta", other: "consultationOther" }],
+          label: "Historial Gineco-Obstétrico",
+          fields: [
+            { id: "menstruation", label: "Menstruación" },
+            { id: "menstruationTrue", label: "Menstruación Regular" },
+            { id: "menstruationNull", label: "Menstruación Ausente" },
+            { id: "menstruationDate", label: "Última Fecha de Menstruación" },
+            { id: "pregnancies", label: "Número de Embarazos", other: "otherPregnancies" },
+            { id: "pregnanciesComplications", label: "Complicaciones en Embarazos" },
+          ],
         },
-    ].filter((step) => step.fields.length > 0);
+        {
+          label: "Motivo de Consulta",
+          fields: [{ id: "reasonConsultation", label: "Motivo de la Consulta", other: "consultationOther" }],
+        },
+      ].filter((step) => step.fields.length > 0);
+      
+      
 
     const handleNext = () => setActiveStep((prev) => prev + 1);
     const handleBack = () => setActiveStep((prev) => prev - 1);
@@ -143,6 +161,24 @@ function MedicalRecordDisplay({ record }) {
                                     );
                                 })}
                             </SoftBox>
+                            <Box sx={{ display: "flex",
+                    justifyContent: "flex-end", mb: 2 }} >
+                  <Button
+                    variant="contained"
+                    onClick={handleNext}
+                    sx={{ mt: 1, mr: 1 }}
+                    disabled={index === steps.length - 1}
+                  >
+                    Continuar
+                  </Button>
+                  <Button
+                    disabled={index === 0}
+                    onClick={handleBack}
+                    sx={{ mt: 1, mr: 1 }}
+                  >
+                    Regresar
+                  </Button>
+                </Box>
                         </StepContent>
                     </Step>
                 ))}
