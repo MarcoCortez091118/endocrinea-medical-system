@@ -19,7 +19,7 @@ function HistoryNotes() {
             `https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/${patient.id}/ehr`
           );
           if (!response.ok) {
-            throw new Error("Error al obtener los datos");
+            throw new Error("Estamos realizando algunos ajustes para mejorar el servicio. Puede que la información no esté disponible por ahora, pero estamos en ello.");
           }
           const data = await response.json();
           setNotes(data); 
