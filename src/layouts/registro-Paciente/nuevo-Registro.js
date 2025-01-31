@@ -17,8 +17,8 @@ const newRegisterForm = () => {
     id: "",
     first_name: "",
     last_name: "",
-    phone: "",
     email: "",
+    phoneNumber: "",
     city: "",
     country: "",
     neighborhood: "",
@@ -31,7 +31,7 @@ const newRegisterForm = () => {
     born_city: "",
     born_state: "",
     date_of_birth: "",
-    document: "",
+    document: null, // Guardará el archivo
     education: "",
     gender: "",
     insurance: "",
@@ -49,60 +49,16 @@ const newRegisterForm = () => {
     signed_data_privacy: false,
     status: "",
     type: "",
-    number: "",
+    number: 0,
   });
-  const [relatedPersons, setRelatedPersons] = useState([]);
-  const [authorizedPerson, setAuthorizedPerson] = useState("");
-  const [legalRepresentative, setLegalRepresentative] = useState("");
-  const [showAuthorizedDropdown, setShowAuthorizedDropdown] = useState(false);
-  const [showRepresentativeDropdown, setShowRepresentativeDropdown] = useState(false);
-  const handleAddRelatedPerson = () => {
-    const newRelatedPersons = [
-      ...patientData.relatedPersons,
-      { name: "", relation: "", profession: "" },
-    ];
-    setPatientData({ ...patientData, relatedPersons: newRelatedPersons });
-  };
 
-  const handleRelatedPersonChange = (index, field, value) => {
-    const updatedPersons = [...patientData.relatedPersons];
-    updatedPersons[index][field] = value;
-    setPatientData({ ...patientData, relatedPersons: updatedPersons });
-  };
-
-  const handleAuthorizedPersonChange = (value) => {
-    setPatientData({ ...patientData, authorizedPerson: value });
-  };
-
-  const handleLegalRepresentativeChange = (value) => {
-    setPatientData({ ...patientData, legalRepresentative: value });
-  };
-
-  const handleCheckboxChange = (checkboxType) => {
-    if (checkboxType === "authorized") {
-      setShowAuthorizedDropdown(!showAuthorizedDropdown);
-    } else if (checkboxType === "representative") {
-      setShowRepresentativeDropdown(!showRepresentativeDropdown);
-    }
-  };
-  const handleRemoveRelatedPerson = (index) => {
-    const updatedPersons = relatedPersons.filter((_, i) => i !== index);
-    setRelatedPersons(updatedPersons);
-  };
-
+  // Manejador de cambios en los inputs
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (type === "checkbox") {
-      setPatientData({
-        ...patientData,
-        [name]: checked,
-      });
-    } else {
-      setPatientData({
-        ...patientData,
-        [name]: value,
-      });
-    }
+    setPatientData({
+      ...patientData,
+      [name]: type === "checkbox" ? checked : value,
+    });
   };
 
   const handleAddressChange = (e) => {
@@ -113,52 +69,90 @@ const newRegisterForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // Validación básica antes de enviar
+  
 
-    // Generar el objeto JSON con los datos
-    const jsonData = {
-      id: patientData.id,
-      first_name: patientData.first_name,
-      last_name: patientData.last_name,
-      phone: patientData.phone,
-      email: patientData.email,
-      city: patientData.city,
-      country: patientData.country,
-      neighborhood: patientData.neighborhood,
-      address_number: patientData.address_number,
-      postal_code: patientData.postal_code,
-      province: patientData.province,
-      state: patientData.state,
-      street: patientData.street,
-      allergies: patientData.allergies,
-      born_city: patientData.born_city,
-      born_state: patientData.born_state,
-      date_of_birth: patientData.date_of_birth,
-      document: patientData.document,
-      education: patientData.education,
-      gender: patientData.gender,
-      insurance: patientData.insurance,
-      insurance_card_number: patientData.insurance_card_number,
-      marital_status: patientData.marital_status,
-      medications: patientData.medications,
-      nation_healthcare_number: patientData.nation_healthcare_number,
-      nationality: patientData.nationality,
-      observations: patientData.observations,
-      other_information: patientData.other_information,
-      precedents: patientData.precedents,
-      profession: patientData.profession,
-      religion: patientData.religion,
-      signed_data_marketing: patientData.signed_data_marketing,
-      signed_data_privacy: patientData.signed_data_privacy,
-      status: patientData.status,
-      type: patientData.type,
-      number: patientData.number,
+  // Manejador de archivos
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPatientData({ ...patientData, document: reader.result.split(",")[1] }); // Convertir a base64
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+
+    const apiUrl = "https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/create";
+    const requestBody = {
+      ...patientData,
+      created_at: new Date().toISOString(), // Genera la fecha actual en formato ISO
     };
 
-    // Mostrar el JSON en consola
-    console.log("JSON generado: ", JSON.stringify(jsonData, null, 2));
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (response.ok) {
+        alert("Paciente registrado exitosamente.");
+        setPatientData({
+          id: "",
+          first_name: "",
+          last_name: "",
+          email: "",
+          phoneNumber: "",
+          city: "",
+          country: "",
+          neighborhood: "",
+          address_number: "",
+          postal_code: "",
+          province: "",
+          state: "",
+          street: "",
+          allergies: "",
+          born_city: "",
+          born_state: "",
+          date_of_birth: "",
+          document: null,
+          education: "",
+          gender: "",
+          insurance: "",
+          insurance_card_number: "",
+          marital_status: "",
+          medications: "",
+          nation_healthcare_number: "",
+          nationality: "",
+          observations: "",
+          other_information: "",
+          precedents: "",
+          profession: "",
+          religion: "",
+          signed_data_marketing: false,
+          signed_data_privacy: false,
+          status: "",
+          type: "",
+          number: 0,
+        });
+        setActiveStep(0);
+      } else {
+        const errorData = await response.json();
+        alert(`Error al registrar paciente: ${errorData.detail || "Verifica los datos ingresados"}`);
+      }
+    } catch (error) {
+      alert("Error en la solicitud. Inténtalo nuevamente.");
+    }
   };
+
 
   const steps = [
     "Datos generales",
