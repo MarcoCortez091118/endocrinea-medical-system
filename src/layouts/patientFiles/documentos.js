@@ -15,9 +15,11 @@ import { Download, Edit, Delete, Upload, Add } from "@mui/icons-material";
 
 function Documentos() {
   const files = [
+    /*
     { id: 1, name: "Juan Lopez ", author: "Dr Bryan Pichon", date: "29/10/2024" },
     { id: 2, name: "Juan Lopez AH", author: "Dr Oscar Lopez", date: "02/08/2024" },
     { id: 3, name: "Juan Lopez RC", author: "Dr Oscar Lopez", date: "01/08/2024" },
+    */
   ];
 
   return (
@@ -40,7 +42,7 @@ function Documentos() {
         Documentos
       </Typography>
       <Box display="flex" gap={2} mt={2} mb={2}>
-        {/* Botón "Subir archivo" con gradiente */}
+        {/* Botón "Subir archivo" */}
         <Button
           variant="contained"
           color="primary"
@@ -49,12 +51,12 @@ function Documentos() {
             fontWeight: "bold",
             textTransform: "capitalize",
             boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)",
-             color: "#FFFFFF",
+            color: "#FFFFFF",
           }}
         >
           Subir archivo
         </Button>
-        {/* Botón "Crear documento" con color suave */}
+        {/* Botón "Crear documento" */}
         <Button
           variant="contained"
           startIcon={<Add />}
@@ -72,56 +74,78 @@ function Documentos() {
         </Button>
       </Box>
       <Divider />
-      <Table
-        style={{
-          marginTop: "16px",
-          borderCollapse: "collapse",
-          width: "100%",
-          textAlign: "center",
-        }}
-      >
-        <TableBody>
-          {files.map((file, index) => (
-            <TableRow
-              key={file.id}
-              style={{
-                backgroundColor: index % 2 === 0 ? "#f9f9f9" : "#ffffff",
-                borderBottom: "1px solid #e0e0e0",
-              }}
-            >
-              <TableCell style={{ textAlign: "center", padding: "12px", width: "15%" }}>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  style={{ borderColor: "#183A64", color: "#183A64" }}
-                >
-                  PDF
-                </Button>
-              </TableCell>
-              <TableCell style={{ padding: "12px", textAlign: "center", width: "30%" }}>
-                {file.name}
-              </TableCell>
-              <TableCell style={{ padding: "12px", textAlign: "center", width: "25%" }}>
-                {file.author}
-              </TableCell>
-              <TableCell style={{ textAlign: "center", padding: "12px", width: "15%" }}>
-                {file.date}
-              </TableCell>
-              <TableCell style={{ textAlign: "center", padding: "12px", width: "15%" }}>
-                <IconButton style={{ color: "#183A64" }}>
-                  <Download />
-                </IconButton>
-                <IconButton style={{ color: "#183A64" }}>
-                  <Edit />
-                </IconButton>
-                <IconButton color="error">
-                  <Delete />
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+
+      {/* 
+        UX: Mensaje de que este apartado está deshabilitado temporalmente.
+      */}
+      {files.length === 0 ? (
+        <Box
+          style={{
+            padding: "20px",
+            textAlign: "center",
+            color: "#757575",
+          }}
+        >
+          <Typography variant="body1" style={{ fontWeight: "bold", fontSize: "16px" }}>
+            ⚠️ Este apartado está temporalmente deshabilitado.
+          </Typography>
+          <Typography variant="body2" style={{ marginTop: "8px", fontSize: "14px" }}>
+          📌 Por el momento, los documentos del paciente no están disponibles.
+          </Typography>
+        </Box>
+      ) : (
+        // Tabla con documentos (si los hay)
+        <Table
+          style={{
+            marginTop: "16px",
+            borderCollapse: "collapse",
+            width: "100%",
+            textAlign: "center",
+          }}
+        >
+          <TableBody>
+            {files.map((file, index) => (
+              <TableRow
+                key={file.id}
+                style={{
+                  backgroundColor: index % 2 === 0 ? "#f9f9f9" : "#ffffff",
+                  borderBottom: "1px solid #e0e0e0",
+                }}
+              >
+                <TableCell style={{ textAlign: "center", padding: "12px", width: "15%" }}>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    style={{ borderColor: "#183A64", color: "#183A64" }}
+                  >
+                    PDF
+                  </Button>
+                </TableCell>
+                <TableCell style={{ padding: "12px", textAlign: "center", width: "30%" }}>
+                  {file.name}
+                </TableCell>
+                <TableCell style={{ padding: "12px", textAlign: "center", width: "25%" }}>
+                  {file.author}
+                </TableCell>
+                <TableCell style={{ textAlign: "center", padding: "12px", width: "15%" }}>
+                  {file.date}
+                </TableCell>
+                <TableCell style={{ textAlign: "center", padding: "12px", width: "15%" }}>
+                  <IconButton style={{ color: "#183A64" }}>
+                    <Download />
+                  </IconButton>
+                  <IconButton style={{ color: "#183A64" }}>
+                    <Edit />
+                  </IconButton>
+                  <IconButton color="error">
+                    <Delete />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </Card>
   );
 }

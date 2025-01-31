@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import SoftBox from "components/SoftBox";
@@ -34,7 +34,6 @@ function Tables() {
   const handleCloseModal = () => setOpenModal(false);
 
   const handleRowClick = (patient) => {
-    console.log("Paciente seleccionado:", patient); // Verifica los datos
     if (patient) {
       navigate("/PatientDetails", {
         state: {
@@ -50,22 +49,25 @@ function Tables() {
       console.error("No se pasaron datos del paciente.");
     }
   };
-  // Estado y lógica para la paginación de la segunda tabla
-  const [newPage, setNewPage] = useState(1); // Estado para la página actual
-  const totalNewPages = Math.ceil(newRows.length / rowsPerPage); // Total de páginas
-  const displayedNewRows = newRows.slice((newPage - 1) * rowsPerPage, newPage * rowsPerPage); // Filas a mostrar en la página actual
 
-  const handleNewPageChange = (newPage) => setNewPage(newPage); // Manejador de cambio de página
+  // Estado y lógica para la paginación de la segunda tabla
+  const [newPage, setNewPage] = useState(1);
+  const totalNewPages = Math.ceil(newRows.length / rowsPerPage);
+  const displayedNewRows = newRows.slice((newPage - 1) * rowsPerPage, newPage * rowsPerPage);
+
+  const handleNewPageChange = (newPage) => setNewPage(newPage);
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <SoftBox py={3}>
-        {/* Primera Tabla */}
+        {/* Segunda Tabla (Pacientes Endocrinea) ahora está arriba */}
         <SoftBox mb={3}>
           <Card>
             <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-              <SoftTypography variant="h6">Pacientes</SoftTypography>
+              <SoftTypography variant="h6">Pacientes Endocrinea</SoftTypography>
+
+              {/* Botón "Agregar paciente" reubicado arriba */}
               <Button
                 variant="contained"
                 color="primary"
@@ -84,6 +86,33 @@ function Tables() {
                 <span style={{ fontSize: "32px", lineHeight: "0.9" }}>+</span>
                 <span style={{ fontSize: "16px" }}>Agregar paciente</span>
               </Button>
+            </SoftBox>
+
+            <SoftBox
+              sx={{
+                "& .MuiTableRow-root": {
+                  cursor: "pointer",
+                  "&:hover": { backgroundColor: "#f5f5f5" },
+                },
+              }}
+            >
+              <Table columns={newColumns} rows={displayedNewRows} />
+            </SoftBox>
+
+            {/* Paginación de la segunda tabla */}
+            <CustomPagination
+              page={newPage}
+              totalPages={totalNewPages}
+              onPageChange={handleNewPageChange}
+            />
+          </Card>
+        </SoftBox>
+
+        {/* Primera Tabla (Pacientes) ahora está debajo */}
+        <SoftBox mb={3}>
+          <Card>
+            <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+              <SoftTypography variant="h6">Pacientes</SoftTypography>
             </SoftBox>
 
             <SoftBox
@@ -138,33 +167,6 @@ function Tables() {
               />
             </SoftBox>
             <CustomPagination page={page} totalPages={totalPages} onPageChange={handlePageChange} />
-          </Card>
-        </SoftBox>
-
-        {/* Segunda Tabla */}
-        <SoftBox mb={3}>
-          <Card>
-            <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-              <SoftTypography variant="h6">Pacientes Endocrinea</SoftTypography>
-            </SoftBox>
-
-            <SoftBox
-              sx={{
-                "& .MuiTableRow-root": {
-                  cursor: "pointer",
-                  "&:hover": { backgroundColor: "#f5f5f5" },
-                },
-              }}
-            >
-              <Table columns={newColumns} rows={displayedNewRows} />
-            </SoftBox>
-
-            {/* Paginación de la segunda tabla */}
-            <CustomPagination
-              page={newPage}
-              totalPages={totalNewPages}
-              onPageChange={handleNewPageChange}
-            />
           </Card>
         </SoftBox>
       </SoftBox>
