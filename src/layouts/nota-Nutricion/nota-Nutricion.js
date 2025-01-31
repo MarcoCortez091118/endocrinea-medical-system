@@ -139,20 +139,22 @@ function NotaNutricional({ patientId }) {
   useEffect(() => {
     const fetchNotas = async () => {
       try {
+        const apiUrl = `https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/${patientId}/nutrition_notes`;
         const response = await fetch(apiUrl);
         if (!response.ok) {
           throw new Error(`Error al obtener datos: ${response.statusText}`);
         }
         const data = await response.json();
-        setNotas(data); // Guardar notas en el estado
+        console.log("Datos obtenidos:", data);
         setMostrarNotas(true);
       } catch (error) {
         console.error("Error al obtener notas:", error);
       }
     };
-
-    fetchNotas();
-  }, [apiUrl]); // Se ejecuta cuando cambia el `apiUrl`
+    if (patientId) {
+      fetchNotas();
+    }
+  }, [patientId]); // Se ejecuta cuando cambia el `apiUrl`
 
   // ✅ Enviar notas con POST
   const handleSubmit = async (e) => {
@@ -220,7 +222,7 @@ function NotaNutricional({ patientId }) {
     }
   };
 
-  
+
 
   const [columnsMediciones, setColumnsMediciones] = useState([]);
   const [datesMediciones, setDatesMediciones] = useState([]);
@@ -990,9 +992,9 @@ function NotaNutricional({ patientId }) {
       </form>
       {/* Sección de notas */}
       <Card sx={{ p: 3, mb: 3, boxShadow: 3 }}>{mostrarNotas && <Notas notas={notas} />}</Card>
-        
-        
-      </SoftBox>
+
+
+    </SoftBox>
   );
 }
 NotaNutricional.propTypes = {

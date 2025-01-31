@@ -82,70 +82,72 @@ function NoteDisplay({ nota }) {
       <SoftTypography variant="h6" mb={2}>
         Fecha de creación: {nota.date}
       </SoftTypography>
-     
-        <Stepper activeStep={activeStep} orientation="vertical">
-          {steps.map((step, index) => (
-            <Step key={step.label}>
-              <StepLabel>{step.label}</StepLabel>
-              <StepContent>
-                <SoftBox
-                  sx={{
-                    display: "grid",
-                    gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-                    gap: 3,
-                  }}
-                >
-                  {step.fields.map((field) => (
-                    <SoftBox key={field.id}>
-                      <label>
-                        <SoftTypography variant="body1" fontWeight="bold">
-                          {field.label}
-                        </SoftTypography>
-                      </label>
-                      <SoftBox
-                        sx={{
-                          padding: "8px",
-                          background: "#f9f9f9",
-                          borderRadius: "4px",
-                          border: "1px solid #ddd",
-                        }}
-                      >
-                        <SoftTypography>{nota[field.id] || "No especificado"}</SoftTypography>
-                      </SoftBox>
+
+      <Stepper activeStep={activeStep} orientation="vertical">
+        {steps.map((step, index) => (
+          <Step key={step.label}>
+            <StepLabel>{step.label}</StepLabel>
+            <StepContent>
+              <SoftBox
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+                  gap: 3,
+                }}
+              >
+                {step.fields.map((field) => (
+                  <SoftBox key={field.id}>
+                    <label>
+                      <SoftTypography variant="body1" fontWeight="bold">
+                        {field.label}
+                      </SoftTypography>
+                    </label>
+                    <SoftBox
+                      sx={{
+                        padding: "8px",
+                        background: "#f9f9f9",
+                        borderRadius: "4px",
+                        border: "1px solid #ddd",
+                      }}
+                    >
+                      <SoftTypography>{nota[field.id] || "No especificado"}</SoftTypography>
                     </SoftBox>
-                  ))}
-                </SoftBox>
-                <Box sx={{ display: "flex",
-                    justifyContent: "flex-end", mb: 2 }} >
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{ mt: 1, mr: 1 }}
-                    disabled={index === steps.length - 1}
-                  >
-                    Continuar
-                  </Button>
-                  <Button
-                    disabled={index === 0}
-                    onClick={handleBack}
-                    sx={{ mt: 1, mr: 1 }}
-                  >
-                    Regresar
-                  </Button>
-                </Box>
-              </StepContent>
-            </Step>
-          ))}
-        </Stepper>
-        {activeStep === steps.length && (
-          <Paper square elevation={0} sx={{ p: 3 }}>
-            <Typography>All steps completed - you&apos;re finished</Typography>
-            <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-              Reset
-            </Button>
-          </Paper>
-        )}
-    
+                  </SoftBox>
+                ))}
+              </SoftBox>
+              <Box sx={{
+                display: "flex",
+                justifyContent: "flex-end", mb: 2
+              }} >
+                <Button
+                  variant="contained"
+                  onClick={handleNext}
+                  sx={{ mt: 1, mr: 1 }}
+                  disabled={index === steps.length - 1}
+                >
+                  Continuar
+                </Button>
+                <Button
+                  disabled={index === 0}
+                  onClick={handleBack}
+                  sx={{ mt: 1, mr: 1 }}
+                >
+                  Regresar
+                </Button>
+              </Box>
+            </StepContent>
+          </Step>
+        ))}
+      </Stepper>
+      {activeStep === steps.length && (
+        <Paper square elevation={0} sx={{ p: 3 }}>
+          <Typography>All steps completed - you&apos;re finished</Typography>
+          <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+            Reset
+          </Button>
+        </Paper>
+      )}
+
     </SoftBox>
   );
 }
