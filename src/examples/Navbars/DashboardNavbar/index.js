@@ -140,7 +140,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
     >
       <Toolbar sx={(theme) => navbarContainer(theme)}>
         <SoftBox color="inherit" mb={{ xs: 1, md: 0 }} sx={(theme) => navbarRow(theme, { isMini })}>
-          <Breadcrumbs icon={<Link to="/dashboard">
+          <Breadcrumbs icon={<Link to="/tables">
             <Icon sx={{ cursor: "pointer" }}>home</Icon>
           </Link>} title={route[route.length - 1]} route={route} light={light} />
         </SoftBox>

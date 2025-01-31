@@ -86,7 +86,7 @@ function SignIn() {
         setSuccessMessage("¡Bienvenido! Has iniciado sesión correctamente.");
         setOpenSnackbar(true);
         setTimeout(() => {
-          navigate("/dashboard");
+          navigate("/tables");
         }, 1600);
       } else {
         setError("No se recibió un token válido del servidor.");

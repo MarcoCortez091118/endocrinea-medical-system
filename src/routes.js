@@ -26,18 +26,18 @@ import PatientDetails from "layouts/patientFiles/patientFiles";
 // import ProtectedRoute from "components/ProtectedRoutes/ProtectedRoute";
 
 const routes = /*(isAuthenticated) =>*/[
-  {
+  {/*
     type: "collapse",
     name: "Dashboard",
     key: "dashboard",
     route: "/dashboard",
     icon: <Shop size="12px" />,
     component: (
-      /*<ProtectedRoute>*/
+      <ProtectedRoute>
       <Dashboard />
-      /*</ProtectedRoute>*/
+      /*</ProtectedRoute>
     ),
-    noCollapse: true,
+    noCollapse: true,*/
   },
   {
     type: "collapse",
@@ -160,7 +160,7 @@ const routes = /*(isAuthenticated) =>*/[
   { type: "title", title: "Account Pages", key: "account-pages" },
   /*...(isAuthenticated
     ? 
-    [*/
+    [
   {
     type: "collapse",
     name: "Perfil",
@@ -168,14 +168,14 @@ const routes = /*(isAuthenticated) =>*/[
     route: "/profile",
     icon: <CustomerSupport size="12px" />,
     component: (
-      /*<ProtectedRoute>*/
+      <ProtectedRoute>
       <Profile />
-      /*</ProtectedRoute>*/
+      </ProtectedRoute>
     ),
     noCollapse: true,
   },
-  /*]*/
-  /*: [*/
+  ]
+  : [
   {
     type: "collapse",
     name: "Iniciar sesión",
@@ -194,7 +194,7 @@ const routes = /*(isAuthenticated) =>*/[
     component: <SignUp />,
     noCollapse: true,
   },
-  /*],),*/
+  ],),*/
 ];
 
 export default routes;

@@ -94,7 +94,7 @@ export default function App() {
       )}
       <Routes>
         {getRoutes(dynamicRoutes)}
-        <Route path="*" element={<Navigate to="/dashboard" />} />
+        <Route path="*" element={<Navigate to="/tables" />} />
       </Routes>
     </ThemeProvider>
   );
