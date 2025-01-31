@@ -1,7 +1,6 @@
 // Importaciones necesarias
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import Notas from "./Notas";
 import Card from "@mui/material/Card";
 import {
   TextField,
@@ -47,13 +46,13 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import "layouts/TextareaStyles.css";
 import button from "assets/theme/components/button";
 import { Code, Margin, WidthFull } from "@mui/icons-material";
-
+import { useLocation } from "react-router-dom";
 // Libreria gluestacks
 
-function NotaNutricional({ patientId }) {
-  {
-    /* Variables */
-  }
+function NotaNutricional() {
+  const location = useLocation();
+  const patient = location.state?.patient; // Asegurar que `patient` se obtiene correctamente
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     symptoms: "",
     energy: "",
@@ -61,21 +60,17 @@ function NotaNutricional({ patientId }) {
     TypesExercise: "",
     exerciseDaysWeek: "",
     exerciseIntensity: "",
-
     currentConditions: "",
     complications: "",
-
     symptomsGastrointestinal: "",
     detailSymptoms: [],
     frequencyStraining: "",
     frequencyDiarrhea: "",
-
     breakfast: "",
     collation1: "",
     meal: "",
     collation2: "",
     extras: "",
-
     measurementDates: "",
     waist: "",
     abdomen: "",
@@ -85,15 +80,43 @@ function NotaNutricional({ patientId }) {
     rightCalf: "",
     leftCalf: "",
     newMeasurements: [],
-
     diagnosis: "",
   });
 
-  const [notas, setNotas] = useState([]); // Almacena las notas enviadas
-  const [mostrarNotas, setMostrarNotas] = useState(false); // Controla la visualización de la sección de notas
+  const [notas, setNotas] = useState([]);
+  const [expandedNotes, setExpandedNotes] = useState({});
+  const apiUrl = `https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/${patient.id}/nutrition_notes`;
+  useEffect(() => {
+    const fetchNotas = async () => {
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error("Error al obtener las notas");
+        }
+        const data = await response.json();
+        setNotas(data);
+      } catch (error) {
+        console.error("Error al obtener los registros: ", error);
+      }
+    };
+    fetchNotas();
+  }, [apiUrl]);
+
+  const handleToggleExpand = (index) => {
+    setExpandedNotes((prev) => ({ ...prev, [index]: !prev[index] }));
+  };
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    return new Date(dateString).toLocaleDateString('es-ES', options);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
 
     // Manejamos el cambio de estado civil y limpiamos "otherStatus" si no es "otros"
     if (name === "maritalStatus" && value !== "otros") {
@@ -131,32 +154,6 @@ function NotaNutricional({ patientId }) {
     }
   };
 
-  // Reemplázalo con el ID real del paciente
-  //const patientId = "12345"; // Reemplázalo con el ID del paciente
-  const apiUrl = `https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/${patientId}/nutrition_notes`;
-
-  // ✅ Obtener notas al cargar la página
-  useEffect(() => {
-    const fetchNotas = async () => {
-      try {
-        const apiUrl = `https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/${patientId}/nutrition_notes`;
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-          throw new Error(`Error al obtener datos: ${response.statusText}`);
-        }
-        const data = await response.json();
-        console.log("Datos obtenidos:", data);
-        setMostrarNotas(true);
-      } catch (error) {
-        console.error("Error al obtener notas:", error);
-      }
-    };
-    if (patientId) {
-      fetchNotas();
-    }
-  }, [patientId]); // Se ejecuta cuando cambia el `apiUrl`
-
-  // ✅ Enviar notas con POST
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -177,15 +174,6 @@ function NotaNutricional({ patientId }) {
       console.log("Nota enviada con éxito:", result);
 
       alert("Nota guardada correctamente");
-
-      const newNote = {
-        id: result.id, // Usar el ID de la API
-        created_at: new Date().toISOString(), // Fecha actual
-        ...formData,
-      };
-
-      setNotas((prevNotas) => [newNote, ...prevNotas]); // Agregar nueva nota al estado
-      setMostrarNotas(true);
 
       // Limpiar el formulario
       setFormData({
@@ -991,13 +979,40 @@ function NotaNutricional({ patientId }) {
         )}
       </form>
       {/* Sección de notas */}
-      <Card sx={{ p: 3, mb: 3, boxShadow: 3 }}>{mostrarNotas && <Notas notas={notas} />}</Card>
+      <Card sx={{ p: 3, mb: 3, boxShadow: 3 }}>
+        <Typography variant="h6" mb={2}>Historial de Notas</Typography>
+        {notas.length > 0 ? (
+          notas.map((nota, index) => (
+            <Box key={index} sx={{ mb: 3, p: 2, border: "1px solid #ccc", borderRadius: "8px" }}>
+              <Grid container spacing={2}>
+                {Object.keys(nota).slice(0, 5).map((key) => (
+                  <Grid item xs={6} key={key}>
+                    <Typography><strong>{key.replace(/([A-Z])/g, ' $1').trim()}:</strong> {nota[key]}</Typography>
+                  </Grid>
+                ))}
+              </Grid>
+              {expandedNotes[index] && (
+                <Grid container spacing={2} mt={2}>
+                  {Object.keys(nota).slice(5).map((key) => (
+                    <Grid item xs={6} key={key}>
+                      <Typography><strong>{key.replace(/([A-Z])/g, ' $1').trim()}:</strong> {nota[key]}</Typography>
+                    </Grid>
+                  ))}
+                </Grid>
+              )}
+              <Button onClick={() => handleToggleExpand(index)} sx={{ mt: 1 }}>
+                {expandedNotes[index] ? "Ver menos" : "Ver más"}
+              </Button>
+            </Box>
+          ))
+        ) : (
+          <Typography>No hay notas disponibles.</Typography>
+        )}
+      </Card>
 
 
     </SoftBox>
   );
 }
-NotaNutricional.propTypes = {
-  patientId: PropTypes.string.isRequired,
-};
+
 export default NotaNutricional;
