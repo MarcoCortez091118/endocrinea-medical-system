@@ -23,6 +23,8 @@ import CreditCard from "examples/Icons/CreditCard";
 import Cube from "examples/Icons/Cube";
 import HistoryIcon from "@mui/icons-material/History";
 import PatientDetails from "layouts/patientFiles/patientFiles";
+import DoctorRegistrationForm from "layouts/registro-doctores";
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 // import ProtectedRoute from "components/ProtectedRoutes/ProtectedRoute";
 
 const routes = /*(isAuthenticated) =>*/[
@@ -66,31 +68,31 @@ const routes = /*(isAuthenticated) =>*/[
     //noCollapse: true,
   },
   //{
-    //type: "collapse",
-    //name: "HCP",
-    //key: "ClinicalForm",
-    //route: "/ClinicalForm",
-    //icon: <HistoryIcon size="12px" />,
-    //component: (
-      /*<ProtectedRoute>*/
-      //<ClinicalForm />
-      /*</ProtectedRoute>*/
-   // ),
-    //noCollapse: true,
- // },
- // {
+  //type: "collapse",
+  //name: "HCP",
+  //key: "ClinicalForm",
+  //route: "/ClinicalForm",
+  //icon: <HistoryIcon size="12px" />,
+  //component: (
+  /*<ProtectedRoute>*/
+  //<ClinicalForm />
+  /*</ProtectedRoute>*/
+  // ),
+  //noCollapse: true,
+  // },
+  // {
   //  type: "collapse",
   //  name: "HCN",
   //  key: "HistorialNutricional",
   //  route: "/HistorialNutricional",
   //  icon: <HistoryIcon size="12px" />,
- //   component: (
-      /*<ProtectedRoute>*/
-   //   <HistorialNutricional />
-      /*</ProtectedRoute>*/
+  //   component: (
+  /*<ProtectedRoute>*/
+  //   <HistorialNutricional />
+  /*</ProtectedRoute>*/
   //  ),
   //  noCollapse: true,
- // },
+  // },
   {
     //type: "collapse",
     //name: "Nota Nutricional",
@@ -117,19 +119,19 @@ const routes = /*(isAuthenticated) =>*/[
     ),
     //noCollapse: true,
   },
- // {
- //   type: "collapse",
- //   name: "HCM",
- //   key: "HistorialClinico",
- //   route: "/HistorialClinico",
- //   icon: <HistoryIcon size="12px" />,
- //   component: (
-      /*<ProtectedRoute>*/
+  // {
+  //   type: "collapse",
+  //   name: "HCM",
+  //   key: "HistorialClinico",
+  //   route: "/HistorialClinico",
+  //   icon: <HistoryIcon size="12px" />,
+  //   component: (
+  /*<ProtectedRoute>*/
   //    <HistorialClinico />
-      /*</ProtectedRoute>*/
- //   ),
- //   noCollapse: true,
- // },
+  /*</ProtectedRoute>*/
+  //   ),
+  //   noCollapse: true,
+  // },
 
   {
     // type: "collapse",
@@ -153,6 +155,19 @@ const routes = /*(isAuthenticated) =>*/[
     component: (
       /*<ProtectedRoute>*/
       <Agenda />
+      /*</ProtectedRoute>*/
+    ),
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "Medicos",
+    key: "RegistroDoctores",
+    route: "/RegistroDoctores",
+    icon: <LocalHospitalIcon size="12px" />,
+    component: (
+      /*<ProtectedRoute>*/
+      <DoctorRegistrationForm />
       /*</ProtectedRoute>*/
     ),
     noCollapse: true,
