@@ -420,15 +420,15 @@ function HistorialNutricional({ patientId }) {
   };
 
   const steps = [
-    "Ant. Heredo-Fam.", // Antecedentes Heredo Familiares
-    "Ant. Pers.", // Antecedentes personales
-    "Ant. Méd.", // Antecedentes Médicos
-    "Eval. Dietética", // Evaluación dietética
-    "Freq. Alim.", // Frecuencia de alimentos
-    "Signos Vit.", // Signos vitales
-    "Expl. Física", // Exploración Física
-    "Dx.", // Diagnóstico
-    "Plan & Obj.", // Plan y Objetivo
+    "Antecedentes Heredo Familiares", // Antecedentes Heredo Familiares
+    "Antecedentes personales", // Antecedentes personales
+    "Antecedentes Médicos", // Antecedentes Médicos
+    "Evaluación dietética", // Evaluación dietética
+    "Frecuencia de alimentos", // Frecuencia de alimentos
+    "Signos vitales", // Signos vitales
+    "Exploración Física", // Exploración Física
+    "Diagnóstico", // Diagnóstico
+    "Plan y Objetivo", // Plan y Objetivo
   ];
 
   const [activeStep, setActiveStep] = React.useState(0);
