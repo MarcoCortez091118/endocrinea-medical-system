@@ -116,7 +116,7 @@ const PatientDetailsForm = () => {
 
     // Generar el objeto JSON con los datos
     const jsonData = {
-        id: patientData.id,
+        
         first_name: patientData.first_name,
         last_name: patientData.last_name,
         phone: patientData.phone,
@@ -337,23 +337,7 @@ const PatientDetailsForm = () => {
             Datos administrativos
           </Typography>
           <Grid container spacing={2}>
-            {/* ID */}
-            <Grid item xs={12} sm={6}>
-              <label
-                htmlFor="id"
-                style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
-              >
-                ID
-              </label>
-              <textarea
-                id="id"
-                name="id"
-                value={patientData.id}
-                onChange={handleChange}
-                rows="1"
-                className="global-textarea"
-              />
-            </Grid>
+
 
             {/* Estado del paciente */}
             <Grid item xs={12} sm={6}>

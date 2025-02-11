@@ -33,7 +33,7 @@ function AddPatient({ open, onClose, onPatientAdded }) {
   const [formData, setFormData] = useState(initialFormData);
   const [alert, setAlert] = useState({ severity: "", message: "", show: false });
 
-  // Restablece el formulario cada vez que el modal se abre
+  
   useEffect(() => {
     if (open) {
       setFormData(initialFormData);
@@ -115,7 +115,7 @@ function AddPatient({ open, onClose, onPatientAdded }) {
         </Typography>
       </DialogTitle>
       <DialogContent>
-        {/* Mostrar alerta */}
+        
         {alert.show && (
           <Alert
             severity={alert.severity}
@@ -150,7 +150,7 @@ function AddPatient({ open, onClose, onPatientAdded }) {
             />
           </Grid>
 
-          {/* Apellidos */}
+          
           <Grid item xs={12} sm={6}>
             <SoftTypography variant="subtitle2" fontWeight="medium">
               Apellidos
@@ -172,7 +172,7 @@ function AddPatient({ open, onClose, onPatientAdded }) {
             />
           </Grid>
 
-          {/* Teléfono */}
+        
           <Grid item xs={12} sm={6}>
             <SoftTypography variant="subtitle2" fontWeight="medium">
               Teléfono
@@ -194,7 +194,7 @@ function AddPatient({ open, onClose, onPatientAdded }) {
             />
           </Grid>
 
-          {/* Email */}
+        
           <Grid item xs={12} sm={6}>
             <SoftTypography variant="subtitle2" fontWeight="medium">
               Email
@@ -216,9 +216,9 @@ function AddPatient({ open, onClose, onPatientAdded }) {
             />
           </Grid>
 
-          {/* Género */}
+         
           <Grid item xs={12} sm={6}>
-            {/* Etiqueta manual para que se vea como los otros campos */}
+            
             <SoftTypography variant="subtitle2" fontWeight="medium">
               Género
             </SoftTypography>
@@ -242,8 +242,7 @@ function AddPatient({ open, onClose, onPatientAdded }) {
             </FormControl>
           </Grid>
 
-          {/* Tipo de paciente */}
-          {/* Tipo de paciente alineado */}
+          
           <Grid item xs={12} sm={6}>
             <SoftTypography variant="subtitle2" fontWeight="medium">
               Tipo de paciente
@@ -254,7 +253,7 @@ function AddPatient({ open, onClose, onPatientAdded }) {
               name="type"
               value={formData.type}
               onChange={handleChange}
-              sx={{ margin: "0 10px" }} // Agrega margen superior para alinear con Género
+              sx={{ margin: "0 10px" }} 
             >
               <FormControlLabel value="Privado" control={<Radio />} label="Privado" />
               <FormControlLabel value="De aseguradora" control={<Radio />} label="De aseguradora" />
@@ -267,7 +266,7 @@ function AddPatient({ open, onClose, onPatientAdded }) {
         <Button
           onClick={onClose}
           variant="outlined"
-          sx={{ color: "#183A64", borderColor: "#183A64" }} // Azul en texto y borde
+          sx={{ color: "#183A64", borderColor: "#183A64" }}
         >
           Cerrar
         </Button>
@@ -276,7 +275,7 @@ function AddPatient({ open, onClose, onPatientAdded }) {
           onClick={handleSave}
           color="primary"
           variant="contained"
-          sx={{ color: "#FFFFFF" }} // Letras blancas
+          sx={{ color: "#FFFFFF" }} 
         >
           Guardar
         </Button>
