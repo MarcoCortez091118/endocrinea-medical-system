@@ -18,6 +18,7 @@ import {
   Alert,
   AlertTitle,
 } from "@mui/material";
+import SoftTypography from "components/SoftTypography";
 
 function AddPatient({ open, onClose, onPatientAdded }) {
   const initialFormData = {
@@ -32,7 +33,7 @@ function AddPatient({ open, onClose, onPatientAdded }) {
   const [formData, setFormData] = useState(initialFormData);
   const [alert, setAlert] = useState({ severity: "", message: "", show: false });
 
-  // Restablece el formulario cada vez que el modal se abre
+  
   useEffect(() => {
     if (open) {
       setFormData(initialFormData);
@@ -106,21 +107,22 @@ function AddPatient({ open, onClose, onPatientAdded }) {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>
-        <Typography variant="h6" fontWeight="bold" color="primary">
+        <Typography
+          fontWeight="bold"
+          sx={{ color: "#183A64", fontWeight: "bold", display: "block", marginBottom: "4px" }}
+        >
           Agregar paciente
         </Typography>
       </DialogTitle>
       <DialogContent>
-        {/* Mostrar alerta */}
+        
         {alert.show && (
           <Alert
             severity={alert.severity}
             onClose={() => setAlert({ ...alert, show: false })}
             sx={{ marginBottom: "16px" }}
           >
-            <AlertTitle>
-              {alert.severity === "success" ? "Éxito" : "Error"}
-            </AlertTitle>
+            <AlertTitle>{alert.severity === "success" ? "Éxito" : "Error"}</AlertTitle>
             {alert.message}
           </Alert>
         )}
@@ -128,16 +130,9 @@ function AddPatient({ open, onClose, onPatientAdded }) {
         <Grid container spacing={2}>
           {/* Nombre */}
           <Grid item xs={12} sm={6}>
-            <label
-              htmlFor="first_name"
-              style={{
-                fontWeight: "bold",
-                display: "block",
-                marginBottom: "4px",
-              }}
-            >
+            <SoftTypography variant="subtitle2" fontWeight="medium">
               Nombre del paciente
-            </label>
+            </SoftTypography>
             <textarea
               id="first_name"
               name="first_name"
@@ -155,18 +150,11 @@ function AddPatient({ open, onClose, onPatientAdded }) {
             />
           </Grid>
 
-          {/* Apellidos */}
+          
           <Grid item xs={12} sm={6}>
-            <label
-              htmlFor="last_name"
-              style={{
-                fontWeight: "bold",
-                display: "block",
-                marginBottom: "4px",
-              }}
-            >
+            <SoftTypography variant="subtitle2" fontWeight="medium">
               Apellidos
-            </label>
+            </SoftTypography>
             <textarea
               id="last_name"
               name="last_name"
@@ -184,18 +172,11 @@ function AddPatient({ open, onClose, onPatientAdded }) {
             />
           </Grid>
 
-          {/* Teléfono */}
+        
           <Grid item xs={12} sm={6}>
-            <label
-              htmlFor="phone"
-              style={{
-                fontWeight: "bold",
-                display: "block",
-                marginBottom: "4px",
-              }}
-            >
+            <SoftTypography variant="subtitle2" fontWeight="medium">
               Teléfono
-            </label>
+            </SoftTypography>
             <textarea
               id="phone"
               name="phone"
@@ -213,18 +194,11 @@ function AddPatient({ open, onClose, onPatientAdded }) {
             />
           </Grid>
 
-          {/* Email */}
+        
           <Grid item xs={12} sm={6}>
-            <label
-              htmlFor="email"
-              style={{
-                fontWeight: "bold",
-                display: "block",
-                marginBottom: "4px",
-              }}
-            >
+            <SoftTypography variant="subtitle2" fontWeight="medium">
               Email
-            </label>
+            </SoftTypography>
             <textarea
               id="email"
               name="email"
@@ -242,17 +216,24 @@ function AddPatient({ open, onClose, onPatientAdded }) {
             />
           </Grid>
 
-          {/* Género */}
+         
           <Grid item xs={12} sm={6}>
+            
+            <SoftTypography variant="subtitle2" fontWeight="medium">
+              Género
+            </SoftTypography>
+
             <FormControl fullWidth>
-              <InputLabel id="gender-label">Género</InputLabel>
               <Select
-                labelId="gender-label"
                 id="gender"
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
+                displayEmpty
               >
+                <MenuItem value="" disabled>
+                  Seleccionar género
+                </MenuItem>
                 <MenuItem value="Masculino">Masculino</MenuItem>
                 <MenuItem value="Femenino">Femenino</MenuItem>
                 <MenuItem value="Otro">Otro</MenuItem>
@@ -261,9 +242,19 @@ function AddPatient({ open, onClose, onPatientAdded }) {
             </FormControl>
           </Grid>
 
-          {/* Tipo de paciente */}
+          
           <Grid item xs={12} sm={6}>
-            <RadioGroup row name="type" value={formData.type} onChange={handleChange}>
+            <SoftTypography variant="subtitle2" fontWeight="medium">
+              Tipo de paciente
+            </SoftTypography>
+
+            <RadioGroup
+              row
+              name="type"
+              value={formData.type}
+              onChange={handleChange}
+              sx={{ margin: "0 10px" }} 
+            >
               <FormControlLabel value="Privado" control={<Radio />} label="Privado" />
               <FormControlLabel value="De aseguradora" control={<Radio />} label="De aseguradora" />
             </RadioGroup>
@@ -272,10 +263,20 @@ function AddPatient({ open, onClose, onPatientAdded }) {
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onClose} color="secondary" variant="outlined">
+        <Button
+          onClick={onClose}
+          variant="outlined"
+          sx={{ color: "#183A64", borderColor: "#183A64" }}
+        >
           Cerrar
         </Button>
-        <Button onClick={handleSave} color="primary" variant="contained">
+
+        <Button
+          onClick={handleSave}
+          color="primary"
+          variant="contained"
+          sx={{ color: "#FFFFFF" }} 
+        >
           Guardar
         </Button>
       </DialogActions>
