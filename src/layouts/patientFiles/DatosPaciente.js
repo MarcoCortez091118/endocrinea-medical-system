@@ -116,44 +116,42 @@ const PatientDetailsForm = () => {
 
     // Generar el objeto JSON con los datos
     const jsonData = {
-        
-        first_name: patientData.first_name,
-        last_name: patientData.last_name,
-        phone: patientData.phone,
-        email: patientData.email,
-        city: patientData.city,
-        country: patientData.country,
-        neighborhood: patientData.neighborhood,
-        address_number: patientData.address_number,
-        postal_code: patientData.postal_code,
-        province: patientData.province,
-        state: patientData.state,
-        street: patientData.street,
-        allergies: patientData.allergies,
-        born_city: patientData.born_city,
-        born_state: patientData.born_state,
-        date_of_birth: patientData.date_of_birth,
-        document: patientData.document,
-        education: patientData.education,
-        gender: patientData.gender,
-        insurance: patientData.insurance,
-        insurance_card_number: patientData.insurance_card_number,
-        marital_status: patientData.marital_status,
-        medications: patientData.medications,
-        nation_healthcare_number: patientData.nation_healthcare_number,
-        nationality: patientData.nationality,
-        observations: patientData.observations,
-        other_information: patientData.other_information,
-        precedents: patientData.precedents,
-        profession: patientData.profession,
-        religion: patientData.religion,
-        signed_data_marketing: patientData.signed_data_marketing,
-        signed_data_privacy: patientData.signed_data_privacy,
-        status: patientData.status,
-        type: patientData.type,
-        number: patientData.number,
-      };
-      
+      first_name: patientData.first_name,
+      last_name: patientData.last_name,
+      phone: patientData.phone,
+      email: patientData.email,
+      city: patientData.city,
+      country: patientData.country,
+      neighborhood: patientData.neighborhood,
+      address_number: patientData.address_number,
+      postal_code: patientData.postal_code,
+      province: patientData.province,
+      state: patientData.state,
+      street: patientData.street,
+      allergies: patientData.allergies,
+      born_city: patientData.born_city,
+      born_state: patientData.born_state,
+      date_of_birth: patientData.date_of_birth,
+      document: patientData.document,
+      education: patientData.education,
+      gender: patientData.gender,
+      insurance: patientData.insurance,
+      insurance_card_number: patientData.insurance_card_number,
+      marital_status: patientData.marital_status,
+      medications: patientData.medications,
+      nation_healthcare_number: patientData.nation_healthcare_number,
+      nationality: patientData.nationality,
+      observations: patientData.observations,
+      other_information: patientData.other_information,
+      precedents: patientData.precedents,
+      profession: patientData.profession,
+      religion: patientData.religion,
+      signed_data_marketing: patientData.signed_data_marketing,
+      signed_data_privacy: patientData.signed_data_privacy,
+      status: patientData.status,
+      type: patientData.type,
+      number: patientData.number,
+    };
 
     // Mostrar el JSON en consola
     console.log("JSON generado: ", JSON.stringify(jsonData, null, 2));
@@ -282,19 +280,22 @@ const PatientDetailsForm = () => {
               >
                 Género*
               </label>
-              <TextField
-                select
-                fullWidth
-                name="gender"
-                value={patientData.gender}
-                onChange={handleChange}
-                variant="outlined"
-              >
-                <MenuItem value="">Selecciona una opción</MenuItem>
-                <MenuItem value="male">Masculino</MenuItem>
-                <MenuItem value="female">Femenino</MenuItem>
-                <MenuItem value="other">Otro</MenuItem>
-              </TextField>
+              <FormControl fullWidth>
+                <Select
+                  id="gender"
+                  name="gender"
+                  value={patientData.gender}
+                  onChange={handleChange}
+                  displayEmpty
+                >
+                  <MenuItem value="" disabled>
+                    Seleccionar género
+                  </MenuItem>
+                  <MenuItem value="male">Masculino</MenuItem>
+                  <MenuItem value="female">Femenino</MenuItem>
+                  <MenuItem value="other">Otro</MenuItem>
+                </Select>
+              </FormControl>
             </Grid>
 
             {/* Tipo de paciente */}
@@ -337,8 +338,6 @@ const PatientDetailsForm = () => {
             Datos administrativos
           </Typography>
           <Grid container spacing={2}>
-
-
             {/* Estado del paciente */}
             <Grid item xs={12} sm={6}>
               <label
