@@ -72,12 +72,8 @@ function DoctorRegistrationForm() {
     return (
         <DashboardLayout>
             <DashboardNavbar />
-            <Container maxWidth="md" sx={{ mt: 4 }}>
+            <Container maxWidth="md" sx={{ mt: 2, mb: 4 }}>
                 <Card>
-                    <CardHeader
-                        title="Registro de Médico"
-                        sx={{ backgroundColor: '#1976d2', color: 'white' }}
-                    />
                     <CardContent>
                         <form onSubmit={handleSubmit}>
                             <Grid container spacing={2}>
@@ -421,7 +417,7 @@ function DoctorRegistrationForm() {
                                 {/* Botón de envío */}
                                 <Grid item xs={12}>
                                     <Button type="submit" variant="contained" color="primary" fullWidth>
-                                        Registrar
+                                        Crear Médico
                                     </Button>
                                 </Grid>
                             </Grid>
