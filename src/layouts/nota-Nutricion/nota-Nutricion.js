@@ -3,31 +3,17 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Card from "@mui/material/Card";
 import {
-  TextField,
-  MenuItem,
-  Select,
-  Input,
   Grid,
   Button,
-  FormControl,
-  InputLabel,
   FormControlLabel,
   Radio,
   RadioGroup,
-  DatePicker,
   Checkbox,
   Box,
-  NativeSelect,
-  FormLabel,
-  Table,
-  TableBody,
   TableCell,
-  TableContainer,
-  TableHead,
   TableRow,
-  Paper,
   tableCellClasses,
-  Collapse
+  Collapse,
 } from "@mui/material";
 
 import Stepper from "@mui/material/Stepper";
@@ -40,13 +26,9 @@ import { styled } from "@mui/system";
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
-// Soft UI Dashboard React examples
-import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 
 // Global style textarea
 import "layouts/TextareaStyles.css";
-import button from "assets/theme/components/button";
-import { Code, Margin, WidthFull } from "@mui/icons-material";
 import { useLocation } from "react-router-dom";
 // Libreria gluestacks
 
@@ -72,15 +54,6 @@ function NotaNutricional() {
     meal: "",
     collation2: "",
     extras: "",
-    measurementDates: "",
-    waist: "",
-    abdomen: "",
-    hips: "",
-    leftArm: "",
-    rightArm: "",
-    rightCalf: "",
-    leftCalf: "",
-    newMeasurements: [],
     diagnosis: "",
   });
 
@@ -187,26 +160,19 @@ function NotaNutricional() {
       setFormData({
         symptoms: "",
         symptomsGastrointestinal: "",
-        abdomen: "",
         TypesExercise: "",
-        leftArm: "",
-        waist: "",
         diagnosis: "",
         breakfast: "",
         meal: "",
-        rightArm: "",
-        rightCalf: "",
         exerciseIntensity: "",
         measurementDates: "",
         complications: "",
-        leftCalf: "",
         detailSymptoms: [],
         frequencyDiarrhea: "",
         extras: "",
         liquids: "",
         energy: "",
         collation1: "",
-        hips: "",
         currentConditions: "",
         exerciseDaysWeek: "",
         frequencyStraining: "",
@@ -221,15 +187,10 @@ function NotaNutricional() {
   const translations = {
     symptoms: "Síntomas",
     symptomsGastrointestinal: "Síntomas gastrointestinales",
-    abdomen: "Abdomen",
     TypesExercise: "Tipos de ejercicio",
-    leftArm: "Brazo izquierdo",
-    waist: "Cintura",
     diagnosis: "Diagnóstico",
     breakfast: "Desayuno",
     meal: "Comida",
-    rightArm: "Brazo derecho",
-    rightCalf: "Pantorrilla derecha",
     exerciseIntensity: "Intensidad del ejercicio",
     measurementDates: "Fechas de mediciones",
     complications: "Complicaciones",
@@ -240,98 +201,11 @@ function NotaNutricional() {
     liquids: "Líquidos",
     energy: "Energía",
     collation1: "Colación 1",
-    hips: "Caderas",
     currentConditions: "Condiciones actuales",
     exerciseDaysWeek: "Días de ejercicio por semana",
     frequencyStraining: "Frecuencia de esfuerzo",
     collation2: "Colación 2",
   };
-
-  const [columnsMediciones, setColumnsMediciones] = useState([]);
-  const [datesMediciones, setDatesMediciones] = useState([]);
-  const [lastMeasurements, setLastMeasurements] = useState(null);
-
-  // Mapeo de nombres legibles para las claves
-  const visibleFieldsMediciones = {
-    waist: "Cintura",
-    abdomen: "Abdomen",
-    hips: "Cadera",
-    leftArm: "Brazo Izquierdo",
-    rightArm: "Brazo Derecho",
-    rightCalf: "Pantorrilla Derecha",
-    leftCalf: "Pantorrilla Izquierda",
-  };
-
-  const handleInputChange = (event, measurement) => {
-    setFormData({
-      ...formData,
-      [measurement]: event.target.value,
-    });
-  };
-
-  const showPreviousMeasurements = () => {
-    if (columnsMediciones.length > 0) {
-      // Si hay registros, mostramos la última columna en la tabla
-      const lastColumn = columnsMediciones[columnsMediciones.length - 1];
-      const lastDate = datesMediciones[columnsMediciones.length - 1];
-      setLastMeasurements({ data: lastColumn, date: lastDate });
-    } else {
-      // Si no hay registros, mostramos una alerta
-      alert("No hay registros previos para comparar.");
-    }
-  };
-
-  const handleNewMeasurementChange = (event, rowIndex, colIndex, tableType) => {
-    const { value } = event.target;
-    if (tableType === "pesos") {
-      setColumnsPesos((prevColumns) => {
-        const updatedColumns = [...prevColumns];
-        // Asegúrate de que la columna y la fila existan antes de asignar valores
-        if (!updatedColumns[colIndex]) updatedColumns[colIndex] = [];
-        updatedColumns[colIndex][rowIndex] = value;
-        return updatedColumns;
-      });
-    } else if (tableType === "mediciones") {
-      setColumnsMediciones((prevColumns) => {
-        const updatedColumns = [...prevColumns];
-        if (!updatedColumns[colIndex]) updatedColumns[colIndex] = [];
-        updatedColumns[colIndex][rowIndex] = value;
-        return updatedColumns;
-      });
-    }
-  };
-
-  const addColumn = (tableType) => {
-    if (tableType === "mediciones") {
-      const newColumn = Object.keys(visibleFieldsMediciones).map(() => ""); // Nueva columna vacía
-      setColumnsMediciones([...columnsMediciones, newColumn]);
-      setDatesMediciones([...datesMediciones, ""]); // Agregar un campo vacío para la fecha
-    } else if (tableType === "pesos") {
-      const newColumn = Object.keys(visibleFieldsPesos).map(() => ""); // Nueva columna vacía
-      setColumnsPesos((prevColumns) => [...prevColumns, newColumn]);
-      setDatesPesos((prevDates) => [...prevDates, ""]); // Agregar un campo vacío para la fecha
-    }
-  };
-
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
-
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    "&:last-child td, &:last-child th": {
-      border: 0,
-    },
-  }));
 
   const handleCheckboxChange1 = (e, detalle) => {
     const { checked } = e.target;
@@ -343,14 +217,10 @@ function NotaNutricional() {
     }));
   };
 
-  const steps = ["Subjetivo", "Objetivo", "Evaluación dietética", "Exploración Física ", "Plan"];
+  const steps = ["Subjetivo", "Objetivo", "Evaluación dietética", "Plan"];
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
-
-  const isStepOptional = (step) => {
-    return step === 1;
-  };
 
   const isStepSkipped = (step) => {
     return skipped.has(step);
@@ -797,146 +667,9 @@ function NotaNutricional() {
             </Grid>
           </SoftBox>
         )}
-        {/* mediciones */}
-        {activeStep === 3 && (
-          <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
-            {/* Título de la tabla */}
-            <SoftTypography variant="h5" color="secondary" mb={3}>
-              Exploración Física (antropometría)
-            </SoftTypography>
 
-            {/* Contenedor de la tabla */}
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                <TableBody>
-                  {/* Fila de Fechas */}
-                  <StyledTableRow>
-                    <StyledTableCell component="th" scope="row">
-                      Fecha
-                    </StyledTableCell>
-                    {/* Campo de fecha actual */}
-                    <StyledTableCell align="center">
-                      <input
-                        type="date"
-                        value={formData.measurementDates}
-                        onChange={(e) =>
-                          setFormData({ ...formData, measurementDates: e.target.value })
-                        }
-                        style={{
-                          width: "100%",
-                          padding: "8px",
-                          border: "1px solid #ccc",
-                          borderRadius: "4px",
-                        }}
-                      />
-                    </StyledTableCell>
-                    {/* Campos de fecha para las columnas existentes */}
-                    {datesMediciones.map((date, colIndex) => (
-                      <StyledTableCell key={`date-col-${colIndex}`} align="center">
-                        <input
-                          type="date"
-                          value={date}
-                          onChange={(e) => {
-                            const updatedDates = [...datesMediciones];
-                            updatedDates[colIndex] = e.target.value;
-                            setDatesMediciones(updatedDates); // Actualiza la fecha en el estado
-                          }}
-                          style={{
-                            width: "100%",
-                            padding: "8px",
-                            border: "1px solid #ccc",
-                            borderRadius: "4px",
-                          }}
-                        />
-                      </StyledTableCell>
-                    ))}
-                  </StyledTableRow>
-
-                  {/* Mostrar registro anterior si existe */}
-                  {lastMeasurements && (
-                    <>
-                      <StyledTableRow>
-                        <StyledTableCell component="th" scope="row">
-                          Registro Anterior
-                        </StyledTableCell>
-                        <StyledTableCell align="center" colSpan={columnsMediciones.length + 1}>
-                          {lastMeasurements.date || "Fecha no disponible"}
-                        </StyledTableCell>
-                      </StyledTableRow>
-                      {Object.keys(visibleFieldsMediciones).map((measurement, rowIndex) => (
-                        <StyledTableRow key={`prev-${measurement}`}>
-                          <StyledTableCell component="th" scope="row">
-                            {visibleFieldsMediciones[measurement]}
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            {lastMeasurements.data[rowIndex] || "Sin datos"}
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      ))}
-                    </>
-                  )}
-
-                  {/* Fila de Mediciones */}
-                  {Object.keys(visibleFieldsMediciones).map((measurement, rowIndex) => (
-                    <StyledTableRow key={measurement}>
-                      <StyledTableCell component="th" scope="row">
-                        {visibleFieldsMediciones[measurement]}
-                      </StyledTableCell>
-                      {/* Input para cada medición en la fila */}
-                      <StyledTableCell>
-                        <input
-                          type="text"
-                          style={{
-                            width: "100%",
-                            padding: "8px",
-                            border: "1px solid #ccc",
-                            borderRadius: "4px",
-                          }}
-                          value={formData[measurement]}
-                          onChange={(e) => handleInputChange(e, measurement)}
-                        />
-                      </StyledTableCell>
-
-                      {/* Celdas para las columnas de mediciones */}
-                      {columnsMediciones.map((col, colIndex) => (
-                        <StyledTableCell key={`cell-${colIndex}-${rowIndex}`}>
-                          <input
-                            type="text"
-                            style={{
-                              width: "100%",
-                              padding: "8px",
-                              border: "1px solid #ccc",
-                              borderRadius: "4px",
-                            }}
-                            value={col[rowIndex] || ""}
-                            onChange={(e) =>
-                              handleNewMeasurementChange(e, rowIndex, colIndex, "mediciones")
-                            }
-                          />
-                        </StyledTableCell>
-                      ))}
-                    </StyledTableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-
-            {/* Botón para agregar columna */}
-            <SoftBox mt={2}>
-              <Button
-                type="button"
-                variant="contained"
-                color="primary"
-                style={{ color: "white" }}
-                onClick={showPreviousMeasurements} // Cambiar de addColumn a showPreviousMeasurements
-              >
-                Mostrar registro anterior
-              </Button>
-            </SoftBox>
-          </SoftBox>
-        )}
         {/* Diagnostico */}
-        {activeStep === 4 && (
+        {activeStep === 3 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             {/* Título del componente */}
             <SoftTypography variant="h5" color="secondary" mb={3}>

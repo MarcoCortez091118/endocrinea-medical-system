@@ -5,50 +5,36 @@ import Card from "@mui/material/Card";
 import {
   TextField,
   MenuItem,
-  Select as MuiSelect,
-  Input,
+  Select,
   Grid,
   Button,
-  FormControl as MuiFormControl,
+  FormControl,
   InputLabel,
-  FormControlLabel as MuiFormControlLabel,
+  FormControlLabel,
   Radio,
   RadioGroup,
-  DatePicker,
   Checkbox,
-  Box as MuiBox,
-  NativeSelect,
-  FormLabel as MuiFormLabel,
+  Box,
   Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
   Paper,
   tableCellClasses,
-  Box,
 } from "@mui/material";
 
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import Typography from "@mui/material/Typography";
 
 import { styled } from "@mui/system";
 
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
-// Soft UI Dashboard React examples
-import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
-
 // Global style textarea
 import "layouts/TextareaStyles.css";
-import button from "assets/theme/components/button";
-import { Code, Margin, WidthFull } from "@mui/icons-material";
 import NutritionRecords from "./nota-historial-nutricion";
 
 // Libreria gluestacks
@@ -58,12 +44,6 @@ function HistorialNutricional({ patientId }) {
     /* Variables */
   }
   const [formData, setFormData] = useState({
-    name: "",
-    gender: "",
-    reasonVisit: "",
-    birthDate: "",
-    occupation: "",
-
     familyHistory: {
       Diabetes: {
         Mother: false,
@@ -169,14 +149,13 @@ function HistorialNutricional({ patientId }) {
 
   // Maneja el cambio de los checkboxes
   const handleCheckboxChange = (e, disease, familyMember) => {
-    const { checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((prev) => ({
+      ...prev,
       familyHistory: {
-        ...prevData.familyHistory,
+        ...prev.familyHistory,
         [disease]: {
-          ...prevData.familyHistory[disease],
-          [familyMember]: checked,
+          ...prev.familyHistory[disease],
+          [familyMember]: e.target.checked,
         },
       },
     }));
@@ -193,25 +172,45 @@ function HistorialNutricional({ patientId }) {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
+
+    // Si es un checkbox de antecedentes familiares
+    if (name.startsWith("familyHistory")) {
+      const [_, disease, familyMember] = name.split(".");
+
+      setFormData((prevData) => ({
+        ...prevData,
+        familyHistory: {
+          ...prevData.familyHistory,
+          [disease]: {
+            ...prevData.familyHistory[disease],
+            [familyMember]: checked, // Checkbox: true/false
+          },
+        },
+      }));
+    }
     // Si cambia el estado civil y no es "Otros", limpiamos el campo otherStatus
-    if (name === "maritalStatus" && value !== "otros") {
+    else if (name === "maritalStatus" && value !== "otros") {
       setFormData((prevData) => ({
         ...prevData,
         [name]: value,
         otherStatus: "", // Limpiamos el campo "otherStatus"
       }));
-    } else if (name === "surgery") {
+    }
+    // Si cambia el estado de cirugía, limpiamos otros campos relacionados
+    else if (name === "surgery") {
       setFormData((prevData) => ({
         ...prevData,
         [name]: value,
         surgeryHistory: [], // Limpiamos el historial de cirugías si cambia
         surgeryOther: "", // Limpiamos el campo de especificaciones
       }));
-    } else {
+    }
+    // Caso general
+    else {
       setFormData((prevData) => ({
         ...prevData,
-        [name]: value,
+        [name]: type === "checkbox" ? checked : value, // Maneja checkboxes generales
       }));
     }
   };
@@ -221,7 +220,8 @@ function HistorialNutricional({ patientId }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const apiUrl = "https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/10000003/nutrition_records";
+    const apiUrl =
+      "https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/10000003/nutrition_records";
 
     try {
       const response = await fetch(apiUrl, {
@@ -249,11 +249,6 @@ function HistorialNutricional({ patientId }) {
       setMostrarNotas(true);
       // Limpiar el formulario
       setFormData({
-        name: "",
-        gender: "",
-        reasonVisit: "",
-        birthDate: "",
-        occupation: "",
         familyHistory: {},
         otherFamilyHistory: "",
         drugAllergy: "",
@@ -316,7 +311,6 @@ function HistorialNutricional({ patientId }) {
       console.error("Error en la solicitud:", error);
       alert("Hubo un error al guardar el historial. Inténtalo nuevamente.");
     }
-
   };
 
   const data = [
@@ -348,6 +342,15 @@ function HistorialNutricional({ patientId }) {
     minimumWeight: "Peso Mínimo",
     currentWeight: "Peso Actual",
   };
+
+  const diseaseTranslations = {
+    Diabetes: "Diabetes",
+    Hypertension: "Hipertensión",
+    "High Cholesterol": "Colesterol Alto",
+    "Heart Attacks": "Infartos Cardíacos",
+  };
+  
+  
 
   const handleInputChange = (event, measurement) => {
     setFormData({
@@ -417,16 +420,15 @@ function HistorialNutricional({ patientId }) {
   };
 
   const steps = [
-    "Generales",
-    "Antecedentes Heredo Familiares",
-    "Antecedentes personales",
-    "Antecedentes Médicos",
-    "Evaluación dietética",
-    "Frecuencia de alimentos",
-    "Signos vitales",
-    "Exploración Física",
-    "Diagnóstico",
-    "Plan y Objetivo",
+    "Ant. Heredo-Fam.", // Antecedentes Heredo Familiares
+    "Ant. Pers.", // Antecedentes personales
+    "Ant. Méd.", // Antecedentes Médicos
+    "Eval. Dietética", // Evaluación dietética
+    "Freq. Alim.", // Frecuencia de alimentos
+    "Signos Vit.", // Signos vitales
+    "Expl. Física", // Exploración Física
+    "Dx.", // Diagnóstico
+    "Plan & Obj.", // Plan y Objetivo
   ];
 
   const [activeStep, setActiveStep] = React.useState(0);
@@ -453,21 +455,6 @@ function HistorialNutricional({ patientId }) {
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
   };
 
   const handleReset = () => {
@@ -509,158 +496,8 @@ function HistorialNutricional({ patientId }) {
       </SoftBox>
 
       <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-        {/* Generales */}
-        {activeStep === 0 && (
-          <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
-            <SoftTypography variant="h5" color="secondary" mb={3}>
-              Generales
-            </SoftTypography>
-            <Grid container spacing={1} alignItems="center">
-              {/* Nombre */}
-              <Grid item xs={12} sm={3}>
-                <SoftBox mb={2}>
-                  <label
-                    htmlFor="name"
-                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
-                  >
-                    Nombre:
-                  </label>
-                  <textarea
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    rows="1"
-                    className="global-textarea"
-                    style={{
-                      width: "100%",
-                      padding: "8px",
-                      borderRadius: "4px",
-                      border: "1px solid #ccc",
-                      fontSize: "14px",
-                      fontFamily: "Arial, sans-serif",
-                    }}
-                  />
-                </SoftBox>
-              </Grid>
-
-              {/* Género */}
-              <Grid item xs={12} sm={3}>
-                <SoftBox mb={2}>
-                  <label
-                    htmlFor="gender"
-                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
-                  >
-                    Género:
-                  </label>
-                  <MuiFormControl variant="standard" fullWidth>
-                    <MuiSelect
-                      id="gender"
-                      name="gender"
-                      value={formData.gender}
-                      onChange={handleChange}
-                      style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "4px",
-                        border: "1px solid #ccc",
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value="Hombre">Hombre</MenuItem>
-                      <MenuItem value="Mujer">Mujer</MenuItem>
-                    </MuiSelect>
-                  </MuiFormControl>
-                </SoftBox>
-              </Grid>
-
-              {/* Fecha de nacimiento */}
-              <Grid item xs={12} sm={3}>
-                <SoftBox mb={2}>
-                  <label
-                    htmlFor="birthDate"
-                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
-                  >
-                    Fecha de nacimiento:
-                  </label>
-                  <TextField
-                    id="birthDate"
-                    name="birthDate"
-                    type="date"
-                    value={formData.birthDate}
-                    onChange={handleChange}
-                    fullWidth
-                    InputLabelProps={{ shrink: true }}
-                    style={{
-                      width: "100%",
-                      padding: "8px",
-                      borderRadius: "4px",
-                      border: "1px solid #ccc",
-                    }}
-                  />
-                </SoftBox>
-              </Grid>
-
-              {/* Ocupación */}
-              <Grid item xs={12} sm={3}>
-                <SoftBox mb={2}>
-                  <label
-                    htmlFor="occupation"
-                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
-                  >
-                    Ocupación:
-                  </label>
-                  <textarea
-                    id="occupation"
-                    name="occupation"
-                    value={formData.occupation}
-                    onChange={handleChange}
-                    rows="1"
-                    className="global-textarea"
-                    style={{
-                      width: "100%",
-                      padding: "8px",
-                      borderRadius: "4px",
-                      border: "1px solid #ccc",
-                      fontSize: "14px",
-                      fontFamily: "Arial, sans-serif",
-                    }}
-                  />
-                </SoftBox>
-              </Grid>
-            </Grid>
-
-            {/* Motivo de visita */}
-            <SoftBox mt={3}>
-              <label
-                htmlFor="reasonVisit"
-                style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
-              >
-                Motivo de visita:
-              </label>
-              <textarea
-                id="reasonVisit"
-                name="reasonVisit"
-                value={formData.reasonVisit}
-                onChange={handleChange}
-                rows="2"
-                className="global-textarea"
-                style={{
-                  width: "100%",
-                  padding: "8px",
-                  borderRadius: "4px",
-                  border: "1px solid #ccc",
-                  fontSize: "14px",
-                  fontFamily: "Arial, sans-serif",
-                }}
-              />
-            </SoftBox>
-          </SoftBox>
-        )}
         {/* Antecedentes Heredo Familiares*/}
-        {activeStep === 1 && (
+        {activeStep === 0 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             {/* Título principal */}
             <SoftBox mb={2}>
@@ -695,7 +532,7 @@ function HistorialNutricional({ patientId }) {
                   {Object.keys(formData.familyHistory).map((disease) => (
                     <tr key={disease} style={{ borderBottom: "1px solid #ddd" }}>
                       <td style={{ padding: "8px", textAlign: "left", fontWeight: "medium" }}>
-                        {disease}
+                        {diseaseTranslations[disease]}
                       </td>
                       {Object.keys(formData.familyHistory[disease]).map((familyMember) => (
                         <td key={familyMember} style={{ padding: "8px" }}>
@@ -739,7 +576,7 @@ function HistorialNutricional({ patientId }) {
           </SoftBox>
         )}
         {/* ANTECEDENTES PERSONALES NO PATOLÓGICOS */}
-        {activeStep === 2 && (
+        {activeStep === 1 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             <SoftTypography variant="h5" color="secondary" mb={3}>
               Antecedentes personales
@@ -762,8 +599,8 @@ function HistorialNutricional({ patientId }) {
                 onChange={handleChange}
                 required
               >
-                <MuiFormControlLabel value="Si" control={<Radio />} label="Si" />
-                <MuiFormControlLabel value="No" control={<Radio />} label="No" />
+                <FormControlLabel value="Si" control={<Radio />} label="Si" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
               </RadioGroup>
             </SoftBox>
             {formData.drugAllergy === "Si" && (
@@ -795,8 +632,8 @@ function HistorialNutricional({ patientId }) {
                 onChange={handleChange}
                 required
               >
-                <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
-                <MuiFormControlLabel value="No" control={<Radio />} label="No" />
+                <FormControlLabel value="Si" control={<Radio />} label="Sí" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
               </RadioGroup>
             </SoftBox>
             {formData.foodAllergy === "Si" && (
@@ -828,8 +665,8 @@ function HistorialNutricional({ patientId }) {
                 onChange={handleChange}
                 required
               >
-                <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
-                <MuiFormControlLabel value="No" control={<Radio />} label="No" />
+                <FormControlLabel value="Si" control={<Radio />} label="Sí" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
               </RadioGroup>
             </SoftBox>
             {formData.prohibitedFoods === "Si" && (
@@ -862,8 +699,8 @@ function HistorialNutricional({ patientId }) {
                   onChange={handleChange}
                   required
                 >
-                  <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
-                  <MuiFormControlLabel value="No" control={<Radio />} label="No" />
+                  <FormControlLabel value="Si" control={<Radio />} label="Sí" />
+                  <FormControlLabel value="No" control={<Radio />} label="No" />
                 </RadioGroup>
               </SoftBox>
 
@@ -902,26 +739,22 @@ function HistorialNutricional({ patientId }) {
                       onChange={handleChange}
                       required
                     >
-                      <MuiFormControlLabel
+                      <FormControlLabel
                         value="1"
                         control={<Radio />}
                         label="Al menos 1 día a la semana"
                       />
-                      <MuiFormControlLabel
+                      <FormControlLabel
                         value="2"
                         control={<Radio />}
                         label="Al menos 2 días a la semana"
                       />
-                      <MuiFormControlLabel
+                      <FormControlLabel
                         value="3"
                         control={<Radio />}
                         label="3 o más días a la semana"
                       />
-                      <MuiFormControlLabel
-                        value="4"
-                        control={<Radio />}
-                        label="No hago ejercicio"
-                      />
+                      <FormControlLabel value="4" control={<Radio />} label="No hago ejercicio" />
                     </RadioGroup>
                   </SoftBox>
 
@@ -942,9 +775,9 @@ function HistorialNutricional({ patientId }) {
                       rows="1"
                       className="global-textarea"
                     >
-                      <MuiFormControlLabel value="Leve" control={<Radio />} label="Leve" />
-                      <MuiFormControlLabel value="Moderado" control={<Radio />} label="Moderado" />
-                      <MuiFormControlLabel value="Intenso" control={<Radio />} label="Intenso" />
+                      <FormControlLabel value="Leve" control={<Radio />} label="Leve" />
+                      <FormControlLabel value="Moderado" control={<Radio />} label="Moderado" />
+                      <FormControlLabel value="Intenso" control={<Radio />} label="Intenso" />
                     </RadioGroup>
                   </SoftBox>
                 </>
@@ -966,8 +799,8 @@ function HistorialNutricional({ patientId }) {
                   onChange={handleChange}
                   required
                 >
-                  <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
-                  <MuiFormControlLabel value="No" control={<Radio />} label="No" />
+                  <FormControlLabel value="Si" control={<Radio />} label="Sí" />
+                  <FormControlLabel value="No" control={<Radio />} label="No" />
                 </RadioGroup>
                 {formData.sleepInsomnia === "Si" && (
                   <SoftBox ml={4}>
@@ -984,27 +817,19 @@ function HistorialNutricional({ patientId }) {
                       onChange={handleChange}
                       required
                     >
-                      <MuiFormControlLabel
+                      <FormControlLabel
                         value="Menos de 4 horas"
                         control={<Radio />}
                         label="Menos de 4 horas"
                       />
-                      <MuiFormControlLabel
-                        value="4-5 horas"
-                        control={<Radio />}
-                        label="4-5 horas"
-                      />
-                      <MuiFormControlLabel
-                        value="6-7 horas"
-                        control={<Radio />}
-                        label="6-7 horas"
-                      />
-                      <MuiFormControlLabel
+                      <FormControlLabel value="4-5 horas" control={<Radio />} label="4-5 horas" />
+                      <FormControlLabel value="6-7 horas" control={<Radio />} label="6-7 horas" />
+                      <FormControlLabel
                         value="8 horas (recomendado)"
                         control={<Radio />}
                         label="8 horas (recomendado)"
                       />
-                      <MuiFormControlLabel
+                      <FormControlLabel
                         value="Más de 8 horas"
                         control={<Radio />}
                         label="Más de 8 horas"
@@ -1030,8 +855,8 @@ function HistorialNutricional({ patientId }) {
                   onChange={handleChange}
                   required
                 >
-                  <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
-                  <MuiFormControlLabel value="No" control={<Radio />} label="No" />
+                  <FormControlLabel value="Si" control={<Radio />} label="Sí" />
+                  <FormControlLabel value="No" control={<Radio />} label="No" />
                 </RadioGroup>
                 {formData.smoke === "Si" && (
                   <SoftBox mb={2}>
@@ -1048,27 +873,27 @@ function HistorialNutricional({ patientId }) {
                       onChange={handleChange}
                       required
                     >
-                      <MuiFormControlLabel
+                      <FormControlLabel
                         value="1"
                         control={<Radio />}
                         label="Menos de 5 cigarrillos al mes"
                       />
-                      <MuiFormControlLabel
+                      <FormControlLabel
                         value="2"
                         control={<Radio />}
                         label="De 1 a 5 cigarrillos a la semana"
                       />
-                      <MuiFormControlLabel
+                      <FormControlLabel
                         value="3"
                         control={<Radio />}
                         label="De 6 a 10 cigarrillos a la semana"
                       />
-                      <MuiFormControlLabel
+                      <FormControlLabel
                         value="4"
                         control={<Radio />}
                         label="Mas de 20 cigarrillos a la semana"
                       />
-                      <MuiFormControlLabel value="Otros" control={<Radio />} label="Otros:" />
+                      <FormControlLabel value="Otros" control={<Radio />} label="Otros:" />
                     </RadioGroup>
                     {formData.smokeHistory === "Otros" && (
                       <SoftBox mb={2}>
@@ -1104,8 +929,8 @@ function HistorialNutricional({ patientId }) {
                   onChange={handleChange}
                   required
                 >
-                  <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
-                  <MuiFormControlLabel value="No" control={<Radio />} label="No" />
+                  <FormControlLabel value="Si" control={<Radio />} label="Sí" />
+                  <FormControlLabel value="No" control={<Radio />} label="No" />
                 </RadioGroup>
                 {formData.alcohol === "Si" && (
                   <SoftBox mb={2}>
@@ -1122,22 +947,22 @@ function HistorialNutricional({ patientId }) {
                       onChange={handleChange}
                       required
                     >
-                      <MuiFormControlLabel
+                      <FormControlLabel
                         value="1"
                         control={<Radio />}
                         label="Sólo en fiestas o reuniones."
                       />
-                      <MuiFormControlLabel
+                      <FormControlLabel
                         value="2"
                         control={<Radio />}
                         label="Al menos una vez a la semana hasta llegar a la embriaguez."
                       />
-                      <MuiFormControlLabel
+                      <FormControlLabel
                         value="3"
                         control={<Radio />}
                         label="Al menos una vez a la semana sin llegar a la embriaguez."
                       />
-                      <MuiFormControlLabel value="Otros" control={<Radio />} label=" Otros:" />
+                      <FormControlLabel value="Otros" control={<Radio />} label=" Otros:" />
                     </RadioGroup>
                     {formData.alcoholHistory === "Otros" && (
                       <SoftBox mb={2}>
@@ -1160,7 +985,7 @@ function HistorialNutricional({ patientId }) {
           </SoftBox>
         )}
         {/* Antecedentes medicos */}
-        {activeStep === 3 && (
+        {activeStep === 2 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             <SoftTypography variant="h5" color="secondary" mb={3}>
               Antecedentes Médicos
@@ -1185,8 +1010,8 @@ function HistorialNutricional({ patientId }) {
                 onChange={handleChange}
                 required
               >
-                <MuiFormControlLabel value="Si" control={<Radio />} label="Sí" />
-                <MuiFormControlLabel value="No" control={<Radio />} label="No" />
+                <FormControlLabel value="Si" control={<Radio />} label="Sí" />
+                <FormControlLabel value="No" control={<Radio />} label="No" />
               </RadioGroup>
               {formData.surgery === "Si" && (
                 <SoftBox ml={4} mt={2}>
@@ -1199,7 +1024,7 @@ function HistorialNutricional({ patientId }) {
                   <SoftBox>
                     {["Apendicectomía", "Colecistectomía", "Cesárea", "Cirugía bariátrica"].map(
                       (surgery) => (
-                        <MuiFormControlLabel
+                        <FormControlLabel
                           key={surgery}
                           control={
                             <Checkbox
@@ -1289,7 +1114,7 @@ function HistorialNutricional({ patientId }) {
           </SoftBox>
         )}
         {/* Evaluacion dietetica */}
-        {activeStep === 4 && (
+        {activeStep === 3 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             <SoftTypography variant="h5" color="secondary" mb={3}>
               Evaluación dietética
@@ -1387,7 +1212,7 @@ function HistorialNutricional({ patientId }) {
           </SoftBox>
         )}
         {/* Frecuencia de alimentos */}
-        {activeStep === 5 && (
+        {activeStep === 4 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             <SoftTypography variant="h5" color="secondary" mb={3}>
               Frecuencia de alimentos
@@ -1404,9 +1229,9 @@ function HistorialNutricional({ patientId }) {
                         {row.map((item, colIndex) => (
                           <TableCell key={colIndex}>
                             <Box sx={{ minWidth: 120 }}>
-                              <MuiFormControl fullWidth>
+                              <FormControl fullWidth>
                                 <InputLabel id={`select-label-${item}`}>{item}</InputLabel>
-                                <MuiSelect
+                                <Select
                                   labelId={`select-label-${item}`}
                                   id={`select-${item}`}
                                   value={formData[item] || ""} // Usa la clave de `formData` como valor
@@ -1419,8 +1244,8 @@ function HistorialNutricional({ patientId }) {
                                   <MenuItem value="A veces">A veces</MenuItem>
                                   <MenuItem value="Frecuentemente">Frecuentemente</MenuItem>
                                   <MenuItem value="Siempre">Siempre</MenuItem>
-                                </MuiSelect>
-                              </MuiFormControl>
+                                </Select>
+                              </FormControl>
                             </Box>
                           </TableCell>
                         ))}
@@ -1447,7 +1272,7 @@ function HistorialNutricional({ patientId }) {
         )}
 
         {/* Signos vitales */}
-        {activeStep === 6 && (
+        {activeStep === 5 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             <SoftTypography variant="h5" color="secondary" mb={3}>
               Signos vitales
@@ -1648,7 +1473,7 @@ function HistorialNutricional({ patientId }) {
           </SoftBox>
         )}
 
-        {activeStep === 7 && (
+        {activeStep === 6 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             <div className="overflow-x-auto mt-4">
               <SoftTypography variant="h6" color="secondary" mb={2}>
@@ -1762,7 +1587,7 @@ function HistorialNutricional({ patientId }) {
         )}
 
         {/* Diagnostico */}
-        {activeStep === 8 && (
+        {activeStep === 7 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             {/* Título del componente */}
             <SoftTypography variant="h6" color="secondary" mb={2}>
@@ -1794,7 +1619,7 @@ function HistorialNutricional({ patientId }) {
         )}
 
         {/* Objetivo y Plan */}
-        {activeStep === 9 && (
+        {activeStep === 8 && (
           <SoftBox component={Card} sx={{ p: 3, boxShadow: 3 }}>
             <SoftTypography variant="h6" color="secondary" mb={2}>
               Plan y Objetivo
@@ -1902,7 +1727,8 @@ function HistorialNutricional({ patientId }) {
           </Box>
         )}
       </form>
-      {/* Sección de notas 
+      {
+        /* Sección de notas 
       <Card sx={{ p: 3, mt: 4, boxShadow: 3 }}>{mostrarNotas && <Notas notas={notas} />}</Card>
    */
         <NutritionRecords />
