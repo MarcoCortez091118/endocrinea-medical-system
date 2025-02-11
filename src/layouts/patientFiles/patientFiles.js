@@ -22,7 +22,6 @@ import HCM from "layouts/historial-clinico";
 import NoteDisplay from "../historial-evolucion/NoteDisplay";
 import HistoryNotes from "layouts/notesHistory/historyNotes";
 
-
 function PatientDetails() {
   const location = useLocation();
   const { patient } = location.state || {}; // Datos del paciente seleccionados
@@ -54,8 +53,6 @@ function PatientDetails() {
         return <DatosPaciente />;
       case 4:
         return <Antropometria />;
-      case 5:
-        return  <HistorialEvolucion patientId={patient?.id} />;
       default:
         return null;
     }
@@ -68,13 +65,15 @@ function PatientDetails() {
       case 0:
         return <HCM patientId={patient?.id} />;
       case 1:
-        return <NotaClinico />; 
+        return <NotaClinico />;
       case 2:
         return <HCN />;
       case 3:
-        return <NotaNutricional />; 
-        case 4:
-          return <HCP />;
+        return <NotaNutricional />;
+      case 4:
+        return <HCP />;
+      case 5:
+        return <HistorialEvolucion patientId={patient?.id} />;
       default:
         return null;
     }
@@ -126,30 +125,11 @@ function PatientDetails() {
             onChange={handleTabChange}
             TabIndicatorProps={{ style: { display: "none" } }} // Sin indicador predeterminado
           >
-            <Tab
-              label="Citas"
-              className={activeTab === 0 ? "tab-active" : "tab"}
-            />
-            <Tab
-              label="Historial de Notas"
-              className={activeTab === 1 ? "tab-active" : "tab"}
-            />
-            <Tab
-              label="Documentos"
-              className={activeTab === 2 ? "tab-active" : "tab"}
-            />
-            <Tab
-              label="Datos del Paciente"
-              className={activeTab === 3 ? "tab-active" : "tab"}
-            />
-            <Tab
-              label="Antropometría"
-              className={activeTab === 4 ? "tab-active" : "tab"}
-            />
-            <Tab
-              label="Historial de evolución"
-              className={activeTab === 5 ? "tab-active" : "tab"}
-            />
+            <Tab label="Citas" className={activeTab === 0 ? "tab-active" : "tab"} />
+            <Tab label="Historial de Notas" className={activeTab === 1 ? "tab-active" : "tab"} />
+            <Tab label="Documentos" className={activeTab === 2 ? "tab-active" : "tab"} />
+            <Tab label="Datos del Paciente" className={activeTab === 3 ? "tab-active" : "tab"} />
+            <Tab label="Antropometría" className={activeTab === 4 ? "tab-active" : "tab"} />
             
           </Tabs>
 
@@ -162,10 +142,18 @@ function PatientDetails() {
             TabIndicatorProps={{ style: { display: "none" } }} // Sin indicador predeterminado
           >
             <Tab label="HCM" className={activeSubTab === 0 ? "sub-tab-active" : "sub-tab"} />
-            <Tab label="Nota médica" className={activeSubTab === 1 ? "sub-tab-active" : "sub-tab"} />
+            <Tab
+              label="Nota médica"
+              className={activeSubTab === 1 ? "sub-tab-active" : "sub-tab"}
+            />
             <Tab label="HCN" className={activeSubTab === 2 ? "sub-tab-active" : "sub-tab"} />
-            <Tab label="Nota nutrición" className={activeSubTab === 3 ? "sub-tab-active" : "sub-tab"}/>
+            <Tab
+              label="Nota nutrición"
+              className={activeSubTab === 3 ? "sub-tab-active" : "sub-tab"}
+            />
             <Tab label="HCP" className={activeSubTab === 4 ? "sub-tab-active" : "sub-tab"} />
+            <Tab label="Nota psicología" className={activeSubTab === 5 ? "sub-tab-active" : "sub-tab"} />
+            
           </Tabs>
 
           <Divider style={{ margin: "16px 0" }} />
