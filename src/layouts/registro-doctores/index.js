@@ -61,7 +61,12 @@ function DoctorRegistrationForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Aquí se puede realizar la validación y el envío a la API
-        console.log({ formValues, schedule });
+        const formData = {
+            ...formValues,
+            schedule
+        };
+
+        console.log("📋 Form Data Sent:", JSON.stringify(formData, null, 2));
     };
 
     return (
@@ -81,7 +86,7 @@ function DoctorRegistrationForm() {
                                     <Typography variant='subtitle2'>Nómbre</Typography>
                                     <TextField
                                         placeholder="Ingrese su nómbre"
-                                        name="nombre"
+                                        name="firstName"
                                         value={formValues.firstName}
                                         onChange={handleInputChange}
                                         fullWidth
@@ -92,7 +97,7 @@ function DoctorRegistrationForm() {
                                     <Typography variant='subtitle2'>Apellidos</Typography>
                                     <TextField
                                         placeholder="Ingrese sus apellidos"
-                                        name="apellidos"
+                                        name="lastName"
                                         value={formValues.lastName}
                                         onChange={handleInputChange}
                                         fullWidth
@@ -105,7 +110,7 @@ function DoctorRegistrationForm() {
                                     <Typography variant='subtitle2'>Correo</Typography>
                                     <TextField
                                         placeholder="ejemplo@correo.com"
-                                        name="correo"
+                                        name="email"
                                         type="email"
                                         value={formValues.email}
                                         onChange={handleInputChange}
@@ -117,7 +122,7 @@ function DoctorRegistrationForm() {
                                     <Typography variant='subtitle2'>Teléfono</Typography>
                                     <TextField
                                         placeholder="Ingrese su teléfono"
-                                        name="telefono"
+                                        name="phone"
                                         value={formValues.phone}
                                         onChange={handleInputChange}
                                         fullWidth
@@ -130,7 +135,7 @@ function DoctorRegistrationForm() {
                                     <Typography variant='subtitle2'>Dirección</Typography>
                                     <TextField
                                         placeholder="Ingrese su dirección"
-                                        name="direccion"
+                                        name="address"
                                         value={formValues.address}
                                         onChange={handleInputChange}
                                         fullWidth
@@ -143,7 +148,7 @@ function DoctorRegistrationForm() {
                                     <Typography variant='subtitle2'>Ciudad</Typography>
                                     <TextField
                                         placeholder="Ciudad"
-                                        name="ciudad"
+                                        name="city"
                                         value={formValues.city}
                                         onChange={handleInputChange}
                                         fullWidth
@@ -154,7 +159,7 @@ function DoctorRegistrationForm() {
                                     <Typography variant='subtitle2'>Código Postal</Typography>
                                     <TextField
                                         placeholder="Código Postal"
-                                        name="codigoPostal"
+                                        name="postalCode"
                                         value={formValues.postalCode}
                                         onChange={handleInputChange}
                                         fullWidth
@@ -165,7 +170,7 @@ function DoctorRegistrationForm() {
                                     <Typography variant='subtitle2'>Colonia</Typography>
                                     <TextField
                                         placeholder="Colonia"
-                                        name="colonia"
+                                        name="neighborhood"
                                         value={formValues.neighborhood}
                                         onChange={handleInputChange}
                                         fullWidth
@@ -178,7 +183,7 @@ function DoctorRegistrationForm() {
                                     <Typography variant='subtitle2'>Nacionalidad</Typography>
                                     <TextField
                                         placeholder="Nacionalidad"
-                                        name="nacionalidad"
+                                        name="nationality"
                                         value={formValues.nationality}
                                         onChange={handleInputChange}
                                         fullWidth
@@ -351,7 +356,7 @@ function DoctorRegistrationForm() {
                                     </Typography>
                                     <FormControl fullWidth required>
                                         <Select
-                                            name="categoria"
+                                            name="category"
                                             value={formValues.category}
                                             onChange={handleInputChange}
                                             displayEmpty // Permite que la opción vacía sea visible
@@ -372,7 +377,7 @@ function DoctorRegistrationForm() {
                                     </Typography>
                                     <FormControl fullWidth required>
                                         <Select
-                                            name="rol"
+                                            name="role"
                                             value={formValues.role}
                                             onChange={handleInputChange}
                                             displayEmpty // Permite que la opción vacía sea visible
