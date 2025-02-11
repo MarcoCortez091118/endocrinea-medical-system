@@ -20,22 +20,15 @@ import {
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
 // Soft UI Dashboard React components
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
-// Soft UI Dashboard React examples
-import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
-import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
 import { useLocation } from "react-router-dom";
 
 // Global style textarea
 import "layouts/TextareaStyles.css";
-import button from "assets/theme/components/button";
-import { Margin, WidthFull } from "@mui/icons-material";
 
 import MedicalRecordsList from "./MedicalRecordsList";
 
@@ -45,19 +38,6 @@ function HistorialClinico() {
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
-    email: "",
-    phoneNumber: "",
-    fullName: "",
-    birthDate: "",
-    age: "",
-    city: "",
-    occupation: "",
-    maritalStatus: "",
-    otherStatus: "",
-    religion: "",
-    otherReligion: "",
-    gender: "",
-    otherGender: "",
     familyHistory: {
       Diabetes: {
         Mother: false,
@@ -117,16 +97,22 @@ function HistorialClinico() {
     consultationOther: "",
   });
 
+  const diseaseTranslations = {
+    Diabetes: "Diabetes",
+    Hypertension: "Hipertensión",
+    "High Cholesterol": "Colesterol Alto",
+    "Heart Attacks": "Infartos Cardíacos",
+  };
+
   // Maneja el cambio de los checkboxes
   const handleCheckboxChange = (e, disease, familyMember) => {
-    const { checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((prev) => ({
+      ...prev,
       familyHistory: {
-        ...prevData.familyHistory,
+        ...prev.familyHistory,
         [disease]: {
-          ...prevData.familyHistory[disease],
-          [familyMember]: checked,
+          ...prev.familyHistory[disease],
+          [familyMember]: e.target.checked,
         },
       },
     }));
@@ -173,25 +159,45 @@ function HistorialClinico() {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
+
+    // Si es un checkbox de antecedentes familiares
+    if (name.startsWith("familyHistory")) {
+      const [_, disease, familyMember] = name.split(".");
+
+      setFormData((prevData) => ({
+        ...prevData,
+        familyHistory: {
+          ...prevData.familyHistory,
+          [disease]: {
+            ...prevData.familyHistory[disease],
+            [familyMember]: checked, // Checkbox: true/false
+          },
+        },
+      }));
+    }
     // Si cambia el estado civil y no es "Otros", limpiamos el campo otherStatus
-    if (name === "maritalStatus" && value !== "otros") {
+    else if (name === "maritalStatus" && value !== "otros") {
       setFormData((prevData) => ({
         ...prevData,
         [name]: value,
         otherStatus: "", // Limpiamos el campo "otherStatus"
       }));
-    } else if (name === "surgery") {
+    }
+    // Si cambia el estado de cirugía, limpiamos otros campos relacionados
+    else if (name === "surgery") {
       setFormData((prevData) => ({
         ...prevData,
         [name]: value,
         surgeryHistory: [], // Limpiamos el historial de cirugías si cambia
         surgeryOther: "", // Limpiamos el campo de especificaciones
       }));
-    } else {
+    }
+    // Caso general
+    else {
       setFormData((prevData) => ({
         ...prevData,
-        [name]: value,
+        [name]: type === "checkbox" ? checked : value, // Maneja checkboxes generales
       }));
     }
   };
@@ -228,19 +234,6 @@ function HistorialClinico() {
         alert("Historial clínico enviado con éxito.");
 
         setFormData({
-          email: "",
-          phoneNumber: "",
-          fullName: "",
-          birthDate: "",
-          age: "",
-          city: "",
-          occupation: "",
-          maritalStatus: "",
-          otherStatus: "",
-          religion: "",
-          otherReligion: "",
-          gender: "",
-          otherGender: "",
           familyHistory: {
             Diabetes: {
               Mother: false,
@@ -327,19 +320,15 @@ function HistorialClinico() {
   }, [formData.gender]);
 
   const steps = [
-    "Generales",
     "Antecedentes familiares",
     "Antecedentes personales",
     "Antecedentes Médicos",
-    ...(isFemale ? ["Antecedentes Ginecológico"] : []),
+    "Antecedentes Ginecológico",
     "Motivo de la consulta", // Siempre está presente
   ];
 
-
   const goToNextStep = () => setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));
   const goToPreviousStep = () => setActiveStep((prev) => Math.max(prev - 1, 0));
-
-  
 
   return (
     <SoftBox py={3}>
@@ -371,226 +360,6 @@ function HistorialClinico() {
 
       <form noValidate autoComplete="off" onSubmit={handleSubmit}>
         {activeStep === 0 && (
-          <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
-            <SoftTypography variant="h5" color="secondary" mb={3}>
-              Generales
-            </SoftTypography>
-            <Grid container spacing={2}>
-              {/* Campos del formulario */}
-              {[
-                {
-                  id: "email",
-                  label: "Correo electrónico *",
-                  value: formData.email,
-                  rows: 1,
-                },
-                {
-                  id: "phoneNumber",
-                  label: "Número telefónico*",
-                  value: formData.phoneNumber,
-                  rows: 1,
-                },
-                {
-                  id: "fullName",
-                  label: "Nombre completo *",
-                  value: formData.fullName,
-                  rows: 1,
-                },
-                {
-                  id: "city",
-                  label: "Lugar de residencia*",
-                  value: formData.city,
-                  rows: 1,
-                },
-                {
-                  id: "occupation",
-                  label: "Ocupación *",
-                  value: formData.occupation,
-                  rows: 1,
-                },
-              ].map((field, index) => (
-                <Grid item xs={12} sm={3} key={field.id}>
-                  <SoftBox mb={2}>
-                    <label
-                      htmlFor={field.id}
-                      style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
-                    >
-                      {field.label}
-                    </label>
-                    <textarea
-                      id={field.id}
-                      name={field.id}
-                      value={field.value}
-                      onChange={handleChange}
-                      required
-                      rows={field.rows}
-                      placeholder={field.placeholder}
-                      style={{
-                        width: "100%",
-                        padding: "10px",
-                        fontSize: "16px",
-                        border: "1px solid #ccc",
-                        borderRadius: "4px",
-                        resize: "none",
-                      }}
-                    />
-                  </SoftBox>
-                </Grid>
-              ))}
-
-              <Grid item xs={12} md={3}>
-                <SoftBox mb={2}>
-                  <label
-                    htmlFor="birthDate"
-                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
-                  >
-                    Fecha de nacimiento *
-                  </label>
-                  <TextField
-                    id="birthDate"
-                    name="birthDate"
-                    type="date"
-                    value={formData.birthDate}
-                    onChange={handleChange}
-                    required
-                    fullWidth
-                    InputLabelProps={{ shrink: true }}
-                  />
-                </SoftBox>
-              </Grid>
-
-              <Grid item xs={12} md={3}>
-                <SoftBox mb={2}>
-                  <label
-                    htmlFor="age"
-                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
-                  >
-                    Edad *
-                  </label>
-                  <TextField
-                    id="age"
-                    name="age"
-                    type="number"
-                    value={formData.age}
-                    onChange={handleChange}
-                    required
-                    fullWidth
-                  />
-                </SoftBox>
-              </Grid>
-
-              <Grid item xs={12} md={3}>
-                <SoftBox mb={2}>
-                  <label
-                    htmlFor="maritalStatus"
-                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
-                  >
-                    Estado civil *
-                  </label>
-                  <FormControl variant="standard" fullWidth>
-                    <Select
-                      id="maritalStatus"
-                      name="maritalStatus"
-                      value={formData.maritalStatus}
-                      onChange={handleChange}
-                      required
-                      style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "4px",
-                        border: "1px solid #ccc",
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value="Soltero">Soltero</MenuItem>
-                      <MenuItem value="Casado">Casado</MenuItem>
-                      <MenuItem value="Union libre">Unión libre</MenuItem>
-                    </Select>
-                  </FormControl>
-                </SoftBox>
-              </Grid>
-
-              <Grid item xs={12} sm={3}>
-                <SoftBox mb={2}>
-                  <label
-                    htmlFor="gender"
-                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
-                  >
-                    Género:
-                  </label>
-                  <FormControl variant="standard" fullWidth>
-                    <Select
-                      id="gender"
-                      name="gender"
-                      value={formData.gender}
-                      onChange={(e) => {
-                        handleChange(e); // Actualiza el estado general del formulario
-                        // Verifica si se selecciona el género Mujer para actualizar `isFemale`
-                        setIsFemale(e.target.value === "Mujer");
-                      }}
-                      style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "4px",
-                        border: "1px solid #ccc",
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value="Hombre">Hombre</MenuItem>
-                      <MenuItem value="Mujer">Mujer</MenuItem>
-                    </Select>
-                  </FormControl>
-                </SoftBox>
-              </Grid>
-              <Grid item xs={12}>
-                <SoftBox mb={2}>
-                  <label
-                    htmlFor="religion"
-                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
-                  >
-                    ¿Su RELIGIÓN le impide comer algún tipo de alimento?
-                  </label>
-                  <RadioGroup
-                    id="religion"
-                    name="religion"
-                    value={formData.religion}
-                    onChange={handleChange}
-                    required
-                  >
-                    <FormControlLabel value="Si" control={<Radio />} label="Si" />
-                    <FormControlLabel value="No" control={<Radio />} label="No" />
-                  </RadioGroup>
-                </SoftBox>
-                {formData.religion === "Si" && (
-                  <SoftBox mt={4}>
-                    <textarea
-                      id="otherReligion"
-                      name="otherReligion"
-                      placeholder="Especifique"
-                      value={formData.otherReligion}
-                      onChange={handleChange}
-                      required
-                      rows="1"
-                      style={{
-                        width: "100%",
-                        padding: "10px",
-                        fontSize: "16px",
-                        border: "1px solid #ccc",
-                        borderRadius: "4px",
-                        resize: "none",
-                      }}
-                    />
-                  </SoftBox>
-                )}
-              </Grid>
-            </Grid>
-          </SoftBox>
-        )}
-        {activeStep === 1 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             <SoftBox mb={2}>
               <SoftTypography variant="h5" color="secondary" mb={3}>
@@ -624,7 +393,7 @@ function HistorialClinico() {
                     {Object.keys(formData.familyHistory).map((disease) => (
                       <tr key={disease} style={{ borderBottom: "1px solid #ddd" }}>
                         <td style={{ padding: "8px", textAlign: "left", fontWeight: "medium" }}>
-                          {disease}
+                          {diseaseTranslations[disease]}
                         </td>
                         {Object.keys(formData.familyHistory[disease]).map((familyMember) => (
                           <td key={familyMember} style={{ padding: "8px" }}>
@@ -644,7 +413,7 @@ function HistorialClinico() {
             </SoftBox>
           </SoftBox>
         )}
-        {activeStep === 2 && (
+        {activeStep === 1 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             <SoftTypography variant="h5" color="secondary" mb={3}>
               Antecedentes personales
@@ -866,7 +635,7 @@ function HistorialClinico() {
             </SoftBox>
           </SoftBox>
         )}
-        {activeStep === 3 && (
+        {activeStep === 2 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             <SoftTypography variant="h5" color="secondary" mb={3}>
               Antecedentes Médicos
@@ -1176,7 +945,7 @@ function HistorialClinico() {
         )}
 
         {/* Sección de Antecedentes Ginecológicos */}
-        {activeStep === 4 && isFemale && (
+        {activeStep === 3 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             <SoftTypography variant="h5" color="secondary" mb={3}>
               Antecedentes Ginecológicos
@@ -1351,7 +1120,7 @@ function HistorialClinico() {
           </SoftBox>
         )}
 
-        {activeStep === steps.length - 1 && (
+        {activeStep === 4 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             <SoftTypography variant="h5" color="secondary" mb={3}>
               Motivo de la consulta
@@ -1479,7 +1248,12 @@ function HistorialClinico() {
 
         {/* Botones de navegación */}
         <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-          <Button color="inherit" disabled={activeStep === 0} onClick={goToPreviousStep} sx={{ mr: 1 }}>
+          <Button
+            color="inherit"
+            disabled={activeStep === 0}
+            onClick={goToPreviousStep}
+            sx={{ mr: 1 }}
+          >
             Atrás
           </Button>
           <Box sx={{ flex: "1 1 auto" }} />
@@ -1491,7 +1265,6 @@ function HistorialClinico() {
             </Button>
           )}
         </Box>
-        
       </form>
 
       <SoftBox py={3}>
@@ -1503,9 +1276,7 @@ function HistorialClinico() {
         {/* Mostrar el historial médico debajo del formulario */}
         <MedicalRecordsList />
       </SoftBox>
-
     </SoftBox>
-
   );
 }
 

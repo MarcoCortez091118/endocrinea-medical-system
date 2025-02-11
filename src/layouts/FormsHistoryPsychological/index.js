@@ -32,13 +32,6 @@ function ClinicalForm() {
   const location = useLocation();
   const patient = location.state?.patient; // Obtenemos el ID del paciente desde la navegación
   const [formData, setFormData] = useState({
-    name: "",
-    birthDate: "",
-    gender: "",
-    maritalStatus: "",
-    highestEducation: "",
-    occupation: "",
-    religiousBeliefs: "",
     medicalHistory: {
       // Sección de antecedentes médicos
       AHF: "", // Historial familiar
@@ -132,13 +125,6 @@ function ClinicalForm() {
 
       alert("Historial clínico enviado con éxito.");
       setFormData({
-        name: "",
-        birthDate: "",
-        gender: "",
-        maritalStatus: "",
-        highestEducation: "",
-        occupation: "",
-        religiousBeliefs: "",
         medicalHistory: { AHF: "", PA: "" },
         substanceAbuse: "",
         lifestyle: { diet: "", sleep: "", physicalActivity: "", leisure: "", hygiene: "" },
@@ -169,15 +155,7 @@ function ClinicalForm() {
 
   const generateJSON = () => {
     const jsonData = {
-      identification: {
-        name: formData.name,
-        birthDate: formData.birthDate,
-        gender: formData.gender,
-        maritalStatus: formData.maritalStatus,
-        highestEducation: formData.highestEducation,
-        occupation: formData.occupation,
-        religiousBeliefs: formData.religiousBeliefs,
-      },
+      
       medicalHistory: formData.medicalHistory,
       substanceAbuse: formData.substanceAbuse,
       lifestyle: formData.lifestyle,
@@ -188,7 +166,6 @@ function ClinicalForm() {
   };
 
   const steps = [
-    "Ficha de identificación",
     "Antecedentes médicos",
     "Toxicomanías",
     "Estilo de vida",
@@ -275,152 +252,11 @@ function ClinicalForm() {
         </Card>
       </SoftBox>
 
+      
       {activeStep === 0 && (
-        <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-          <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
-            <SoftTypography variant="h6" color="secondary" mb={2}>
-              1. Ficha de identificación
-            </SoftTypography>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={3}>
-                <label htmlFor="name">
-                  <SoftTypography variant="body1" color="textPrimary" fontWeight="bold">
-                    Nombre
-                  </SoftTypography>
-                </label>
-                <textarea
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  rows="1"
-                  className="global-textarea"
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    borderRadius: "4px",
-                    border: "1px solid #ccc",
-                  }}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={3}>
-                <SoftBox mb={2}>
-                  <label htmlFor="birthDate">
-                    <SoftTypography variant="body1" color="textPrimary" fontWeight="bold">
-                      Fecha de nacimiento
-                    </SoftTypography>
-                  </label>
-                  <TextField
-                    id="birthDate"
-                    name="birthDate"
-                    type="date"
-                    value={formData.birthDate}
-                    onChange={handleChange}
-                    fullWidth
-                    InputLabelProps={{ shrink: true }}
-                  />
-                </SoftBox>
-              </Grid>
-
-              <Grid item xs={12} sm={3}>
-                <SoftBox mb={2}>
-                  <label
-                    htmlFor="gender"
-                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
-                  >
-                    Género
-                  </label>
-                  <FormControl variant="standard" fullWidth>
-                    <Select
-                      id="gender"
-                      name="gender"
-                      value={formData.gender}
-                      onChange={handleChange}
-                      style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "4px",
-                        border: "1px solid #ccc",
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value="Hombre">Hombre</MenuItem>
-                      <MenuItem value="Mujer">Mujer</MenuItem>
-                    </Select>
-                  </FormControl>
-                </SoftBox>
-              </Grid>
-
-              <Grid item xs={12} sm={3}>
-                <SoftBox mb={2}>
-                  <label
-                    htmlFor="gender"
-                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
-                  >
-                    Estado Civil
-                  </label>
-                  <FormControl fullWidth variant="outlined">
-                    <Select
-                      name="maritalStatus"
-                      value={formData.maritalStatus}
-                      onChange={handleChange}
-                      sx={{
-                        "& .MuiOutlinedInput-notchedOutline": { borderColor: "#ccc" },
-                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                          borderColor: "#183A64",
-                        },
-                      }}
-                    >
-                      <MenuItem value="Single">Soltero/a</MenuItem>
-                      <MenuItem value="Married">Casado/a</MenuItem>
-                      <MenuItem value="Divorced">Divorciado/a</MenuItem>
-                      <MenuItem value="Widowed">Viudo/a</MenuItem>
-                    </Select>
-                  </FormControl>
-                </SoftBox>
-              </Grid>
-
-              {[
-                { id: "highestEducation", label: "Máximo grado de estudios" },
-                { id: "occupation", label: "Ocupación actual" },
-                { id: "religiousBeliefs", label: "Creencias religiosas" },
-              ].map((field) => (
-                <Grid item xs={12} sm={4} key={field.id}>
-                  <SoftBox mb={2}>
-                    <label htmlFor={field.id}>
-                      <SoftTypography variant="body1" color="textPrimary" fontWeight="bold">
-                        {field.label}
-                      </SoftTypography>
-                    </label>
-                    <textarea
-                      id={field.id}
-                      name={field.id}
-                      value={formData[field.id]}
-                      onChange={handleChange}
-                      rows="3"
-                      className="global-textarea"
-                      style={{
-                        width: "100%",
-                        padding: "8px",
-                        borderRadius: "4px",
-                        border: "1px solid #ccc",
-                      }}
-                    />
-                  </SoftBox>
-                </Grid>
-              ))}
-            </Grid>
-          </SoftBox>
-        </form>
-      )}
-      {activeStep === 1 && (
         <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
           <SoftTypography variant="h6" color="secondary" mb={2}>
-            2. Antecedentes médicos
+            Antecedentes médicos
           </SoftTypography>
           <Grid container spacing={2}>
             {/* Campo AHF */}
@@ -475,10 +311,10 @@ function ClinicalForm() {
           </Grid>
         </SoftBox>
       )}
-      {activeStep === 2 && (
+      {activeStep === 1 && (
         <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
           <SoftTypography variant="h6" color="secondary" mb={2}>
-            3. Toxicomanías
+            Toxicomanías
           </SoftTypography>
           <SoftBox mb={2}>
             <label htmlFor="substanceAbuse">
@@ -503,10 +339,10 @@ function ClinicalForm() {
           </SoftBox>
         </SoftBox>
       )}
-      {activeStep === 3 && (
+      {activeStep === 2 && (
         <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
           <SoftTypography variant="h6" color="secondary" mb={2}>
-            4. Estilo de vida
+            Estilo de vida
           </SoftTypography>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={4}>
@@ -627,11 +463,11 @@ function ClinicalForm() {
           </Grid>
         </SoftBox>
       )}
-      {activeStep === 4 && (
+      {activeStep === 3 && (
         <form noValidate autoComplete="off" onSubmit={handleChange}>
           <SoftBox component={Card} sx={{ p: 3, boxShadow: 3, mb: 3 }}>
             <SoftTypography variant="h6" color="secondary" mb={2}>
-              5. Evaluación psicológica integral
+              Evaluación psicológica integral
             </SoftTypography>
             <Grid container spacing={2}>
               {[
