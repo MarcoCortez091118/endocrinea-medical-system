@@ -161,7 +161,7 @@ const routes = /*(isAuthenticated) =>*/[
   },
   {
     type: "collapse",
-    name: "Medicos",
+    name: "Médicos",
     key: "RegistroDoctores",
     route: "/RegistroDoctores",
     icon: <LocalHospitalIcon size="12px" />,
