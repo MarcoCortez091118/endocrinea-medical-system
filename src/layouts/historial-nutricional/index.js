@@ -118,16 +118,6 @@ function HistorialNutricional({ patientId }) {
     minimumWeight: "",
     currentWeight: "",
 
-    measurementDates: "",
-    waist: "",
-    abdomen: "",
-    hips: "",
-    leftArm: "",
-    rightArm: "",
-    rightCalf: "",
-    leftCalf: "",
-    newMeasurements: [],
-
     diagnosis: "",
 
     goal: "",
@@ -283,14 +273,6 @@ function HistorialNutricional({ patientId }) {
         maximumWeight: "",
         minimumWeight: "",
         currentWeight: "",
-        measurementDates: "",
-        waist: "",
-        abdomen: "",
-        hips: "",
-        leftArm: "",
-        rightArm: "",
-        rightCalf: "",
-        leftCalf: "",
         diagnosis: "",
         goal: "",
         medicationsGoal: "",
@@ -310,6 +292,7 @@ function HistorialNutricional({ patientId }) {
     } catch (error) {
       console.error("Error en la solicitud:", error);
       alert("Hubo un error al guardar el historial. Inténtalo nuevamente.");
+      console.log("Datos a enviar:", formData);
     }
   };
 
@@ -426,7 +409,6 @@ function HistorialNutricional({ patientId }) {
     "Evaluación dietética", // Evaluación dietética
     "Frecuencia de alimentos", // Frecuencia de alimentos
     "Signos vitales", // Signos vitales
-    "Exploración Física", // Exploración Física
     "Diagnóstico", // Diagnóstico
     "Plan y Objetivo", // Plan y Objetivo
   ];
@@ -1473,121 +1455,9 @@ function HistorialNutricional({ patientId }) {
           </SoftBox>
         )}
 
-        {activeStep === 6 && (
-          <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
-            <div className="overflow-x-auto mt-4">
-              <SoftTypography variant="h6" color="secondary" mb={2}>
-                Exploración Física (antropometría)
-              </SoftTypography>
-              <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                  <TableBody>
-                    {/* Fila de Fechas */}
-                    <StyledTableRow>
-                      <StyledTableCell component="th" scope="row">
-                        Fecha
-                      </StyledTableCell>
-                      {/* Campo de fecha actual */}
-                      <StyledTableCell align="center">
-                        <input
-                          type="date"
-                          value={formData.measurementDates}
-                          onChange={(e) =>
-                            setFormData({ ...formData, measurementDates: e.target.value })
-                          }
-                          style={{
-                            width: "100%",
-                            padding: "8px",
-                            border: "1px solid #ccc",
-                            borderRadius: "4px",
-                          }}
-                        />
-                      </StyledTableCell>
-                      {/* Campos de fecha para las columnas existentes */}
-                      {datesMediciones.map((date, colIndex) => (
-                        <StyledTableCell key={`date-col-${colIndex}`} align="center">
-                          <input
-                            type="date"
-                            value={date}
-                            onChange={(e) => {
-                              const updatedDates = [...datesMediciones];
-                              updatedDates[colIndex] = e.target.value;
-                              setDatesMediciones(updatedDates); // Actualiza la fecha en el estado
-                            }}
-                            style={{
-                              width: "100%",
-                              padding: "8px",
-                              border: "1px solid #ccc",
-                              borderRadius: "4px",
-                            }}
-                          />
-                        </StyledTableCell>
-                      ))}
-                    </StyledTableRow>
-
-                    {/* Fila de Mediciones */}
-                    {Object.keys(visibleFieldsMediciones).map((measurement, rowIndex) => (
-                      <StyledTableRow key={measurement}>
-                        <StyledTableCell component="th" scope="row">
-                          {visibleFieldsMediciones[measurement]}
-                        </StyledTableCell>
-                        {/* Input para cada medición en la fila */}
-                        <StyledTableCell>
-                          <input
-                            type="text"
-                            style={{
-                              width: "100%",
-                              padding: "8px",
-                              border: "1px solid #ccc",
-                              borderRadius: "4px",
-                            }}
-                            value={formData[measurement]}
-                            onChange={(e) => handleInputChange(e, measurement)}
-                          />
-                        </StyledTableCell>
-
-                        {/* Celdas para las columnas de mediciones */}
-                        {columnsMediciones.map((col, colIndex) => (
-                          <StyledTableCell key={`cell-${colIndex}-${rowIndex}`}>
-                            <input
-                              type="text"
-                              style={{
-                                width: "100%",
-                                padding: "8px",
-                                border: "1px solid #ccc",
-                                borderRadius: "4px",
-                              }}
-                              value={col[rowIndex] || ""}
-                              onChange={(e) =>
-                                handleNewMeasurementChange(e, rowIndex, colIndex, "mediciones")
-                              }
-                            />
-                          </StyledTableCell>
-                        ))}
-                      </StyledTableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-
-              <SoftBox mt={2}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  style={{ color: "white" }}
-                  onClick={() => addColumn("mediciones")}
-                  className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
-                >
-                  Agregar Columna
-                </Button>
-              </SoftBox>
-            </div>
-          </SoftBox>
-        )}
 
         {/* Diagnostico */}
-        {activeStep === 7 && (
+        {activeStep === 6 && (
           <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
             {/* Título del componente */}
             <SoftTypography variant="h6" color="secondary" mb={2}>
@@ -1619,7 +1489,7 @@ function HistorialNutricional({ patientId }) {
         )}
 
         {/* Objetivo y Plan */}
-        {activeStep === 8 && (
+        {activeStep === 7 && (
           <SoftBox component={Card} sx={{ p: 3, boxShadow: 3 }}>
             <SoftTypography variant="h6" color="secondary" mb={2}>
               Plan y Objetivo

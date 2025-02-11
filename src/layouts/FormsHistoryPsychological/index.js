@@ -141,6 +141,7 @@ function ClinicalForm() {
           diagnosticImpression: "",
         },
       });
+      console.log("Datos a enviar:", formData);
 
       // 📌 Refrescar historial después del envío
       const updatedRecords = await fetch(`${API_BASE_URL}/${patient.id}/psychology_records`);

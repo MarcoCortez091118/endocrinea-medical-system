@@ -36,7 +36,6 @@ function antropometria({ patientId }) {
     rightArm: "",
     rightCalf: "",
     leftCalf: "",
-    newMeasurements: [],
   });
 
   const handleSubmit = async (e) => {
@@ -77,7 +76,6 @@ function antropometria({ patientId }) {
         rightArm: "",
         rightCalf: "",
         leftCalf: "",
-        diagnosis: "",
       });
       console.log("Datos a enviar:", formData);
     } catch (error) {
