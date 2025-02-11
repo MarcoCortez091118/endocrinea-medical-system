@@ -18,23 +18,21 @@ import {
     Button,
     Typography
 } from '@mui/material';
-import SoftTypography from 'components/SoftTypography';
 
 function DoctorRegistrationForm() {
 
     const [formValues, setFormValues] = useState({
-        id: '',
-        nombre: '',
-        apellidos: '',
-        correo: '',
-        telefono: '',
-        direccion: '',
-        ciudad: '',
-        codigoPostal: '',
-        colonia: '',
-        nacionalidad: '',
-        categoria: '',
-        rol: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        address: '',
+        city: '',
+        postalCode: '',
+        neighborhood: '',
+        nationality: '',
+        category: '',
+        role: '',
         password: '',
         confirmPassword: ''
     });
@@ -78,24 +76,13 @@ function DoctorRegistrationForm() {
                     <CardContent>
                         <form onSubmit={handleSubmit}>
                             <Grid container spacing={2}>
-                                {/* ID */}
-                                <Grid item xs={12}>
-                                    <Typography variant='subtitle2'>ID de Médico</Typography>
-                                    <TextField
-                                        name="id"
-                                        value={formValues.id}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        required
-                                    />
-                                </Grid>
                                 {/* Nombre y Apellidos */}
                                 <Grid item xs={12} sm={6}>
                                     <Typography variant='subtitle2'>Nómbre</Typography>
                                     <TextField
                                         placeholder="Ingrese su nómbre"
                                         name="nombre"
-                                        value={formValues.nombre}
+                                        value={formValues.firstName}
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
@@ -106,7 +93,7 @@ function DoctorRegistrationForm() {
                                     <TextField
                                         placeholder="Ingrese sus apellidos"
                                         name="apellidos"
-                                        value={formValues.apellidos}
+                                        value={formValues.lastName}
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
@@ -120,7 +107,7 @@ function DoctorRegistrationForm() {
                                         placeholder="ejemplo@correo.com"
                                         name="correo"
                                         type="email"
-                                        value={formValues.correo}
+                                        value={formValues.email}
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
@@ -131,7 +118,7 @@ function DoctorRegistrationForm() {
                                     <TextField
                                         placeholder="Ingrese su teléfono"
                                         name="telefono"
-                                        value={formValues.telefono}
+                                        value={formValues.phone}
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
@@ -144,7 +131,7 @@ function DoctorRegistrationForm() {
                                     <TextField
                                         placeholder="Ingrese su dirección"
                                         name="direccion"
-                                        value={formValues.direccion}
+                                        value={formValues.address}
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
@@ -157,7 +144,7 @@ function DoctorRegistrationForm() {
                                     <TextField
                                         placeholder="Ciudad"
                                         name="ciudad"
-                                        value={formValues.ciudad}
+                                        value={formValues.city}
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
@@ -168,7 +155,7 @@ function DoctorRegistrationForm() {
                                     <TextField
                                         placeholder="Código Postal"
                                         name="codigoPostal"
-                                        value={formValues.codigoPostal}
+                                        value={formValues.postalCode}
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
@@ -179,7 +166,7 @@ function DoctorRegistrationForm() {
                                     <TextField
                                         placeholder="Colonia"
                                         name="colonia"
-                                        value={formValues.colonia}
+                                        value={formValues.neighborhood}
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
@@ -192,7 +179,7 @@ function DoctorRegistrationForm() {
                                     <TextField
                                         placeholder="Nacionalidad"
                                         name="nacionalidad"
-                                        value={formValues.nacionalidad}
+                                        value={formValues.nationality}
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
@@ -365,7 +352,7 @@ function DoctorRegistrationForm() {
                                     <FormControl fullWidth required>
                                         <Select
                                             name="categoria"
-                                            value={formValues.categoria}
+                                            value={formValues.category}
                                             onChange={handleInputChange}
                                             displayEmpty // Permite que la opción vacía sea visible
                                         >
@@ -386,7 +373,7 @@ function DoctorRegistrationForm() {
                                     <FormControl fullWidth required>
                                         <Select
                                             name="rol"
-                                            value={formValues.rol}
+                                            value={formValues.role}
                                             onChange={handleInputChange}
                                             displayEmpty // Permite que la opción vacía sea visible
                                         >
