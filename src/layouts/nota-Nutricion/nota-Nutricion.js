@@ -178,9 +178,11 @@ function NotaNutricional() {
         frequencyStraining: "",
         collation2: "",
       });
+      console.log("Datos a enviar:", formData);
     } catch (error) {
       console.error("Error en la solicitud:", error);
       alert("Hubo un error al guardar la nota. Inténtalo nuevamente.");
+      console.log("Datos a enviar:", formData);
     }
   };
 
