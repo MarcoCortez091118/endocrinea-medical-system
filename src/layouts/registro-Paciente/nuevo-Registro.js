@@ -70,7 +70,6 @@ const newRegisterForm = () => {
   };
 
   // Validación básica antes de enviar
-  
 
   // Manejador de archivos
   const handleFileChange = (e) => {
@@ -86,7 +85,6 @@ const newRegisterForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
 
     const apiUrl = "https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/create";
     const requestBody = {
@@ -146,13 +144,14 @@ const newRegisterForm = () => {
         setActiveStep(0);
       } else {
         const errorData = await response.json();
-        alert(`Error al registrar paciente: ${errorData.detail || "Verifica los datos ingresados"}`);
+        alert(
+          `Error al registrar paciente: ${errorData.detail || "Verifica los datos ingresados"}`
+        );
       }
     } catch (error) {
       alert("Error en la solicitud. Inténtalo nuevamente.");
     }
   };
-
 
   const steps = [
     "Datos generales",
@@ -312,19 +311,22 @@ const newRegisterForm = () => {
                   >
                     Género*
                   </label>
-                  <TextField
-                    select
-                    fullWidth
-                    name="gender"
-                    value={patientData.gender}
-                    onChange={handleChange}
-                    variant="outlined"
-                  >
-                    <MenuItem value="">Selecciona una opción</MenuItem>
-                    <MenuItem value="male">Masculino</MenuItem>
-                    <MenuItem value="female">Femenino</MenuItem>
-                    <MenuItem value="other">Otro</MenuItem>
-                  </TextField>
+                  <FormControl fullWidth>
+                    <Select
+                      id="gender"
+                      name="gender"
+                      value={patientData.gender}
+                      onChange={handleChange}
+                      displayEmpty
+                    >
+                      <MenuItem value="" disabled>
+                        Seleccionar género
+                      </MenuItem>
+                      <MenuItem value="male">Masculino</MenuItem>
+                      <MenuItem value="female">Femenino</MenuItem>
+                      <MenuItem value="other">Otro</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Grid>
 
                 {/* Tipo de paciente */}

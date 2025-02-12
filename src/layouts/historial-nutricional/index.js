@@ -332,8 +332,6 @@ function HistorialNutricional({ patientId }) {
     "High Cholesterol": "Colesterol Alto",
     "Heart Attacks": "Infartos Cardíacos",
   };
-  
-  
 
   const handleInputChange = (event, measurement) => {
     setFormData({
@@ -1208,34 +1206,52 @@ function HistorialNutricional({ patientId }) {
                   <TableBody>
                     {data.map((row, rowIndex) => (
                       <TableRow key={rowIndex}>
-                        {row.map((item, colIndex) => (
-                          <TableCell key={colIndex}>
-                            <Box sx={{ minWidth: 120 }}>
-                              <FormControl fullWidth>
-                                <InputLabel id={`select-label-${item}`}>{item}</InputLabel>
-                                <Select
-                                  labelId={`select-label-${item}`}
-                                  id={`select-${item}`}
-                                  value={formData[item] || ""} // Usa la clave de `formData` como valor
-                                  onChange={(event) =>
-                                    handleChange1(rowIndex, colIndex, event.target.value)
-                                  }
+                        {row.map((item, colIndex) => {
+                          const sanitizedItem = item.replace(/\s+/g, "-").toLowerCase();
+                          return (
+                            <TableCell key={colIndex}>
+                              <Box sx={{ minWidth: 120 }}>
+                                {/* Etiqueta para el nombre del alimento */}
+                                <label
+                                  htmlFor={`select-${sanitizedItem}`}
+                                  style={{
+                                    display: "block",
+                                    marginBottom: "4px",
+                                    fontWeight: "bold",
+                                  }}
                                 >
-                                  <MenuItem value="Nunca">Nunca</MenuItem>
-                                  <MenuItem value="Rara vez">Rara vez</MenuItem>
-                                  <MenuItem value="A veces">A veces</MenuItem>
-                                  <MenuItem value="Frecuentemente">Frecuentemente</MenuItem>
-                                  <MenuItem value="Siempre">Siempre</MenuItem>
-                                </Select>
-                              </FormControl>
-                            </Box>
-                          </TableCell>
-                        ))}
+                                  {item}
+                                </label>
+                                <FormControl fullWidth>
+                                  <Select
+                                    id={`select-${sanitizedItem}`}
+                                    name={sanitizedItem}
+                                    value={formData.hasOwnProperty(item) ? formData[item] : ""}
+                                    onChange={(event) =>
+                                      handleChange1(rowIndex, colIndex, event.target.value)
+                                    }
+                                    displayEmpty
+                                  >
+                                    <MenuItem value="" disabled>
+                                      Indicar frecuencia
+                                    </MenuItem>
+                                    <MenuItem value="Nunca">Nunca</MenuItem>
+                                    <MenuItem value="Rara vez">Rara vez</MenuItem>
+                                    <MenuItem value="A veces">A veces</MenuItem>
+                                    <MenuItem value="Frecuentemente">Frecuentemente</MenuItem>
+                                    <MenuItem value="Siempre">Siempre</MenuItem>
+                                  </Select>
+                                </FormControl>
+                              </Box>
+                            </TableCell>
+                          );
+                        })}
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               </TableContainer>
+
               <label style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
                 Alimentos que no le gustan:
               </label>
