@@ -164,7 +164,6 @@ function antropometria({ patientId }) {
             única y exclusivamente para mejorar la calidad de la atención durante su consulta y
             brindarle un mejor servicio.
           </SoftTypography>
-          {/** 
           <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
             Dra. Elizabeth Raquel Juárez <br />
             Mtra. Isbeth Gómez Díaz
@@ -173,7 +172,7 @@ function antropometria({ patientId }) {
             <br />
             Dra. Victoria Sandoval Nava
             <br />
-          </SoftTypography>*/}
+          </SoftTypography>
           <SoftTypography variant="subtitle2" fontWeight="medium" mb={2}>
             Circuito Juan Pablo II. PB No. 3113. Colonia Fraccionamiento Las Ánimas, Puebla.
           </SoftTypography>
@@ -235,19 +234,6 @@ function antropometria({ patientId }) {
                 </TableBody>
               </Table>
             </TableContainer>
-
-            <SoftBox mt={2}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                style={{ color: "white" }}
-                onClick={() => addColumn("mediciones")}
-                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
-              >
-                Agregar Columna
-              </Button>
-            </SoftBox>
           </div>
         </SoftBox>
 
