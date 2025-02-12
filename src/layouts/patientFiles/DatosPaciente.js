@@ -10,6 +10,7 @@ import { label } from "@mui/material";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
+import { color } from "framer-motion";
 const PatientDetailsForm = () => {
   const [patientData, setPatientData] = useState({
     id: "",
@@ -990,9 +991,15 @@ const PatientDetailsForm = () => {
         {activeStep < steps.length - 1 ? (
           <Button onClick={handleNext}>Siguiente</Button>
         ) : (
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
-            Enviar
-          </Button>
+          <Button
+  variant="contained"
+  sx={{ backgroundColor: "#4CAF50", color: "white" }} 
+  onClick={handleSubmit}
+>
+  Actualizar y guardar
+</Button>
+
+        
         )}
       </Box>
       {/* Botón de reinicio */}
