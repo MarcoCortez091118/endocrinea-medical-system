@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import SoftBox from "components/SoftBox";
 import {
     Container,
     Card,
-    CardHeader,
     CardContent,
     Grid,
     TextField,
     FormControl,
-    InputLabel,
     Select,
     MenuItem,
     FormControlLabel,
@@ -76,7 +73,7 @@ function DoctorRegistrationForm() {
                 <Card>
                     <CardContent>
                         <form onSubmit={handleSubmit}>
-                            <Grid container spacing={2}>
+                            <Grid container spacing={2} sx={{ mt: 1 }}>
                                 {/* Nombre y Apellidos */}
                                 <Grid item xs={12} sm={6}>
                                     <Typography variant='subtitle2'>Nómbre</Typography>
@@ -87,6 +84,8 @@ function DoctorRegistrationForm() {
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
+                                        sx={{ width: "100% !important" }}
+                                        InputProps={{ sx: { width: "100% !important" } }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -415,9 +414,51 @@ function DoctorRegistrationForm() {
                                 </Grid>
 
                                 {/* Botón de envío */}
-                                <Grid item xs={12}>
-                                    <Button type="submit" variant="contained" color="primary" fullWidth>
+                                <Grid item xs={12} sx={{ display: 'flex', gap: 2, mt: 2, mb: 2 }}>
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                        sx={{
+                                            bgcolor: "#183a64",
+                                            color: "#ffffff",
+                                            flex: 1,
+                                            '&:hover': { bgcolor: "#1259a5" }
+                                        }}
+                                    >
                                         Crear Médico
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        sx={{
+                                            bgcolor: "#2e7d32",
+                                            color: "#ffffff",
+                                            flex: 1,
+                                            '&:hover': { bgcolor: "#1b5e20" }
+                                        }}
+                                    >
+                                        Consultar Médico
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        sx={{
+                                            bgcolor: "#f9a825",
+                                            color: "#ffffff",
+                                            flex: 1,
+                                            '&:hover': { bgcolor: "#c17900" }
+                                        }}
+                                    >
+                                        Actualizar Médico
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        sx={{
+                                            bgcolor: "#d32f2f",
+                                            color: "#ffffff",
+                                            flex: 1,
+                                            '&:hover': { bgcolor: "#9a0007" }
+                                        }}
+                                    >
+                                        Borrar Médico
                                     </Button>
                                 </Grid>
                             </Grid>
