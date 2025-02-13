@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+import { registerDoctor } from './apiService';
 import {
     Container,
     Card,
@@ -55,7 +56,7 @@ function DoctorRegistrationForm() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Aquí se puede realizar la validación y el envío a la API
         const formData = {
@@ -64,6 +65,14 @@ function DoctorRegistrationForm() {
         };
 
         console.log("📋 Form Data Sent:", JSON.stringify(formData, null, 2));
+
+        try {
+            const response = await registerDoctor(formData);
+            alert("✅ Médico registrado con éxito");
+            console.log("📋 Respuesta API:", response);
+        } catch (error) {
+            alert("❌ Error al registrar el médico");
+        }
     };
 
     return (
