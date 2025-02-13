@@ -992,14 +992,22 @@ const PatientDetailsForm = () => {
           <Button onClick={handleNext}>Siguiente</Button>
         ) : (
           <Button
-  variant="contained"
-  sx={{ backgroundColor: "#4CAF50", color: "white" }} 
-  onClick={handleSubmit}
->
-  Actualizar y guardar
-</Button>
-
-        
+            variant="contained"
+            sx={{
+              backgroundColor: "#E67E22",
+              color: "#ffffff",
+              "&:hover": {
+                backgroundColor: "#c17900", // Darker shade for hover effect
+              },
+              "&:focus:not(:hover)": {
+                backgroundColor: "#E67E22", // Keep the original color on focus
+                boxShadow: "0px 0px 8px rgba(230, 126, 34, 0.5)", // Custom focus shadow
+              },
+            }}
+            onClick={handleSubmit}
+          >
+            Actualizar y guardar
+          </Button>
         )}
       </Box>
       {/* Botón de reinicio */}
