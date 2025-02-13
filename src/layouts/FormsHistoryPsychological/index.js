@@ -15,7 +15,7 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Typography from "@mui/material/Typography";
-import {Collapse}  from "@mui/material";
+import { Collapse } from "@mui/material";
 
 // Soft UI Dashboard React examples
 import SoftBox from "components/SoftBox";
@@ -156,7 +156,6 @@ function ClinicalForm() {
 
   const generateJSON = () => {
     const jsonData = {
-      
       medicalHistory: formData.medicalHistory,
       substanceAbuse: formData.substanceAbuse,
       lifestyle: formData.lifestyle,
@@ -253,7 +252,6 @@ function ClinicalForm() {
         </Card>
       </SoftBox>
 
-      
       {activeStep === 0 && (
         <SoftBox component={Card} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
           <SoftTypography variant="h6" color="secondary" mb={2}>
@@ -569,79 +567,129 @@ function ClinicalForm() {
 
       {/* 📌 Mostrar registros previos con opción de "Ver más" */}
       <SoftBox mb={3}>
-      <Card sx={{ p: 3, boxShadow: 3 }}>
-        <SoftTypography variant="h6" color="secondary" mb={2}>
-          Registros Previos
-        </SoftTypography>
+        <Card sx={{ p: 3, boxShadow: 3 }}>
+          <SoftTypography variant="h6" color="secondary" mb={2}>
+            Registros Previos
+          </SoftTypography>
 
-        {loading ? (
-          <Typography>Cargando...</Typography>
-        ) : error ? (
-          <Typography color="error">{error}</Typography>
-        ) : psychologyRecords.length === 0 ? (
-          <Typography>No hay registros previos.</Typography>
-        ) : (
-          psychologyRecords.slice(0, visibleRecords).map((record, index) => (
-            <Card key={record.id} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
-              <SoftTypography variant="h6" color="primary">
-                Registro {index + 1}
-              </SoftTypography>
+          {loading ? (
+            <Typography>Cargando...</Typography>
+          ) : error ? (
+            <Typography color="error">{error}</Typography>
+          ) : psychologyRecords.length === 0 ? (
+            <Typography>No hay registros previos.</Typography>
+          ) : (
+            psychologyRecords.slice(0, visibleRecords).map((record, index) => (
+              <Card key={record.id} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
+                <SoftTypography variant="h6" color="primary">
+                  Registro {index + 1}
+                </SoftTypography>
 
-              {/* 📌 Mostrar primeros datos clave */}
-              <SoftTypography variant="body2"><strong>Fecha:</strong> {new Date(record.created_at).toLocaleDateString()}</SoftTypography>
-              <SoftTypography variant="body2"><strong>Nombre:</strong> {record.name}</SoftTypography>
-              <SoftTypography variant="body2"><strong>Fecha de nacimiento:</strong> {record.birthDate}</SoftTypography>
-              <SoftTypography variant="body2"><strong>Género:</strong> {record.gender}</SoftTypography>
-              <SoftTypography variant="body2"><strong>Estado civil:</strong> {record.maritalStatus}</SoftTypography>
+                {/* 📌 Mostrar primeros datos clave */}
+                <SoftTypography variant="body2">
+                  <strong>Fecha:</strong> {new Date(record.created_at).toLocaleDateString()}
+                </SoftTypography>
+                <SoftTypography variant="body2">
+                  <strong>Antecedentes Heredofamiliares (AHF):</strong>{" "}
+                  {record.medicalHistory.AHF || "No especificado"}
+                </SoftTypography>
+                <SoftTypography variant="body2">
+                  <strong>Antecedentes Personales Patológicos (PA):</strong>{" "}
+                  {record.medicalHistory.PA || "No especificado"}
+                </SoftTypography>
+                <SoftTypography variant="body2">
+                  <strong>Consumo de sustancias:</strong>{" "}
+                  {record.substanceAbuse || "No especificado"}
+                </SoftTypography>
+                <SoftTypography variant="body2">
+                  <strong>Alimentación:</strong> {record.lifestyle.diet || "No especificado"}
+                </SoftTypography>
 
-              {/* 📌 Información oculta en "Ver más" */}
-              <Collapse in={expandedRecord === index}>
-                <SoftTypography variant="body2"><strong>Máximo grado de estudios:</strong> {record.highestEducation}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Ocupación:</strong> {record.occupation}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Creencias religiosas:</strong> {record.religiousBeliefs}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Antecedentes Heredofamiliares (AHF):</strong> {record.medicalHistory.AHF || "No especificado"}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Antecedentes Personales Patológicos (PA):</strong> {record.medicalHistory.PA || "No especificado"}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Consumo de sustancias:</strong> {record.substanceAbuse || "No especificado"}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Alimentación:</strong> {record.lifestyle.diet || "No especificado"}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Sueño:</strong> {record.lifestyle.sleep || "No especificado"}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Actividad física:</strong> {record.lifestyle.physicalActivity || "No especificado"}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Ocio y recreación:</strong> {record.lifestyle.leisure || "No especificado"}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Higiene:</strong> {record.lifestyle.hygiene || "No especificado"}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Dinámica familiar:</strong> {record.otherSections.familyDynamics || "No especificado"}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Relaciones afectivas:</strong> {record.otherSections.affectiveRelationships || "No especificado"}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Dinámica laboral:</strong> {record.otherSections.workDynamics || "No especificado"}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Historial psicológico:</strong> {record.otherSections.psychologicalHistory || "No especificado"}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Motivo de consulta:</strong> {record.otherSections.consultationReason || "No especificado"}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Intentos de solución:</strong> {record.otherSections.solutionAttempts || "No especificado"}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Signos y síntomas:</strong> {record.otherSections.signsSymptoms || "No especificado"}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Conductas autolesivas:</strong> {record.otherSections.selfHarmingBehaviors || "No especificado"}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Valoración clínica:</strong> {record.otherSections.clinicalAssessment || "No especificado"}</SoftTypography>
-                <SoftTypography variant="body2"><strong>Impresión diagnóstica:</strong> {record.otherSections.diagnosticImpression || "No especificado"}</SoftTypography>
-              </Collapse>
+                {/* 📌 Información oculta en "Ver más" */}
+                <Collapse in={expandedRecord === index}>
+                  <SoftTypography variant="body2">
+                    <strong>Sueño:</strong> {record.lifestyle.sleep || "No especificado"}
+                  </SoftTypography>
+                  <SoftTypography variant="body2">
+                    <strong>Actividad física:</strong>{" "}
+                    {record.lifestyle.physicalActivity || "No especificado"}
+                  </SoftTypography>
+                  <SoftTypography variant="body2">
+                    <strong>Ocio y recreación:</strong>{" "}
+                    {record.lifestyle.leisure || "No especificado"}
+                  </SoftTypography>
+                  <SoftTypography variant="body2">
+                    <strong>Higiene:</strong> {record.lifestyle.hygiene || "No especificado"}
+                  </SoftTypography>
+                  <SoftTypography variant="body2">
+                    <strong>Dinámica familiar:</strong>{" "}
+                    {record.otherSections.familyDynamics || "No especificado"}
+                  </SoftTypography>
+                  <SoftTypography variant="body2">
+                    <strong>Relaciones afectivas:</strong>{" "}
+                    {record.otherSections.affectiveRelationships || "No especificado"}
+                  </SoftTypography>
+                  <SoftTypography variant="body2">
+                    <strong>Dinámica laboral:</strong>{" "}
+                    {record.otherSections.workDynamics || "No especificado"}
+                  </SoftTypography>
+                  <SoftTypography variant="body2">
+                    <strong>Historial psicológico:</strong>{" "}
+                    {record.otherSections.psychologicalHistory || "No especificado"}
+                  </SoftTypography>
+                  <SoftTypography variant="body2">
+                    <strong>Motivo de consulta:</strong>{" "}
+                    {record.otherSections.consultationReason || "No especificado"}
+                  </SoftTypography>
+                  <SoftTypography variant="body2">
+                    <strong>Intentos de solución:</strong>{" "}
+                    {record.otherSections.solutionAttempts || "No especificado"}
+                  </SoftTypography>
+                  <SoftTypography variant="body2">
+                    <strong>Signos y síntomas:</strong>{" "}
+                    {record.otherSections.signsSymptoms || "No especificado"}
+                  </SoftTypography>
+                  <SoftTypography variant="body2">
+                    <strong>Conductas autolesivas:</strong>{" "}
+                    {record.otherSections.selfHarmingBehaviors || "No especificado"}
+                  </SoftTypography>
+                  <SoftTypography variant="body2">
+                    <strong>Valoración clínica:</strong>{" "}
+                    {record.otherSections.clinicalAssessment || "No especificado"}
+                  </SoftTypography>
+                  <SoftTypography variant="body2">
+                    <strong>Impresión diagnóstica:</strong>{" "}
+                    {record.otherSections.diagnosticImpression || "No especificado"}
+                  </SoftTypography>
+                </Collapse>
 
-              {/* 📌 Botón para expandir/cerrar */}
+                {/* 📌 Botón para expandir/cerrar */}
+                <Button
+                  variant="contained"
+                  color={expandedRecord === index ? "secondary" : "primary"}
+                  onClick={() => toggleExpand(index)}
+                  sx={{ mt: 2 }}
+                >
+                  {expandedRecord === index ? "Ver menos" : "Ver más"}
+                </Button>
+              </Card>
+            ))
+          )}
+
+          {/* 📌 Botón para cargar más registros */}
+          {visibleRecords < psychologyRecords.length && (
+            <Box sx={{ textAlign: "center", mt: 2 }}>
               <Button
                 variant="contained"
-                color={expandedRecord === index ? "secondary" : "primary"}
-                onClick={() => toggleExpand(index)}
-                sx={{ mt: 2 }}
+                color="primary"
+                onClick={() => setVisibleRecords((prev) => prev + 10)}
               >
-                {expandedRecord === index ? "Ver menos" : "Ver más"}
+                Ver más registros
               </Button>
-            </Card>
-          ))
-        )}
-
-        {/* 📌 Botón para cargar más registros */}
-        {visibleRecords < psychologyRecords.length && (
-          <Box sx={{ textAlign: "center", mt: 2 }}>
-            <Button variant="contained" color="primary" onClick={() => setVisibleRecords(prev => prev + 10)}>
-              Ver más registros
-            </Button>
-          </Box>
-        )}
-      </Card>
-    </SoftBox>
+            </Box>
+          )}
+        </Card>
+      </SoftBox>
     </SoftBox>
   );
 }
