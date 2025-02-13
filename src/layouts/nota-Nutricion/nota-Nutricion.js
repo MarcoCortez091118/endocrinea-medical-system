@@ -36,6 +36,7 @@ function NotaNutricional() {
   const location = useLocation();
   const patient = location.state?.patient; // Asegurar que `patient` se obtiene correctamente
   const [loading, setLoading] = useState(false);
+  const [visibleNotes, setVisibleNotes] = useState(10);
   const [formData, setFormData] = useState({
     symptoms: "",
     energy: "",
@@ -56,7 +57,7 @@ function NotaNutricional() {
     extras: "",
     diagnosis: "",
   });
-
+  const [error, setError] = useState(null);
   const [notas, setNotas] = useState([]);
   const [expandedNotes, setExpandedNotes] = useState({});
   const apiUrl = `https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/${patient.id}/nutrition_notes`;
@@ -748,91 +749,125 @@ function NotaNutricional() {
           </Box>
         )}
       </form>
-      {/* Sección de notas */}
+      {/* 📌 Sección de notas */}
       <SoftBox mb={3}>
         <Card sx={{ p: 3, boxShadow: 3 }}>
-          <Typography variant="h6" color="secondary" mb={2}>
+          <SoftTypography variant="h6" color="secondary" mb={2}>
             Historial de Notas
-          </Typography>
-          {notas.length === 0 ? (
-            <Typography variant="body1">No hay notas disponibles.</Typography>
+          </SoftTypography>
+
+          {loading ? (
+            <Typography>Cargando...</Typography>
+          ) : error ? (
+            <Typography color="error">{error}</Typography>
+          ) : notas.length === 0 ? (
+            <Typography>No hay notas disponibles.</Typography>
           ) : (
-            notas.map((nota, index) => (
-              <Card key={index} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
-                <Typography variant="h6" color="primary">
-                  Nota {index + 1}
-                </Typography>
+            notas
+              .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+              .slice(0, visibleNotes)
+              .map((nota, index) => (
+                <Card key={index} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
+                  <SoftTypography variant="h6" color="primary">
+                    Nota {index + 1}
+                  </SoftTypography>
 
-                {Object.entries(nota)
-                  .slice(0, 5)
-                  .map(([key, value]) => (
-                    <SoftTypography key={key} variant="body2" sx={{ mt: 1 }}>
-                      <strong>{translations[key] || key}:</strong>{" "}
-                      {typeof value === "object" ? (
-                        <ul>
-                          {Object.entries(value).map(([subKey, subValue]) => (
-                            <li key={subKey}>
-                              <strong>{translations[subKey] || subKey}:</strong>{" "}
-                              {typeof subValue === "object"
-                                ? Object.entries(subValue)
-                                    .map(
-                                      ([subItemKey, subItemValue]) =>
-                                        `${translations[subItemKey] || subItemKey}: ${
-                                          subItemValue ? "Sí" : "No"
-                                        }`
-                                    )
-                                    .join(", ")
-                                : subValue.toString()}
-                            </li>
-                          ))}
-                        </ul>
-                      ) : (
-                        value.toString()
-                      )}
+                  {/* 📌 Mostrar primeros datos clave */}
+                  <SoftTypography variant="body2">
+                    <strong>Fecha:</strong> {new Date(nota.created_at).toLocaleDateString()}
+                  </SoftTypography>
+                  <SoftTypography variant="body2">
+                    <strong>Síntomas:</strong> {nota.symptoms || "No especificado"}
+                  </SoftTypography>
+                  <SoftTypography variant="body2">
+                    <strong>Estado de energía:</strong> {nota.energy || "No especificado"}
+                  </SoftTypography>
+                  <SoftTypography variant="body2">
+                    <strong>Consumo de líquidos:</strong> {nota.liquids || "No especificado"}
+                  </SoftTypography>
+                  <SoftTypography variant="body2">
+                    <strong>Tipo de ejercicio:</strong> {nota.TypesExercise || "No especificado"}
+                  </SoftTypography>
+                  <SoftTypography variant="body2">
+                    <strong>Días de ejercicio por semana:</strong>{" "}
+                    {nota.exerciseDaysWeek || "No especificado"}
+                  </SoftTypography>
+                  <SoftTypography variant="body2">
+                    <strong>Intensidad del ejercicio:</strong>{" "}
+                    {nota.exerciseIntensity || "No especificado"}
+                  </SoftTypography>
+
+                  {/* 📌 Información oculta en "Ver más" */}
+                  <Collapse in={expandedNotes === index}>
+                    <SoftTypography variant="body2">
+                      <strong>Condiciones actuales:</strong>{" "}
+                      {nota.currentConditions || "No especificado"}
                     </SoftTypography>
-                  ))}
+                    <SoftTypography variant="body2">
+                      <strong>Complicaciones:</strong> {nota.complications || "No especificado"}
+                    </SoftTypography>
+                    <SoftTypography variant="body2">
+                      <strong>Síntomas gastrointestinales:</strong>{" "}
+                      {nota.symptomsGastrointestinal || "No especificado"}
+                    </SoftTypography>
+                    <SoftTypography variant="body2">
+                      <strong>Detalles de síntomas:</strong>{" "}
+                      {nota.detailSymptoms.length > 0
+                        ? nota.detailSymptoms.join(", ")
+                        : "No especificado"}
+                    </SoftTypography>
+                    <SoftTypography variant="body2">
+                      <strong>Frecuencia de estreñimiento:</strong>{" "}
+                      {nota.frequencyStraining || "No especificado"}
+                    </SoftTypography>
+                    <SoftTypography variant="body2">
+                      <strong>Frecuencia de diarrea:</strong>{" "}
+                      {nota.frequencyDiarrhea || "No especificado"}
+                    </SoftTypography>
+                    <SoftTypography variant="body2">
+                      <strong>Desayuno:</strong> {nota.breakfast || "No especificado"}
+                    </SoftTypography>
+                    <SoftTypography variant="body2">
+                      <strong>Colación 1:</strong> {nota.collation1 || "No especificado"}
+                    </SoftTypography>
+                    <SoftTypography variant="body2">
+                      <strong>Comida:</strong> {nota.meal || "No especificado"}
+                    </SoftTypography>
+                    <SoftTypography variant="body2">
+                      <strong>Colación 2:</strong> {nota.collation2 || "No especificado"}
+                    </SoftTypography>
+                    <SoftTypography variant="body2">
+                      <strong>Extras:</strong> {nota.extras || "No especificado"}
+                    </SoftTypography>
+                    <SoftTypography variant="body2">
+                      <strong>Diagnóstico:</strong> {nota.diagnosis || "No especificado"}
+                    </SoftTypography>
+                  </Collapse>
 
-                <Collapse in={expandedNotes === index}>
-                  {Object.entries(nota)
-                    .slice(5)
-                    .map(([key, value]) => (
-                      <SoftTypography key={key} variant="body2" sx={{ mt: 1 }}>
-                        <strong>{translations[key] || key}:</strong>{" "}
-                        {typeof value === "object" ? (
-                          <ul>
-                            {Object.entries(value).map(([subKey, subValue]) => (
-                              <li key={subKey}>
-                                <strong>{translations[subKey] || subKey}:</strong>{" "}
-                                {typeof subValue === "object"
-                                  ? Object.entries(subValue)
-                                      .map(
-                                        ([subItemKey, subItemValue]) =>
-                                          `${translations[subItemKey] || subItemKey}: ${
-                                            subItemValue ? "Sí" : "No"
-                                          }`
-                                      )
-                                      .join(", ")
-                                  : subValue.toString()}
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          value.toString()
-                        )}
-                      </SoftTypography>
-                    ))}
-                </Collapse>
+                  {/* 📌 Botón para expandir/cerrar */}
+                  <Button
+                    variant="contained"
+                    color={expandedNotes === index ? "secondary" : "primary"}
+                    onClick={() => toggleExpand(index)}
+                    sx={{ mt: 2 }}
+                  >
+                    {expandedNotes === index ? "Ver menos" : "Ver más"}
+                  </Button>
+                </Card>
+              ))
+          )}
 
-                <Button
-                  variant="contained"
-                  color={expandedNotes === index ? "secondary" : "primary"}
-                  onClick={() => toggleExpand(index)}
-                  sx={{ mt: 2 }}
-                >
-                  {expandedNotes === index ? "Ver menos" : "Ver más"}
-                </Button>
-              </Card>
-            ))
+          {/* 📌 Botón para cargar más notas */}
+          {visibleNotes < notas.length && (
+            <Box sx={{ textAlign: "center", mt: 2 }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setVisibleNotes((prev) => prev + 10)}
+              >
+                Ver más notas
+              </Button>
+            </Box>
           )}
         </Card>
       </SoftBox>
