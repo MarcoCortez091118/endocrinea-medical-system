@@ -51,21 +51,6 @@ function MedicalRecordDisplay({ record }) {
 
     const steps = [
         {
-          label: "Información General",
-          fields: [
-            { id: "fullName", label: "Nombre Completo" },
-            { id: "email", label: "Correo Electrónico" },
-            { id: "phoneNumber", label: "Número Telefónico" },
-            { id: "birthDate", label: "Fecha de Nacimiento" },
-            { id: "age", label: "Edad" },
-            { id: "city", label: "Ciudad" },
-            { id: "occupation", label: "Ocupación" },
-            { id: "maritalStatus", label: "Estado Civil", other: "otherStatus" },
-            { id: "religion", label: "Religión", other: "otherReligion" },
-            { id: "gender", label: "Género", other: "otherGender" },
-          ],
-        },
-        {
           label: "Antecedentes Familiares",
           fields: [
             { id: "familyHistoryDiabetes", label: "Diabetes", options: ["Mother", "Father", "Siblings", "Paternal Uncles", "Maternal Uncles"] },
