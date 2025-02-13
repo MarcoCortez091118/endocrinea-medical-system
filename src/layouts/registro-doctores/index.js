@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import SoftBox from "components/SoftBox";
 import {
     Container,
     Card,
-    CardHeader,
     CardContent,
     Grid,
     TextField,
     FormControl,
-    InputLabel,
     Select,
     MenuItem,
     FormControlLabel,
@@ -18,23 +15,21 @@ import {
     Button,
     Typography
 } from '@mui/material';
-import SoftTypography from 'components/SoftTypography';
 
 function DoctorRegistrationForm() {
 
     const [formValues, setFormValues] = useState({
-        id: '',
-        nombre: '',
-        apellidos: '',
-        correo: '',
-        telefono: '',
-        direccion: '',
-        ciudad: '',
-        codigoPostal: '',
-        colonia: '',
-        nacionalidad: '',
-        categoria: '',
-        rol: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        address: '',
+        city: '',
+        postalCode: '',
+        neighborhood: '',
+        nationality: '',
+        category: '',
+        role: '',
         password: '',
         confirmPassword: ''
     });
@@ -63,50 +58,42 @@ function DoctorRegistrationForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Aquí se puede realizar la validación y el envío a la API
-        console.log({ formValues, schedule });
+        const formData = {
+            ...formValues,
+            schedule
+        };
+
+        console.log("📋 Form Data Sent:", JSON.stringify(formData, null, 2));
     };
 
     return (
         <DashboardLayout>
             <DashboardNavbar />
-            <Container maxWidth="md" sx={{ mt: 4 }}>
+            <Container maxWidth="md" sx={{ mt: 2, mb: 4 }}>
                 <Card>
-                    <CardHeader
-                        title="Registro de Médico"
-                        sx={{ backgroundColor: '#1976d2', color: 'white' }}
-                    />
                     <CardContent>
                         <form onSubmit={handleSubmit}>
-                            <Grid container spacing={2}>
-                                {/* ID */}
-                                <Grid item xs={12}>
-                                    <Typography variant='subtitle2'>ID de Médico</Typography>
-                                    <TextField
-                                        name="id"
-                                        value={formValues.id}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        required
-                                    />
-                                </Grid>
+                            <Grid container spacing={2} sx={{ mt: 1 }}>
                                 {/* Nombre y Apellidos */}
                                 <Grid item xs={12} sm={6}>
                                     <Typography variant='subtitle2'>Nómbre</Typography>
                                     <TextField
                                         placeholder="Ingrese su nómbre"
-                                        name="nombre"
-                                        value={formValues.nombre}
+                                        name="firstName"
+                                        value={formValues.firstName}
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
+                                        sx={{ width: "100% !important" }}
+                                        InputProps={{ sx: { width: "100% !important" } }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <Typography variant='subtitle2'>Apellidos</Typography>
                                     <TextField
                                         placeholder="Ingrese sus apellidos"
-                                        name="apellidos"
-                                        value={formValues.apellidos}
+                                        name="lastName"
+                                        value={formValues.lastName}
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
@@ -118,9 +105,9 @@ function DoctorRegistrationForm() {
                                     <Typography variant='subtitle2'>Correo</Typography>
                                     <TextField
                                         placeholder="ejemplo@correo.com"
-                                        name="correo"
+                                        name="email"
                                         type="email"
-                                        value={formValues.correo}
+                                        value={formValues.email}
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
@@ -130,8 +117,8 @@ function DoctorRegistrationForm() {
                                     <Typography variant='subtitle2'>Teléfono</Typography>
                                     <TextField
                                         placeholder="Ingrese su teléfono"
-                                        name="telefono"
-                                        value={formValues.telefono}
+                                        name="phone"
+                                        value={formValues.phone}
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
@@ -143,8 +130,8 @@ function DoctorRegistrationForm() {
                                     <Typography variant='subtitle2'>Dirección</Typography>
                                     <TextField
                                         placeholder="Ingrese su dirección"
-                                        name="direccion"
-                                        value={formValues.direccion}
+                                        name="address"
+                                        value={formValues.address}
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
@@ -156,8 +143,8 @@ function DoctorRegistrationForm() {
                                     <Typography variant='subtitle2'>Ciudad</Typography>
                                     <TextField
                                         placeholder="Ciudad"
-                                        name="ciudad"
-                                        value={formValues.ciudad}
+                                        name="city"
+                                        value={formValues.city}
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
@@ -167,8 +154,8 @@ function DoctorRegistrationForm() {
                                     <Typography variant='subtitle2'>Código Postal</Typography>
                                     <TextField
                                         placeholder="Código Postal"
-                                        name="codigoPostal"
-                                        value={formValues.codigoPostal}
+                                        name="postalCode"
+                                        value={formValues.postalCode}
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
@@ -178,8 +165,8 @@ function DoctorRegistrationForm() {
                                     <Typography variant='subtitle2'>Colonia</Typography>
                                     <TextField
                                         placeholder="Colonia"
-                                        name="colonia"
-                                        value={formValues.colonia}
+                                        name="neighborhood"
+                                        value={formValues.neighborhood}
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
@@ -191,8 +178,8 @@ function DoctorRegistrationForm() {
                                     <Typography variant='subtitle2'>Nacionalidad</Typography>
                                     <TextField
                                         placeholder="Nacionalidad"
-                                        name="nacionalidad"
-                                        value={formValues.nacionalidad}
+                                        name="nationality"
+                                        value={formValues.nationality}
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
@@ -364,8 +351,8 @@ function DoctorRegistrationForm() {
                                     </Typography>
                                     <FormControl fullWidth required>
                                         <Select
-                                            name="categoria"
-                                            value={formValues.categoria}
+                                            name="category"
+                                            value={formValues.category}
                                             onChange={handleInputChange}
                                             displayEmpty // Permite que la opción vacía sea visible
                                         >
@@ -385,8 +372,8 @@ function DoctorRegistrationForm() {
                                     </Typography>
                                     <FormControl fullWidth required>
                                         <Select
-                                            name="rol"
-                                            value={formValues.rol}
+                                            name="role"
+                                            value={formValues.role}
                                             onChange={handleInputChange}
                                             displayEmpty // Permite que la opción vacía sea visible
                                         >
@@ -427,9 +414,51 @@ function DoctorRegistrationForm() {
                                 </Grid>
 
                                 {/* Botón de envío */}
-                                <Grid item xs={12}>
-                                    <Button type="submit" variant="contained" color="primary" fullWidth>
-                                        Registrar
+                                <Grid item xs={12} sx={{ display: 'flex', gap: 2, mt: 2, mb: 2 }}>
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                        sx={{
+                                            bgcolor: "#183a64",
+                                            color: "#ffffff",
+                                            flex: 1,
+                                            '&:hover': { bgcolor: "#1259a5" }
+                                        }}
+                                    >
+                                        Crear Médico
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        sx={{
+                                            bgcolor: "#2e7d32",
+                                            color: "#ffffff",
+                                            flex: 1,
+                                            '&:hover': { bgcolor: "#1b5e20" }
+                                        }}
+                                    >
+                                        Consultar Médico
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        sx={{
+                                            bgcolor: "#f9a825",
+                                            color: "#ffffff",
+                                            flex: 1,
+                                            '&:hover': { bgcolor: "#c17900" }
+                                        }}
+                                    >
+                                        Actualizar Médico
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        sx={{
+                                            bgcolor: "#d32f2f",
+                                            color: "#ffffff",
+                                            flex: 1,
+                                            '&:hover': { bgcolor: "#9a0007" }
+                                        }}
+                                    >
+                                        Borrar Médico
                                     </Button>
                                 </Grid>
                             </Grid>
