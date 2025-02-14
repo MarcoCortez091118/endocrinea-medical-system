@@ -12,7 +12,7 @@ export default function useNewPatientsTableData() {
   useEffect(() => {
     async function fetchNewPatients() {
       try {
-        const response = await fetch("https://endocrinea-fastapi-datacolletion.azurewebsites.net/new_patients");
+        const response = await fetch("https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/?q=");
         const newPatients = await response.json();
 
         if (!Array.isArray(newPatients)) {
