@@ -23,12 +23,11 @@ const API_BASE_URL = "https://endocrinea-fastapi-dataprocessing.azurewebsites.ne
 
 function ClinicalForm() {
   const location = useLocation();
-  const patient = location.state?.patient; 
+  const patient = location.state?.patient;
   const [formData, setFormData] = useState({
     medicalHistory: {
-  
-      AHF: "", 
-      PA: "", 
+      AHF: "",
+      PA: "",
     },
     substanceAbuse: "",
     lifestyle: {
@@ -51,12 +50,11 @@ function ClinicalForm() {
       diagnosticImpression: "",
     },
   });
-  
+
   const [psychologyRecords, setPsychologyRecords] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
- 
   useEffect(() => {
     if (!patient?.id) return;
 
@@ -67,8 +65,11 @@ function ClinicalForm() {
         return response.json();
       })
       .then((data) => {
-        setPsychologyRecords(data);
+        // 🔹 Ordenar los registros por fecha (más reciente primero)
+        const sortedRecords = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        setPsychologyRecords(sortedRecords);
       })
+
       .catch((error) => {
         setError(error.message);
       })
@@ -80,7 +81,6 @@ function ClinicalForm() {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    
     if (name.includes(".")) {
       const [section, field] = name.split(".");
       setFormData((prevData) => ({
@@ -139,14 +139,32 @@ function ClinicalForm() {
       // 📌 Refrescar historial después del envío!!!!!
       const updatedRecords = await fetch(`${API_BASE_URL}/${patient.id}/psychology_records/`);
       const newData = await updatedRecords.json();
-      setPsychologyRecords(newData);
+
+      // 🔹 Ordenar los registros después de obtener los nuevos datos
+      const sortedRecords = newData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      setPsychologyRecords(sortedRecords);
     } catch (error) {
       alert(error.message);
     }
 
     setLoading(false);
   };
+  const formatDate = (utcDate) => {
+    if (!utcDate) return "Fecha no disponible";
 
+    const date = new Date(utcDate);
+    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+
+    return localDate.toLocaleString("es-ES", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    });
+  };
   const generateJSON = () => {
     const jsonData = {
       medicalHistory: formData.medicalHistory,
@@ -168,7 +186,7 @@ function ClinicalForm() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [expandedRecord, setExpandedRecord] = useState(null);
-  const [visibleRecords, setVisibleRecords] = useState(10); 
+  const [visibleRecords, setVisibleRecords] = useState(10);
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -192,7 +210,6 @@ function ClinicalForm() {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
 
   const handleReset = () => {
     setActiveStep(0);
@@ -494,7 +511,7 @@ function ClinicalForm() {
           </SoftBox>
         </form>
       )}
-      
+
       {/* Stepper */}
       <Stepper activeStep={activeStep}>
         {steps.map((label) => (
@@ -549,8 +566,9 @@ function ClinicalForm() {
 
                 {/* 📌 Mostrar primeros datos clave */}
                 <SoftTypography variant="body2">
-                  <strong>Fecha:</strong> {new Date(record.created_at).toLocaleDateString()}
+                  <strong>Fecha:</strong> {formatDate(record.created_at)}
                 </SoftTypography>
+
                 <SoftTypography variant="body2">
                   <strong>Antecedentes Heredofamiliares (AHF):</strong>{" "}
                   {record.medicalHistory.AHF || "No especificado"}
