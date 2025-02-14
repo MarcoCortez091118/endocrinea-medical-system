@@ -74,11 +74,11 @@ function DefaultNavbar({ action }) {
           <SoftBox component="img" src={logoct} alt="Logo" width="9rem" />
         </SoftBox>
         <SoftBox color="inherit" display={{ xs: "none", lg: "flex" }} m={0} p={0}>
-          <DefaultNavbarLink
+          {/* <DefaultNavbarLink
             icon="account_circle"
             name="Registrarme"
             route="/authentication/sign-up"
-          />
+          /> */}
           <DefaultNavbarLink
             icon="key"
             name="Iniciar sesión"

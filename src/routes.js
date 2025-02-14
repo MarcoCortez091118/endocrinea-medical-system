@@ -166,7 +166,7 @@ const routes = (isAuthenticated, userRole) => {
     baseRoutes.push({
       type: "collapse",
       name: "Médicos",
-      key: "RegistroDoctores",
+      key: "registro-doctores",
       route: "/registro-doctores",
       icon: <LocalHospitalIcon size="12px" />,
       component: (
