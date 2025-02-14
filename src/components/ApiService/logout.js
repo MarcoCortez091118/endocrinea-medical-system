@@ -1,6 +1,6 @@
 const logoutUser = async (setMessage) => {
     try {
-        const response = await fetch('https://bituin-fastapi-data.azurewebsites.net/users/logout', {
+        const response = await fetch('https://endocrinea-fastapi-dataprocessing.azurewebsites.net/logout', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -8,19 +8,20 @@ const logoutUser = async (setMessage) => {
             },
         });
 
-        if (response.ok) {
-            const data = await response.json();
-            setMessage(data.message);
+        const data = await response.json();
 
+        if (response.ok) {
+            setMessage({ text: data.message || "Sesión cerrada exitosamente", type: "success" });
             localStorage.removeItem("authData");
 
             setTimeout(() => {
                 window.location.href = 'authentication/sign-in';
             }, 2000);
         } else {
-            console.error('Error al cerrar sesión');
+            setMessage({ text: data.message || "Error al cerrar sesión", type: "error" });
         }
     } catch (error) {
+        setMessage({ text: "Error al enviar la solicitud", type: "error" });
         console.error('Error al enviar la solicitud:', error);
     }
 };
