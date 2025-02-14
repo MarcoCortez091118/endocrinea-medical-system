@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+import SoftBox from "components/SoftBox";
+import SoftTypography from "components/SoftTypography";
+import Table from 'examples/Tables/Table';
+import doctorsTableData from './doctorsTableData';
+import { registerDoctor } from './apiService';
 import {
     Container,
     Card,
@@ -13,12 +18,17 @@ import {
     FormControlLabel,
     Switch,
     Button,
-    Typography
+    Typography,
+    Snackbar,
+    Alert,
 } from '@mui/material';
 
 function DoctorRegistrationForm() {
 
+    const { columns, rows } = doctorsTableData();
+
     const [formValues, setFormValues] = useState({
+        id: '',
         firstName: '',
         lastName: '',
         email: '',
@@ -41,6 +51,10 @@ function DoctorRegistrationForm() {
         sunday: { works: false, start: '', end: '' }
     });
 
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertType, setAlertType] = useState('success');
+    const [openAlert, setOpenAlert] = useState(false);
+
     // Manejo de cambios en los inputs del formulario
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -55,7 +69,7 @@ function DoctorRegistrationForm() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Aquí se puede realizar la validación y el envío a la API
         const formData = {
@@ -64,6 +78,41 @@ function DoctorRegistrationForm() {
         };
 
         console.log("📋 Form Data Sent:", JSON.stringify(formData, null, 2));
+
+        try {
+            const response = await registerDoctor(formData);
+            setAlertMessage("✅ Médico registrado con éxito");
+            setAlertType("success");
+            console.log("📋 Respuesta API:", response);
+
+            setFormValues({
+                id: '',
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: '',
+                address: '',
+                city: '',
+                postalCode: '',
+                neighborhood: '',
+                nationality: '',
+                category: '',
+                role: '',
+                password: '',
+                confirmPassword: ''
+            });
+            setSchedule({
+                mondayFriday: { works: false, start: '', end: '' },
+                saturday: { works: false, start: '', end: '' },
+                sunday: { works: false, start: '', end: '' }
+            });
+
+        } catch (error) {
+            setAlertMessage("❌ Error al registrar el médico");
+            setAlertType("error");
+        } finally {
+            setOpenAlert(true); // Mostrar la alerta
+        }
     };
 
     return (
@@ -74,6 +123,18 @@ function DoctorRegistrationForm() {
                     <CardContent>
                         <form onSubmit={handleSubmit}>
                             <Grid container spacing={2} sx={{ mt: 1 }}>
+                                {/* ID de Médico */}
+                                <Grid item xs={12}>
+                                    <Typography variant='subtitle2'>ID de Médico</Typography>
+                                    <TextField
+                                        placeholder="Ingrese ID de médico"
+                                        name="id"
+                                        value={formValues.id}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        helperText="Ingrese el ID solo si desea consultar, actualizar o eliminar, en caso contrario dejar vacío."
+                                    />
+                                </Grid>
                                 {/* Nombre y Apellidos */}
                                 <Grid item xs={12} sm={6}>
                                     <Typography variant='subtitle2'>Nómbre</Typography>
@@ -84,8 +145,6 @@ function DoctorRegistrationForm() {
                                         onChange={handleInputChange}
                                         fullWidth
                                         required
-                                        sx={{ width: "100% !important" }}
-                                        InputProps={{ sx: { width: "100% !important" } }}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -466,6 +525,35 @@ function DoctorRegistrationForm() {
                     </CardContent>
                 </Card>
             </Container>
+            <SoftBox mb={3}>
+                <Card>
+                    <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+                        <SoftTypography variant="h6">Doctores registrados</SoftTypography>
+                    </SoftBox>
+
+                    <SoftBox
+                        sx={{
+                            "& .MuiTableRow-root": {
+                                cursor: "pointer",
+                                "&:hover": { backgroundColor: "#f5f5f5" },
+                            },
+                        }}
+                    >
+                        <Table columns={columns} rows={rows} />
+                    </SoftBox>
+                </Card>
+            </SoftBox>
+            {/* Snackbar para mostrar mensajes de éxito o error */}
+            <Snackbar
+                open={openAlert}
+                autoHideDuration={4000}
+                onClose={() => setOpenAlert(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert onClose={() => setOpenAlert(false)} severity={alertType} sx={{ width: '100%' }}>
+                    {alertMessage}
+                </Alert>
+            </Snackbar>
         </DashboardLayout >
     );
 }
