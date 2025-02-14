@@ -46,17 +46,17 @@ import team2 from "assets/images/team-2.jpg";
 import logoSpotify from "assets/images/small-logos/logo-spotify.svg";
 
 //Auth 
-// import { useAuth } from "context/AuthContext";
-// import logoutUser from "components/ApiService/logout";
+import { useAuth } from "context/AuthContext";
+import logoutUser from "components/ApiService/logout";
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } = controller;
   const [openMenu, setOpenMenu] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState({ text: "", type: "success" });
   const route = useLocation().pathname.split("/").slice(1);
-  //const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
 
   const handleLogout = () => {
     logoutUser(setMessage);
@@ -154,17 +154,17 @@ function DashboardNavbar({ absolute, light, isMini }) {
             </SoftBox>
             <SoftBox color={light ? "white" : "inherit"}>
 
-              {/*{isAuthenticated ? (*/}
-              <SoftTypography
-                variant="button"
-                fontWeight="medium"
-                color={light ? "white" : "dark"}
-                onClick={handleLogout}
-                sx={{ cursor: "pointer" }}
-              >
-                Cerrar sesión
-              </SoftTypography>
-              {/* ) : (
+              {isAuthenticated ? (
+                <SoftTypography
+                  variant="button"
+                  fontWeight="medium"
+                  color={light ? "white" : "dark"}
+                  onClick={handleLogout}
+                  sx={{ cursor: "pointer" }}
+                >
+                  Cerrar sesión
+                </SoftTypography>
+              ) : (
 
                 <Link to="/authentication/sign-in">
                   <IconButton sx={navbarIconButton} size="small">
@@ -184,7 +184,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                     </SoftTypography>
                   </IconButton>
                 </Link>
-              )} */}
+              )}
               <IconButton
                 size="small"
                 color="inherit"
@@ -213,16 +213,16 @@ function DashboardNavbar({ absolute, light, isMini }) {
       </Toolbar>
 
       <Snackbar
-        open={message !== ""}
+        open={Boolean(message.text)}
         autoHideDuration={2000}
-        onClose={() => setMessage("")}
+        onClose={() => setMessage({ text: "", type: "success" })}
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'center',
         }}
       >
-        <Alert severity="success" sx={{ width: "100%" }}>
-          {message}
+        <Alert severity={message.type} sx={{ width: "100%" }}>
+          {message.text}
         </Alert>
       </Snackbar>
 
