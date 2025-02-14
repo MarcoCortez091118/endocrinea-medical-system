@@ -52,24 +52,18 @@ function SignIn() {
     e.preventDefault();
     setError("");
     const emailError = validateEmail(email);
-    const passwordError = validatePassword(password);
 
     if (emailError) {
       setError(emailError);
       return;
     }
 
-    if (passwordError) {
-      setError(passwordError);
-      return;
-    }
-
     try {
-      const response = await loginUser({ mail: email, password });
+      const response = await loginUser({ email, password });
 
       if (response && response.token) {
         document.cookie = `token=${response.token}; path=/; secure; samesite=strict; max-age=86400`;
-       
+
         if (rememberMe) {
           localStorage.setItem("email", email);
           localStorage.setItem("password", password);
@@ -79,8 +73,8 @@ function SignIn() {
           localStorage.removeItem("password");
           localStorage.removeItem("rememberMe");
         }
-       
-       
+
+
         login(response);
 
         setSuccessMessage("¡Bienvenido! Has iniciado sesión correctamente.");
@@ -118,38 +112,38 @@ function SignIn() {
           />
         </SoftBox>
         <SoftBox mb={2}>
-  <SoftBox mb={1} ml={0.5}>
-    <SoftTypography component="label" variant="caption" fontWeight="bold">
-      Contraseña
-    </SoftTypography>
-  </SoftBox>
-  <SoftBox display="flex" alignItems="center">
-    <SoftInput
-      type={showPassword ? "text" : "password"}
-      placeholder="Contraseña"
-      value={password}
-      onChange={(e) => setPassword(e.target.value)}
-    />
-    <Icon
-      onClick={() => setShowPassword(!showPassword)}
-      sx={{
-        cursor: "pointer",
-        marginLeft: "-35px",
-        zIndex: "10",
-        color: "#aaa",
-      }}
-    >
-      {showPassword ? "visibility" : "visibility_off"}
-    </Icon>
-  </SoftBox>
-</SoftBox>
+          <SoftBox mb={1} ml={0.5}>
+            <SoftTypography component="label" variant="caption" fontWeight="bold">
+              Contraseña
+            </SoftTypography>
+          </SoftBox>
+          <SoftBox display="flex" alignItems="center">
+            <SoftInput
+              type={showPassword ? "text" : "password"}
+              placeholder="Contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Icon
+              onClick={() => setShowPassword(!showPassword)}
+              sx={{
+                cursor: "pointer",
+                marginLeft: "-35px",
+                zIndex: "10",
+                color: "#aaa",
+              }}
+            >
+              {showPassword ? "visibility" : "visibility_off"}
+            </Icon>
+          </SoftBox>
+        </SoftBox>
 
         {error && (
           <SoftTypography color="error" variant="caption">
             {error}
           </SoftTypography>
         )}
-         <SoftBox display="flex" alignItems="center">
+        <SoftBox display="flex" alignItems="center">
           <Switch checked={rememberMe} onChange={handleSetRememberMe} />
           <SoftTypography
             variant="button"
@@ -165,6 +159,7 @@ function SignIn() {
             Iniciar sesión
           </SoftButton>
         </SoftBox>
+        {/* 
         <SoftBox mt={3} textAlign="center">
           <SoftTypography variant="button" color="text" fontWeight="regular">
             ¿No tienes una cuenta?{" "}
@@ -180,6 +175,7 @@ function SignIn() {
             </SoftTypography>
           </SoftTypography>
         </SoftBox>
+        */}
       </SoftBox>
 
       <Snackbar
