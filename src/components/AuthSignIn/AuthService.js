@@ -1,13 +1,19 @@
+import { jwtDecode } from "jwt-decode";
+
 export const loginUser = async (credentials) => {
-  const API_URL = "https://bituin-fastapi-data.azurewebsites.net/users/login";
+  const API_URL = "https://endocrinea-fastapi-dataprocessing.azurewebsites.net/login";
+
+  const params = new URLSearchParams({
+    email: credentials.email,
+    password: credentials.password,
+  });
 
   try {
-    const response = await fetch(API_URL, {
+    const response = await fetch(`${API_URL}?${params.toString()}`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Accept": "application/json",
       },
-      body: JSON.stringify(credentials),
     });
 
     if (!response.ok) {
@@ -16,14 +22,14 @@ export const loginUser = async (credentials) => {
     }
 
     const data = await response.json();
-    const accessToken = data.data.access_token;
+    const accessToken = data.access_token;
 
     if (!accessToken) {
       throw new Error("No se recibió un token válido del servidor.");
     }
 
     const userResponse = await fetch(
-      "https://bituin-fastapi-data.azurewebsites.net/users/profile",
+      `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/users/${jwtDecode(accessToken).sub}`,
       {
         method: "GET",
         headers: {
@@ -39,9 +45,11 @@ export const loginUser = async (credentials) => {
     const userData = await userResponse.json();
 
     const authData = {
-      name: userData.name,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
       email: userData.email,
       token: accessToken,
+      role: userData.role,
     };
     localStorage.setItem("authData", JSON.stringify(authData));
 
