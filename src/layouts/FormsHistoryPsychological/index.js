@@ -2,11 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 // @mui material components
 import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card"; // Importación de Card
 
@@ -22,20 +17,17 @@ import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 
-// Función para enviar los datos del formulario
-import { sendFormData } from "./sendFormData";
 // Global style textarea
 import "layouts/TextareaStyles.css";
-const API_BASE_URL = "https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients";
+const API_BASE_URL = "https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients";
 
 function ClinicalForm() {
   const location = useLocation();
-  const patient = location.state?.patient; // Obtenemos el ID del paciente desde la navegación
+  const patient = location.state?.patient;
   const [formData, setFormData] = useState({
     medicalHistory: {
-      // Sección de antecedentes médicos
-      AHF: "", // Historial familiar
-      PA: "", // Condiciones médicas
+      AHF: "",
+      PA: "",
     },
     substanceAbuse: "",
     lifestyle: {
@@ -58,24 +50,26 @@ function ClinicalForm() {
       diagnosticImpression: "",
     },
   });
-  // 📌 Estados adicionales para API
+
   const [psychologyRecords, setPsychologyRecords] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // 📌 Obtener historial psicológico con `GET`
   useEffect(() => {
     if (!patient?.id) return;
 
     setLoading(true);
-    fetch(`${API_BASE_URL}/${patient.id}/psychology_records`)
+    fetch(`${API_BASE_URL}/${patient.id}/psychology_records/`)
       .then((response) => {
         if (!response.ok) throw new Error("Error al obtener historial psicológico.");
         return response.json();
       })
       .then((data) => {
-        setPsychologyRecords(data);
+        // 🔹 Ordenar los registros por fecha (más reciente primero)
+        const sortedRecords = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        setPsychologyRecords(sortedRecords);
       })
+
       .catch((error) => {
         setError(error.message);
       })
@@ -87,7 +81,6 @@ function ClinicalForm() {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    // Manejo para campos anidados con "." en el nombre
     if (name.includes(".")) {
       const [section, field] = name.split(".");
       setFormData((prevData) => ({
@@ -115,7 +108,7 @@ function ClinicalForm() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/${patient.id}/psychology_records`, {
+      const response = await fetch(`${API_BASE_URL}/${patient.id}/psychology_records/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -143,17 +136,35 @@ function ClinicalForm() {
       });
       console.log("Datos a enviar:", formData);
 
-      // 📌 Refrescar historial después del envío
-      const updatedRecords = await fetch(`${API_BASE_URL}/${patient.id}/psychology_records`);
+      // 📌 Refrescar historial después del envío!!!!!
+      const updatedRecords = await fetch(`${API_BASE_URL}/${patient.id}/psychology_records/`);
       const newData = await updatedRecords.json();
-      setPsychologyRecords(newData);
+
+      // 🔹 Ordenar los registros después de obtener los nuevos datos
+      const sortedRecords = newData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      setPsychologyRecords(sortedRecords);
     } catch (error) {
       alert(error.message);
     }
 
     setLoading(false);
   };
+  const formatDate = (utcDate) => {
+    if (!utcDate) return "Fecha no disponible";
 
+    const date = new Date(utcDate);
+    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+
+    return localDate.toLocaleString("es-ES", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    });
+  };
   const generateJSON = () => {
     const jsonData = {
       medicalHistory: formData.medicalHistory,
@@ -175,7 +186,7 @@ function ClinicalForm() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const [expandedRecord, setExpandedRecord] = useState(null);
-  const [visibleRecords, setVisibleRecords] = useState(10); // Muestra los primeros 10 registros
+  const [visibleRecords, setVisibleRecords] = useState(10);
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -198,21 +209,6 @@ function ClinicalForm() {
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
   };
 
   const handleReset = () => {
@@ -515,23 +511,6 @@ function ClinicalForm() {
           </SoftBox>
         </form>
       )}
-      {/** 
-        <Grid item xs={12}>
-          <Button
-            variant="contained"
-            type="submit"
-            color="primary"
-            fullWidth
-            sx={{
-              mt: 3,
-              backgroundColor: "#183A64",
-              "&:hover": { backgroundColor: "#183A64" },
-              color: "white !important",
-            }}
-          >
-            Enviar
-          </Button>
-        </Grid>*/}
 
       {/* Stepper */}
       <Stepper activeStep={activeStep}>
@@ -587,8 +566,9 @@ function ClinicalForm() {
 
                 {/* 📌 Mostrar primeros datos clave */}
                 <SoftTypography variant="body2">
-                  <strong>Fecha:</strong> {new Date(record.created_at).toLocaleDateString()}
+                  <strong>Fecha:</strong> {formatDate(record.created_at)}
                 </SoftTypography>
+
                 <SoftTypography variant="body2">
                   <strong>Antecedentes Heredofamiliares (AHF):</strong>{" "}
                   {record.medicalHistory.AHF || "No especificado"}

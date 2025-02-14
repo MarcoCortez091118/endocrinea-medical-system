@@ -13,20 +13,38 @@ function NoteDisplay({ note, expandedNoteId, onToggle }) {
     { id: "prognostic", label: "6. Pronóstico *" },
   ];
 
+  // 🔹 Función para convertir fecha UTC a la hora local
+  const formatDate = (utcDate) => {
+    if (!utcDate) return "Fecha no disponible";
+
+    // Crear objeto de fecha en UTC
+    const date = new Date(utcDate);
+
+    // 🔹 Ajustar manualmente la hora a la zona local
+    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+
+    // 🔹 Formatear la fecha correctamente
+    return localDate.toLocaleString("es-ES", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false, // ✅ Formato de 24 horas
+    });
+  };
+
   return (
     <SoftBox sx={{ p: 3, mb: 3, border: "1px solid #ccc", borderRadius: "4px" }}>
+      {/* 🔹 Mostrar fecha correctamente convertida a la hora local */}
       <SoftBox sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <SoftTypography variant="h6">
-          Fecha de creación: {new Date(note.created_at).toLocaleString("es-ES", {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit"
-          })}
+          Fecha de creación: {formatDate(note.created_at)}
         </SoftTypography>
       </SoftBox>
+
+      {/* 🔹 Información de la nota */}
       <SoftBox
         sx={{
           display: "grid",
@@ -49,11 +67,15 @@ function NoteDisplay({ note, expandedNoteId, onToggle }) {
                 border: "1px solid #ddd",
               }}
             >
-              <SoftTypography>{note[field.id]}</SoftTypography>
+              <SoftTypography>
+                {note[field.id] && note[field.id].trim() !== "" ? note[field.id] : "No especificado"}
+              </SoftTypography>
             </SoftBox>
           </SoftBox>
         ))}
       </SoftBox>
+
+      {/* 🔹 Botón para expandir/cerrar detalles */}
       <SoftBox mt={2} sx={{ textAlign: "right" }}>
         <button
           style={{
