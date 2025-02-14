@@ -25,10 +25,12 @@ import HistoryIcon from "@mui/icons-material/History";
 import PatientDetails from "layouts/patientFiles/patientFiles";
 import DoctorRegistrationForm from "layouts/registro-doctores";
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
-// import ProtectedRoute from "components/ProtectedRoutes/ProtectedRoute";
+import ProtectedRoute from "components/ProtectedRoutes/ProtectedRoute";
+import { useAuth } from "context/AuthContext";
 
-const routes = /*(isAuthenticated) =>*/[
-  {/*
+const routes = (isAuthenticated, userRole) => {
+  const baseRoutes = [
+    {/*
     type: "collapse",
     name: "Dashboard",
     key: "dashboard",
@@ -40,176 +42,183 @@ const routes = /*(isAuthenticated) =>*/[
       /*</ProtectedRoute>
     ),
     noCollapse: true,*/
-  },
-  {
-    type: "collapse",
-    name: "Pacientes",
-    key: "tables",
-    route: "/tables",
-    icon: <Office size="12px" />,
-    component: (
-      /*<ProtectedRoute>*/
-      <Tables />
-      /*</ProtectedRoute>*/
-    ),
-    noCollapse: true,
-  },
-  {
-    type: "collapse",
-    name: "Nuevo registro",
-    key: "NuevoRegistro",
-    route: "/NuevoRegistro",
-    icon: <HistoryIcon size="12px" />,
-    component: (
-      /*<ProtectedRoute>*/
-      <NuevoRegistro />
-      /*</ProtectedRoute>*/
-    ),
-    //noCollapse: true,
-  },
-  //{
-  //type: "collapse",
-  //name: "HCP",
-  //key: "ClinicalForm",
-  //route: "/ClinicalForm",
-  //icon: <HistoryIcon size="12px" />,
-  //component: (
-  /*<ProtectedRoute>*/
-  //<ClinicalForm />
-  /*</ProtectedRoute>*/
-  // ),
-  //noCollapse: true,
-  // },
-  // {
-  //  type: "collapse",
-  //  name: "HCN",
-  //  key: "HistorialNutricional",
-  //  route: "/HistorialNutricional",
-  //  icon: <HistoryIcon size="12px" />,
-  //   component: (
-  /*<ProtectedRoute>*/
-  //   <HistorialNutricional />
-  /*</ProtectedRoute>*/
-  //  ),
-  //  noCollapse: true,
-  // },
-  {
+    },
+    {
+      type: "collapse",
+      name: "Pacientes",
+      key: "tables",
+      route: "/tables",
+      icon: <Office size="12px" />,
+      component: (
+        <ProtectedRoute>
+          <Tables />
+        </ProtectedRoute>
+      ),
+      noCollapse: true,
+    },
+    {
+      type: "collapse",
+      name: "Nuevo registro",
+      key: "NuevoRegistro",
+      route: "/NuevoRegistro",
+      icon: <HistoryIcon size="12px" />,
+      component: (
+        <ProtectedRoute>
+          <NuevoRegistro />
+        </ProtectedRoute>
+      ),
+      //noCollapse: true,
+    },
+    //{
     //type: "collapse",
-    //name: "Nota Nutricional",
-    key: "NotaNutricional",
-    route: "/NotaNutricional",
+    //name: "HCP",
+    //key: "ClinicalForm",
+    //route: "/ClinicalForm",
     //icon: <HistoryIcon size="12px" />,
-    component: (
-      /*<ProtectedRoute>*/
-      <NotaNutricional />
-      /*</ProtectedRoute>*/
-    ),
-    // noCollapse: true,
-  },
-  {
+    //component: (
+    /*<ProtectedRoute>*/
+    //<ClinicalForm />
+    /*</ProtectedRoute>*/
+    // ),
+    //noCollapse: true,
+    // },
+    // {
     //  type: "collapse",
-    // name: "Historial pacientes",
-    key: "PatientDetails",
-    route: "/PatientDetails",
-    //icon: <HistoryIcon size="12px" />,
-    component: (
-      /*<ProtectedRoute>*/
-      <PatientDetails />
-      /*</ProtectedRoute>*/
-    ),
-    //noCollapse: true,
-  },
-  // {
-  //   type: "collapse",
-  //   name: "HCM",
-  //   key: "HistorialClinico",
-  //   route: "/HistorialClinico",
-  //   icon: <HistoryIcon size="12px" />,
-  //   component: (
-  /*<ProtectedRoute>*/
-  //    <HistorialClinico />
-  /*</ProtectedRoute>*/
-  //   ),
-  //   noCollapse: true,
-  // },
+    //  name: "HCN",
+    //  key: "HistorialNutricional",
+    //  route: "/HistorialNutricional",
+    //  icon: <HistoryIcon size="12px" />,
+    //   component: (
+    /*<ProtectedRoute>*/
+    //   <HistorialNutricional />
+    /*</ProtectedRoute>*/
+    //  ),
+    //  noCollapse: true,
+    // },
+    {
+      //type: "collapse",
+      //name: "Nota Nutricional",
+      key: "NotaNutricional",
+      route: "/NotaNutricional",
+      //icon: <HistoryIcon size="12px" />,
+      component: (
+        /*<ProtectedRoute>*/
+        <NotaNutricional />
+        /*</ProtectedRoute>*/
+      ),
+      // noCollapse: true,
+    },
+    {
+      //  type: "collapse",
+      // name: "Historial pacientes",
+      key: "PatientDetails",
+      route: "/PatientDetails",
+      //icon: <HistoryIcon size="12px" />,
+      component: (
+        /*<ProtectedRoute>*/
+        <PatientDetails />
+        /*</ProtectedRoute>*/
+      ),
+      //noCollapse: true,
+    },
+    // {
+    //   type: "collapse",
+    //   name: "HCM",
+    //   key: "HistorialClinico",
+    //   route: "/HistorialClinico",
+    //   icon: <HistoryIcon size="12px" />,
+    //   component: (
+    /*<ProtectedRoute>*/
+    //    <HistorialClinico />
+    /*</ProtectedRoute>*/
+    //   ),
+    //   noCollapse: true,
+    // },
 
-  {
-    // type: "collapse",
-    //name: "Nota Clínica Médica",
-    key: "NotaClinico",
-    route: "/nota-Clinica",
-    //icon: <HistoryIcon size="12px" />,
-    component: (
-      /*<ProtectedRoute>*/
-      <NotaClinico />
-      /*</ProtectedRoute>*/
-    ),
-    //noCollapse: true,
-  },
-  {
-    type: "collapse",
-    name: "Agenda",
-    key: "Agenda",
-    route: "/Agenda",
-    icon: <HistoryIcon size="12px" />,
-    component: (
-      /*<ProtectedRoute>*/
-      <Agenda />
-      /*</ProtectedRoute>*/
-    ),
-    noCollapse: true,
-  },
-  {
-    type: "collapse",
-    name: "Médicos",
-    key: "RegistroDoctores",
-    route: "/RegistroDoctores",
-    icon: <LocalHospitalIcon size="12px" />,
-    component: (
-      /*<ProtectedRoute>*/
-      <DoctorRegistrationForm />
-      /*</ProtectedRoute>*/
-    ),
-    noCollapse: true,
-  },
-  { type: "title", title: "Account Pages", key: "account-pages" },
-  /*...(isAuthenticated
-    ? 
-    [
-  {
-    type: "collapse",
-    name: "Perfil",
-    key: "profile",
-    route: "/profile",
-    icon: <CustomerSupport size="12px" />,
-    component: (
-      <ProtectedRoute>
-      <Profile />
-      </ProtectedRoute>
-    ),
-    noCollapse: true,
-  },
-  ]
-  : [
-  {
-    type: "collapse",
-    name: "Iniciar sesión",
-    key: "sign-in",
-    route: "/authentication/sign-in",
-    icon: <Document size="12px" />,
-    component: <SignIn />,
-    noCollapse: true,
-  },
-  {
-    type: "collapse",
-    name: "Registrarme",
-    key: "sign-up",
-    route: "/authentication/sign-up",
-    icon: <SpaceShip size="12px" />,
-    component: <SignUp />,
-    noCollapse: true,
-  },
-  ],),*/
-];
+    {
+      // type: "collapse",
+      //name: "Nota Clínica Médica",
+      key: "NotaClinico",
+      route: "/nota-Clinica",
+      //icon: <HistoryIcon size="12px" />,
+      component: (
+        /*<ProtectedRoute>*/
+        <NotaClinico />
+        /*</ProtectedRoute>*/
+      ),
+      //noCollapse: true,
+    },
+    {
+      type: "collapse",
+      name: "Agenda",
+      key: "Agenda",
+      route: "/Agenda",
+      icon: <HistoryIcon size="12px" />,
+      component: (
+        <ProtectedRoute>
+          <Agenda />
+        </ProtectedRoute>
+      ),
+      noCollapse: true,
+    },
+  ];
+  if (userRole === "administrador") {
+    baseRoutes.push({
+      type: "collapse",
+      name: "Médicos",
+      key: "RegistroDoctores",
+      route: "/registro-doctores",
+      icon: <LocalHospitalIcon size="12px" />,
+      component: (
+        <ProtectedRoute>
+          <DoctorRegistrationForm />
+        </ProtectedRoute>
+      ),
+      noCollapse: true,
+    });
+  }
+  return [
+    ...baseRoutes,
+    { type: "title", title: "Account Pages", key: "account-pages" },
+    ...(isAuthenticated
+      ? [
+        {
+          type: "collapse",
+          name: "Perfil",
+          key: "profile",
+          route: "/profile",
+          icon: <CustomerSupport size="12px" />,
+          component: (
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          ),
+          noCollapse: true,
+        },
+      ]
+      : [
+        {
+          type: "collapse",
+          name: "Iniciar sesión",
+          key: "sign-in",
+          route: "/authentication/sign-in",
+          icon: <Document size="12px" />,
+          component: <SignIn />,
+          noCollapse: true,
+        },
+        /*
+        {
+          type: "collapse",
+          name: "Registrarme",
+          key: "sign-up",
+          route: "/authentication/sign-up",
+          icon: <SpaceShip size="12px" />,
+          component: <SignUp />,
+          noCollapse: true,
+        },
+        */
+      ]),
+  ];
+};
 
 export default routes;
