@@ -18,7 +18,7 @@ import routes from "routes";
 
 // Soft UI Dashboard React contexts
 import { setMiniSidenav, useSoftUIController } from "context";
-// import { useAuth } from "context/AuthContext";
+import { useAuth } from "context/AuthContext";
 
 // Images
 import brand from "assets/images/logo-ct.png";
@@ -28,14 +28,16 @@ export default function App() {
   const { miniSidenav, direction, layout, sidenavColor } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
   const { pathname } = useLocation();
-  /* const { isAuthenticated } = useAuth(); */
+  const { isAuthenticated, userData } = useAuth();
   const [dynamicRoutes, setDynamicRoutes] = useState([]);
 
   useEffect(() => {
-    console.log(dynamicRoutes);
-    const generatedRoutes = routes/*(isAuthenticated)*/;
-    setDynamicRoutes(generatedRoutes);
-  }, [/*isAuthenticated*/]);
+    if (isAuthenticated !== null) { // Evitar que se renderice con isAuthenticated en null
+      const generatedRoutes = routes(isAuthenticated, userData?.role);
+      setDynamicRoutes(generatedRoutes);
+    }
+  }, [isAuthenticated, userData?.role]);
+
 
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
@@ -94,7 +96,7 @@ export default function App() {
       )}
       <Routes>
         {getRoutes(dynamicRoutes)}
-        <Route path="*" element={<Navigate to="/tables" />} />
+        <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
       </Routes>
     </ThemeProvider>
   );
