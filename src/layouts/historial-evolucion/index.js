@@ -21,8 +21,9 @@ function HistorialEvolucion({ patientId }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const apiUrl = `https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/${patientId}/psychology_notes`;
+  const apiUrl = `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patientId}/psychology_notes/`;
 
+  // 🔹 Cargar las notas al inicio en orden descendente
   useEffect(() => {
     const fetchNotes = async () => {
       try {
@@ -31,7 +32,11 @@ function HistorialEvolucion({ patientId }) {
           throw new Error(`Error HTTP: ${response.status}`);
         }
         const data = await response.json();
-        setNotes(data); // Guardamos las notas obtenidas
+
+        // 🔹 Ordenar notas por fecha de más reciente a más antigua
+        const sortedNotes = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+        setNotes(sortedNotes);
       } catch (err) {
         setError("Error al cargar las notas");
       } finally {
@@ -44,6 +49,7 @@ function HistorialEvolucion({ patientId }) {
     }
   }, [patientId]);
 
+  // 🔹 Manejo del formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -52,25 +58,50 @@ function HistorialEvolucion({ patientId }) {
     }));
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const newNote = {
-      id: notes.length + 1,
-      date: new Date().toLocaleString(),
-      ...formData,
-    };
-    setNotes((prevNotes) => [newNote, ...prevNotes]);
-    setFormData({
-      presentation: "",
-      evolution: "",
-      notes: "",
-      tasks: "",
-      comments: "",
-      prognostic: "",
-    });
-    console.log("Datos a enviar:", formData);
+  // 🔹 Enviar la nueva nota a la API y actualizar UI en orden descendente
+  const handleSubmit = async (event) => {
+    if (event) event.preventDefault(); // ✅ Evita la recarga de la página
+    console.log("📌 Datos a enviar:", formData);
+
+    if (!patientId) {
+      alert("⚠️ Error: No se ha seleccionado un paciente.");
+      return;
+    }
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error al guardar la nota: ${response.statusText}`);
+      }
+
+      const newNote = await response.json(); // 📌 Recibir la nueva nota guardada
+      console.log("✅ Nota guardada con éxito:", newNote);
+
+      // 📌 Agregar la nueva nota en la primera posición
+      setNotes((prevNotes) => [newNote, ...prevNotes]);
+
+      // 📌 Resetear el formulario después de guardar
+      setFormData({
+        presentation: "",
+        evolution: "",
+        notes: "",
+        tasks: "",
+        comments: "",
+        prognostic: "",
+      });
+
+    } catch (error) {
+      console.error("❌ Error en la petición:", error);
+      alert("❌ Hubo un error al guardar la nota.");
+    }
   };
 
+  // 🔹 Expandir/Cerrar nota en la UI
   const handleToggle = (id) => {
     setExpandedNoteId(id === expandedNoteId ? null : id);
   };
@@ -132,6 +163,7 @@ function HistorialEvolucion({ patientId }) {
     </SoftBox>
   );
 }
+
 HistorialEvolucion.propTypes = {
   patientId: PropTypes.string.isRequired,
 };
