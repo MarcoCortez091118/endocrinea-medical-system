@@ -36,13 +36,17 @@ import SoftTypography from "components/SoftTypography";
 // Global style textarea
 import "layouts/TextareaStyles.css";
 import NutritionRecords from "./nota-historial-nutricion";
+import { useLocation } from "react-router-dom";
 
 // Libreria gluestacks
 
-function HistorialNutricional({ patientId }) {
+function HistorialNutricional() {
   {
     /* Variables */
   }
+  const location = useLocation();
+  const patient = location.state?.patient; // Asegurar que `patient` se obtiene correctamente
+
   const [formData, setFormData] = useState({
     familyHistory: {
       Diabetes: {
@@ -59,14 +63,14 @@ function HistorialNutricional({ patientId }) {
         "Paternal Uncles": false,
         "Maternal Uncles": false,
       },
-      "High Cholesterol": {
+      High_Cholesterol: {
         Mother: false,
         Father: false,
         Siblings: false,
         "Paternal Uncles": false,
         "Maternal Uncles": false,
       },
-      "Heart Attacks": {
+      Heart_Attacks: {
         Mother: false,
         Father: false,
         Siblings: false,
@@ -89,7 +93,7 @@ function HistorialNutricional({ patientId }) {
     exerciseDaysPerWeek: "",
     exerciseIntensity: "",
 
-    sleepInsomnia: false,
+    sleepInsomnia: "",
     sleepHours: "",
 
     medications: "",
@@ -205,13 +209,30 @@ function HistorialNutricional({ patientId }) {
     }
   };
 
-  const [notas, setNotas] = useState([]); // Almacena las notas enviadas
+  const [notas, setRecords] = useState([]); // Almacena las notas enviadas
   const [mostrarNotas, setMostrarNotas] = useState(false); // Controla la visualización de la sección de notas
+  const apiUrl = `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient.id}/nutritional_records/`;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const apiUrl =
-      "https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/10000003/nutrition_records";
+
+    // Agregar fecha local al formData antes de enviarlo
+    const formattedDate = new Date().toLocaleString("es-ES", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false, // Usa formato de 24 horas
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    });
+
+    const formattedFormData = {
+      ...formData,
+      created_at: formattedDate, // Agregar la fecha formateada antes de enviarla
+      timestamp: Date.now(), // También puedes enviar un timestamp para mayor precisión
+    };
 
     try {
       const response = await fetch(apiUrl, {
@@ -219,7 +240,7 @@ function HistorialNutricional({ patientId }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formattedFormData),
       });
 
       if (!response.ok) {
@@ -231,12 +252,10 @@ function HistorialNutricional({ patientId }) {
 
       alert("Historial guardado correctamente");
 
-      setNotas((prevNotas) => [
-        { id: result.id, created_at: new Date().toISOString(), ...formData },
-        ...prevNotas,
-      ]);
-
+      //setNotas((prevNotas) => [result, ...prevNotas]);
+      setRecords((prevRecords) => [result, ...prevRecords]);
       setMostrarNotas(true);
+
       // Limpiar el formulario
       setFormData({
         familyHistory: {},
@@ -288,11 +307,11 @@ function HistorialNutricional({ patientId }) {
         surgeryHistory: [],
         surgeryOther: "",
       });
-      console.log("Datos a enviar:", formData);
+
+      console.log("Datos enviados a la API:", formattedFormData);
     } catch (error) {
       console.error("Error en la solicitud:", error);
       alert("Hubo un error al guardar el historial. Inténtalo nuevamente.");
-      console.log("Datos a enviar:", formData);
     }
   };
 
@@ -329,15 +348,12 @@ function HistorialNutricional({ patientId }) {
   const diseaseTranslations = {
     Diabetes: "Diabetes",
     Hypertension: "Hipertensión",
-    "High Cholesterol": "Colesterol Alto",
-    "Heart Attacks": "Infartos Cardíacos",
+    High_Cholesterol: "Colesterol Alto",
+    Heart_Attacks: "Infartos Cardíacos",
   };
 
   const handleInputChange = (event, measurement) => {
-    setFormData({
-      ...formData,
-      [measurement]: event.target.value,
-    });
+    setFormData({ ...formData, [measurement]: event.target.value });
   };
 
   const handleNewMeasurementChange = (event, rowIndex, colIndex, tableType) => {
@@ -360,17 +376,7 @@ function HistorialNutricional({ patientId }) {
     }
   };
 
-  const addColumn = (tableType) => {
-    if (tableType === "mediciones") {
-      const newColumn = Object.keys(visibleFieldsMediciones).map(() => ""); // Nueva columna vacía
-      setColumnsMediciones([...columnsMediciones, newColumn]);
-      setDatesMediciones([...datesMediciones, ""]); // Agregar un campo vacío para la fecha
-    } else if (tableType === "pesos") {
-      const newColumn = Object.keys(visibleFieldsPesos).map(() => ""); // Nueva columna vacía
-      setColumnsPesos((prevColumns) => [...prevColumns, newColumn]);
-      setDatesPesos((prevDates) => [...prevDates, ""]); // Agregar un campo vacío para la fecha
-    }
-  };
+  
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -1374,11 +1380,11 @@ function HistorialNutricional({ patientId }) {
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
                   <TableBody>
                     {/* Fila de Fechas */}
-                    <StyledTableRow>
-                      <StyledTableCell component="th" scope="row">
+                    <TableRow>
+                      <TableCell component="th" scope="row">
                         Fecha
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
+                      </TableCell>
+                      <TableCell align="center">
                         <input
                           type="date"
                           value={formData.weightDates}
@@ -1392,9 +1398,9 @@ function HistorialNutricional({ patientId }) {
                             borderRadius: "4px",
                           }}
                         />
-                      </StyledTableCell>
+                      </TableCell>
                       {datesPesos.map((date, colIndex) => (
-                        <StyledTableCell key={`date-col-${colIndex}`} align="center">
+                        <TableCell key={`date-col-${colIndex}`} align="center">
                           <input
                             type="date"
                             value={date}
@@ -1410,16 +1416,16 @@ function HistorialNutricional({ patientId }) {
                               borderRadius: "4px",
                             }}
                           />
-                        </StyledTableCell>
+                        </TableCell>
                       ))}
-                    </StyledTableRow>
-                    {/* Fila de Medidas */}
-                    {Object.keys(visibleFieldsPesos).map((measurement, rowIndex) => (
-                      <StyledTableRow key={measurement}>
-                        <StyledTableCell component="th" scope="row">
+                    </TableRow>
+                   
+                    {Object.keys(visibleFieldsPesos).map((measurement) => (
+                      <TableRow key={measurement}>
+                        <TableCell component="th" scope="row">
                           {visibleFieldsPesos[measurement]}
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
+                        </TableCell>
+                        <TableCell align="center">
                           <textarea
                             value={formData[measurement]}
                             onChange={(e) => handleInputChange(e, measurement)}
@@ -1429,48 +1435,17 @@ function HistorialNutricional({ patientId }) {
                               border: "1px solid #ccc",
                               borderRadius: "4px",
                             }}
-                            className="global-textarea"
                           />
-                        </StyledTableCell>
-                        {columnsPesos.map((col, colIndex) => (
-                          <StyledTableCell key={`cell-${colIndex}-${rowIndex}`} align="center">
-                            <textarea
-                              type="text"
-                              value={col[rowIndex] || ""}
-                              onChange={(e) =>
-                                handleNewMeasurementChange(e, rowIndex, colIndex, "pesos")
-                              }
-                              style={{
-                                width: "100%",
-                                padding: "8px",
-                                border: "1px solid #ccc",
-                                borderRadius: "4px",
-                              }}
-                              className="global-textarea"
-                            />
-                          </StyledTableCell>
-                        ))}
-                      </StyledTableRow>
+                        </TableCell>
+                  
+                      </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               </TableContainer>
-
-              <SoftBox mt={2}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  style={{ color: "white" }}
-                  onClick={() => addColumn("pesos")}
-                >
-                  Agregar Columna
-                </Button>
-              </SoftBox>
             </SoftBox>
           </SoftBox>
         )}
-
 
         {/* Diagnostico */}
         {activeStep === 6 && (
