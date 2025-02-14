@@ -24,11 +24,29 @@ function NotaClinica() {
     }
   }, [patient_id]);
 
+  // ✅ Función para convertir fecha UTC a la hora local del usuario
+  const formatDate = (utcDate) => {
+    if (!utcDate) return "Fecha no disponible";
+
+    const date = new Date(utcDate);
+    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+
+    return localDate.toLocaleString("es-ES", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false, // Formato 24 horas
+    });
+  };
+
   const fetchNotes = async () => {
     setErrorMessage("");
     try {
       const response = await fetch(
-        `https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/${patient_id}/medical_notes`
+        `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient_id}/medical_notes/`
       );
 
       if (!response.ok) {
@@ -41,11 +59,14 @@ function NotaClinica() {
         throw new Error("La API no devolvió un array válido de notas.");
       }
 
-      const formattedNotes = data.map((note) => ({
-        id: note.id,
-        medicNote: note.medicNote,
-        date: new Date(note.created_at).toLocaleString(),
-      }));
+      const formattedNotes = data
+        .map((note) => ({
+          id: note.id,
+          medicNote: note.medicNote,
+          date: formatDate(note.created_at), // ✅ Convierte la fecha correctamente
+          timestamp: new Date(note.created_at).getTime(), // Para ordenarlo correctamente
+        }))
+        .sort((a, b) => b.timestamp - a.timestamp); // Ordenar por fecha descendente (más reciente primero)
 
       setNotes(formattedNotes);
     } catch (error) {
@@ -75,7 +96,7 @@ function NotaClinica() {
 
     try {
       const response = await fetch(
-        `https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/${patient_id}/medical_notes`,
+        `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient_id}/medical_notes/`,
         {
           method: "POST",
           headers: {
@@ -89,7 +110,17 @@ function NotaClinica() {
         throw new Error(`Error al enviar la nota clínica: ${response.status} (${response.statusText})`);
       }
 
-      await fetchNotes();
+      const createdNote = await response.json();
+
+      const newFormattedNote = {
+        id: createdNote.id,
+        medicNote: createdNote.medicNote,
+        date: formatDate(new Date()), // ✅ Convierte la fecha correctamente
+        timestamp: new Date().getTime(),
+      };
+
+      setNotes((prevNotes) => [newFormattedNote, ...prevNotes]);
+
       setFormData({ medicNote: "" });
     } catch (error) {
       console.error("⚠️ Error al enviar la nota clínica:", error);
@@ -98,7 +129,7 @@ function NotaClinica() {
   };
 
   const handleToggle = (id) => {
-    setExpandedNoteId(id === expandedNoteId ? null : id);
+    setExpandedNoteId((prevId) => (prevId === id ? null : id));
   };
 
   return (
