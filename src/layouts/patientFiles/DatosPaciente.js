@@ -947,29 +947,7 @@ const PatientDetailsForm = () => {
                 className="global-textarea"
               />
             </Grid>
-            {/* Documento */}
-            <Grid item xs={12} sm={6}>
-              <label
-                htmlFor="document"
-                style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
-              >
-                Documento
-              </label>
-              <input
-                type="file"
-                id="document"
-                name="document"
-                accept=".pdf,.doc,.docx,.jpg,.png"
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  setPatientData({
-                    ...patientData,
-                    document: file, // Guardamos el archivo en el estado
-                  });
-                }}
-                className="global-input"
-              />
-            </Grid>
+           
           </Grid>
         </SoftBox>
       )}

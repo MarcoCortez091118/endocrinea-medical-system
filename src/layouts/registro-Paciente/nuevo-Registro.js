@@ -14,7 +14,6 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 const newRegisterForm = () => {
   const [patientData, setPatientData] = useState({
-    id: "",
     first_name: "",
     last_name: "",
     email: "",
@@ -104,7 +103,6 @@ const newRegisterForm = () => {
       if (response.ok) {
         alert("Paciente registrado exitosamente.");
         setPatientData({
-          id: "",
           first_name: "",
           last_name: "",
           email: "",
@@ -369,24 +367,6 @@ const newRegisterForm = () => {
                 Datos administrativos
               </Typography>
               <Grid container spacing={2}>
-                {/* ID */}
-                <Grid item xs={12} sm={6}>
-                  <label
-                    htmlFor="id"
-                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
-                  >
-                    ID
-                  </label>
-                  <textarea
-                    id="id"
-                    name="id"
-                    value={patientData.id}
-                    onChange={handleChange}
-                    rows="1"
-                    className="global-textarea"
-                  />
-                </Grid>
-
                 {/* Estado del paciente */}
                 <Grid item xs={12} sm={6}>
                   <label
@@ -996,29 +976,7 @@ const newRegisterForm = () => {
                     className="global-textarea"
                   />
                 </Grid>
-                {/* Documento */}
-                <Grid item xs={12} sm={6}>
-                  <label
-                    htmlFor="document"
-                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
-                  >
-                    Documento
-                  </label>
-                  <input
-                    type="file"
-                    id="document"
-                    name="document"
-                    accept=".pdf,.doc,.docx,.jpg,.png"
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      setPatientData({
-                        ...patientData,
-                        document: file, // Guardamos el archivo en el estado
-                      });
-                    }}
-                    className="global-input"
-                  />
-                </Grid>
+                
               </Grid>
             </SoftBox>
           )}
