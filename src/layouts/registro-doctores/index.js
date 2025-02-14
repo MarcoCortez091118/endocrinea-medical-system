@@ -6,6 +6,9 @@ import SoftTypography from "components/SoftTypography";
 import Table from 'examples/Tables/Table';
 import doctorsTableData from './doctorsTableData';
 import { registerDoctor } from './apiService';
+import { apiConsult } from './apiConsult';
+import { apiUpdate } from './apiUpdate';
+import { deleteDoctor } from './apiDelete';
 import {
     Container,
     Card,
@@ -44,7 +47,6 @@ function DoctorRegistrationForm() {
         confirmPassword: ''
     });
 
-    // Estado para el horario de servicio (sin valores por defecto)
     const [schedule, setSchedule] = useState({
         mondayFriday: { works: false, start: '', end: '' },
         saturday: { works: false, start: '', end: '' },
@@ -114,6 +116,101 @@ function DoctorRegistrationForm() {
             setOpenAlert(true); // Mostrar la alerta
         }
     };
+
+    const handleConsultDoctor = async () => {
+        if (!formValues.id.trim()) {
+            setAlertMessage("Ingrese un ID de médico para consultar.");
+            setAlertType("warning");
+            setOpenAlert(true);
+            return;
+        }
+
+        try {
+            const doctorData = await apiConsult(formValues.id);
+
+            setFormValues((prevValues) => ({
+                ...prevValues,
+                firstName: doctorData.firstName || "",
+                lastName: doctorData.lastName || "",
+                email: doctorData.email || "",
+                phone: doctorData.phone || "",
+                address: doctorData.address || "",
+                city: doctorData.city || "",
+                postalCode: doctorData.postalCode || "",
+                neighborhood: doctorData.neighborhood || "",
+                nationality: doctorData.nationality || "",
+                category: doctorData.category || "",
+                role: doctorData.role || ""
+            }));
+            setSchedule({
+                mondayFriday: {
+                    works: doctorData.schedule?.mondayFriday?.works ?? false,
+                    start: doctorData.schedule?.mondayFriday?.start || "",
+                    end: doctorData.schedule?.mondayFriday?.end || ""
+                },
+                saturday: {
+                    works: doctorData.schedule?.saturday?.works ?? false,
+                    start: doctorData.schedule?.saturday?.start || "",
+                    end: doctorData.schedule?.saturday?.end || ""
+                },
+                sunday: {
+                    works: doctorData.schedule?.sunday?.works ?? false,
+                    start: doctorData.schedule?.sunday?.start || "",
+                    end: doctorData.schedule?.sunday?.end || ""
+                }
+            });
+
+            setAlertMessage("✅ Médico encontrado.");
+            setAlertType("success");
+        } catch (error) {
+            setAlertMessage("❌ No se encontró el médico.");
+            setAlertType("error");
+        } finally {
+            setOpenAlert(true);
+        }
+    };
+
+    const handleUpdateDoctor = async () => {
+        if (!formValues.id.trim()) {
+            setAlertMessage("⚠️ Ingrese un ID de médico para actualizar.");
+            setAlertType("warning");
+            setOpenAlert(true);
+            return;
+        }
+
+        const updatedData = {
+            ...formValues,
+            schedule
+        };
+
+        try {
+            await apiUpdate(formValues.id, updatedData);
+
+            setAlertMessage("✅ Médico actualizado con éxito.");
+            setAlertType("success");
+        } catch (error) {
+            setAlertMessage("❌ Error al actualizar el médico.");
+            setAlertType("error");
+        } finally {
+            setOpenAlert(true);
+        }
+    };
+
+    const handleDeleteDoctor = async () => {
+        try {
+            const response = await deleteDoctor(formValues.id);
+            setAlertMessage("✅ Médico eliminado con éxito");
+            setAlertType("success");
+            setOpenAlert(true);
+            console.log("📋 Respuesta API:", response);
+        } catch (error) {
+            setAlertMessage("❌ Error al eliminar el médico");
+            setAlertType("error");
+            setOpenAlert(true);
+            console.error("❌ Error en la eliminación:", error);
+        }
+    };
+
 
     return (
         <DashboardLayout>
@@ -488,6 +585,7 @@ function DoctorRegistrationForm() {
                                     </Button>
                                     <Button
                                         variant="contained"
+                                        onClick={handleConsultDoctor}
                                         sx={{
                                             bgcolor: "#2e7d32",
                                             color: "#ffffff",
@@ -499,6 +597,7 @@ function DoctorRegistrationForm() {
                                     </Button>
                                     <Button
                                         variant="contained"
+                                        onClick={handleUpdateDoctor}
                                         sx={{
                                             bgcolor: "#f9a825",
                                             color: "#ffffff",
@@ -510,6 +609,7 @@ function DoctorRegistrationForm() {
                                     </Button>
                                     <Button
                                         variant="contained"
+                                        onClick={handleDeleteDoctor}
                                         sx={{
                                             bgcolor: "#d32f2f",
                                             color: "#ffffff",
