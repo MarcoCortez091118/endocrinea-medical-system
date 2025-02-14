@@ -60,22 +60,25 @@ function NotaNutricional() {
   const [error, setError] = useState(null);
   const [notas, setNotas] = useState([]);
   const [expandedNotes, setExpandedNotes] = useState({});
-  const apiUrl = `https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/${patient.id}/nutrition_notes`;
-  useEffect(() => {
-    const fetchNotas = async () => {
-      try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-          throw new Error("Error al obtener las notas");
-        }
-        const data = await response.json();
-        setNotas(data);
-      } catch (error) {
-        console.error("Error al obtener los registros: ", error);
+  const apiUrl = `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient.id}/nutritional_notes/`;
+  const fetchNotas = async () => {
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error("Error al obtener las notas");
       }
-    };
+      const data = await response.json();
+      setNotas(data);
+    } catch (error) {
+      console.error("Error al obtener los registros: ", error);
+    }
+  };
+  
+  // 🚀 Llamar la función en `useEffect`
+  useEffect(() => {
     fetchNotas();
-  }, [apiUrl]);
+  }, []);
+  
 
   const toggleExpand = (index) => {
     setExpandedNotes(expandedNotes === index ? null : index);
@@ -138,7 +141,7 @@ function NotaNutricional() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -147,16 +150,19 @@ function NotaNutricional() {
         },
         body: JSON.stringify(formData),
       });
-
+  
       if (!response.ok) {
         throw new Error(`Error al enviar datos: ${response.statusText}`);
       }
-
+  
       const result = await response.json();
       console.log("Nota enviada con éxito:", result);
-
+  
       alert("Nota guardada correctamente");
-
+  
+      // 📌 🚀 ACTUALIZAR ESTADO DE NOTAS SIN RECARGAR
+      setNotas((prevNotas) => [result, ...prevNotas]);
+  
       // Limpiar el formulario
       setFormData({
         symptoms: "",
@@ -179,13 +185,13 @@ function NotaNutricional() {
         frequencyStraining: "",
         collation2: "",
       });
-      console.log("Datos a enviar:", formData);
+  
     } catch (error) {
       console.error("Error en la solicitud:", error);
       alert("Hubo un error al guardar la nota. Inténtalo nuevamente.");
-      console.log("Datos a enviar:", formData);
     }
   };
+  
 
   const translations = {
     symptoms: "Síntomas",
@@ -764,7 +770,7 @@ function NotaNutricional() {
             <Typography>No hay notas disponibles.</Typography>
           ) : (
             notas
-              .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+              .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
               .slice(0, visibleNotes)
               .map((nota, index) => (
                 <Card key={index} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
