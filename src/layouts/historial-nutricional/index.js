@@ -45,6 +45,16 @@ function HistorialNutricional(patientId) {
     /* Variables */
   }
   const location = useLocation();
+  const [patient, setPatient] = useState(location.state?.patient || null);
+
+  useEffect(() => {
+    if (!patient) {
+      const storedPatient = localStorage.getItem("selectedPatient");
+      if (storedPatient) {
+        setPatient(JSON.parse(storedPatient));
+      }
+    }
+  }, [patient]);
 
   const [formData, setFormData] = useState({
     familyHistory: {
@@ -210,7 +220,8 @@ function HistorialNutricional(patientId) {
 
   const [notas, setRecords] = useState([]); // Almacena las notas enviadas
   const [mostrarNotas, setMostrarNotas] = useState(false); // Controla la visualización de la sección de notas
-  const apiUrl = `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patientId}/nutritional_records/`;
+  const apiUrl = patient ? `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient.id}/nutritional_records/`
+    : null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
