@@ -1,6 +1,8 @@
 // Importaciones necesarias
 import React, { useState, useEffect } from "react";
 import Card from "@mui/material/Card";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 import {
   TextField,
   MenuItem,
@@ -34,8 +36,14 @@ import MedicalRecordsList from "./MedicalRecordsList";
 
 function HistorialClinico() {
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const location = useLocation();
   const [patient, setPatient] = useState(location.state?.patient || null);
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
 
   useEffect(() => {
     if (!patient) {
@@ -45,40 +53,38 @@ function HistorialClinico() {
       }
     }
   }, [patient]);
-  const [loading, setLoading] = useState(false);
 
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     familyHistory: {
       Diabetes: {
         Mother: false,
         Father: false,
         Siblings: false,
-        "Paternal Uncles": false,
-        "Maternal Uncles": false,
+        Paternal_Uncles: false,
+        Maternal_Uncles: false
       },
       Hypertension: {
         Mother: false,
         Father: false,
         Siblings: false,
-        "Paternal Uncles": false,
-        "Maternal Uncles": false,
+        Paternal_Uncles: false,
+        Maternal_Uncles: false
       },
-      "High Cholesterol": {
+      High_Cholesterol: {
         Mother: false,
         Father: false,
         Siblings: false,
-        "Paternal Uncles": false,
-        "Maternal Uncles": false,
+        Paternal_Uncles: false,
+        Maternal_Uncles: false
       },
-      "Heart Attacks": {
+      Heart_Attacks: {
         Mother: false,
         Father: false,
         Siblings: false,
-        "Paternal Uncles": false,
-        "Maternal Uncles": false,
-      },
+        Paternal_Uncles: false,
+        Maternal_Uncles: false
+      }
     },
-
     smoke: "",
     smokeHistory: "",
     smokeOther: "",
@@ -104,25 +110,26 @@ function HistorialClinico() {
     otherPregnancies: "",
     pregnanciesComplications: [],
     reasonConsultation: [],
-    consultationOther: "",
-  });
+    consultationOther: ""
+  };
+  const [formData, setFormData] = useState(initialFormData);
 
   const diseaseTranslations = {
     Diabetes: "Diabetes",
     Hypertension: "Hipertensión",
-    "High Cholesterol": "Colesterol Alto",
-    "Heart Attacks": "Infartos Cardíacos",
+    High_Cholesterol: "Colesterol alto",
+    Heart_Attacks: "Infartos cardíacos",
   };
 
-  // Maneja el cambio de los checkboxes
   const handleCheckboxChange = (e, disease, familyMember) => {
-    setFormData((prev) => ({
-      ...prev,
+    const { checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
       familyHistory: {
-        ...prev.familyHistory,
+        ...prevData.familyHistory,
         [disease]: {
-          ...prev.familyHistory[disease],
-          [familyMember]: e.target.checked,
+          ...prevData.familyHistory[disease],
+          [familyMember]: checked,
         },
       },
     }));
@@ -214,127 +221,49 @@ function HistorialClinico() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const dataToSend = { ...formData };
-    if (dataToSend.maritalStatus !== "Otros") {
-      delete dataToSend.otherStatus;
-    }
-
-    if (!patient || !patient.id) {
-      alert("Error: No se ha seleccionado un paciente.");
-      return;
-    }
-
-    setLoading(true); // Mostrar estado de carga
-
     try {
+      console.log("Enviando datos:", dataToSend);
+
       const response = await fetch(
-        "https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients//${patient.id}/medical_records",
+        `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient.id}/medical_records/`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Accept": "application/json",
           },
           body: JSON.stringify(dataToSend),
         }
       );
 
-      if (response.ok) {
-        console.log("Historial enviado exitosamente");
-        alert("Historial clínico enviado con éxito.");
+      const responseData = await response.json();
 
-        setFormData({
-          familyHistory: {
-            Diabetes: {
-              Mother: false,
-              Father: false,
-              Siblings: false,
-              "Paternal Uncles": false,
-              "Maternal Uncles": false,
-            },
-            Hypertension: {
-              Mother: false,
-              Father: false,
-              Siblings: false,
-              "Paternal Uncles": false,
-              "Maternal Uncles": false,
-            },
-            "High Cholesterol": {
-              Mother: false,
-              Father: false,
-              Siblings: false,
-              "Paternal Uncles": false,
-              "Maternal Uncles": false,
-            },
-            "Heart Attacks": {
-              Mother: false,
-              Father: false,
-              Siblings: false,
-              "Paternal Uncles": false,
-              "Maternal Uncles": false,
-            },
-          },
-          smoke: "",
-          smokeHistory: "",
-          smokeOther: "",
-          alcohol: "",
-          alcoholHistory: "",
-          alcoholOther: "",
-          drug: "",
-          drugHistory: "",
-          exercise: "",
-          allergicMedicine: "",
-          allergicFood: "",
-          surgery: "",
-          surgeryHistory: [],
-          surgeryOther: "",
-          diagnosedDiseases: [],
-          diagnosedDiseasesOther: "",
-          takeMedications: "",
-          menstruation: "",
-          menstruationTrue: "",
-          menstruationNull: "",
-          menstruationDate: "",
-          pregnancies: "",
-          otherPregnancies: "",
-          pregnanciesComplications: [],
-          reasonConsultation: [],
-          consultationOther: "",
-        });
-
-        // Reiniciar paso en el stepper si es necesario
-        setActiveStep(0);
-      } else {
-        console.error("Error al enviar el historial");
-        alert("Hubo un error al enviar el historial. Inténtalo de nuevo.");
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${responseData.message || "Error en la API"}`);
       }
+      setSnackbarMessage("Historial clínico enviado con éxito.");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
+      setActiveStep(0);
+      setFormData(initialFormData);
     } catch (error) {
-      console.error("Error:", error);
-      alert("Error de conexión con el servidor.");
+      console.error("Error al enviar:", error);
+      setSnackbarMessage(`Hubo un error al enviar: ${error.message}`);
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
-
-    console.log("Datos enviados:", dataToSend);
-    setLoading(false);
   };
 
-  const [isFemale, setIsFemale] = useState(false);
   const [activeStep, setActiveStep] = React.useState(0);
 
-  useEffect(() => {
-    setIsFemale(formData.gender === "Mujer");
-
-    // Si el usuario cambia a "Hombre" estando en "Antecedentes Ginecológicos", lo movemos a "Motivo de consulta"
-    if (activeStep === 4 && formData.gender !== "Mujer") {
-      setActiveStep(4);
-    }
-  }, [formData.gender]);
 
   const steps = [
     "Antecedentes familiares",
     "Antecedentes personales",
     "Antecedentes Médicos",
     "Antecedentes Ginecológico",
-    "Motivo de la consulta", // Siempre está presente
+    "Motivo de la consulta",
   ];
 
   const goToNextStep = () => setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));
@@ -383,7 +312,7 @@ function HistorialClinico() {
             </SoftBox>
 
             <SoftBox mb={4}>
-              <SoftTypography htmlFor="religion" variant="body1" fontWeight="bold" mb={2}>
+              <SoftTypography htmlFor="familyHistory" variant="subtitle1" fontWeight="bold" mb={2}>
                 ¿Alguien de su familia ha sido diagnosticado con alguna de las siguientes
                 enfermedades ?
               </SoftTypography>
@@ -531,17 +460,17 @@ function HistorialClinico() {
                     required
                   >
                     <FormControlLabel
-                      value="1"
+                      value="Sólo en fiestas o reuniones."
                       control={<Radio />}
                       label="Sólo en fiestas o reuniones."
                     />
                     <FormControlLabel
-                      value="2"
+                      value="Al menos una vez a la semana hasta llegar a la embriaguez."
                       control={<Radio />}
                       label="Al menos una vez a la semana hasta llegar a la embriaguez."
                     />
                     <FormControlLabel
-                      value="3"
+                      value="Al menos una vez a la semana sin llegar a la embriaguez."
                       control={<Radio />}
                       label="Al menos una vez a la semana sin llegar a la embriaguez."
                     />
@@ -630,17 +559,17 @@ function HistorialClinico() {
                 required
               >
                 <FormControlLabel
-                  value="1"
+                  value="Al menos 1 día a la semana"
                   control={<Radio />}
                   label="Al menos 1 día a la semana"
                 />
                 <FormControlLabel
-                  value="2"
+                  value="Al menos 2 días a la semana"
                   control={<Radio />}
                   label="Al menos 2 días a la semana"
                 />
-                <FormControlLabel value="3" control={<Radio />} label="3 o más días a la semana" />
-                <FormControlLabel value="4" control={<Radio />} label="No hago ejercicio" />
+                <FormControlLabel value="3 o más días a la semana" control={<Radio />} label="3 o más días a la semana" />
+                <FormControlLabel value="No hago ejercicio" control={<Radio />} label="No hago ejercicio" />
               </RadioGroup>
             </SoftBox>
           </SoftBox>
@@ -656,7 +585,6 @@ function HistorialClinico() {
             </SoftTypography>
 
             <Grid container spacing={2}>
-              {/* Campo: Alergia a medicamentos */}
               <Grid item xs={12} sm={6}>
                 <SoftBox mb={2}>
                   <label
@@ -1121,9 +1049,9 @@ function HistorialClinico() {
                   onChange={handleChange}
                   required
                 >
-                  <FormControlLabel value="1" control={<Radio />} label="Cada 21-30 días" />
-                  <FormControlLabel value="2" control={<Radio />} label="Cada 31-40 días" />
-                  <FormControlLabel value="3" control={<Radio />} label="Tardan más de 40 días" />
+                  <FormControlLabel value="Cada 21-30 días" control={<Radio />} label="Cada 21-30 días" />
+                  <FormControlLabel value="Cada 31-40 días" control={<Radio />} label="Cada 31-40 días" />
+                  <FormControlLabel value="Tardan más de 40 días" control={<Radio />} label="Tardan más de 40 días" />
                 </RadioGroup>
               </SoftBox>
             </SoftBox>
@@ -1233,21 +1161,6 @@ function HistorialClinico() {
             </SoftBox>
           </SoftBox>
         )}
-
-        {/** 
-          <SoftBox mt={2}>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              fullWidth
-              style={{ color: "white" }}
-              onClick={handleSubmit}
-            >
-              Enviar
-            </Button>
-          </SoftBox>*/}
-        {/* Stepper */}
         <Stepper activeStep={activeStep}>
           {steps.map((label) => (
             <Step key={label}>
@@ -1276,16 +1189,24 @@ function HistorialClinico() {
           )}
         </Box>
       </form>
+      {/* Mostrar el historial médico debajo del formulario */}
+      <MedicalRecordsList />
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <MuiAlert
+          onClose={handleCloseSnackbar}
+          severity={snackbarSeverity}
+          elevation={6}
+          variant="filled"
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
 
-      <SoftBox py={3}>
-        {/* Formulario */}
-        <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-          {/** Tu código del formulario aquí... */}
-        </form>
-
-        {/* Mostrar el historial médico debajo del formulario */}
-        <MedicalRecordsList />
-      </SoftBox>
     </SoftBox>
   );
 }

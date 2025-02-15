@@ -1,20 +1,16 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types"; // Importar PropTypes
-import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import StepContent from "@mui/material/StepContent";
-import Button from "@mui/material/Button";
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
+import React, { useState, useEffect } from "react";
+import { Card, Button, Typography, Snackbar, Grid } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import { useLocation } from "react-router-dom";
 
-function MedicalRecordDisplay({ record }) {
-
-    const [loading, setLoading] = useState(false);
+const MedicalRecordsList = () => {
+    const [medicalRecords, setMedicalRecords] = useState([]); // Estado para los registros
+    const [expandedIndex, setExpandedIndex] = useState(null); // Estado para mostrar detalles
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarSeverity, setSnackbarSeverity] = useState("success");
     const location = useLocation();
     const [patient, setPatient] = useState(location.state?.patient || null);
 
@@ -27,200 +23,155 @@ function MedicalRecordDisplay({ record }) {
         }
     }, [patient]);
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-
-        // Validar si el paciente está seleccionado
-        if (!patient || !patient.id) {
-            alert("Error: No se ha seleccionado un paciente.");
-            return;
-        }
-
-        setLoading(true); // Mostrar estado de carga
-
-        try {
-            const apiUrl = `https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/${patient.id}/medical_records`;
-            const response = await fetch(apiUrl);
-
-            if (!response.ok) {
-                throw new Error("Error al obtener los registros médicos");
-            }
-
-            const data = await response.json();
-            console.log("Datos recibidos:", data);
-        } catch (error) {
-            console.error("Error en la solicitud:", error.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    if (!record) return null;
-
-    const [activeStep, setActiveStep] = useState(0);
-
-    const steps = [
-        {
-            label: "Antecedentes Familiares",
-            fields: [
-                { id: "familyHistoryDiabetes", label: "Diabetes", options: ["Mother", "Father", "Siblings", "Paternal Uncles", "Maternal Uncles"] },
-                { id: "familyHistoryHypertension", label: "Hipertensión", options: ["Mother", "Father", "Siblings", "Paternal Uncles", "Maternal Uncles"] },
-                { id: "familyHistoryHighCholesterol", label: "Colesterol Alto", options: ["Mother", "Father", "Siblings", "Paternal Uncles", "Maternal Uncles"] },
-                { id: "familyHistoryHeartAttacks", label: "Ataques al Corazón", options: ["Mother", "Father", "Siblings", "Paternal Uncles", "Maternal Uncles"] },
-            ],
-        },
-        {
-            label: "Hábitos Personales",
-            fields: [
-                { id: "smoke", label: "Fuma", other: "smokeHistory", extra: "smokeOther" },
-                { id: "alcohol", label: "Consume Alcohol", other: "alcoholHistory", extra: "alcoholOther" },
-                { id: "drug", label: "Consumo de Drogas", other: "drugHistory" },
-                { id: "exercise", label: "Ejercicio" },
-            ],
-        },
-        {
-            label: "Historial Médico",
-            fields: [
-                { id: "allergicMedicine", label: "Alergias a Medicamentos" },
-                { id: "allergicFood", label: "Alergias a Alimentos" },
-                { id: "surgery", label: "Cirugías", other: "surgeryHistory", extra: "surgeryOther" },
-                { id: "diagnosedDiseases", label: "Enfermedades Diagnosticadas", other: "diagnosedDiseasesOther" },
-                { id: "takeMedications", label: "Medicamentos Actuales" },
-            ],
-        },
-        {
-            label: "Historial Gineco-Obstétrico",
-            fields: [
-                { id: "menstruation", label: "Menstruación" },
-                { id: "menstruationTrue", label: "Menstruación Regular" },
-                { id: "menstruationNull", label: "Menstruación Ausente" },
-                { id: "menstruationDate", label: "Última Fecha de Menstruación" },
-                { id: "pregnancies", label: "Número de Embarazos", other: "otherPregnancies" },
-                { id: "pregnanciesComplications", label: "Complicaciones en Embarazos" },
-            ],
-        },
-        {
-            label: "Motivo de Consulta",
-            fields: [{ id: "reasonConsultation", label: "Motivo de la Consulta", other: "consultationOther" }],
-        },
-    ].filter((step) => step.fields.length > 0);
-
-
-
-    const handleNext = () => setActiveStep((prev) => prev + 1);
-    const handleBack = () => setActiveStep((prev) => prev - 1);
-    const handleReset = () => setActiveStep(0);
-
-    const formatDate = (isoString) => {
-        if (!isoString) return "Fecha no disponible";
-        const date = new Date(isoString);
-        return date.toLocaleString("es-MX", {
-            timeZone: "America/Mexico_City",
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-        });
-    };
-
-    return (
-        <SoftBox sx={{ p: 3, mb: 3, border: "1px solid #ccc", borderRadius: "4px" }}>
-            <SoftTypography variant="h6" mb={2}>
-                Fecha de Creación: {formatDate(record.created_at)}
-            </SoftTypography>
-
-            <Stepper activeStep={activeStep} orientation="vertical">
-                {steps.map((step, index) => (
-                    <Step key={step.label}>
-                        <StepLabel>{step.label}</StepLabel>
-                        <StepContent>
-                            <SoftBox sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: 3 }}>
-                                {step.fields.map((field) => {
-                                    let value = record[field.id] || "No especificado";
-                                    if (record[field.other]) value += ` (${record[field.other]})`;
-                                    if (record[field.extra]) value += ` (${record[field.extra]})`;
-                                    if (Array.isArray(value)) value = value.length > 0 ? value.join(", ") : "No especificado";
-
-                                    return (
-                                        <SoftBox key={field.id}>
-                                            <label>
-                                                <SoftTypography variant="body1" fontWeight="bold">
-                                                    {field.label}
-                                                </SoftTypography>
-                                            </label>
-                                            <SoftBox sx={{ padding: "8px", background: "#f9f9f9", borderRadius: "4px", border: "1px solid #ddd" }}>
-                                                <SoftTypography>{value}</SoftTypography>
-                                            </SoftBox>
-                                        </SoftBox>
-                                    );
-                                })}
-                            </SoftBox>
-                            <Box sx={{
-                                display: "flex",
-                                justifyContent: "flex-end", mb: 2
-                            }} >
-                                <Button
-                                    variant="contained"
-                                    onClick={handleNext}
-                                    sx={{ mt: 1, mr: 1 }}
-                                    disabled={index === steps.length - 1}
-                                >
-                                    Continuar
-                                </Button>
-                                <Button
-                                    disabled={index === 0}
-                                    onClick={handleBack}
-                                    sx={{ mt: 1, mr: 1 }}
-                                >
-                                    Regresar
-                                </Button>
-                            </Box>
-                        </StepContent>
-                    </Step>
-                ))}
-            </Stepper>
-        </SoftBox>
-    );
-}
-
-MedicalRecordDisplay.propTypes = {
-    record: PropTypes.object.isRequired,
-};
-
-const MedicalRecordsList = () => {
-    const [records, setRecords] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const location = useLocation();
-    const patient = location.state?.patient; // Obtener paciente correctamente
-
+    // Obtener los registros de la API
     useEffect(() => {
-        if (!patient?.id) return;
-
-        const fetchRecords = async () => {
+        const fetchMedicalRecords = async () => {
+            if (!patient || !patient.id) {
+                console.error("Error: No se encontró el paciente.");
+                return; // Detener la ejecución si no hay paciente
+            }
             try {
-                const apiUrl = `https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/${patient.id}/medical_records`;
-                const response = await fetch(apiUrl);
-                if (!response.ok) throw new Error("Error al obtener registros médicos");
+                const response = await fetch(
+                    `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient.id}/medical_records/`
+                );
+                if (!response.ok) {
+                    throw new Error(`Error ${response.status}: No se pudieron obtener los registros`);
+                }
                 const data = await response.json();
-                setRecords(data);
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
+                setMedicalRecords(data);
+            } catch (error) {
+                setSnackbarMessage(error.message);
+                setSnackbarSeverity("error");
+                setSnackbarOpen(true);
             }
         };
 
-        fetchRecords();
+        fetchMedicalRecords();
     }, [patient]);
 
+    // Función para alternar la visualización de detalles
+    const toggleExpand = (index) => {
+        setExpandedIndex(expandedIndex === index ? null : index);
+    };
+
+    // Función para cerrar el Snackbar
+    const handleCloseSnackbar = () => {
+        setSnackbarOpen(false);
+    };
+
     return (
-        <SoftBox mt={4}>
-            <SoftTypography variant="h4" color="secondary" mb={2}>
-                <hr /><br></br>Historial Médico
+        <SoftBox py={3}>
+            <SoftTypography variant="h4" mb={3}>
+                Registros Médicos
             </SoftTypography>
-            {loading ? "Cargando..." : error ? error : records.map((record) => <MedicalRecordDisplay key={record.id} record={record} />)}
+
+            {medicalRecords.length === 0 ? (
+                <SoftTypography variant="h6">No hay registros disponibles</SoftTypography>
+            ) : (
+                medicalRecords.map((record, index) => (
+                    <Card key={index} sx={{ p: 3, mb: 2, boxShadow: 3 }}>
+                        <SoftTypography variant="h6" mb={2}>
+                            Registro {index + 1}
+                        </SoftTypography>
+
+                        {/* Muestra los primeros 5 datos principales */}
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <SoftTypography variant="body1">
+                                    <strong>¿Fuma?:</strong> {record.smoke || "No especificado"}
+                                </SoftTypography>
+                                <SoftTypography variant="body1">
+                                    <strong>¿Consume alcohol?:</strong> {record.alcohol || "No especificado"}
+                                </SoftTypography>
+                                <SoftTypography variant="body1">
+                                    <strong>¿Hace ejercicio?:</strong> {record.exercise || "No especificado"}
+                                </SoftTypography>
+                                <SoftTypography variant="body1">
+                                    <strong>¿Alergias a medicamentos?:</strong>{" "}
+                                    {record.allergicMedicine || "No especificado"}
+                                </SoftTypography>
+                                <SoftTypography variant="body1">
+                                    <strong>¿Ha tenido alguna cirugía?:</strong> {record.surgery || "No especificado"}
+                                </SoftTypography>
+                            </Grid>
+                        </Grid>
+
+                        {/* Botón para ver más detalles */}
+                        <Button
+                            variant="outlined"
+                            color="primary"
+                            onClick={() => toggleExpand(index)}
+                            sx={{ mt: 2 }}
+                        >
+                            {expandedIndex === index ? "Ver menos" : "Ver más"}
+                        </Button>
+
+                        {/* Mostrar más detalles si está expandido */}
+                        {expandedIndex === index && (
+                            <SoftBox mt={2}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={6}>
+                                        <SoftTypography variant="body1">
+                                            <strong>¿Cirugías adicionales?:</strong>{" "}
+                                            {record.surgeryOther || "No especificado"}
+                                        </SoftTypography>
+                                        <SoftTypography variant="body1">
+                                            <strong>¿Enfermedades diagnosticadas?:</strong>{" "}
+                                            {record.diagnosedDiseases.length > 0
+                                                ? record.diagnosedDiseases.join(", ")
+                                                : "No especificado"}
+                                        </SoftTypography>
+                                        <SoftTypography variant="body1">
+                                            <strong>¿Toma medicamentos actualmente?:</strong>{" "}
+                                            {record.takeMedications || "No especificado"}
+                                        </SoftTypography>
+                                    </Grid>
+
+                                    <Grid item xs={12} sm={6}>
+                                        <SoftTypography variant="body1">
+                                            <strong>¿Fecha de última menstruación?:</strong>{" "}
+                                            {record.menstruationDate || "No especificado"}
+                                        </SoftTypography>
+                                        <SoftTypography variant="body1">
+                                            <strong>¿Número de embarazos?:</strong>{" "}
+                                            {record.pregnancies || "No especificado"}
+                                        </SoftTypography>
+                                        <SoftTypography variant="body1">
+                                            <strong>¿Complicaciones en embarazos?:</strong>{" "}
+                                            {record.pregnanciesComplications.length > 0
+                                                ? record.pregnanciesComplications.join(", ")
+                                                : "No especificado"}
+                                        </SoftTypography>
+                                        <SoftTypography variant="body1">
+                                            <strong>¿Motivo de consulta?:</strong>{" "}
+                                            {record.reasonConsultation.length > 0
+                                                ? record.reasonConsultation.join(", ")
+                                                : "No especificado"}
+                                        </SoftTypography>
+                                    </Grid>
+                                </Grid>
+                            </SoftBox>
+                        )}
+                    </Card>
+                ))
+            )}
+
+            {/* Snackbar para mostrar errores */}
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            >
+                <MuiAlert
+                    onClose={handleCloseSnackbar}
+                    severity={snackbarSeverity}
+                    elevation={6}
+                    variant="filled"
+                >
+                    {snackbarMessage}
+                </MuiAlert>
+            </Snackbar>
         </SoftBox>
     );
 };
