@@ -34,6 +34,20 @@ function AddPatient({ open, onClose, onPatientAdded }) {
   const [alert, setAlert] = useState({ severity: "", message: "", show: false });
 
   
+  const genderMap = {
+    Masculino: "male",
+    Femenino: "female",
+    Otro: "other",
+    "No especificado": "not specified",
+  };
+
+  const reverseGenderMap = {
+    male: "Masculino",
+    female: "Femenino",
+    other: "Otro",
+    "not specified": "No especificado",
+  };
+
   useEffect(() => {
     if (open) {
       setFormData(initialFormData);
@@ -42,18 +56,22 @@ function AddPatient({ open, onClose, onPatientAdded }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    setFormData({
+      ...formData,
+      [name]: name === "gender" ? genderMap[value] || "not specified" : value,
+    });
   };
 
   const handleSave = async () => {
-    const apiUrl = "https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/create";
+    const apiUrl = "https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/";
 
     const patientData = {
       first_name: formData.first_name,
       last_name: formData.last_name,
       email: formData.email,
       phone: formData.phone,
-      gender: formData.gender,
+      gender: formData.gender, // Ya se guarda el valor correcto en handleChange
       type: formData.type,
     };
 
@@ -115,7 +133,6 @@ function AddPatient({ open, onClose, onPatientAdded }) {
         </Typography>
       </DialogTitle>
       <DialogContent>
-        
         {alert.show && (
           <Alert
             severity={alert.severity}
@@ -128,7 +145,6 @@ function AddPatient({ open, onClose, onPatientAdded }) {
         )}
 
         <Grid container spacing={2}>
-          {/* Nombre */}
           <Grid item xs={12} sm={6}>
             <SoftTypography variant="subtitle2" fontWeight="medium">
               Nombre del paciente
@@ -150,7 +166,6 @@ function AddPatient({ open, onClose, onPatientAdded }) {
             />
           </Grid>
 
-          
           <Grid item xs={12} sm={6}>
             <SoftTypography variant="subtitle2" fontWeight="medium">
               Apellidos
@@ -172,7 +187,6 @@ function AddPatient({ open, onClose, onPatientAdded }) {
             />
           </Grid>
 
-        
           <Grid item xs={12} sm={6}>
             <SoftTypography variant="subtitle2" fontWeight="medium">
               Teléfono
@@ -194,7 +208,6 @@ function AddPatient({ open, onClose, onPatientAdded }) {
             />
           </Grid>
 
-        
           <Grid item xs={12} sm={6}>
             <SoftTypography variant="subtitle2" fontWeight="medium">
               Email
@@ -216,9 +229,7 @@ function AddPatient({ open, onClose, onPatientAdded }) {
             />
           </Grid>
 
-         
           <Grid item xs={12} sm={6}>
-            
             <SoftTypography variant="subtitle2" fontWeight="medium">
               Género
             </SoftTypography>
@@ -227,7 +238,7 @@ function AddPatient({ open, onClose, onPatientAdded }) {
               <Select
                 id="gender"
                 name="gender"
-                value={formData.gender}
+                value={reverseGenderMap[formData.gender] || ""}
                 onChange={handleChange}
                 displayEmpty
               >
@@ -242,19 +253,12 @@ function AddPatient({ open, onClose, onPatientAdded }) {
             </FormControl>
           </Grid>
 
-          
           <Grid item xs={12} sm={6}>
             <SoftTypography variant="subtitle2" fontWeight="medium">
               Tipo de paciente
             </SoftTypography>
 
-            <RadioGroup
-              row
-              name="type"
-              value={formData.type}
-              onChange={handleChange}
-              sx={{ margin: "0 10px" }} 
-            >
+            <RadioGroup row name="type" value={formData.type} onChange={handleChange}>
               <FormControlLabel value="Privado" control={<Radio />} label="Privado" />
               <FormControlLabel value="De aseguradora" control={<Radio />} label="De aseguradora" />
             </RadioGroup>
@@ -263,20 +267,11 @@ function AddPatient({ open, onClose, onPatientAdded }) {
       </DialogContent>
 
       <DialogActions>
-        <Button
-          onClick={onClose}
-          variant="outlined"
-          sx={{ color: "#183A64", borderColor: "#183A64" }}
-        >
+        <Button onClick={onClose} variant="outlined" sx={{ color: "#183A64", borderColor: "#183A64" }}>
           Cerrar
         </Button>
 
-        <Button
-          onClick={handleSave}
-          color="primary"
-          variant="contained"
-          sx={{ color: "#FFFFFF" }} 
-        >
+        <Button onClick={handleSave} color="primary" variant="contained" sx={{ color: "#FFFFFF" }}>
           Guardar
         </Button>
       </DialogActions>
