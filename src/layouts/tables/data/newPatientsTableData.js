@@ -3,11 +3,11 @@ import SoftTypography from "components/SoftTypography";
 import SoftAvatar from "components/SoftAvatar";
 import Button from "@mui/material/Button";
 import team2 from "assets/images/team-2.jpg";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 
 export default function useNewPatientsTableData() {
   const [data, setData] = useState({ newColumns: [], newRows: [] });
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const traducirGenero = (genero) => {
     const traducciones = {
       male: "Masculino",
@@ -15,7 +15,7 @@ export default function useNewPatientsTableData() {
       other: "Otro",
       "not specified": "No especificado",
     };
-    return traducciones[genero] || "Género no especificado"; 
+    return traducciones[genero] || "Género no especificado";
   };
 
   useEffect(() => {
@@ -37,29 +37,30 @@ export default function useNewPatientsTableData() {
           nombre: `${patient.first_name ?? "Nombre no proporcionado"} ${patient.last_name ?? "Apellido no proporcionado"}`,
           teléfono: patient.phone ?? "Teléfono no proporcionado",
           correo: patient.email ?? "Correo no proporcionado",
-          género: traducirGenero(patient.gender), 
+          género: traducirGenero(patient.gender),
           estatus: patient.status ?? "Estatus no proporcionado",
           Acciones: (
             <Button
-              onClick={() =>
-                navigate("/PatientDetails", {
-                  state: {
-                    patient: {
-                      name: `${patient.first_name ?? "Nombre no proporcionado"} ${patient.last_name ?? "Apellido no proporcionado"}`,
-                      id: patient.id ?? "No especificado",
-                      email: patient.email ?? "Correo no proporcionado",
-                      phone: patient.phone ?? "Teléfono no proporcionado",
-                      gender: traducirGenero(patient.gender), 
-                      status: patient.status ?? "Estatus no proporcionado",
-                    },
-                  },
-                })
-              }
+              onClick={() => {
+                const patientData = {
+                  name: `${patient.first_name ?? "Nombre no proporcionado"} ${patient.last_name ?? "Apellido no proporcionado"}`,
+                  id: patient.id ?? "No especificado",
+                  email: patient.email ?? "Correo no proporcionado",
+                  phone: patient.phone ?? "Teléfono no proporcionado",
+                  gender: traducirGenero(patient.gender),
+                  status: patient.status ?? "Estatus no proporcionado",
+                };
+
+                localStorage.setItem("selectedPatient", JSON.stringify(patientData)); // Guardar en localStorage
+
+                navigate("/PatientDetails", { state: { patient: patientData } });
+              }}
               variant="text"
               color="primary"
             >
               Ver Detalles
             </Button>
+
           ),
         }));
 
