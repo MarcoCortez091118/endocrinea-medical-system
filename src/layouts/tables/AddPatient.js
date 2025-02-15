@@ -52,7 +52,7 @@ function AddPatient({ open, onClose, onPatientAdded }) {
       first_name: formData.first_name,
       last_name: formData.last_name,
       email: formData.email,
-      phoneNumber: formData.phone,
+      phone: formData.phone,
       gender: formData.gender,
       type: formData.type,
     };

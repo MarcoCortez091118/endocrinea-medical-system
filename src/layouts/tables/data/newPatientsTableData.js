@@ -26,7 +26,7 @@ export default function useNewPatientsTableData() {
           foto: <SoftAvatar src={team2} size="sm" variant="rounded" />,
           id: patient.id ?? "No especificado",
           nombre: `${patient.first_name ?? "No first name"} ${patient.last_name ?? "No last name"}`,
-          teléfono: patient.phoneNumber ?? "Teléfono no proporcionado", // CORREGIDO: `phoneNumber`
+          teléfono: patient.phone ?? "Teléfono no proporcionado", // CORREGIDO: `phone`
           correo: patient.email ?? "Correo no proporcionado", // CORREGIDO: `email`
           género: patient.gender ?? "Género no especificado",
           estatus: patient.status ?? "Estatus no proporcionado",
@@ -39,7 +39,7 @@ export default function useNewPatientsTableData() {
                       name: `${patient.first_name ?? "No first name"} ${patient.last_name ?? "No last name"}`,
                       id: patient.id ?? "No especificado",
                       email: patient.email ?? "Correo no proporcionado", // CORREGIDO
-                      phone: patient.phoneNumber ?? "Teléfono no proporcionado", // CORREGIDO
+                      phone: patient.phone ?? "Teléfono no proporcionado", // CORREGIDO
                       gender: patient.gender ?? "Género no especificado",
                       status: patient.status ?? "Estatus no proporcionado",
                     },
