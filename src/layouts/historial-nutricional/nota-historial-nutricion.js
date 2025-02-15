@@ -6,7 +6,16 @@ import { useLocation } from "react-router-dom";
 
 function NutritionRecords() {
   const location = useLocation();
-  const patient = location.state?.patient;
+  const [patient, setPatient] = useState(location.state?.patient || null);
+
+  useEffect(() => {
+    if (!patient) {
+      const storedPatient = localStorage.getItem("selectedPatient");
+      if (storedPatient) {
+        setPatient(JSON.parse(storedPatient));
+      }
+    }
+  }, [patient]);
 
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,32 +27,32 @@ function NutritionRecords() {
     ? `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient.id}/nutritional_records/`
     : null;
 
-    const fetchRecords = useCallback(async () => {
-      if (!apiUrl) return;
-      
-      setLoading(true);
-      setError(null);
-  
-      try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(errorText || "Error al obtener los registros");
-        }
-        const data = await response.json();
-        setRecords(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
+  const fetchRecords = useCallback(async () => {
+    if (!apiUrl) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || "Error al obtener los registros");
       }
-    }, [apiUrl]);
-  
+      const data = await response.json();
+      setRecords(data);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [apiUrl]);
+
   // 🔹 Ahora `fetchRecords` se ejecutará también cuando `records` cambie
   useEffect(() => {
     fetchRecords();
   }, [fetchRecords]); // Agregamos 'records' como dependencia para actualizaciones automáticas
-  
+
   const toggleExpand = (index) => {
     setExpandedRecord(expandedRecord === index ? null : index);
   };
@@ -60,7 +69,7 @@ function NutritionRecords() {
       year: "numeric",
       month: "long",
       day: "numeric",
-      
+
     });
   };
 

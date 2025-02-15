@@ -9,7 +9,16 @@ function HistoryNotes() {
   const [error, setError] = useState(null);
 
   const location = useLocation();
-  const { patient } = location.state || {};
+  const [patient, setPatient] = useState(location.state?.patient || null);
+
+  useEffect(() => {
+    if (!patient) {
+      const storedPatient = localStorage.getItem("selectedPatient");
+      if (storedPatient) {
+        setPatient(JSON.parse(storedPatient));
+      }
+    }
+  }, [patient]);
 
   useEffect(() => {
     if (patient?.id) {

@@ -17,6 +17,7 @@ import {
 import { Upload, FilePresent, PictureAsPdf, Image, CloudDownload, ErrorOutline } from "@mui/icons-material";
 
 function Documentos() {
+
   const location = useLocation();
   const patient = location.state?.patient;
   const patientId = patient?.id;
@@ -132,7 +133,56 @@ function Documentos() {
       >
         📁 Subida y Gestión de Documentos
       </Typography>
+      <Box display="flex" gap={2} mt={2} mb={2}>
+        {/* Botón "Subir archivo" */}
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<Upload />}
+          style={{
+            fontWeight: "bold",
+            textTransform: "capitalize",
+            boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)",
+            color: "#FFFFFF",
+          }}
+        >
+          Subir archivo
+        </Button>
+        {/* Botón "Crear documento" */}
+        <Button
+          variant="contained"
+          startIcon={<Add />}
+          style={{
+            backgroundColor: "#66bb6a", // Verde suave
+            color: "#FFFFFF",
+            fontWeight: "bold",
+            fontSize: "14px",
+            padding: "10px 20px",
+            textTransform: "capitalize",
+            boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)",
+          }}
+        >
+          Crear documento
+        </Button>
+      </Box>
+      <Divider />
 
+      {/* 
+        UX: Mensaje de que este apartado está deshabilitado temporalmente.
+      */}
+      {files.length === 0 ? (
+        <Box
+          style={{
+            padding: "20px",
+            textAlign: "center",
+            color: "#757575",
+          }}
+        >
+          <Typography variant="body1" style={{ fontWeight: "bold", fontSize: "16px" }}>
+            ⚠️ Este apartado está temporalmente deshabilitado.
+          </Typography>
+          <Typography variant="body2" style={{ marginTop: "8px", fontSize: "14px" }}>
+            📌 Por el momento, los documentos del paciente no están disponibles.
       {!patientId ? (
         <Box textAlign="center" color="red" p={2}>
           <Typography variant="subtitle2" fontWeight="medium">

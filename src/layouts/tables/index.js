@@ -35,20 +35,21 @@ function Tables() {
 
   const handleRowClick = (patient) => {
     if (patient) {
-      navigate("/PatientDetails", {
-        state: {
-          patient: {
-            name: patient.nombre,
-            id: patient.id,
-            email: patient.correo,
-            phone: patient.teléfono,
-          },
-        },
-      });
+      const patientData = {
+        name: patient.nombre,
+        id: patient.id,
+        email: patient.correo,
+        phone: patient.teléfono,
+      };
+
+      localStorage.setItem("selectedPatient", JSON.stringify(patientData));
+
+      navigate("/PatientDetails", { state: { patient: patientData } });
     } else {
       console.error("No se pasaron datos del paciente.");
     }
   };
+
 
   // Estado y lógica para la paginación de la segunda tabla
   const [newPage, setNewPage] = useState(1);

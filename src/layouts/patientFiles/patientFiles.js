@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
@@ -24,7 +24,16 @@ import HistoryNotes from "layouts/notesHistory/historyNotes";
 
 function PatientDetails() {
   const location = useLocation();
-  const { patient } = location.state || {}; // Datos del paciente seleccionados
+  const [patient, setPatient] = useState(location.state?.patient || null);
+
+  useEffect(() => {
+    if (!patient) {
+      const storedPatient = localStorage.getItem("selectedPatient");
+      if (storedPatient) {
+        setPatient(JSON.parse(storedPatient));
+      }
+    }
+  }, [patient]);
 
   const [activeTab, setActiveTab] = useState(0); // Estado para la primera fila de pestañas
   const [activeSubTab, setActiveSubTab] = useState(null); // Estado para la segunda fila de pestañas
@@ -67,9 +76,9 @@ function PatientDetails() {
       case 1:
         return <NotaClinico />;
       case 2:
-        return <HCN />;
+        return <HCN patientId={patient.id} />;
       case 3:
-        return <NotaNutricional />;
+        return <NotaNutricional patientId={patient.id} />;
       case 4:
         return <HCP />;
       case 5:
@@ -130,7 +139,7 @@ function PatientDetails() {
             <Tab label="Documentos" className={activeTab === 2 ? "tab-active" : "tab"} />
             <Tab label="Datos del Paciente" className={activeTab === 3 ? "tab-active" : "tab"} />
             <Tab label="Antropometría" className={activeTab === 4 ? "tab-active" : "tab"} />
-            
+
           </Tabs>
 
           <Divider style={{ margin: "16px 0" }} />
@@ -153,7 +162,7 @@ function PatientDetails() {
             />
             <Tab label="HCP" className={activeSubTab === 4 ? "sub-tab-active" : "sub-tab"} />
             <Tab label="Nota psicología" className={activeSubTab === 5 ? "sub-tab-active" : "sub-tab"} />
-            
+
           </Tabs>
 
           <Divider style={{ margin: "16px 0" }} />

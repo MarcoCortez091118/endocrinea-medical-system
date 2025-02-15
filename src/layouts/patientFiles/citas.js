@@ -6,7 +6,16 @@ import { useLocation } from "react-router-dom";
 function Citas() {
   const [citas, setCitas] = useState([]);
   const location = useLocation();
-  const { patient } = location.state || {};
+  const [patient, setPatient] = useState(location.state?.patient || null);
+
+  useEffect(() => {
+    if (!patient) {
+      const storedPatient = localStorage.getItem("selectedPatient");
+      if (storedPatient) {
+        setPatient(JSON.parse(storedPatient));
+      }
+    }
+  }, [patient]);
 
   useEffect(() => {
     if (patient?.id) {

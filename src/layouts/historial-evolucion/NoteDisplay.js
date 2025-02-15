@@ -1,9 +1,23 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useState, useEffect } from "react";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
+import { useLocation } from "react-router-dom";
 
 function NoteDisplay({ note, expandedNoteId, onToggle }) {
+
+  const location = useLocation();
+  const [patient, setPatient] = useState(location.state?.patient || null);
+
+  useEffect(() => {
+    if (!patient) {
+      const storedPatient = localStorage.getItem("selectedPatient");
+      if (storedPatient) {
+        setPatient(JSON.parse(storedPatient));
+      }
+    }
+  }, [patient]);
+
   const fields = [
     { id: "presentation", label: "1. Presentación *" },
     { id: "evolution", label: "2. Evolución *" },

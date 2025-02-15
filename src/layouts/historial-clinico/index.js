@@ -33,8 +33,18 @@ import "layouts/TextareaStyles.css";
 import MedicalRecordsList from "./MedicalRecordsList";
 
 function HistorialClinico() {
+
   const location = useLocation();
-  const { patient } = location.state || {};
+  const [patient, setPatient] = useState(location.state?.patient || null);
+
+  useEffect(() => {
+    if (!patient) {
+      const storedPatient = localStorage.getItem("selectedPatient");
+      if (storedPatient) {
+        setPatient(JSON.parse(storedPatient));
+      }
+    }
+  }, [patient]);
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({

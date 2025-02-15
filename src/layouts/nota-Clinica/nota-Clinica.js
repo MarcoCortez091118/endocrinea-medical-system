@@ -13,16 +13,22 @@ function NotaClinica() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const location = useLocation();
-  const { patient } = location.state || {};
-  const patient_id = patient?.id;
+  const [patient, setPatient] = useState(location.state?.patient || null);
 
   useEffect(() => {
-    if (patient_id) {
-      fetchNotes();
-    } else {
-      setErrorMessage("No se encontró información del paciente.");
+    if (!patient) {
+      const storedPatient = localStorage.getItem("selectedPatient");
+      if (storedPatient) {
+        setPatient(JSON.parse(storedPatient));
+      }
     }
-  }, [patient_id]);
+  }, [patient]);
+
+  useEffect(() => {
+    if (patient && patient.id) {
+      fetchNotes();
+    }
+  }, [patient]);
 
   // ✅ Función para convertir fecha UTC a la hora local del usuario
   const formatDate = (utcDate) => {
@@ -43,10 +49,11 @@ function NotaClinica() {
   };
 
   const fetchNotes = async () => {
+    if (!patient || !patient.id) return;
     setErrorMessage("");
     try {
       const response = await fetch(
-        `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient_id}/medical_notes/`
+        `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient.id}/medical_notes/`
       );
 
       if (!response.ok) {
@@ -87,7 +94,7 @@ function NotaClinica() {
     e.preventDefault();
     setErrorMessage("");
 
-    if (!patient_id) {
+    if (!patient || !patient.id) {
       setErrorMessage("No se encontró el ID del paciente.");
       return;
     }
@@ -96,7 +103,7 @@ function NotaClinica() {
 
     try {
       const response = await fetch(
-        `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient_id}/medical_notes/`,
+        `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient.id}/medical_notes/`,
         {
           method: "POST",
           headers: {
