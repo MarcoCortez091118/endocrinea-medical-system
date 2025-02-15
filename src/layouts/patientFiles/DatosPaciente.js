@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Card, Grid, TextField, MenuItem, Button, Typography, Box } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Card, Grid, TextField, MenuItem, Button, Typography, Box, Snackbar, Alert } from "@mui/material";
 import SoftBox from "components/SoftBox";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
@@ -11,6 +11,7 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { color } from "framer-motion";
+import { useLocation } from "react-router-dom";
 const PatientDetailsForm = () => {
   const [patientData, setPatientData] = useState({
     id: "",
@@ -50,6 +51,53 @@ const PatientDetailsForm = () => {
     type: "",
     number: "",
   });
+
+  const [loading, setLoading] = useState(false);
+  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "info" });
+  const location = useLocation();
+  const [patient, setPatient] = useState(location.state?.patient || null);
+
+  useEffect(() => {
+    if (!patient) {
+      const storedPatient = localStorage.getItem("selectedPatient");
+      if (storedPatient) {
+        setPatient(JSON.parse(storedPatient));
+      }
+    }
+  }, [patient]);
+
+  const fetchPatientData = async () => {
+    if (!patient || !patient.id) return;
+
+    try {
+      const response = await fetch(
+        `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient.id}`,
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error fetching patient data");
+      }
+
+      const data = await response.json();
+      setPatientData(data);
+    } catch (error) {
+      setSnackbar({ open: true, message: "Error al obtener datos del paciente", severity: "error" });
+      console.error("Error fetching patient data:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (patient && patient.id) {
+      fetchPatientData();
+    }
+  }, [patient]);
+
   const [relatedPersons, setRelatedPersons] = useState([]);
   const [authorizedPerson, setAuthorizedPerson] = useState("");
   const [legalRepresentative, setLegalRepresentative] = useState("");
@@ -91,17 +139,10 @@ const PatientDetailsForm = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (type === "checkbox") {
-      setPatientData({
-        ...patientData,
-        [name]: checked,
-      });
-    } else {
-      setPatientData({
-        ...patientData,
-        [name]: value,
-      });
-    }
+    setPatientData({
+      ...patientData,
+      [name]: type === "checkbox" ? checked : value,
+    });
   };
 
   const handleAddressChange = (e) => {
@@ -112,9 +153,39 @@ const PatientDetailsForm = () => {
     });
   };
 
+  const handleUpdate = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(patientData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error updating patient data");
+      }
+
+      await fetchPatientData(); // Get updated data from API
+      setSnackbar({ open: true, message: "Datos actualizados correctamente", severity: "success" });
+
+    } catch (error) {
+      console.error("Error updating patient data:", error);
+      setSnackbar({ open: true, message: "Error al actualizar los datos", severity: "error" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    console.log("JSON generado: ", JSON.stringify(patientData, null, 2));
     // Generar el objeto JSON con los datos
     const jsonData = {
       first_name: patientData.first_name,
@@ -947,7 +1018,7 @@ const PatientDetailsForm = () => {
                 className="global-textarea"
               />
             </Grid>
-           
+
           </Grid>
         </SoftBox>
       )}
@@ -982,7 +1053,7 @@ const PatientDetailsForm = () => {
                 boxShadow: "0px 0px 8px rgba(230, 126, 34, 0.5)", // Custom focus shadow
               },
             }}
-            onClick={handleSubmit}
+            onClick={handleUpdate}
           >
             Actualizar y guardar
           </Button>
@@ -1009,6 +1080,16 @@ const PatientDetailsForm = () => {
           guardar
         </Button>
       </SoftBox>*/}
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+      >
+        <Alert severity={snackbar.severity} sx={{ width: "100%" }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </form>
   );
 };
