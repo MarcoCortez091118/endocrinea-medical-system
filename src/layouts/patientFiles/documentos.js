@@ -2,58 +2,136 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import {
   Card,
-  Divider,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  IconButton,
   Button,
   Box,
   Typography,
+  CircularProgress,
+  Snackbar,
+  Alert,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  IconButton,
 } from "@mui/material";
-import { Download, Edit, Delete, Upload, Add } from "@mui/icons-material";
+import { Upload, FilePresent, PictureAsPdf, Image, CloudDownload, ErrorOutline } from "@mui/icons-material";
 
 function Documentos() {
 
   const location = useLocation();
-  const [patient, setPatient] = useState(location.state?.patient || null);
+  const patient = location.state?.patient;
+  const patientId = patient?.id;
+
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [documents, setDocuments] = useState([]);
+  const [loadingDocs, setLoadingDocs] = useState(false);
 
   useEffect(() => {
-    if (!patient) {
-      const storedPatient = localStorage.getItem("selectedPatient");
-      if (storedPatient) {
-        setPatient(JSON.parse(storedPatient));
-      }
+    if (patientId) {
+      fetchDocuments();
     }
-  }, [patient]);
+  }, [patientId]);
 
-  const files = [
-    /*
-    { id: 1, name: "Juan Lopez ", author: "Dr Bryan Pichon", date: "29/10/2024" },
-    { id: 2, name: "Juan Lopez AH", author: "Dr Oscar Lopez", date: "02/08/2024" },
-    { id: 3, name: "Juan Lopez RC", author: "Dr Oscar Lopez", date: "01/08/2024" },
-    */
-  ];
+  const fetchDocuments = async () => {
+    setLoadingDocs(true);
+    try {
+      const response = await fetch(
+        `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patientId}/documents/`
+      );
+      if (!response.ok) {
+        throw new Error("Error al obtener los documentos.");
+      }
+      const data = await response.json();
+      // Ordenar por fecha de creación (más recientes primero)
+      const sortedData = data.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
+      setDocuments(sortedData);
+    } catch (error) {
+      setErrorMessage("❌ No se pudieron cargar los documentos.");
+    } finally {
+      setLoadingDocs(false);
+    }
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
+      if (!allowedTypes.includes(file.type)) {
+        setErrorMessage("⚠️ Formato no permitido. Solo PDF, JPG y PNG.");
+        return;
+      }
+
+      setSelectedFile(file);
+      setErrorMessage("");
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!selectedFile) {
+      setErrorMessage("⚠️ Selecciona un archivo antes de subir.");
+      return;
+    }
+
+    if (!patientId) {
+      setErrorMessage("⚠️ Error: No se encontró el ID del paciente.");
+      return;
+    }
+
+    setIsUploading(true);
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      const response = await fetch(
+        `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patientId}/documents/`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error al subir el archivo.");
+      }
+
+      setUploadSuccess(true);
+      setSelectedFile(null);
+      fetchDocuments(); // Refrescar lista tras subida
+    } catch (error) {
+      setUploadSuccess(false);
+      setErrorMessage("❌ Hubo un problema al subir el archivo.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   return (
     <Card
       style={{
-        padding: "16px",
-        borderRadius: "10px",
-        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+        padding: "20px",
+        borderRadius: "12px",
+        boxShadow: "0 4px 15px rgba(0, 0, 0, 0.15)",
         margin: "0 auto",
+        backgroundColor: "#ffffff",
       }}
     >
       <Typography
-        variant="h6"
+        variant="h5"
+        fontWeight="medium"
         style={{
-          fontWeight: "bold",
           marginBottom: "16px",
           color: "#183A64",
+          textAlign: "center",
         }}
       >
-        Documentos
+        📁 Subida y Gestión de Documentos
       </Typography>
       <Box display="flex" gap={2} mt={2} mb={2}>
         {/* Botón "Subir archivo" */}
@@ -105,60 +183,114 @@ function Documentos() {
           </Typography>
           <Typography variant="body2" style={{ marginTop: "8px", fontSize: "14px" }}>
             📌 Por el momento, los documentos del paciente no están disponibles.
+      {!patientId ? (
+        <Box textAlign="center" color="red" p={2}>
+          <Typography variant="subtitle2" fontWeight="medium">
+            ⚠️ Error: No se ha seleccionado un paciente.
           </Typography>
         </Box>
       ) : (
-        // Tabla con documentos (si los hay)
-        <Table
-          style={{
-            marginTop: "16px",
-            borderCollapse: "collapse",
-            width: "100%",
-            textAlign: "center",
-          }}
-        >
-          <TableBody>
-            {files.map((file, index) => (
-              <TableRow
-                key={file.id}
-                style={{
-                  backgroundColor: index % 2 === 0 ? "#f9f9f9" : "#ffffff",
-                  borderBottom: "1px solid #e0e0e0",
+        <>
+          {/* Indicador de formatos permitidos */}
+          <Box
+            style={{
+              backgroundColor: "#f0f8ff",
+              padding: "10px",
+              borderRadius: "8px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              marginBottom: "16px",
+            }}
+          >
+            <FilePresent style={{ color: "#0077B6" }} />
+            <Typography variant="subtitle2" fontWeight="medium" style={{ color: "#0077B6" }}>
+              Solo se permiten archivos PDF, JPG y PNG.
+            </Typography>
+          </Box>
+
+          {/* Selector de archivos */}
+          <Box display="flex" alignItems="center" gap={2} justifyContent="center">
+            <input
+              type="file"
+              accept=".jpg,.png,.pdf"
+              style={{ display: "none" }}
+              id="file-upload"
+              onChange={handleFileChange}
+            />
+            <label htmlFor="file-upload">
+              <Button
+                variant="contained"
+                component="span"
+                startIcon={<Upload />}
+                sx={{
+                  backgroundColor: "#0077B6",
+                  color: "#ffffff",
+                  fontWeight: "medium",
+                  "&:hover": { backgroundColor: "#005f8c" },
                 }}
               >
-                <TableCell style={{ textAlign: "center", padding: "12px", width: "15%" }}>
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    style={{ borderColor: "#183A64", color: "#183A64" }}
-                  >
-                    PDF
-                  </Button>
-                </TableCell>
-                <TableCell style={{ padding: "12px", textAlign: "center", width: "30%" }}>
-                  {file.name}
-                </TableCell>
-                <TableCell style={{ padding: "12px", textAlign: "center", width: "25%" }}>
-                  {file.author}
-                </TableCell>
-                <TableCell style={{ textAlign: "center", padding: "12px", width: "15%" }}>
-                  {file.date}
-                </TableCell>
-                <TableCell style={{ textAlign: "center", padding: "12px", width: "15%" }}>
-                  <IconButton style={{ color: "#183A64" }}>
-                    <Download />
-                  </IconButton>
-                  <IconButton style={{ color: "#183A64" }}>
-                    <Edit />
-                  </IconButton>
-                  <IconButton color="error">
-                    <Delete />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                Seleccionar Archivo
+              </Button>
+            </label>
+
+            {selectedFile && (
+              <Typography variant="subtitle2" fontWeight="medium" sx={{ color: "#333" }}>
+                {selectedFile.name}
+              </Typography>
+            )}
+          </Box>
+
+          {/* Botón de subida */}
+          <Box mt={2} textAlign="center">
+            <Button
+              variant="contained"
+              color="success"
+              onClick={handleUpload}
+              disabled={isUploading}
+              sx={{
+                fontWeight: "medium",
+                fontSize: "16px",
+                textTransform: "capitalize",
+                padding: "10px 20px",
+              }}
+            >
+              {isUploading ? <CircularProgress size={24} color="inherit" /> : "Subir Archivo"}
+            </Button>
+          </Box>
+
+          {/* Lista de Documentos */}
+          <Box mt={3}>
+            <Typography variant="h6" fontWeight="medium">
+              📂 Archivos Subidos:
+            </Typography>
+
+            {loadingDocs ? (
+              <CircularProgress />
+            ) : documents.length === 0 ? (
+              <Typography variant="subtitle2" fontWeight="medium" sx={{ color: "#757575" }}>
+                No hay documentos disponibles.
+              </Typography>
+            ) : (
+              <List>
+                {documents.map((doc) => (
+                  <ListItem key={doc.id} divider>
+                    <ListItemIcon>
+                      {doc.content_type === "application/pdf" ? <PictureAsPdf color="error" /> : <Image color="primary" />}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={doc.filename}
+                      secondary={`📅 ${new Date(doc.created_at).toISOString().split('T')[0]}`}
+                    />
+                    <IconButton href={doc.file_url} target="_blank">
+                      <CloudDownload />
+                    </IconButton>
+                  </ListItem>
+                ))}
+              </List>
+            )}
+          </Box>
+        </>
       )}
     </Card>
   );
