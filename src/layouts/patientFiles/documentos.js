@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import {
   Card,
   Divider,
@@ -14,6 +15,19 @@ import {
 import { Download, Edit, Delete, Upload, Add } from "@mui/icons-material";
 
 function Documentos() {
+
+  const location = useLocation();
+  const [patient, setPatient] = useState(location.state?.patient || null);
+
+  useEffect(() => {
+    if (!patient) {
+      const storedPatient = localStorage.getItem("selectedPatient");
+      if (storedPatient) {
+        setPatient(JSON.parse(storedPatient));
+      }
+    }
+  }, [patient]);
+
   const files = [
     /*
     { id: 1, name: "Juan Lopez ", author: "Dr Bryan Pichon", date: "29/10/2024" },
@@ -90,7 +104,7 @@ function Documentos() {
             ⚠️ Este apartado está temporalmente deshabilitado.
           </Typography>
           <Typography variant="body2" style={{ marginTop: "8px", fontSize: "14px" }}>
-          📌 Por el momento, los documentos del paciente no están disponibles.
+            📌 Por el momento, los documentos del paciente no están disponibles.
           </Typography>
         </Box>
       ) : (
