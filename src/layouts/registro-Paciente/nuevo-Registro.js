@@ -17,7 +17,7 @@ const newRegisterForm = () => {
     first_name: "",
     last_name: "",
     email: "",
-    phoneNumber: "",
+    phone: "",
     city: "",
     country: "",
     neighborhood: "",
@@ -85,7 +85,7 @@ const newRegisterForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const apiUrl = "https://endocrinea-fastapi-datacolletion.azurewebsites.net/patients/create";
+    const apiUrl = "https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/";
     const requestBody = {
       ...patientData,
       created_at: new Date().toISOString(), // Genera la fecha actual en formato ISO
@@ -106,7 +106,7 @@ const newRegisterForm = () => {
           first_name: "",
           last_name: "",
           email: "",
-          phoneNumber: "",
+          phone: "",
           city: "",
           country: "",
           neighborhood: "",
