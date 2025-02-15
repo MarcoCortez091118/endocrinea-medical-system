@@ -18,10 +18,6 @@ import { Upload, FilePresent, PictureAsPdf, Image, CloudDownload, ErrorOutline }
 
 function Documentos() {
 
-  const location = useLocation();
-  const patient = location.state?.patient;
-  const patientId = patient?.id;
-
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(null);
@@ -29,17 +25,29 @@ function Documentos() {
   const [documents, setDocuments] = useState([]);
   const [loadingDocs, setLoadingDocs] = useState(false);
 
+  const location = useLocation();
+  const [patient, setPatient] = useState(location.state?.patient || null);
+
   useEffect(() => {
-    if (patientId) {
+    if (!patient) {
+      const storedPatient = localStorage.getItem("selectedPatient");
+      if (storedPatient) {
+        setPatient(JSON.parse(storedPatient));
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (patient && patient.id) {
       fetchDocuments();
     }
-  }, [patientId]);
+  }, [patient]);
 
   const fetchDocuments = async () => {
     setLoadingDocs(true);
     try {
       const response = await fetch(
-        `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patientId}/documents/`
+        `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient.id}/documents/`
       );
       if (!response.ok) {
         throw new Error("Error al obtener los documentos.");
@@ -78,7 +86,7 @@ function Documentos() {
       return;
     }
 
-    if (!patientId) {
+    if (!patient.id) {
       setErrorMessage("⚠️ Error: No se encontró el ID del paciente.");
       return;
     }
@@ -90,7 +98,7 @@ function Documentos() {
 
     try {
       const response = await fetch(
-        `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patientId}/documents/`,
+        `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient.id}/documents/`,
         {
           method: "POST",
           body: formData,
@@ -133,57 +141,8 @@ function Documentos() {
       >
         📁 Subida y Gestión de Documentos
       </Typography>
-      <Box display="flex" gap={2} mt={2} mb={2}>
-        {/* Botón "Subir archivo" */}
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<Upload />}
-          style={{
-            fontWeight: "bold",
-            textTransform: "capitalize",
-            boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)",
-            color: "#FFFFFF",
-          }}
-        >
-          Subir archivo
-        </Button>
-        {/* Botón "Crear documento" */}
-        <Button
-          variant="contained"
-          startIcon={<Add />}
-          style={{
-            backgroundColor: "#66bb6a", // Verde suave
-            color: "#FFFFFF",
-            fontWeight: "bold",
-            fontSize: "14px",
-            padding: "10px 20px",
-            textTransform: "capitalize",
-            boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.16)",
-          }}
-        >
-          Crear documento
-        </Button>
-      </Box>
-      <Divider />
 
-      {/* 
-        UX: Mensaje de que este apartado está deshabilitado temporalmente.
-      */}
-      {files.length === 0 ? (
-        <Box
-          style={{
-            padding: "20px",
-            textAlign: "center",
-            color: "#757575",
-          }}
-        >
-          <Typography variant="body1" style={{ fontWeight: "bold", fontSize: "16px" }}>
-            ⚠️ Este apartado está temporalmente deshabilitado.
-          </Typography>
-          <Typography variant="body2" style={{ marginTop: "8px", fontSize: "14px" }}>
-            📌 Por el momento, los documentos del paciente no están disponibles.
-      {!patientId ? (
+      {!patient || !patient.id ? (
         <Box textAlign="center" color="red" p={2}>
           <Typography variant="subtitle2" fontWeight="medium">
             ⚠️ Error: No se ha seleccionado un paciente.
