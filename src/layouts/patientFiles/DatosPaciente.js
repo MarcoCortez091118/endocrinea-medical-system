@@ -10,7 +10,6 @@ import { label } from "@mui/material";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import { color } from "framer-motion";
 import { useLocation } from "react-router-dom";
 const PatientDetailsForm = () => {
   const [patientData, setPatientData] = useState({
