@@ -3,11 +3,20 @@ import SoftTypography from "components/SoftTypography";
 import SoftAvatar from "components/SoftAvatar";
 import Button from "@mui/material/Button";
 import team2 from "assets/images/team-2.jpg";
-import { useNavigate } from "react-router-dom"; // Importar useNavigate para manejar la navegación
+import { useNavigate } from "react-router-dom"; 
 
 export default function useNewPatientsTableData() {
   const [data, setData] = useState({ newColumns: [], newRows: [] });
-  const navigate = useNavigate(); // Hook para manejar la navegación
+  const navigate = useNavigate(); 
+  const traducirGenero = (genero) => {
+    const traducciones = {
+      male: "Masculino",
+      female: "Femenino",
+      other: "Otro",
+      "not specified": "No especificado",
+    };
+    return traducciones[genero] || "Género no especificado"; 
+  };
 
   useEffect(() => {
     async function fetchNewPatients() {
@@ -25,10 +34,10 @@ export default function useNewPatientsTableData() {
         const newRows = newPatients.map((patient) => ({
           foto: <SoftAvatar src={team2} size="sm" variant="rounded" />,
           id: patient.id ?? "No especificado",
-          nombre: `${patient.first_name ?? "No first name"} ${patient.last_name ?? "No last name"}`,
-          teléfono: patient.phoneNumber ?? "Teléfono no proporcionado", // CORREGIDO: `phoneNumber`
-          correo: patient.email ?? "Correo no proporcionado", // CORREGIDO: `email`
-          género: patient.gender ?? "Género no especificado",
+          nombre: `${patient.first_name ?? "Nombre no proporcionado"} ${patient.last_name ?? "Apellido no proporcionado"}`,
+          teléfono: patient.phone ?? "Teléfono no proporcionado",
+          correo: patient.email ?? "Correo no proporcionado",
+          género: traducirGenero(patient.gender), 
           estatus: patient.status ?? "Estatus no proporcionado",
           Acciones: (
             <Button
@@ -36,11 +45,11 @@ export default function useNewPatientsTableData() {
                 navigate("/PatientDetails", {
                   state: {
                     patient: {
-                      name: `${patient.first_name ?? "No first name"} ${patient.last_name ?? "No last name"}`,
+                      name: `${patient.first_name ?? "Nombre no proporcionado"} ${patient.last_name ?? "Apellido no proporcionado"}`,
                       id: patient.id ?? "No especificado",
-                      email: patient.email ?? "Correo no proporcionado", // CORREGIDO
-                      phone: patient.phoneNumber ?? "Teléfono no proporcionado", // CORREGIDO
-                      gender: patient.gender ?? "Género no especificado",
+                      email: patient.email ?? "Correo no proporcionado",
+                      phone: patient.phone ?? "Teléfono no proporcionado",
+                      gender: traducirGenero(patient.gender), 
                       status: patient.status ?? "Estatus no proporcionado",
                     },
                   },
@@ -53,7 +62,6 @@ export default function useNewPatientsTableData() {
             </Button>
           ),
         }));
-        
 
         setData({
           newColumns: [
