@@ -17,8 +17,18 @@ import "layouts/TextareaStyles.css";
 import { useLocation } from "react-router-dom";
 
 function Antropometria() {
+
   const location = useLocation();
-  const patient = location.state?.patient;
+  const [patient, setPatient] = useState(location.state?.patient || null);
+
+  useEffect(() => {
+    if (!patient) {
+      const storedPatient = localStorage.getItem("selectedPatient");
+      if (storedPatient) {
+        setPatient(JSON.parse(storedPatient));
+      }
+    }
+  }, [patient]);
 
   const [formData, setFormData] = useState({
     waist: "",

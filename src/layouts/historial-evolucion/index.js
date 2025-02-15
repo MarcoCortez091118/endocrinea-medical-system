@@ -5,8 +5,11 @@ import NoteDisplay from "./NoteDisplay";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
 import Card from "@mui/material/Card";
+import { useLocation } from "react-router-dom";
 
-function HistorialEvolucion({ patientId }) {
+function HistorialEvolucion(patientId) {
+  const location = useLocation();
+
   const [formData, setFormData] = useState({
     presentation: "",
     evolution: "",
@@ -163,9 +166,5 @@ function HistorialEvolucion({ patientId }) {
     </SoftBox>
   );
 }
-
-HistorialEvolucion.propTypes = {
-  patientId: PropTypes.string.isRequired,
-};
 
 export default HistorialEvolucion;

@@ -40,12 +40,11 @@ import { useLocation } from "react-router-dom";
 
 // Libreria gluestacks
 
-function HistorialNutricional() {
+function HistorialNutricional(patientId) {
   {
     /* Variables */
   }
   const location = useLocation();
-  const patient = location.state?.patient; // Asegurar que `patient` se obtiene correctamente
 
   const [formData, setFormData] = useState({
     familyHistory: {
@@ -211,7 +210,7 @@ function HistorialNutricional() {
 
   const [notas, setRecords] = useState([]); // Almacena las notas enviadas
   const [mostrarNotas, setMostrarNotas] = useState(false); // Controla la visualización de la sección de notas
-  const apiUrl = `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient.id}/nutritional_records/`;
+  const apiUrl = `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patientId}/nutritional_records/`;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -376,7 +375,7 @@ function HistorialNutricional() {
     }
   };
 
-  
+
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -1419,7 +1418,7 @@ function HistorialNutricional() {
                         </TableCell>
                       ))}
                     </TableRow>
-                   
+
                     {Object.keys(visibleFieldsPesos).map((measurement) => (
                       <TableRow key={measurement}>
                         <TableCell component="th" scope="row">
@@ -1437,7 +1436,7 @@ function HistorialNutricional() {
                             }}
                           />
                         </TableCell>
-                  
+
                       </TableRow>
                     ))}
                   </TableBody>

@@ -32,9 +32,8 @@ import "layouts/TextareaStyles.css";
 import { useLocation } from "react-router-dom";
 // Libreria gluestacks
 
-function NotaNutricional() {
-  const location = useLocation();
-  const patient = location.state?.patient; // Asegurar que `patient` se obtiene correctamente
+function NotaNutricional(patientId) {
+
   const [loading, setLoading] = useState(false);
   const [visibleNotes, setVisibleNotes] = useState(10);
   const [formData, setFormData] = useState({
@@ -60,7 +59,7 @@ function NotaNutricional() {
   const [error, setError] = useState(null);
   const [notas, setNotas] = useState([]);
   const [expandedNotes, setExpandedNotes] = useState({});
-  const apiUrl = `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient.id}/nutritional_notes/`;
+  const apiUrl = `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patientId}/nutritional_notes/`;
   const fetchNotas = async () => {
     try {
       const response = await fetch(apiUrl);
@@ -73,12 +72,12 @@ function NotaNutricional() {
       console.error("Error al obtener los registros: ", error);
     }
   };
-  
+
   // 🚀 Llamar la función en `useEffect`
   useEffect(() => {
     fetchNotas();
   }, []);
-  
+
 
   const toggleExpand = (index) => {
     setExpandedNotes(expandedNotes === index ? null : index);
@@ -141,7 +140,7 @@ function NotaNutricional() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -150,19 +149,19 @@ function NotaNutricional() {
         },
         body: JSON.stringify(formData),
       });
-  
+
       if (!response.ok) {
         throw new Error(`Error al enviar datos: ${response.statusText}`);
       }
-  
+
       const result = await response.json();
       console.log("Nota enviada con éxito:", result);
-  
+
       alert("Nota guardada correctamente");
-  
+
       // 📌 🚀 ACTUALIZAR ESTADO DE NOTAS SIN RECARGAR
       setNotas((prevNotas) => [result, ...prevNotas]);
-  
+
       // Limpiar el formulario
       setFormData({
         symptoms: "",
@@ -185,13 +184,13 @@ function NotaNutricional() {
         frequencyStraining: "",
         collation2: "",
       });
-  
+
     } catch (error) {
       console.error("Error en la solicitud:", error);
       alert("Hubo un error al guardar la nota. Inténtalo nuevamente.");
     }
   };
-  
+
 
   const translations = {
     symptoms: "Síntomas",

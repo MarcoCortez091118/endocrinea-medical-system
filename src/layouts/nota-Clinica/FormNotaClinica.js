@@ -1,9 +1,23 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
+import { useLocation } from "react-router-dom";
 
 function FormNotaClinica({ formData, onChange, onSubmit }) {
+
+  const location = useLocation();
+  const [patient, setPatient] = useState(location.state?.patient || null);
+
+  useEffect(() => {
+    if (!patient) {
+      const storedPatient = localStorage.getItem("selectedPatient");
+      if (storedPatient) {
+        setPatient(JSON.parse(storedPatient));
+      }
+    }
+  }, [patient]);
+
   return (
     <form noValidate autoComplete="off" onSubmit={onSubmit}>
       <SoftBox component="div" sx={{ p: 3, boxShadow: 3, mb: 3 }}>
