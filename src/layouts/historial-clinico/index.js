@@ -40,10 +40,14 @@ function HistorialClinico() {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const location = useLocation();
+  const [loading, setLoading] = useState(true);
+  const [notes, setNotes] = useState([]);
   const [patient, setPatient] = useState(location.state?.patient || null);
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
   };
+  
+
 
   useEffect(() => {
     if (!patient) {
@@ -237,14 +241,24 @@ function HistorialClinico() {
         }
       );
 
-      const responseData = await response.json();
-
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${responseData.message || "Error en la API"}`);
       }
-      setSnackbarMessage("Historial clínico enviado con éxito.");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+
+      const responseData = await response.json();
+
+      //const responseData = await response.json(); // 📌 Recibir la nueva nota guardada
+      console.log("✅ Nota guardada con éxito:", responseData);
+
+      alert("Su formulario ha sido recibido correctamente. Para ver el registro actualizado, por favor, refresque la página.");
+
+      // 📌 Agregar la nueva nota en la primera posición
+      setNotes((prevNotes) => [responseData, ...prevNotes]);
+
+      //setSnackbarMessage("Actualizar pagina.");
+      //setSnackbarSeverity("success");
+      //setSnackbarOpen(true);
+      //alert("Historial guardado correctamente");
       setActiveStep(0);
       setFormData(initialFormData);
     } catch (error) {
@@ -387,22 +401,22 @@ function HistorialClinico() {
                     required
                   >
                     <FormControlLabel
-                      value="1"
+                      value="Menos de 5 cigarrillos al mes"
                       control={<Radio />}
                       label="Menos de 5 cigarrillos al mes"
                     />
                     <FormControlLabel
-                      value="2"
+                      value="De 1-5 cigarrillos a la semana"
                       control={<Radio />}
                       label="De 1-5 cigarrillos a la semana"
                     />
                     <FormControlLabel
-                      value="3"
+                      value="De 6-10 cigarrillos a la semana"
                       control={<Radio />}
                       label="De 6-10 cigarrillos a la semana"
                     />
                     <FormControlLabel
-                      value="4"
+                      value="Mas de 20 cigarrillos a la semana"
                       control={<Radio />}
                       label="Mas de 20 cigarrillos a la semana"
                     />
@@ -978,8 +992,22 @@ function HistorialClinico() {
                 </RadioGroup>
               </SoftBox>
             </SoftBox>
+            {formData.pregnancies === "Otros" && (
+              <SoftBox mb={2}>
+                <textarea
+                  id="otherPregnancies"
+                  name="otherPregnancies"
+                  placeholder="Especifique"
+                  value={formData.otherPregnancies}
+                  onChange={handleChange}
+                  required
+                  rows="1"
+                  className="global-textarea"
+                />
+              </SoftBox>
+            )}
 
-            {["1", "2", "3"].includes(formData.pregnancies) && (
+            {["1", "2", "3", "Otros"].includes(formData.pregnancies) && (
               <FormControl component="fieldset">
                 <SoftBox ml={2}>
                   <SoftTypography variant="subtitle2">
@@ -1019,20 +1047,7 @@ function HistorialClinico() {
               </FormControl>
             )}
 
-            {formData.pregnancies === "Otros" && (
-              <SoftBox mb={2}>
-                <textarea
-                  id="otherPregnancies"
-                  name="otherPregnancies"
-                  placeholder="Especifique"
-                  value={formData.otherPregnancies}
-                  onChange={handleChange}
-                  required
-                  rows="1"
-                  className="global-textarea"
-                />
-              </SoftBox>
-            )}
+            
 
             <SoftBox ml={2}>
               <SoftBox mb={2}>
@@ -1189,8 +1204,10 @@ function HistorialClinico() {
           )}
         </Box>
       </form>
-      {/* Mostrar el historial médico debajo del formulario */}
+
+      {/* Notas registradas */}
       <MedicalRecordsList />
+      
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
