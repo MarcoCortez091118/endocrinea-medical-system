@@ -62,29 +62,29 @@ function HistorialNutricional(patientId) {
         Mother: false,
         Father: false,
         Siblings: false,
-        "Paternal Uncles": false,
-        "Maternal Uncles": false,
+        Paternal_Uncles: false,
+        Maternal_Uncles: false,
       },
       Hypertension: {
         Mother: false,
         Father: false,
         Siblings: false,
-        "Paternal Uncles": false,
-        "Maternal Uncles": false,
+        Paternal_Uncles: false,
+        Maternal_Uncles: false,
       },
       High_Cholesterol: {
         Mother: false,
         Father: false,
         Siblings: false,
-        "Paternal Uncles": false,
-        "Maternal Uncles": false,
+        Paternal_Uncles: false,
+        Maternal_Uncles: false,
       },
       Heart_Attacks: {
         Mother: false,
         Father: false,
         Siblings: false,
-        "Paternal Uncles": false,
-        "Maternal Uncles": false,
+        Paternal_Uncles: false,
+        Maternal_Uncles: false,
       },
     },
 
@@ -268,7 +268,12 @@ function HistorialNutricional(patientId) {
 
       // Limpiar el formulario
       setFormData({
-        familyHistory: {},
+        familyHistory: {
+          Diabetes: { Mother: false, Father: false, Siblings: false, Paternal_Uncles: false, Maternal_Uncles: false },
+          Hypertension: { Mother: false, Father: false, Siblings: false, Paternal_Uncles: false, Maternal_Uncles: false },
+          High_Cholesterol: { Mother: false, Father: false, Siblings: false, Paternal_Uncles: false, Maternal_Uncles: false },
+          Heart_Attacks: { Mother: false, Father: false, Siblings: false, Paternal_Uncles: false, Maternal_Uncles: false },
+        },
         otherFamilyHistory: "",
         drugAllergy: "",
         otherDrugAllergies: "",
@@ -280,7 +285,7 @@ function HistorialNutricional(patientId) {
         exerciseTypes: "",
         exerciseDaysPerWeek: "",
         exerciseIntensity: "",
-        sleepInsomnia: false,
+        sleepInsomnia: "",
         sleepHours: "",
         medications: "",
         vitamins: "",
@@ -870,22 +875,22 @@ function HistorialNutricional(patientId) {
                       required
                     >
                       <FormControlLabel
-                        value="1"
+                        value="Menos de 5 cigarrillos al mes"
                         control={<Radio />}
                         label="Menos de 5 cigarrillos al mes"
                       />
                       <FormControlLabel
-                        value="2"
+                        value="De 1 a 5 cigarrillos a la semana"
                         control={<Radio />}
                         label="De 1 a 5 cigarrillos a la semana"
                       />
                       <FormControlLabel
-                        value="3"
+                        value="De 6 a 10 cigarrillos a la semana"
                         control={<Radio />}
                         label="De 6 a 10 cigarrillos a la semana"
                       />
                       <FormControlLabel
-                        value="4"
+                        value="Mas de 20 cigarrillos a la semana"
                         control={<Radio />}
                         label="Mas de 20 cigarrillos a la semana"
                       />
@@ -944,17 +949,17 @@ function HistorialNutricional(patientId) {
                       required
                     >
                       <FormControlLabel
-                        value="1"
+                        value="Sólo en fiestas o reuniones."
                         control={<Radio />}
                         label="Sólo en fiestas o reuniones."
                       />
                       <FormControlLabel
-                        value="2"
+                        value="Al menos una vez a la semana hasta llegar a la embriaguez."
                         control={<Radio />}
                         label="Al menos una vez a la semana hasta llegar a la embriaguez."
                       />
                       <FormControlLabel
-                        value="3"
+                        value="Al menos una vez a la semana sin llegar a la embriaguez."
                         control={<Radio />}
                         label="Al menos una vez a la semana sin llegar a la embriaguez."
                       />
