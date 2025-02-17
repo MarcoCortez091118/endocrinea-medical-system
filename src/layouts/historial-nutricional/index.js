@@ -274,53 +274,53 @@ function HistorialNutricional(patientId) {
           High_Cholesterol: { Mother: false, Father: false, Siblings: false, Paternal_Uncles: false, Maternal_Uncles: false },
           Heart_Attacks: { Mother: false, Father: false, Siblings: false, Paternal_Uncles: false, Maternal_Uncles: false },
         },
-        otherFamilyHistory: "",
-        drugAllergy: "",
-        otherDrugAllergies: "",
-        foodAllergy: "",
-        otherFoodAllergies: "",
-        prohibitedFoods: "",
-        otherProhibitedFoods: "",
-        exercise: "",
-        exerciseTypes: "",
-        exerciseDaysPerWeek: "",
-        exerciseIntensity: "",
-        sleepInsomnia: "",
-        sleepHours: "",
-        medications: "",
-        vitamins: "",
-        supplements: "",
-        relevantLabResults: "",
-        gastrointestinalSymptoms: "",
-        breakfast: "",
-        snack1: "",
-        lunch: "",
-        snack2: "",
-        extras: "",
-        foodNotLike: "",
-        glucose: "",
-        bloodPressure: "",
-        temperature: "",
-        heartRate: "",
-        weightDates: "",
-        usualWeight: "",
-        maximumWeight: "",
-        minimumWeight: "",
-        currentWeight: "",
-        diagnosis: "",
-        goal: "",
-        medicationsGoal: "",
-        nutritionalPlanType: "",
-        specifications: "",
-        smoke: "",
-        smokeHistory: "",
-        smokeOther: "",
-        alcohol: "",
-        alcoholHistory: "",
-        alcoholOther: "",
-        surgery: "",
-        surgeryHistory: [],
-        surgeryOther: "",
+        otherFamilyHistory: "false",
+        drugAllergy: "false",
+        otherDrugAllergies: "false",
+        foodAllergy: "false",
+        otherFoodAllergies: "false",
+        prohibitedFoods: "false",
+        otherProhibitedFoods: "false",
+        exercise: "false",
+        exerciseTypes: "false",
+        exerciseDaysPerWeek: "false",
+        exerciseIntensity: "false",
+        sleepInsomnia: "false",
+        sleepHours: "false",
+        medications: "false",
+        vitamins: "false",
+        supplements: "false",
+        relevantLabResults: "false",
+        gastrointestinalSymptoms: "false",
+        breakfast: "false",
+        snack1: "false",
+        lunch: "false",
+        snack2: "false",
+        extras: "false",
+        foodNotLike: "false",
+        glucose: "false",
+        bloodPressure: "false",
+        temperature: "false",
+        heartRate: "false",
+        weightDates: "false",
+        usualWeight: "false",
+        maximumWeight: "false",
+        minimumWeight: "false",
+        currentWeight: "false",
+        diagnosis: "false",
+        goal: "false",
+        medicationsGoal: "false",
+        nutritionalPlanType: "false",
+        specifications: "false",
+        smoke: "false",
+        smokeHistory: "false",
+        smokeOther: "false",
+        alcohol: "false",
+        alcoholHistory: "false",
+        alcoholOther: "false",
+        surgery: "false",
+        surgeryHistory: ["false"],
+        surgeryOther: "false",
       });
 
       console.log("Datos enviados a la API:", formattedFormData);
@@ -741,21 +741,21 @@ function HistorialNutricional(patientId) {
                       required
                     >
                       <FormControlLabel
-                        value="1"
+                        value="Al menos 1 día a la semana"
                         control={<Radio />}
                         label="Al menos 1 día a la semana"
                       />
                       <FormControlLabel
-                        value="2"
+                        value="Al menos 2 días a la semana"
                         control={<Radio />}
                         label="Al menos 2 días a la semana"
                       />
                       <FormControlLabel
-                        value="3"
+                        value="3 o más días a la semana"
                         control={<Radio />}
                         label="3 o más días a la semana"
                       />
-                      <FormControlLabel value="4" control={<Radio />} label="No hago ejercicio" />
+                      <FormControlLabel value="No hago ejercicio" control={<Radio />} label="No hago ejercicio" />
                     </RadioGroup>
                   </SoftBox>
 
@@ -1322,7 +1322,7 @@ function HistorialNutricional(patientId) {
               <Grid item xs={12} sm={3}>
                 <label>
                   <SoftTypography variant="body1" fontWeight="bold" color="textPrimary">
-                    TDA (Presión Arterial)
+                    TA (Tensión Arterial)
                   </SoftTypography>
                 </label>
                 <textarea
@@ -1506,7 +1506,7 @@ function HistorialNutricional(patientId) {
                 {
                   id: "goal",
                   label: "Objetivo",
-                  placeholder: "Escriba el goal...",
+                  placeholder: "Escriba el objetivo...",
                   value: formData.goal,
                 },
                 {

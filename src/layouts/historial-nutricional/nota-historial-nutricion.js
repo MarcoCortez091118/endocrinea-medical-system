@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Card, Typography, Button, Box } from "@mui/material";
+import { Card, Typography, Button, Box, Grid } from "@mui/material";
 import SoftTypography from "components/SoftTypography";
 import SoftBox from "components/SoftBox";
 import { useLocation } from "react-router-dom";
@@ -65,12 +65,15 @@ function NutritionRecords() {
     const date = new Date(dateString);
     if (isNaN(date.getTime())) return "Fecha inválida";
 
-    return date.toLocaleString("es-ES", {
+    return new Intl.DateTimeFormat("es-MX", {
       year: "numeric",
       month: "long",
       day: "numeric",
-
-    });
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true, // Formato 24 horas
+      timeZone: "America/Mexico_City", // Zona horaria específica
+    }).format(date);
   };
 
   const renderAllData = (record) => {
@@ -79,54 +82,11 @@ function NutritionRecords() {
         {Object.entries(record).map(([key, value]) => {
           if (!value || key === "id" || key === "updated_at" || key === "created_at") return null;
 
-          const translations = {
-            glucose: "Glucosa",
-            bloodPressure: "Presión Arterial",
-            temperature: "Temperatura",
-            heartRate: "Frecuencia Cardíaca",
-            weightDates: "Fecha de Peso",
-            usualWeight: "Peso Usual",
-            maximumWeight: "Peso Máximo",
-            minimumWeight: "Peso Mínimo",
-            currentWeight: "Peso Actual",
-            diagnosis: "Diagnóstico",
-            goal: "Objetivo",
-            medicationsGoal: "Meta de Medicación",
-            nutritionalPlanType: "Tipo de Plan Nutricional",
-            specifications: "Especificaciones",
-            smoke: "Fuma",
-            smokeHistory: "Historial de Fumar",
-            smokeOther: "Otros hábitos de fumar",
-            alcohol: "Consumo de Alcohol",
-            alcoholHistory: "Historial de Alcohol",
-            alcoholOther: "Otros hábitos de alcohol",
-            surgery: "Cirugías",
-            surgeryHistory: "Historial de Cirugías",
-            surgeryOther: "Otras Cirugías",
-            padecimientoActuales: "Padecimientos Actuales",
-            exercise: "Ejercicio",
-            exerciseTypes: "Tipo de Ejercicio",
-            exerciseDaysPerWeek: "Días de Ejercicio por Semana",
-            exerciseIntensity: "Intensidad del Ejercicio",
-            sleepInsomnia: "Insomnio",
-            sleepHours: "Horas de Sueño",
-            medications: "Medicamentos",
-            vitamins: "Vitaminas",
-            supplements: "Suplementos",
-            relevantLabResults: "Resultados de Laboratorio",
-            gastrointestinalSymptoms: "Síntomas Gastrointestinales",
-            breakfast: "Desayuno",
-            snack1: "Colación 1",
-            lunch: "Almuerzo",
-            snack2: "Colación 2",
-            extras: "Extras",
-            foodNotLike: "Alimentos que no le gustan",
-            drugAllergy: "Alergia a Medicamentos",
-            otherDrugAllergies: "Otras Alergias a Medicamentos",
-            foodAllergy: "Alergia a Alimentos",
-            otherFoodAllergies: "Otras Alergias Alimenticias",
-            prohibitedFoods: "Alimentos Prohibidos",
-            otherProhibitedFoods: "Otros Alimentos Prohibidos",
+          const spanishConditions = {
+            "Diabetes": "Diabetes",
+            "Hypertension": "Hipertensión",
+            "High_Cholesterol": "Colesterol Alto",
+            "Heart_Attacks": "Infartos Cardíacos"
           };
 
           const spanishFamilyTerms = {
@@ -137,41 +97,119 @@ function NutritionRecords() {
             "Maternal_Uncles": "Tíos Maternos"
           };
 
-          const spanishConditions = {
-            "Diabetes": "Diabetes",
-            "Hypertension": "Hipertensión",
-            "High_Cholesterol": "Colesterol Alto",
-            "Heart_Attacks": "Infartos Cardíacos"
+          const translations = {
+            otherFamilyHistory: "Otro familiar diagnosticado con alguna enfermedad",
+            drugAllergy: "¿Usted sufre alguna alergia a medicamentos?",
+            otherDrugAllergies: "Otras alergias a medicamentos",
+            foodAllergy: "¿Usted sufre alguna alergia a algun alimento?",
+            otherFoodAllergies: "Otras alergias a alimentos",
+            prohibitedFoods: "¿Su RELIGIÓN le impide comer algún tipo de alimento?",
+            otherProhibitedFoods: "¿Qué alimentos no puede comer por su religión?",
+            exercise: "¿Realiza algún tipo de ejercicio?",
+            exerciseTypes: "¿Cuál es el tipo de ejercicio que realiza?",
+            exerciseDaysPerWeek: "¿Cuántos días a la semana realiza ejercicio?",
+            exerciseIntensity: "¿Con qué intensidad realiza los ejercicios?",
+            sleepInsomnia: "¿Usted sufre de insomnio?",
+            sleepHours: "¿Cuántas horas duerme por noche?",
+            smoke: "¿Fuma o ha fumado en el pasado?",
+            smokeHistory: "¿Cuántos cigarros fuma al día?",
+            smokeOther: "Especifique cuántos cigarros fuma al día",
+            medications: "¿Toma medicamentos? Especifique cuáles y la frecuencia",
+            vitamins: "¿Consume vitaminas? Indique cuáles.",
+            supplements: "¿Toma suplementos alimenticios? Especifique",
+            relevantLabResults: "¿Se ha hecho análisis de laboratorio recientes? Mencione los importantes",
+            gastrointestinalSymptoms: "¿Ha tenido síntomas gastrointestinales recientes?",
+            breakfast: "Desayuno",
+            snack1: "Colación",
+            lunch: "Comida",
+            snack2: "Colación 2",
+            extras: "Extras",
+            foodNotLike: "Alimentos que no le gustan",
+            glucose: "Glucosa",
+            bloodPressure: "TA (Tensión Arterial)",
+            temperature: "Temperatura",
+            heartRate: "FC (Frecuencia Cardíaca)",
+            weightDates: "Fecha de pesaje",
+            usualWeight: "Peso Habitual",
+            maximumWeight: "Peso Máximo",
+            minimumWeight: "Peso Mínimo",
+            currentWeight: "Peso Actual",
+            diagnosis: "Diagnóstico",
+            goal: "Objetivo del paciente",
+            medicationsGoal: "Medicamentos y suplementos añadidos",
+            nutritionalPlanType: "Tipo de plan nutricional",
+            specifications: "Especificaciones",
+            alcohol: "¿Consume alcohol?",
+            alcoholHistory: "¿Cuántas veces a la semana bebe alcohol?",
+            alcoholOther: "Espefique cuántas veces a la semana bebe alcohol",
+            surgery: "¿Le han realizado alguna cirugía? Es posible seleccionar varias respuestas",
+            surgeryOther: "¿Qué otra cirugía le han realizado?",
           };
 
           if (key === "familyHistory" && typeof value === "object" && value !== null) {
             return (
-              <Box key={key} sx={{ mb: 2 }}>
-                <SoftTypography variant="body2" fontWeight="bold" color="primary">
-                  Historial Familiar
+              <Box key={key} >
+                <SoftTypography variant="subtitle1" fontWeight="bold" color="primary">
+                  Historial Familiar <hr></hr>
                 </SoftTypography>
-                {Object.entries(value).map(([condition, familyMembers]) => (
-                  <Box key={condition} sx={{ ml: 2, mb: 1 }}>
-                    <SoftTypography variant="body2" fontWeight="bold">
-                      {spanishConditions[condition] || condition}
-                    </SoftTypography>
-                    {familyMembers &&
-                      Object.entries(familyMembers).map(([relative, hasCondition]) => (
-                        <SoftTypography key={relative} variant="body2">
-                          {spanishFamilyTerms[relative] || relative}: {formatBoolean(hasCondition)}
-                        </SoftTypography>
-                      ))}
-                  </Box>
-                ))}
+                <SoftTypography variant="subtitle2" fontWeight="bold" mb={1} mt={1}>
+                  ¿Alguien de su familia ha sido diagnosticado con alguna de las siguientes
+                  enfermedades?
+                </SoftTypography>
+                <Grid container spacing={2}>
+                  {Object.entries(value).map(([condition, familyMembers]) => (
+                    <Grid item xs={12} sm={6} md={3} key={condition}>
+                      <SoftTypography variant="body2" fontWeight="bold">
+                        {spanishConditions[condition] || condition}
+                      </SoftTypography>
+                      {familyMembers &&
+                        Object.entries(familyMembers).map(([relative, hasCondition]) => (
+                          <SoftTypography key={relative} variant="body2">
+                            {spanishFamilyTerms[relative] || relative}: {formatBoolean(hasCondition)}
+                          </SoftTypography>
+                        ))}
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+            );
+          }
+
+          if (key === "surgeryHistory" && Array.isArray(value) && value.length > 0) {
+            return (
+              <Box key={key} sx={{ mt: 2 }}>
+                <SoftTypography variant="subtitle1" fontWeight="bold" color="primary">
+                  Historial de cirugías <hr></hr>
+                </SoftTypography>
+                <Grid container spacing={2}>
+                  {value.map((surgery, index) => (
+                    <Grid item xs={12} sm={6} md={3} key={index}>
+                      <SoftTypography variant="body2">{surgery}</SoftTypography>
+                    </Grid>
+                  ))}
+                </Grid>
               </Box>
             );
           }
 
           return (
-            <SoftTypography key={key} variant="body2">
-              <strong>{translations[key] || key}:</strong> {typeof value === "boolean" ? formatBoolean(value) : value}
-            </SoftTypography>
+            <Grid container spacing={2} key={key}>
+              {/* Primera columna: Etiqueta */}
+              <Grid item xs={6}>
+                <SoftTypography variant="body2">
+                  <strong>{translations[key] || key}:</strong>
+                </SoftTypography>
+              </Grid>
+
+              {/* Segunda columna: Valor */}
+              <Grid item xs={6}>
+                <SoftTypography variant="body2">
+                  {typeof value === "boolean" ? formatBoolean(value) : value}
+                </SoftTypography>
+              </Grid>
+            </Grid>
           );
+
         })}
       </Box>
     );
@@ -179,39 +217,38 @@ function NutritionRecords() {
 
   return (
     <SoftBox mb={3}>
-      <Card sx={{ p: 3, boxShadow: 3 }}>
-        <Typography variant="h6" color="secondary" mb={2}>
-          Historial Nutricional del Paciente
-        </Typography>
 
-        {loading ? (
-          <Typography>Cargando...</Typography>
-        ) : error ? (
-          <Typography color="error">{error}</Typography>
-        ) : records.length === 0 ? (
-          <Typography>No hay registros disponibles.</Typography>
-        ) : (
-          records
-            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-            .slice(0, visibleRecords)
-            .map((record, index) => {
+      <Typography variant="h5" color="secondary" mt={4} ml={2} mb={2}>
+        Historial Nutricional del Paciente
+      </Typography>
 
-              const formattedDateTime = formatDateTime(record.created_at);
-              return (
-                <Card key={index} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
-                  <Typography variant="h6" color="primary">
-                    Registro {index + 1} - <small>({formattedDateTime})</small>
-                  </Typography>
-                  {expandedRecord === index ? renderAllData(record) : null}
-                  <Button variant="contained" color={expandedRecord === index ? "secondary" : "primary"} onClick={() => toggleExpand(index)} sx={{ mt: 2 }}>
-                    {expandedRecord === index ? "Ver menos" : "Ver más"}
-                  </Button>
-                </Card>
-              );
-            })
-        )}
-      </Card>
+      {loading ? (
+        <Typography>Cargando...</Typography>
+      ) : error ? (
+        <Typography color="error">{error}</Typography>
+      ) : records.length === 0 ? (
+        <Typography>No hay registros disponibles.</Typography>
+      ) : (
+        records
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          .map((record, index) => {
+
+            const formattedDateTime = formatDateTime(record.created_at);
+            return (
+              <Card key={index} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
+                <Typography variant="h6" color="primary">
+                  Registro {records.length - index} - <small>({formattedDateTime})</small>
+                </Typography>
+                {expandedRecord === index ? renderAllData(record) : null}
+                <Button variant="contained" color={expandedRecord === index ? "secondary" : "primary"} onClick={() => toggleExpand(index)} sx={{ mt: 2 }}>
+                  {expandedRecord === index ? "Ver menos" : "Ver más"}
+                </Button>
+              </Card>
+            );
+          })
+      )}
     </SoftBox>
+
   );
 }
 
