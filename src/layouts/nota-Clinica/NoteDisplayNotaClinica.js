@@ -2,6 +2,7 @@
 import React from "react";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
+import Card from "@mui/material/Card"; // Importación de Card
 
 function NoteDisplayNotaClinica({ note, expandedNoteId, onToggle }) {
   const isExpanded = expandedNoteId === note.id;
@@ -9,25 +10,19 @@ function NoteDisplayNotaClinica({ note, expandedNoteId, onToggle }) {
   return (
     <SoftBox>
       <SoftBox>
-        <SoftTypography variant="body1" fontWeight="bold">
-          Fecha de creación: {note.date}
+        <SoftTypography variant="h6" color="primary">
+        Fecha: {note.date}
         </SoftTypography>
       </SoftBox>
-      <SoftBox
-        sx={{
-          padding: "8px",
-          background: "#f9f9f9",
-          borderRadius: "4px",
-          border: "1px solid #ddd",
-          marginTop: "8px",
-        }}
+      <Card
+        sx={{ p: 3, mb: 3, boxShadow: 3 }}
       >
-        <SoftTypography>
+        <SoftTypography variant="body2">
           {isExpanded
             ? note.medicNote // Mostrar todo si está expandido
             : note.medicNote.split("\n").slice(0, 3).join("\n") + (note.medicNote.split("\n").length > 3 ? "..." : "")}
         </SoftTypography>
-      </SoftBox>
+      </Card>
       <SoftBox textAlign="right" mt={2}>
         {note.medicNote.split("\n").length > 3 && ( // Mostrar el botón solo si hay más de 3 líneas
           <button
