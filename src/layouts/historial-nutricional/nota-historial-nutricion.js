@@ -59,21 +59,20 @@ function NutritionRecords() {
 
   const formatBoolean = (value) => (value ? "Sí" : "No");
 
-  const formatDateTime = (dateString) => {
-    if (!dateString) return "Fecha desconocida";
+  const formatDate = (utcDate) => {
+    if (!utcDate) return "Fecha no disponible";
 
-    const date = new Date(dateString);
-    if (isNaN(date.getTime())) return "Fecha inválida";
+    const date = new Date(utcDate);
+    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
 
-    return new Intl.DateTimeFormat("es-MX", {
+    return localDate.toLocaleString("es-ES", {
       year: "numeric",
-      month: "long",
-      day: "numeric",
+      month: "2-digit",
+      day: "2-digit",
       hour: "2-digit",
       minute: "2-digit",
-      hour12: true, // Formato 24 horas
-      timeZone: "America/Mexico_City", // Zona horaria específica
-    }).format(date);
+      hour12: true,
+    });
   };
 
   const renderAllData = (record) => {
@@ -233,11 +232,11 @@ function NutritionRecords() {
           .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
           .map((record, index) => {
 
-            const formattedDateTime = formatDateTime(record.created_at);
+            const formattedDateTime = formatDate(record.created_at);
             return (
               <Card key={index} sx={{ p: 3, mb: 3, boxShadow: 3 }}>
                 <Typography variant="h6" color="primary">
-                  Registro {records.length - index} - <small>({formattedDateTime})</small>
+                  Registro {records.length - index} - <small>{formattedDateTime}</small>
                 </Typography>
                 {expandedRecord === index ? renderAllData(record) : null}
                 <Button variant="contained" color={expandedRecord === index ? "secondary" : "primary"} onClick={() => toggleExpand(index)} sx={{ mt: 2 }}>
