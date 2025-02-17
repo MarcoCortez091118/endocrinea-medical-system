@@ -260,7 +260,7 @@ function HistorialNutricional(patientId) {
       const result = await response.json();
       console.log("Historial enviado con éxito:", result);
 
-      alert("Historial guardado correctamente");
+      alert("Historial guardado correctamente, recargue la página para ver los cambios.");
 
       //setNotas((prevNotas) => [result, ...prevNotas]);
       setRecords((prevRecords) => [result, ...prevRecords]);
