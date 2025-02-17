@@ -23,7 +23,16 @@ const API_BASE_URL = "https://endocrinea-fastapi-dataprocessing.azurewebsites.ne
 
 function ClinicalForm() {
   const location = useLocation();
-  const patient = location.state?.patient;
+  const [patient, setPatient] = useState(location.state?.patient || null);
+
+  useEffect(() => {
+    if (!patient) {
+      const storedPatient = localStorage.getItem("selectedPatient");
+      if (storedPatient) {
+        setPatient(JSON.parse(storedPatient));
+      }
+    }
+  }, [patient]);
   const [formData, setFormData] = useState({
     medicalHistory: {
       AHF: "",
