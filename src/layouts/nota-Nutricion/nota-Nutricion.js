@@ -33,7 +33,6 @@ import { useLocation } from "react-router-dom";
 // Libreria gluestacks
 
 function NotaNutricional() {
-
   const location = useLocation();
   const [patient, setPatient] = useState(location.state?.patient || null);
 
@@ -71,7 +70,8 @@ function NotaNutricional() {
   const [error, setError] = useState(null);
   const [notas, setNotas] = useState([]);
   const [expandedNotes, setExpandedNotes] = useState({});
-  const apiUrl = patient ? `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient.id}/nutritional_notes/`
+  const apiUrl = patient
+    ? `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient.id}/nutritional_notes/`
     : null;
 
   const fetchNotas = async () => {
@@ -93,7 +93,6 @@ function NotaNutricional() {
   useEffect(() => {
     if (apiUrl) fetchNotas();
   }, [apiUrl]);
-
 
   const toggleExpand = (index) => {
     setExpandedNotes(expandedNotes === index ? null : index);
@@ -200,13 +199,11 @@ function NotaNutricional() {
         frequencyStraining: "",
         collation2: "",
       });
-
     } catch (error) {
       console.error("Error en la solicitud:", error);
       alert("Hubo un error al guardar la nota. Inténtalo nuevamente.");
     }
   };
-
 
   const translations = {
     symptoms: "Síntomas",
@@ -737,6 +734,7 @@ function NotaNutricional() {
               Enviar
             </Button>
           </SoftBox> */}
+          
 
         {/* Stepper */}
         <Stepper activeStep={activeStep}>
@@ -770,6 +768,7 @@ function NotaNutricional() {
           </Box>
         )}
       </form>
+      <br/>
       {/* 📌 Sección de notas */}
       <SoftBox mb={3}>
         <Card sx={{ p: 3, boxShadow: 3 }}>
@@ -804,39 +803,17 @@ function NotaNutricional() {
                     <strong>Estado de energía:</strong> {nota.energy || "No especificado"}
                   </SoftTypography>
                   <SoftTypography variant="body2">
-                    <strong>Consumo de líquidos:</strong> {nota.liquids || "No especificado"}
+                    <strong>Síntomas gastrointestinales:</strong>{" "}
+                    {nota.symptomsGastrointestinal || "No especificado"}
                   </SoftTypography>
                   <SoftTypography variant="body2">
-                    <strong>Tipo de ejercicio:</strong> {nota.TypesExercise || "No especificado"}
+                    <strong>Detalles de síntomas:</strong>{" "}
+                    {nota.detailSymptoms.length > 0
+                      ? nota.detailSymptoms.join(", ")
+                      : "No especificado"}
                   </SoftTypography>
-                  <SoftTypography variant="body2">
-                    <strong>Días de ejercicio por semana:</strong>{" "}
-                    {nota.exerciseDaysWeek || "No especificado"}
-                  </SoftTypography>
-                  <SoftTypography variant="body2">
-                    <strong>Intensidad del ejercicio:</strong>{" "}
-                    {nota.exerciseIntensity || "No especificado"}
-                  </SoftTypography>
-
                   {/* 📌 Información oculta en "Ver más" */}
                   <Collapse in={expandedNotes === index}>
-                    <SoftTypography variant="body2">
-                      <strong>Condiciones actuales:</strong>{" "}
-                      {nota.currentConditions || "No especificado"}
-                    </SoftTypography>
-                    <SoftTypography variant="body2">
-                      <strong>Complicaciones:</strong> {nota.complications || "No especificado"}
-                    </SoftTypography>
-                    <SoftTypography variant="body2">
-                      <strong>Síntomas gastrointestinales:</strong>{" "}
-                      {nota.symptomsGastrointestinal || "No especificado"}
-                    </SoftTypography>
-                    <SoftTypography variant="body2">
-                      <strong>Detalles de síntomas:</strong>{" "}
-                      {nota.detailSymptoms.length > 0
-                        ? nota.detailSymptoms.join(", ")
-                        : "No especificado"}
-                    </SoftTypography>
                     <SoftTypography variant="body2">
                       <strong>Frecuencia de estreñimiento:</strong>{" "}
                       {nota.frequencyStraining || "No especificado"}
@@ -845,6 +822,28 @@ function NotaNutricional() {
                       <strong>Frecuencia de diarrea:</strong>{" "}
                       {nota.frequencyDiarrhea || "No especificado"}
                     </SoftTypography>
+                    <SoftTypography variant="body2">
+                      <strong>Condiciones actuales:</strong>{" "}
+                      {nota.currentConditions || "No especificado"}
+                    </SoftTypography>
+                    <SoftTypography variant="body2">
+                      <strong>Complicaciones:</strong> {nota.complications || "No especificado"}
+                    </SoftTypography>
+                    <SoftTypography variant="body2">
+                      <strong>Consumo de líquidos:</strong> {nota.liquids || "No especificado"}
+                    </SoftTypography>
+                    <SoftTypography variant="body2">
+                      <strong>Tipo de ejercicio:</strong> {nota.TypesExercise || "No especificado"}
+                    </SoftTypography>
+                    <SoftTypography variant="body2">
+                      <strong>Días de ejercicio por semana:</strong>{" "}
+                      {nota.exerciseDaysWeek || "No especificado"}
+                    </SoftTypography>
+                    <SoftTypography variant="body2">
+                      <strong>Intensidad del ejercicio:</strong>{" "}
+                      {nota.exerciseIntensity || "No especificado"}
+                    </SoftTypography>
+
                     <SoftTypography variant="body2">
                       <strong>Desayuno:</strong> {nota.breakfast || "No especificado"}
                     </SoftTypography>
