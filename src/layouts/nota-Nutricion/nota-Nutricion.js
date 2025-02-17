@@ -36,26 +36,17 @@ function NotaNutricional() {
 
   const location = useLocation();
   const [patient, setPatient] = useState(location.state?.patient || null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let storedPatient = location.state?.patient || localStorage.getItem("selectedPatient");
-
-    if (storedPatient) {
-      try {
-        storedPatient = typeof storedPatient === "string" ? JSON.parse(storedPatient) : storedPatient;
-        setPatient(storedPatient);
-      } catch (error) {
-        console.error("Error al parsear paciente:", error);
-        setError("No se pudo obtener la información del paciente.");
+    if (!patient) {
+      const storedPatient = localStorage.getItem("selectedPatient");
+      if (storedPatient) {
+        setPatient(JSON.parse(storedPatient));
       }
-    } else {
-      setError("No se encontró información del paciente.");
     }
-
-    setLoading(false);
   }, []);
 
+  const [loading, setLoading] = useState(false);
   const [visibleNotes, setVisibleNotes] = useState(10);
   const [formData, setFormData] = useState({
     symptoms: "",
@@ -77,12 +68,15 @@ function NotaNutricional() {
     extras: "",
     diagnosis: "",
   });
-
   const [error, setError] = useState(null);
   const [notas, setNotas] = useState([]);
   const [expandedNotes, setExpandedNotes] = useState({});
-  const apiUrl = `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient.id}/nutritional_notes/`;
+  const apiUrl = patient ? `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/${patient.id}/nutritional_notes/`
+    : null;
+
   const fetchNotas = async () => {
+    if (!apiUrl) return;
+
     try {
       const response = await fetch(apiUrl);
       if (!response.ok) {
@@ -97,10 +91,8 @@ function NotaNutricional() {
 
   // 🚀 Llamar la función en `useEffect`
   useEffect(() => {
-    if (patient) {
-      fetchNotas();
-    }
-  }, [patient]);
+    if (apiUrl) fetchNotas();
+  }, [apiUrl]);
 
 
   const toggleExpand = (index) => {
