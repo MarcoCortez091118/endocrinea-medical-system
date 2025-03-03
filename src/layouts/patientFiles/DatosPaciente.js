@@ -48,7 +48,6 @@ const PatientDetailsForm = () => {
     signed_data_privacy: false,
     status: "",
     type: "",
-    number: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -221,7 +220,6 @@ const PatientDetailsForm = () => {
       signed_data_privacy: patientData.signed_data_privacy,
       status: patientData.status,
       type: patientData.type,
-      number: patientData.number,
     };
 
     // Mostrar el JSON en consola
@@ -436,23 +434,7 @@ const PatientDetailsForm = () => {
               </select>
             </Grid>
 
-            {/* Numero x */}
-            <Grid item xs={12} sm={6}>
-              <label
-                htmlFor="number"
-                style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
-              >
-                Numero socio
-              </label>
-              <textarea
-                id="number"
-                name="number"
-                value={patientData.number}
-                onChange={handleChange}
-                rows="1"
-                className="global-textarea"
-              />
-            </Grid>
+           
 
             {/* Numero de seguro social */}
             <Grid item xs={12} sm={6}>
@@ -509,7 +491,7 @@ const PatientDetailsForm = () => {
             </Grid>
 
             {/* Estado de nacimiento */}
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <label
                 htmlFor="born_state"
                 style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}

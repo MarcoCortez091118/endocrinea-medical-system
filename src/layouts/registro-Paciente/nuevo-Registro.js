@@ -48,7 +48,6 @@ const newRegisterForm = () => {
     signed_data_privacy: false,
     status: "",
     type: "",
-    number: 0,
   });
 
   // Manejador de cambios en los inputs
@@ -137,7 +136,6 @@ const newRegisterForm = () => {
           signed_data_privacy: false,
           status: "",
           type: "",
-          number: 0,
         });
         setActiveStep(0);
       } else {
@@ -394,23 +392,7 @@ const newRegisterForm = () => {
                   </select>
                 </Grid>
 
-                {/* Numero x */}
-                <Grid item xs={12} sm={6}>
-                  <label
-                    htmlFor="number"
-                    style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
-                  >
-                    Numero socio
-                  </label>
-                  <textarea
-                    id="number"
-                    name="number"
-                    value={patientData.number}
-                    onChange={handleChange}
-                    rows="1"
-                    className="global-textarea"
-                  />
-                </Grid>
+                
 
                 {/* Numero de seguro social */}
                 <Grid item xs={12} sm={6}>
@@ -467,7 +449,7 @@ const newRegisterForm = () => {
                 </Grid>
 
                 {/* Estado de nacimiento */}
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
                   <label
                     htmlFor="born_state"
                     style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}
