@@ -33,9 +33,9 @@ function FormNotaClinica({ formData, onChange, onSubmit }) {
           id="medicNote"
           name="medicNote"
           placeholder="Escriba las especificaciones..."
-          value={formData.medicNote || ""} // Asegura un valor predeterminado
+          value={formData.medicNote || ""} 
           onChange={onChange}
-          rows="4"
+          rows="7"
           className="global-textarea"
           style={{
             width: "100%",
