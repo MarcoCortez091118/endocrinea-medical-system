@@ -15,6 +15,10 @@ import AddPatient from "./AddPatient";
 
 
 function Tables() {
+  const [triggerUpdate, setTriggerUpdate] = useState(false);
+  const handlePatientAdded = (newPatient) => {
+    setTriggerUpdate((prev) => !prev);
+  };
   const [searchQuery, setSearchQuery] = useState("");
   const { newColumns, newRows } = useNewPatientsTableData(searchQuery);
   const navigate = useNavigate();
