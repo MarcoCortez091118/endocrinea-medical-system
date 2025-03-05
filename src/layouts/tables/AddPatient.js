@@ -33,7 +33,7 @@ function AddPatient({ open, onClose, onPatientAdded }) {
   const [formData, setFormData] = useState(initialFormData);
   const [alert, setAlert] = useState({ severity: "", message: "", show: false });
 
-  
+
   const genderMap = {
     Masculino: "male",
     Femenino: "female",
@@ -90,7 +90,7 @@ function AddPatient({ open, onClose, onPatientAdded }) {
 
         setAlert({
           severity: "success",
-          message: "Paciente registrado exitosamente.",
+          message: "Paciente registrado exitosamente. Actualiza la pagina para ver los cambios.",
           show: true,
         });
 
@@ -106,9 +106,8 @@ function AddPatient({ open, onClose, onPatientAdded }) {
         const errorData = await response.json();
         setAlert({
           severity: "error",
-          message: `Error al registrar el paciente: ${
-            errorData.detail || "Verifica los datos ingresados"
-          }`,
+          message: `Error al registrar el paciente: ${errorData.detail || "Verifica los datos ingresados"
+            }`,
           show: true,
         });
       }

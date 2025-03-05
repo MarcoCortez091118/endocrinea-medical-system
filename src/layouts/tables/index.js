@@ -3,27 +3,30 @@ import Card from "@mui/material/Card";
 import Button from "@mui/material/Button";
 import SoftBox from "components/SoftBox";
 import SoftTypography from "components/SoftTypography";
+import SoftInput from "components/SoftInput";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import Table from "examples/Tables/Table";
-import useUsuarioTableData from "./data/authorsTableData";
-import useNewPatientsTableData from "./data/newPatientsTableData"; // Importar la nueva tabla
+import useNewPatientsTableData from "./data/newPatientsTableData";
 import CustomPagination from "./CustomPagination";
 import { useNavigate } from "react-router-dom";
 import AddPatient from "./AddPatient";
-import SoftAvatar from "components/SoftAvatar";
-import team2 from "assets/images/team-2.jpg";
+
 
 function Tables() {
-  const { columns, rows } = useUsuarioTableData();
-  const { newColumns, newRows } = useNewPatientsTableData(); // Obtener datos de la nueva API
+  const [triggerUpdate, setTriggerUpdate] = useState(false);
+  const handlePatientAdded = (newPatient) => {
+    setTriggerUpdate((prev) => !prev);
+  };
+  const [searchQuery, setSearchQuery] = useState("");
+  const { newColumns, newRows } = useNewPatientsTableData(searchQuery);
   const navigate = useNavigate();
 
   const [page, setPage] = useState(1);
   const rowsPerPage = 20;
-  const totalPages = Math.ceil(rows.length / rowsPerPage);
-  const displayedRows = rows.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+  const totalPages = Math.ceil(newRows.length / rowsPerPage);
+  const displayedRows = newRows.slice((page - 1) * rowsPerPage, page * rowsPerPage);
   const [openModal, setOpenModal] = useState(false);
 
   const handlePageChange = (newPage) => {
@@ -32,6 +35,10 @@ function Tables() {
 
   const handleAddPatientClick = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
 
   const handleRowClick = (patient) => {
     if (patient) {
@@ -61,6 +68,16 @@ function Tables() {
           <Card>
             <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
               <SoftTypography variant="h6">Pacientes Endocrinea</SoftTypography>
+
+              <SoftBox pr={1} flex={1} ml={5} mr={5} maxWidth="500px">
+                <SoftInput
+                  placeholder="Buscar datos del paciente"
+                  icon={{ component: "search", direction: "left" }}
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                />
+              </SoftBox>
+
               <Button
                 variant="contained"
                 color="primary"
