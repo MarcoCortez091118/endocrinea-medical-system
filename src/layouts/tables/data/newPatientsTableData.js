@@ -5,7 +5,7 @@ import team2 from "assets/images/team-2.jpg";
 import { useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
 
-export default function useNewPatientsTableData(searchQuery) {
+export default function useNewPatientsTableData(searchQuery, newPatientAdded) {
   const [data, setData] = useState({ newColumns: [], newRows: [] });
   const navigate = useNavigate();
 
@@ -55,6 +55,16 @@ export default function useNewPatientsTableData(searchQuery) {
     });
   };
 
+  const clearIndexedDB = async () => {
+    const db = await openDB();
+    const transaction = db.transaction("patients", "readwrite");
+    const store = transaction.objectStore("patients");
+    store.clear();
+    return new Promise((resolve) => {
+      transaction.oncomplete = resolve;
+    });
+  };
+
   const saveToIndexedDB = async (patients) => {
     const db = await openDB();
     const transaction = db.transaction("patients", "readwrite");
@@ -83,11 +93,14 @@ export default function useNewPatientsTableData(searchQuery) {
   };
 
   const fetchNewPatients = useCallback(
-    debounce(async () => {
+    debounce(async (forceUpdate = false) => {
       try {
+        if (forceUpdate) {
+          await clearIndexedDB();
+        }
         let newPatients = await getFromIndexedDB();
 
-        if (!newPatients.length) {
+        if (!newPatients.length || forceUpdate) {
           const response = await fetch(
             `https://endocrinea-fastapi-dataprocessing.azurewebsites.net/patients/?q=${encodeURIComponent(
               searchQuery
@@ -107,12 +120,9 @@ export default function useNewPatientsTableData(searchQuery) {
           return;
         }
 
-        // 🔍 Normaliza la búsqueda para evitar errores por espacios o guiones
         const normalizedSearch = normalizeString(searchQuery);
-
         const filteredPatients = newPatients.filter((patient) => {
           const sanitizedPatient = sanitizePatientData(patient);
-
           const fullName = normalizeString(sanitizedPatient.name);
           const phone = normalizeString(sanitizedPatient.phone);
           const email = normalizeString(sanitizedPatient.email);
@@ -172,7 +182,11 @@ export default function useNewPatientsTableData(searchQuery) {
 
   useEffect(() => {
     fetchNewPatients();
-  }, [fetchNewPatients]);
+  }, [fetchNewPatients, newPatientAdded]);
+
+  useEffect(() => {
+    fetchNewPatients(true);
+  }, []);
 
   return data;
 }
