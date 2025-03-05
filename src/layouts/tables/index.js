@@ -49,26 +49,18 @@ function Tables() {
       console.error("No se pasaron datos del paciente.");
     }
   };
-
-
-  // Estado y lógica para la paginación de la segunda tabla
   const [newPage, setNewPage] = useState(1);
   const totalNewPages = Math.ceil(newRows.length / rowsPerPage);
   const displayedNewRows = newRows.slice((newPage - 1) * rowsPerPage, newPage * rowsPerPage);
-
   const handleNewPageChange = (newPage) => setNewPage(newPage);
-
   return (
     <DashboardLayout>
       <DashboardNavbar />
       <SoftBox py={3}>
-        {/* Segunda Tabla (Pacientes Endocrinea) ahora está arriba */}
         <SoftBox mb={3}>
           <Card>
             <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
               <SoftTypography variant="h6">Pacientes Endocrinea</SoftTypography>
-
-              {/* Botón "Agregar paciente" reubicado arriba */}
               <Button
                 variant="contained"
                 color="primary"
@@ -99,75 +91,11 @@ function Tables() {
             >
               <Table columns={newColumns} rows={displayedNewRows} />
             </SoftBox>
-
-            {/* Paginación de la segunda tabla */}
             <CustomPagination
               page={newPage}
               totalPages={totalNewPages}
               onPageChange={handleNewPageChange}
             />
-          </Card>
-        </SoftBox>
-
-        {/* Primera Tabla (Pacientes) ahora está debajo */}
-        <SoftBox mb={3}>
-          <Card>
-            <SoftBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
-              <SoftTypography variant="h6">Pacientes</SoftTypography>
-            </SoftBox>
-
-            <SoftBox
-              sx={{
-                "& .MuiTableRow-root": {
-                  cursor: "pointer",
-                  "&:hover": { backgroundColor: "#f5f5f5" },
-                },
-              }}
-            >
-              <Table
-                columns={[...columns, { name: "Acciones", align: "center" }]}
-                rows={displayedRows.map((row) => ({
-                  ...row,
-                  foto: <SoftAvatar src={team2} size="sm" variant="rounded" />,
-                  id: (
-                    <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-                      {row.id}
-                    </SoftTypography>
-                  ),
-                  nombre: (
-                    <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-                      {row.nombre}
-                    </SoftTypography>
-                  ),
-                  teléfono: (
-                    <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-                      {row.teléfono}
-                    </SoftTypography>
-                  ),
-                  correo: (
-                    <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-                      {row.correo}
-                    </SoftTypography>
-                  ),
-                  género: (
-                    <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-                      {row.género}
-                    </SoftTypography>
-                  ),
-                  estatus: (
-                    <SoftTypography variant="caption" color="secondary" fontWeight="medium">
-                      {row.estatus}
-                    </SoftTypography>
-                  ),
-                  Acciones: (
-                    <Button onClick={() => handleRowClick(row)} variant="text" color="primary">
-                      Ver Detalles
-                    </Button>
-                  ),
-                }))}
-              />
-            </SoftBox>
-            <CustomPagination page={page} totalPages={totalPages} onPageChange={handlePageChange} />
           </Card>
         </SoftBox>
       </SoftBox>
